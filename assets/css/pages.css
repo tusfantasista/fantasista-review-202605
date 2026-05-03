@@ -535,3 +535,129 @@
 }
 /* REVIEW_MOBILE_PAGEHERO_TIGHT_END */
 
+/* REVIEW_PAGE_RESPONSIVE_SWEEP_START */
+@media (max-width: 1024px) {
+  .page-hero {
+    min-height: 48svh;
+  }
+
+  .page-hero__inner {
+    min-height: 48svh;
+    justify-items: center;
+    text-align: center;
+    padding-top: 112px;
+    padding-bottom: 64px;
+  }
+
+  .page-hero__lead {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 40rem;
+    font-size: 1rem;
+  }
+
+  .page-hero__seal {
+    left: 50%;
+    top: 46%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    width: min(34vw, 240px);
+    opacity: 0.08;
+  }
+
+  .page-grid--about,
+  .gallery-page-grid,
+  .contact-grid,
+  .meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-section {
+    padding: 72px 0;
+  }
+
+  .panel,
+  .event-detail-card,
+  .contact-card {
+    padding: 24px;
+    border-radius: 22px;
+  }
+
+  .archive-item {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-hero {
+    min-height: auto;
+  }
+
+  .page-hero__inner {
+    min-height: auto;
+    padding-top: 92px;
+    padding-bottom: 52px;
+  }
+
+  .page-hero__eyebrow {
+    margin-bottom: 10px;
+    font-size: 0.76rem;
+  }
+
+  .page-hero__title {
+    font-size: clamp(2.1rem, 9vw, 3.4rem);
+    line-height: 1.04;
+  }
+
+  .page-hero__lead {
+    font-size: 0.92rem;
+  }
+
+  .page-hero__seal {
+    width: min(72vw, 220px);
+  }
+
+  .page-section {
+    padding: 56px 0;
+  }
+
+  .panel,
+  .event-detail-card,
+  .contact-card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .page-hero {
+    min-height: 40svh;
+  }
+
+  .page-hero__inner {
+    min-height: 40svh;
+    padding-top: 78px;
+    padding-bottom: 42px;
+  }
+
+  .page-hero__seal {
+    width: min(18vw, 160px);
+    bottom: 8%;
+  }
+
+  .page-hero__title {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+  }
+
+  .page-hero__lead {
+    font-size: 0.92rem;
+  }
+
+  .page-section {
+    padding: 48px 0;
+  }
+}
+/* REVIEW_PAGE_RESPONSIVE_SWEEP_END */
+
