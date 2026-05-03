@@ -2785,7 +2785,207 @@
       }
       /* REVIEW_MOBILE_SIMPLIFY_END */
     </style>
-</head>
+    <!-- REVIEW_DATA_FINAL_RESPONSIVE_FIX_START -->
+    <style>
+      @media (max-width: 1024px) {
+        .page-section.stats-section,
+        .page-section.page-section--light.stats-section {
+          padding-top: 42px;
+          padding-bottom: 42px;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+        }
+
+        .stats-two-col,
+        .specialty-layout,
+        .heatmap-layout,
+        .rolling-layout {
+          grid-template-columns: 1fr;
+          gap: 14px;
+        }
+
+        .stats-panel {
+          padding: 18px 16px;
+          border-radius: 18px;
+        }
+
+        .stat-card,
+        .donut-card,
+        .summary-card,
+        .ranking-card,
+        .rolling-callout,
+        .device-advice,
+        .group-row,
+        .balance-summary {
+          padding: 14px 12px;
+          border-radius: 16px;
+        }
+
+        .stats-head {
+          margin-bottom: 14px;
+        }
+
+        .stats-head__kicker {
+          margin-bottom: 8px;
+          font-size: 0.74rem;
+        }
+
+        .stats-head h2 {
+          margin-bottom: 10px;
+          font-size: clamp(1.32rem, 2.6vw, 1.84rem);
+          line-height: 1.22;
+        }
+
+        .stats-head p,
+        .stats-footnote,
+        .school-note,
+        .device-advice p,
+        .rolling-callout,
+        .rolling-axis-note,
+        .scroll-hint {
+          font-size: 0.88rem;
+          line-height: 1.68;
+        }
+
+        .stat-card strong {
+          font-size: clamp(1.26rem, 2.5vw, 1.7rem);
+        }
+
+        .device-advice-section,
+        .mobile-simplify {
+          display: block;
+        }
+
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll,
+        .scroll-hint--heatmap,
+        .scroll-hint--rolling,
+        .rolling-axis-note {
+          display: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page-section.stats-section,
+        .page-section.page-section--light.stats-section {
+          padding-top: 34px;
+          padding-bottom: 34px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .stats-two-col,
+        .specialty-layout,
+        .heatmap-layout,
+        .rolling-layout,
+        .summary-list,
+        .ranking-list,
+        .bar-list,
+        .stacked-list,
+        .school-breakdown,
+        .specialty-breakdown,
+        .group-compare,
+        .rolling-callouts {
+          gap: 10px;
+        }
+
+        .stats-panel {
+          padding: 14px 12px;
+          border-radius: 14px;
+        }
+
+        .stat-card,
+        .donut-card,
+        .summary-card,
+        .ranking-card,
+        .rolling-callout,
+        .device-advice,
+        .group-row,
+        .balance-summary {
+          padding: 12px 10px;
+          border-radius: 12px;
+        }
+
+        .stats-head {
+          margin-bottom: 12px;
+        }
+
+        .stats-head__kicker {
+          margin-bottom: 6px;
+          font-size: 0.66rem;
+        }
+
+        .stats-head h2 {
+          margin-bottom: 8px;
+          font-size: clamp(1.12rem, 5vw, 1.42rem);
+          line-height: 1.22;
+        }
+
+        .stats-head p,
+        .stats-footnote,
+        .school-note,
+        .device-advice p,
+        .rolling-callout,
+        .rolling-axis-note,
+        .scroll-hint,
+        .mobile-simplify-note p,
+        .mobile-simplify-table th,
+        .mobile-simplify-table td {
+          font-size: 0.82rem;
+          line-height: 1.62;
+        }
+
+        .stat-card span {
+          font-size: 0.66rem;
+        }
+
+        .stat-card strong {
+          font-size: 1.14rem;
+          line-height: 1.12;
+        }
+
+        .stat-card p,
+        .balance-summary p,
+        .summary-card p,
+        .ranking-card p {
+          font-size: 0.82rem;
+          line-height: 1.58;
+        }
+
+        .mobile-simplify-note {
+          padding: 12px 12px 10px;
+          border-radius: 14px;
+        }
+
+        .mobile-simplify-table th,
+        .mobile-simplify-table td {
+          padding: 8px 10px;
+        }
+
+        .mobile-simplify-table thead th {
+          font-size: 0.74rem;
+        }
+
+        .data-hero {
+          text-align: center;
+        }
+
+        .data-hero .page-hero__lead,
+        .data-note {
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    </style>
+    <!-- REVIEW_DATA_FINAL_RESPONSIVE_FIX_END -->
+  </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
 <div class="review-notice">
@@ -4218,6 +4418,7 @@
 </script>
 </body>
 </html>
+
 
 
 
