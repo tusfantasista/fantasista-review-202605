@@ -1,0 +1,740 @@
+﻿<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FANTASISTAとは | 東京理科大学舞踏研究部 OBOG会</title>
+    <meta
+      name="description"
+      content="FANTASISTAの役割、会長からのことば、2025年度活動、2026年度方針、体制を掲載しています。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <style>
+      .about-hero {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 18% 18%, rgba(254, 192, 0, 0.14), transparent 28%),
+          radial-gradient(circle at 82% 18%, rgba(112, 38, 63, 0.24), transparent 26%),
+          linear-gradient(180deg, #14181f 0%, #222831 100%);
+      }
+
+      .about-hero .page-hero__eyebrow,
+      .about-hero .page-hero__title,
+      .about-hero .page-hero__lead {
+        color: #ffffff;
+      }
+
+      .about-hero-note {
+        max-width: 720px;
+        margin-top: 16px;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.8;
+      }
+
+      .about-top {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        gap: 26px;
+        align-items: stretch;
+      }
+
+      .about-top-card,
+      .about-facts,
+      .about-message,
+      .about-role-card,
+      .about-focus-card,
+      .about-board-card,
+      .about-current-card,
+      .about-cta {
+        border-radius: 28px;
+        background: #ffffff;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
+      }
+
+      .about-top-card {
+        padding: 34px;
+      }
+
+      .about-top-card p {
+        margin: 0 0 18px;
+        color: #59606b;
+        line-height: 1.9;
+      }
+
+      .about-top-card p:last-child {
+        margin-bottom: 0;
+      }
+
+      .about-facts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        overflow: hidden;
+        background: rgba(25, 31, 42, 0.08);
+      }
+
+      .about-fact {
+        padding: 28px 24px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7e8 100%);
+      }
+
+      .about-fact span {
+        display: block;
+        margin-bottom: 8px;
+        color: #8a6a00;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .about-fact strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #191f2a;
+        font-size: clamp(1.5rem, 3vw, 2.2rem);
+        line-height: 1;
+      }
+
+      .about-fact p {
+        margin: 0;
+        color: #5d6470;
+        line-height: 1.75;
+      }
+
+      .about-message {
+        position: relative;
+        overflow: hidden;
+        padding: 36px;
+        background:
+          radial-gradient(circle at 84% 20%, rgba(254, 192, 0, 0.16), transparent 24%),
+          linear-gradient(180deg, #fffdfa 0%, #fff8ee 100%);
+      }
+
+      .about-message::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 8px;
+        background: linear-gradient(180deg, #fec000 0%, #dba500 100%);
+      }
+
+      .about-message__eyebrow {
+        margin: 0 0 12px;
+        color: #8a6a00;
+        font-size: 0.84rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .about-message h2 {
+        margin: 0 0 12px;
+        color: #191f2a;
+      }
+
+      .about-message__name {
+        margin: 0 0 18px;
+        color: #4b535e;
+        font-weight: 800;
+      }
+
+      .about-message p {
+        margin: 0 0 14px;
+        color: #59606b;
+        line-height: 1.95;
+      }
+
+      .about-message p:last-of-type {
+        margin-bottom: 0;
+      }
+
+      .about-role-grid,
+      .about-focus-grid,
+      .about-board-grid,
+      .about-current-grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      .about-role-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .about-role-card,
+      .about-focus-card,
+      .about-board-card,
+      .about-current-card {
+        padding: 28px 24px;
+      }
+
+      .about-role-card span,
+      .about-focus-card span {
+        display: inline-block;
+        margin-bottom: 10px;
+        color: #8a6a00;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .about-role-card h3,
+      .about-focus-card h3,
+      .about-board-card h3,
+      .about-current-card h3 {
+        margin: 0 0 10px;
+        color: #191f2a;
+      }
+
+      .about-role-card p,
+      .about-focus-card p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.85;
+      }
+
+      .about-focus-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .about-board-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .about-current-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .about-board-card ul,
+      .about-current-card ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .about-board-card li,
+      .about-current-card li {
+        margin-bottom: 10px;
+        color: #59606b;
+      }
+
+      .about-board-card li:last-child,
+      .about-current-card li:last-child {
+        margin-bottom: 0;
+      }
+
+      .about-cta {
+        padding: 34px;
+        background: linear-gradient(180deg, #1c2027 0%, #2b333e 100%);
+        color: #ffffff;
+      }
+
+      .about-cta p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.82);
+      }
+
+      .about-cta .panel__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 22px;
+      }
+
+      @media (max-width: 980px) {
+        .about-top,
+        .about-role-grid,
+        .about-board-grid,
+        .about-current-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .about-focus-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .about-facts,
+        .about-focus-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .about-top-card,
+        .about-message,
+        .about-role-card,
+        .about-focus-card,
+        .about-board-card,
+        .about-current-card,
+        .about-cta {
+          padding: 24px 20px;
+        }
+      }
+          /* About pictogram tune */
+      .about-fact .icon-badge,
+      .about-role-card .icon-badge,
+      .about-focus-card .icon-badge,
+      .about-current-card .icon-badge {
+        width: 34px;
+        height: 34px;
+        margin-bottom: 9px;
+        border-radius: 10px;
+      }
+
+      .about-fact .icon-badge svg,
+      .about-role-card .icon-badge svg,
+      .about-focus-card .icon-badge svg,
+      .about-current-card .icon-badge svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .about-cta .icon-badge {
+        width: 34px;
+        height: 34px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fec000;
+      }
+
+      .about-cta .icon-badge svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      @media (max-width: 720px) {
+        .about-fact .icon-badge,
+        .about-role-card .icon-badge,
+        .about-focus-card .icon-badge,
+        .about-current-card .icon-badge,
+        .about-cta .icon-badge {
+          width: 30px;
+          height: 30px;
+          margin-bottom: 8px;
+        }
+
+        .about-fact .icon-badge svg,
+        .about-role-card .icon-badge svg,
+        .about-focus-card .icon-badge svg,
+        .about-current-card .icon-badge svg,
+        .about-cta .icon-badge svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+      /* About pictogram centering fix */
+      .about-fact > .icon-badge,
+      .about-role-card > .icon-badge,
+      .about-focus-card > .icon-badge,
+      .about-current-card > .icon-badge,
+      .about-cta .icon-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        font-size: 0;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      .about-fact > .icon-badge svg,
+      .about-role-card > .icon-badge svg,
+      .about-focus-card > .icon-badge svg,
+      .about-current-card > .icon-badge svg,
+      .about-cta .icon-badge svg {
+        display: block;
+        flex: none;
+      }
+    </style>
+      <meta name="robots" content="noindex, nofollow, noarchive" />
+      <meta name="googlebot" content="noindex, nofollow, noarchive" />
+      <!-- REVIEW_NOTICE_STYLE_START -->
+    <style>
+      .review-notice{
+        position:relative;
+        z-index:80;
+        padding:8px 16px;
+        text-align:center;
+        font-size:12px;
+        line-height:1.6;
+        color:#f3e3b6;
+        background:rgba(255,210,28,0.08);
+        border-bottom:1px solid rgba(255,210,28,0.16);
+      }
+
+      .review-form-placeholder{
+        margin-top:16px;
+        padding:16px 18px;
+        border:1px solid rgba(255,210,28,0.18);
+        border-radius:16px;
+        background:rgba(255,255,255,0.04);
+      }
+
+      .review-form-placeholder p{
+        margin:0;
+        line-height:1.8;
+      }
+    </style>
+    <!-- REVIEW_NOTICE_STYLE_END -->
+  </head>
+  <body>
+<!-- REVIEW_NOTICE_START -->
+<div class="review-notice">
+  レビュー用サイトです。正式公開前の確認用です。
+</div>
+<!-- REVIEW_NOTICE_END -->
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="brand" href="../" aria-label="FANTASISTA ホームへ戻る">
+          <img class="brand__logo" src="../assets/img/logo-wordmark-dark.png" alt="東京理科大学舞踏研究部 FANTASISTA" />
+        </a>
+
+                <nav class="site-nav site-nav--desktop" aria-label="主要メニュー">
+          <a href="../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
+          <a href="../about/" aria-current="page"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
+          <a href="../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
+          <a href="../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+          <a href="../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
+          <a href="../history/"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
+          <a href="../data/"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
+          <a href="../gallery/"><span class="nav-copy"><span class="nav-ja">写真・ギャラリー</span><span class="nav-en">Gallery</span></span></a>
+          <a href="../contact/"><span class="nav-copy"><span class="nav-ja">お問い合わせ</span><span class="nav-en">Contact</span></span></a>
+        </nav>
+
+                <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+          <span class="sr-only">メニューを開閉</span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+        </button>
+
+          <nav id="site-nav" class="site-nav site-nav--mobile" aria-label="モバイルメニュー">
+            <a href="../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
+            <a href="../about/" aria-current="page"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
+            <a href="../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
+            <a href="../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+            <a href="../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
+            <a href="../history/"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
+            <a href="../data/"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
+            <a href="../gallery/"><span class="nav-copy"><span class="nav-ja">写真・ギャラリー</span><span class="nav-en">Gallery</span></span></a>
+            <a href="../contact/"><span class="nav-copy"><span class="nav-ja">お問い合わせ</span><span class="nav-en">Contact</span></span></a>
+          </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero about-hero">
+        <div class="page-hero__grid" aria-hidden="true"></div>
+        <img class="page-hero__seal" src="../assets/img/university-seal.png" alt="" aria-hidden="true" />
+        <div class="container page-hero__inner">
+          <p class="page-hero__eyebrow"><span class="label-ja">FANTASISTA会について</span><span class="label-en">About</span></p>
+          <h1 class="page-hero__title">FANTASISTAとは</h1>
+          <p class="page-hero__lead">
+            東京理科大学舞踏研究部で生まれた縁を、卒部後も次の世代へつないでいくための OBOG 会です。
+          </p>
+          <p class="about-hero-note">
+            交流の場を守ること、現役を支えること、舞踏研究部の歴史を受け継ぐこと。この3つを軸に、FANTASISTA は現役と卒部生のあいだに長い時間の橋をかけています。
+          </p>
+        </div>
+      </section>
+
+      <section class="page-section">
+        <div class="container">
+          <div class="about-top">
+            <article class="about-top-card">
+              <div class="section-head">
+                <p class="section-head__kicker">Identity</p>
+                <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3" /><path d="M4 19c0-2.8 2.2-5 5-5s5 2.2 5 5" /><path d="M17.5 10.5a2.5 2.5 0 1 0 0-5" /><path d="M19.5 19c0-2.1-1.1-4-3-5" /></svg></span>
+                <h2>卒部後も続くつながりを、組織として支える</h2>
+              </div>
+              <p>FANTASISTAは、東京理科大学舞踏研究部のOBOG会として2008年に設立されました。</p>
+              <p>
+                1966年の創部以来、舞踏研究部には多くの卒部生が関わり、それぞれの時代に技術、文化、運営の積み重ねを残してきました。
+              </p>
+              <p>
+                FANTASISTAは、その蓄積を単なる思い出として閉じず、OBOG会、FESTA、練習会、現役支援、歴史整理といった具体的な活動を支える組織です。
+              </p>
+            </article>
+
+            <div class="about-facts">
+              <article class="about-fact">
+                <span>Founded Club</span>
+                <strong>1966</strong>
+                <p>舞踏研究部の創部年です。</p>
+              </article>
+
+              <article class="about-fact">
+                <span>OBOG Association</span>
+                <strong>2008</strong>
+                <p>FANTASISTA の設立年です。</p>
+              </article>
+
+              <article class="about-fact">
+                <span>Alumni</span>
+                <strong>559</strong>
+                <p>OBOG会で確認している卒部生数です。</p>
+              </article>
+
+              <article class="about-fact">
+                <span>Current Theme</span>
+                <strong>60th</strong>
+                <p>創部60周年に向けた取り組みを進めています。</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light">
+        <div class="container">
+          <article class="about-message">
+            <p class="about-message__eyebrow">Chair Message</p>
+            <h2>会長からのことば</h2>
+            <p class="about-message__name">吉澤幸男（1968） / FANTASISTA会 会長 / 東京理科大学舞踏研究部 創部者</p>
+            <p>
+              1966年、私たちの前には整った環境も伝統も実績もありませんでした。あったのは、踊りたい、うまくなりたい、仲間と前へ進みたいという思いだけでした。その熱こそが、東京理科大学舞踏研究部の最初の一歩であり、60年を越えて受け継がれてきた原点です。
+            </p>
+            <p>
+              この部の歴史は、理科大一部だけの歴史でも、一つの世代だけの歴史でもありません。理科大二部、そして共同加盟校としてともに汗を流してくれた仲間たちを含め、すべての人の歩みが重なって、今日の東京理科大学舞踏研究部が形づくられてきました。
+            </p>
+            <p>
+              60周年は、過去を懐かしむためだけの節目ではありません。受け継がれてきた熱、誇り、記憶を、次の世代へ手渡すための節目です。どうかもう一度、この部の歴史の中に集ってください。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="page-section">
+        <div class="container">
+          <div class="section-head section-head--center">
+            <p class="section-head__kicker">Role</p>
+            <h2>FANTASISTAが担う3つの役割</h2>
+          </div>
+
+          <div class="about-role-grid">
+            <article class="about-role-card">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3" /><path d="M4 19c0-2.8 2.2-5 5-5s5 2.2 5 5" /><path d="M17.5 10.5a2.5 2.5 0 1 0 0-5" /><path d="M19.5 19c0-2.1-1.1-4-3-5" /></svg></span>
+              <span>01</span>
+              <h3>卒部生同士をつなぐ</h3>
+              <p>OBOG会、FESTA、練習会、近況共有を通じて、卒部後も舞踏研究部で生まれた縁が続く場を守ります。</p>
+            </article>
+
+            <article class="about-role-card">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l-2 2a3 3 0 1 1-4-4l3-3a3 3 0 0 1 4 0" /><path d="M14 11l2-2a3 3 0 1 1 4 4l-3 3a3 3 0 0 1-4 0" /><path d="M9 15l6-6" /></svg></span>
+              <span>02</span>
+              <h3>現役を支える</h3>
+              <p>技術指導、練習参加、相談窓口、周年企画の連携などを通じて、現役生の活動を世代横断で支えます。</p>
+            </article>
+
+            <article class="about-role-card">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8" /><path d="M12 8v5l3 2" /></svg></span>
+              <span>03</span>
+              <h3>歴史を受け継ぐ</h3>
+              <p>卒部生の記録、写真、競技実績、周年資料を整理し、舞踏研究部の歩みを次の世代へ渡していく役割を担います。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light">
+        <div class="container">
+          <div class="section-head section-head--center">
+            <p class="section-head__kicker">2025 Review / 2026 Policy</p>
+            <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M8 3v4M16 3v4M3 9h18" /><path d="M8 13h3M13 13h3M8 17h3" /></svg></span>
+            <h2>2025年度の活動と2026年度の方針</h2>
+          </div>
+
+          <div class="about-focus-grid">
+            <article class="about-focus-card">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="12" cy="18" r="2" /><path d="M8 6h8M7.7 7.2l2.8 8M16.3 7.2l-2.8 8" /></svg></span>
+              <span>2025 Review</span>
+              <h3>組織活動の充実</h3>
+              <p>年8回の定例会を実施し、現役部員との意見交換や情報共有を重ねながら、創部60周年に向けた準備を進めました。</p>
+            </article>
+
+            <article class="about-focus-card">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3" /><path d="M4 19c0-2.8 2.2-5 5-5s5 2.2 5 5" /><path d="M17.5 10.5a2.5 2.5 0 1 0 0-5" /><path d="M19.5 19c0-2.1-1.1-4-3-5" /></svg></span>
+              <span>2025 Review</span>
+              <h3>交流機会の設計</h3>
+              <p>FESTAの開催準備や運営体制の整理を通じて、OBOGと現役部員が関わる機会を広げました。</p>
+            </article>
+
+            <article class="about-focus-card">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l2 4 4 .6-3 3 .7 4.4-3.7-2-3.7 2 .7-4.4-3-3 4-.6 2-4Z" /></svg></span>
+              <span>2026 Policy</span>
+              <h3>創部60周年の実施</h3>
+              <p>総会、記念イベント、映像・展示などを含む周年企画を、現役と連携しながら具体化していきます。</p>
+            </article>
+
+            <article class="about-focus-card">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z" /><path d="M14 3v5h5" /><path d="M9 13h6M9 17h6" /></svg></span>
+              <span>2026 Policy</span>
+              <h3>運営基盤の定着</h3>
+              <p>周年後も継続的に活動できる運営体制と連絡基盤を整えます。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Board</p>
+            <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3" /><path d="M4 19c0-2.8 2.2-5 5-5s5 2.2 5 5" /><path d="M17.5 10.5a2.5 2.5 0 1 0 0-5" /><path d="M19.5 19c0-2.1-1.1-4-3-5" /></svg></span>
+            <h2>2026年度 FANTASISTA体制</h2>
+            <p style="margin: 8px 0 0; color: #7b828d; font-size: 0.92rem;">※ 括弧内は卒部年度です。</p>
+          </div>
+
+          <div class="about-board-grid">
+            <article class="about-board-card">
+              <h3>役員</h3>
+              <ul>
+                <li>会長: 吉澤 幸男（1968）</li>
+                <li>副会長: 榎戸 薫（1978）</li>
+                <li>副会長: 高橋 明宏（1996）</li>
+              </ul>
+            </article>
+
+            <article class="about-board-card">
+              <h3>特任幹事・監査</h3>
+              <ul>
+                <li>特任幹事: 斎藤 博光（1998）</li>
+                <li>特任幹事: 豊嶋 希春（2006）</li>
+                <li>特任幹事: 長谷川 健太郎（2006）</li>
+                <li>会計監査: 甲野 功（1999）</li>
+              </ul>
+            </article>
+
+            <article class="about-board-card">
+              <h3>事務局</h3>
+              <ul>
+                <li>事務局長: 中津 貴文（2012）</li>
+                <li>事務局: 片山 弘崇（2018）</li>
+                <li>事務局: 寺坂 優里（2020）</li>
+                <li>事務局: 遠藤 咲乃（2023）</li>
+                <li>事務局: 藤井 美月（2023）</li>
+                <li>事務局: 高木 美佑（2025）</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Current Club</p>
+            <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l-2 2a3 3 0 1 1-4-4l3-3a3 3 0 0 1 4 0" /><path d="M14 11l2-2a3 3 0 1 1 4 4l-3 3a3 3 0 0 1-4 0" /><path d="M9 15l6-6" /></svg></span>
+            <h2>現役部員との連携</h2>
+          </div>
+
+          <div class="about-current-grid">
+            <article class="about-current-card">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l-2 2a3 3 0 1 1-4-4l3-3a3 3 0 0 1 4 0" /><path d="M14 11l2-2a3 3 0 1 1 4 4l-3 3a3 3 0 0 1-4 0" /><path d="M9 15l6-6" /></svg></span>
+              <h3>連携体制</h3>
+              <p>
+                FANTASISTAでは、現役部員との連絡・相談の窓口を設け、FESTAや周年企画、日常的な活動支援を継続しています。
+              </p>
+            </article>
+
+            <article class="about-current-card">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h11M8 12h11M8 17h11" /><circle cx="5" cy="7" r="1" /><circle cx="5" cy="12" r="1" /><circle cx="5" cy="17" r="1" /></svg></span>
+              <h3>主な連携内容</h3>
+              <ul>
+                <li>FESTAや周年企画に関する調整</li>
+                <li>現役部員との意見交換と情報共有</li>
+                <li>練習会や交流機会を通じた活動支援</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section">
+        <div class="container">
+          <div class="about-cta">
+            <div class="section-head">
+              <p class="section-head__kicker">Next Step</p>
+              <span class="icon-badge icon-badge--dark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l-2 2a3 3 0 1 1-4-4l3-3a3 3 0 0 1 4 0" /><path d="M14 11l2-2a3 3 0 1 1 4 4l-3 3a3 3 0 0 1-4 0" /><path d="M9 15l6-6" /></svg></span>
+              <h2>沿革・活動データ・FESTA情報もあわせてご覧ください</h2>
+            </div>
+            <p>
+              沿革、活動データ、FESTA情報もあわせてご覧いただくことで、FANTASISTAの歩みと現在の活動をより深くご覧いただけます。
+            </p>
+            <div class="panel__actions">
+              <a class="button button--primary" href="../history/">沿革を見る</a>
+              <a class="button button--ghost" href="../data/">数字で見る</a>
+              <a class="button button--ghost" href="../festa/">FESTA情報を見る</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
+      </div>
+    </footer>
+  <!-- MOBILE_NAV_SCRIPT_START -->
+<script>
+(function () {
+  const toggle = document.querySelector('.menu-toggle');
+  const header = document.querySelector('.site-header, .header');
+  const nav = document.getElementById(toggle ? toggle.getAttribute('aria-controls') : 'site-nav');
+
+  if (!header || !toggle || !nav) return;
+
+  function setMenuOpen(open) {
+    header.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle.addEventListener('click', function () {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    setMenuOpen(!isOpen);
+  });
+
+  nav.addEventListener('click', function (event) {
+    const link = event.target.closest('a');
+    if (link) setMenuOpen(false);
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') setMenuOpen(false);
+  });
+
+  window.addEventListener('resize', function () {
+    if (window.matchMedia('(min-width: 861px)').matches) {
+      setMenuOpen(false);
+    }
+  });
+})();
+</script>
+<!-- MOBILE_NAV_SCRIPT_END -->
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

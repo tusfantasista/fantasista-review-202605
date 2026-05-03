@@ -1,0 +1,1219 @@
+﻿<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>History | 東京理科大学舞踏研究部 OBOG会</title>
+    <meta
+      name="description"
+      content="東京理科大学舞踏研究部60周年に寄せて、創部の原点、共同加盟校との歩み、背番号の系譜、競技史、そして次代へ続く節目をたどる歴史ページです。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <style>
+      :root {
+        --history-black: #0f1115;
+        --history-black-soft: #1a1e26;
+        --history-gold: #fec000;
+        --history-gold-deep: #d5a000;
+        --history-ivory: #fffaf0;
+        --history-line: rgba(255, 255, 255, 0.12);
+        --history-text: #59606b;
+        --history-head: #191f2a;
+      }
+
+      .history-hero {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 16% 18%, rgba(254, 192, 0, 0.18), transparent 24%),
+          radial-gradient(circle at 84% 16%, rgba(254, 192, 0, 0.10), transparent 20%),
+          linear-gradient(180deg, #0d0f13 0%, #1a1e26 100%);
+      }
+
+      .history-hero::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, rgba(254, 192, 0, 0.9) 18%, rgba(254, 192, 0, 0.18) 100%);
+      }
+
+      .history-hero .page-hero__eyebrow,
+      .history-hero .page-hero__title,
+      .history-hero .page-hero__lead {
+        color: #ffffff;
+      }
+
+      .history-hero-note {
+        max-width: 780px;
+        margin-top: 16px;
+        color: rgba(255, 255, 255, 0.82);
+        line-height: 1.9;
+      }
+
+      .history-jump {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 26px;
+      }
+
+      .history-jump a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 42px;
+        padding: 0 16px;
+        border: 1px solid rgba(254, 192, 0, 0.22);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        color: #ffffff;
+        font-size: 0.92rem;
+        font-weight: 800;
+      }
+
+      .history-opening {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+        gap: 28px;
+        align-items: stretch;
+      }
+
+      .history-card,
+      .history-bib-wall,
+      .history-era,
+      .history-milestone,
+      .history-school-summary,
+      .history-anniversary {
+        border-radius: 28px;
+        background: #ffffff;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
+      }
+
+      .history-card {
+        padding: 34px;
+      }
+
+      .history-card p {
+        margin: 0 0 16px;
+        color: var(--history-text);
+        line-height: 1.95;
+      }
+
+      .history-card p:last-child {
+        margin-bottom: 0;
+      }
+
+      .history-card strong {
+        color: var(--history-head);
+      }
+
+      .history-bib-wall {
+        position: relative;
+        overflow: hidden;
+        padding: 30px;
+        background:
+          linear-gradient(180deg, rgba(254, 192, 0, 0.08) 0%, rgba(254, 192, 0, 0) 100%),
+          linear-gradient(180deg, #111419 0%, #191d25 100%);
+      }
+
+      .history-bib-wall::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+        pointer-events: none;
+      }
+
+      .history-bib-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .history-bib {
+        position: relative;
+        overflow: hidden;
+        padding: 22px 18px 20px;
+        border: 1px solid rgba(254, 192, 0, 0.16);
+        border-radius: 24px;
+        background: rgba(0, 0, 0, 0.26);
+      }
+
+      .history-bib--wide {
+        grid-column: 1 / -1;
+      }
+
+      .history-bib__number {
+        color: var(--history-gold);
+        font-family: "Oswald", sans-serif;
+        font-size: clamp(2.8rem, 6vw, 4.8rem);
+        line-height: 1;
+        letter-spacing: 0.04em;
+      }
+
+      .history-bib__line {
+        width: 100%;
+        height: 3px;
+        margin: 12px 0 10px;
+        background: linear-gradient(90deg, var(--history-gold) 0%, rgba(254, 192, 0, 0.24) 100%);
+      }
+
+      .history-bib__name {
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+      }
+
+      .history-bib__caption {
+        margin-top: 12px;
+        color: rgba(255, 255, 255, 0.74);
+        line-height: 1.8;
+        font-size: 0.95rem;
+      }
+
+      .history-kpis {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .history-kpi {
+        padding: 24px 22px;
+        border-radius: 24px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7e8 100%);
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
+      }
+
+      .history-kpi span {
+        display: block;
+        margin-bottom: 10px;
+        color: #8a6a00;
+        font-size: 0.84rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .history-kpi strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--history-head);
+        font-size: clamp(1.7rem, 3vw, 2.4rem);
+        line-height: 1;
+      }
+
+      .history-kpi p {
+        margin: 0;
+        color: var(--history-text);
+        line-height: 1.8;
+      }
+
+      .history-era-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .history-era {
+        position: relative;
+        overflow: hidden;
+        min-height: 220px;
+        padding: 26px 24px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff6e5 100%);
+      }
+
+      .history-era::after {
+        content: "";
+        position: absolute;
+        right: -30px;
+        bottom: -30px;
+        width: 116px;
+        height: 116px;
+        border-radius: 50%;
+        background: rgba(254, 192, 0, 0.12);
+      }
+
+      .history-era__year {
+        display: inline-block;
+        margin-bottom: 12px;
+        color: #8a6a00;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.98rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .history-era h3 {
+        margin: 0 0 10px;
+        color: var(--history-head);
+      }
+
+      .history-era p {
+        margin: 0;
+        color: var(--history-text);
+        line-height: 1.85;
+      }
+
+      .history-section-note {
+        max-width: 860px;
+        margin: 0 auto 28px;
+        color: var(--history-text);
+        text-align: center;
+        line-height: 1.9;
+      }
+
+      .history-school-timeline-wrap {
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+
+      .history-school-timeline {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(230px, 1fr));
+        gap: 0;
+        min-width: 1260px;
+      }
+
+      .history-school-item {
+        position: relative;
+        padding: 36px 18px 0;
+      }
+
+      .history-school-item::before {
+        content: "";
+        position: absolute;
+        top: 12px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: rgba(25, 31, 42, 0.12);
+      }
+
+      .history-school-item::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 18px;
+        width: 14px;
+        height: 14px;
+        border: 3px solid #ffffff;
+        border-radius: 50%;
+        background: var(--history-gold);
+        box-shadow: 0 0 0 2px var(--history-gold);
+      }
+
+      .history-school-item:first-child::before {
+        left: 18px;
+      }
+
+      .history-school-item:last-child::before {
+        right: calc(100% - 18px);
+      }
+
+      .history-school-year {
+        display: inline-block;
+        margin-bottom: 12px;
+        color: #8a6a00;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.98rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .history-school-body {
+        min-height: 226px;
+        padding: 22px 20px;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
+      }
+
+      .history-school-body h3 {
+        margin: 0 0 10px;
+        color: var(--history-head);
+      }
+
+      .history-school-body p {
+        margin: 0;
+        color: var(--history-text);
+        line-height: 1.85;
+      }
+
+      .history-school-summary {
+        margin-top: 22px;
+        padding: 24px 22px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7eb 100%);
+      }
+
+      .history-school-summary p {
+        margin: 0;
+        color: var(--history-text);
+        line-height: 1.95;
+      }
+
+      .history-number-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .history-number-card {
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        border-radius: 28px;
+        background: linear-gradient(180deg, #0f1115 0%, #1b2028 100%);
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.12);
+      }
+
+      .history-number-card__inner {
+        padding: 26px 22px 24px;
+      }
+
+      .history-number-card__meta {
+        margin-top: 16px;
+        color: rgba(255, 255, 255, 0.76);
+        line-height: 1.85;
+      }
+
+      .history-timeline {
+        position: relative;
+        margin-left: 12px;
+        padding-left: 30px;
+      }
+
+      .history-timeline::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        bottom: 10px;
+        left: 0;
+        width: 2px;
+        background: linear-gradient(180deg, var(--history-gold) 0%, rgba(254, 192, 0, 0.2) 100%);
+      }
+
+      .history-milestone {
+        position: relative;
+        margin-bottom: 20px;
+        padding: 24px 24px 24px 26px;
+      }
+
+      .history-milestone:last-child {
+        margin-bottom: 0;
+      }
+
+      .history-milestone::before {
+        content: "";
+        position: absolute;
+        top: 30px;
+        left: -38px;
+        width: 14px;
+        height: 14px;
+        border: 4px solid #ffffff;
+        border-radius: 50%;
+        background: var(--history-gold);
+        box-shadow: 0 0 0 2px var(--history-gold);
+      }
+
+      .history-milestone time {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #8a6a00;
+        font-size: 0.86rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .history-milestone h3 {
+        margin: 0 0 8px;
+        color: var(--history-head);
+      }
+
+      .history-milestone p {
+        margin: 0;
+        color: var(--history-text);
+        line-height: 1.9;
+      }
+
+      .history-anniversary {
+        position: relative;
+        overflow: hidden;
+        padding: 34px;
+        background:
+          radial-gradient(circle at 84% 20%, rgba(254, 192, 0, 0.18), transparent 24%),
+          linear-gradient(180deg, #fffdfa 0%, #fff7ea 100%);
+      }
+
+      .history-anniversary::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 10px;
+        background: linear-gradient(180deg, var(--history-gold) 0%, var(--history-gold-deep) 100%);
+      }
+
+      .history-anniversary h2 {
+        margin: 0 0 12px;
+        color: var(--history-head);
+      }
+
+      .history-anniversary p {
+        margin: 0 0 14px;
+        color: var(--history-text);
+        line-height: 1.95;
+      }
+
+      .history-anniversary p:last-child {
+        margin-bottom: 0;
+      }
+
+      @media (max-width: 1080px) {
+        .history-opening,
+        .history-kpis,
+        .history-era-grid,
+        .history-number-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 820px) {
+        .history-opening,
+        .history-kpis,
+        .history-era-grid,
+        .history-number-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .history-card,
+        .history-bib-wall,
+        .history-anniversary {
+          padding: 24px 20px;
+        }
+
+        .history-school-timeline {
+          grid-template-columns: 1fr;
+          min-width: 0;
+        }
+
+        .history-school-item {
+          padding: 0 0 18px 26px;
+        }
+
+        .history-school-item::before {
+          top: 0;
+          bottom: 0;
+          left: 6px;
+          right: auto;
+          width: 2px;
+          height: auto;
+        }
+
+        .history-school-item::after {
+          top: 18px;
+          left: -1px;
+        }
+
+        .history-school-item:first-child::before,
+        .history-school-item:last-child::before {
+          right: auto;
+        }
+
+        .history-school-body {
+          min-height: 0;
+        }
+
+        .history-timeline {
+          margin-left: 6px;
+          padding-left: 22px;
+        }
+
+        .history-milestone {
+          padding: 20px 18px 20px 20px;
+        }
+
+        .history-milestone::before {
+          left: -30px;
+        }
+      }
+          /* History pictogram tune */
+      .history-card .section-head .icon-badge,
+      .history-kpi .icon-badge,
+      .history-era .icon-badge {
+        width: 34px;
+        height: 34px;
+        margin-bottom: 9px;
+        border-radius: 10px;
+      }
+
+      .history-card .section-head .icon-badge svg,
+      .history-kpi .icon-badge svg,
+      .history-era .icon-badge svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      @media (max-width: 720px) {
+        .history-card .section-head .icon-badge,
+        .history-kpi .icon-badge,
+        .history-era .icon-badge {
+          width: 30px;
+          height: 30px;
+          margin-bottom: 8px;
+        }
+
+        .history-card .section-head .icon-badge svg,
+        .history-kpi .icon-badge svg,
+        .history-era .icon-badge svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    
+      /* History pictogram position fix */
+      .history-era {
+        position: relative;
+      }
+
+      .history-era .icon-badge {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        width: 34px;
+        height: 34px;
+        margin: 0;
+        border-radius: 10px;
+        z-index: 1;
+      }
+
+      .history-era .icon-badge svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .history-era__year {
+        display: block;
+        margin-bottom: 12px;
+        padding-right: 48px;
+      }
+
+      @media (max-width: 720px) {
+        .history-era .icon-badge {
+          top: 16px;
+          right: 16px;
+          width: 30px;
+          height: 30px;
+        }
+
+        .history-era .icon-badge svg {
+          width: 16px;
+          height: 16px;
+        }
+
+        .history-era__year {
+          padding-right: 42px;
+        }
+      }
+    
+      /* History KPI pictogram position fix */
+      .history-kpi {
+        position: relative;
+      }
+
+      .history-kpi > .icon-badge {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        width: 34px;
+        height: 34px;
+        margin: 0;
+        border-radius: 10px;
+      }
+
+      .history-kpi > .icon-badge svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .history-kpi > .icon-badge + span {
+        display: block;
+        padding-right: 48px;
+      }
+
+      @media (max-width: 720px) {
+        .history-kpi > .icon-badge {
+          top: 16px;
+          right: 16px;
+          width: 30px;
+          height: 30px;
+        }
+
+        .history-kpi > .icon-badge svg {
+          width: 16px;
+          height: 16px;
+        }
+
+        .history-kpi > .icon-badge + span {
+          padding-right: 42px;
+        }
+      }
+    
+      /* History pictogram centering fix */
+      .history-kpi > .icon-badge,
+      .history-era > .icon-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        font-size: 0;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      .history-kpi > .icon-badge svg,
+      .history-era > .icon-badge svg {
+        display: block;
+        flex: none;
+      }
+    </style>
+      <meta name="robots" content="noindex, nofollow, noarchive" />
+      <meta name="googlebot" content="noindex, nofollow, noarchive" />
+      <!-- REVIEW_NOTICE_STYLE_START -->
+    <style>
+      .review-notice{
+        position:relative;
+        z-index:80;
+        padding:8px 16px;
+        text-align:center;
+        font-size:12px;
+        line-height:1.6;
+        color:#f3e3b6;
+        background:rgba(255,210,28,0.08);
+        border-bottom:1px solid rgba(255,210,28,0.16);
+      }
+
+      .review-form-placeholder{
+        margin-top:16px;
+        padding:16px 18px;
+        border:1px solid rgba(255,210,28,0.18);
+        border-radius:16px;
+        background:rgba(255,255,255,0.04);
+      }
+
+      .review-form-placeholder p{
+        margin:0;
+        line-height:1.8;
+      }
+    </style>
+    <!-- REVIEW_NOTICE_STYLE_END -->
+  </head>
+  <body>
+<!-- REVIEW_NOTICE_START -->
+<div class="review-notice">
+  レビュー用サイトです。正式公開前の確認用です。
+</div>
+<!-- REVIEW_NOTICE_END -->
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="brand" href="../" aria-label="FANTASISTA ホームへ戻る">
+          <img class="brand__logo" src="../assets/img/logo-wordmark-dark.png" alt="東京理科大学舞踏研究部 FANTASISTA" />
+        </a>
+
+                <nav class="site-nav site-nav--desktop" aria-label="主要メニュー">
+          <a href="../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
+          <a href="../about/"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
+          <a href="../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
+          <a href="../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+          <a href="../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
+          <a href="../history/" aria-current="page"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
+          <a href="../data/"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
+          <a href="../gallery/"><span class="nav-copy"><span class="nav-ja">写真・ギャラリー</span><span class="nav-en">Gallery</span></span></a>
+          <a href="../contact/"><span class="nav-copy"><span class="nav-ja">お問い合わせ</span><span class="nav-en">Contact</span></span></a>
+        </nav>
+
+                <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+          <span class="sr-only">メニューを開閉</span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+        </button>
+
+          <nav id="site-nav" class="site-nav site-nav--mobile" aria-label="モバイルメニュー">
+            <a href="../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
+            <a href="../about/"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
+            <a href="../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
+            <a href="../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+            <a href="../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
+            <a href="../history/" aria-current="page"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
+            <a href="../data/"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
+            <a href="../gallery/"><span class="nav-copy"><span class="nav-ja">写真・ギャラリー</span><span class="nav-en">Gallery</span></span></a>
+            <a href="../contact/"><span class="nav-copy"><span class="nav-ja">お問い合わせ</span><span class="nav-en">Contact</span></span></a>
+          </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero history-hero">
+        <div class="page-hero__grid" aria-hidden="true"></div>
+        <img class="page-hero__seal" src="../assets/img/university-seal.png" alt="" aria-hidden="true" />
+        <div class="container page-hero__inner">
+          <p class="page-hero__eyebrow"><span class="label-ja">歩み</span><span class="label-en">History</span></p>
+          <h1 class="page-hero__title">東京理科大学舞踏研究部の歴史</h1>
+          <p class="page-hero__lead">
+            創部以来受け継がれてきた歩みを、節目ごとの事実とともにたどります。
+          </p>
+          <p class="history-hero-note">
+            東京理科大学における舞踏研究活動には1950年代の源流があります。現在に続く東京理科大学舞踏研究部の本格的な歩みは、1960年代半ば、吉澤幸男氏らによる創部から始まりました。その歩みは、現役部員、卒部生、OBOG、そして共同加盟校としてともに活動した仲間たちによって受け継がれ、今日の60周年へと至っています。
+          </p>
+
+          <div class="history-jump">
+            <a href="#history-origin">創部と原点</a>
+            <a href="#history-schools">共同加盟校の変遷</a>
+            <a href="#history-numbers">背番号の系譜</a>
+            <a href="#history-results">競技史</a>
+            <a href="#history-anniversary">60周年</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section" id="history-origin">
+        <div class="container">
+          <div class="history-opening">
+            <article class="history-card">
+              <div class="section-head">
+                <p class="section-head__kicker">Origin</p>
+                <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l2 4 4 .6-3 3 .7 4.4-3.7-2-3.7 2 .7-4.4-3-3 4-.6 2-4Z" /></svg></span>
+                <h2>創部と原点</h2>
+              </div>
+              <p>
+                東京理科大学舞踏研究部の歴史は、<strong>踊ることへの情熱</strong>と、学びの場に文化を育てようとする志から始まりました。
+              </p>
+              <p>
+                東京理科大学における舞踏研究活動には1950年代の源流があり、現在に続く歩みは1960年代半ば、吉澤幸男氏らによる創部によって本格的に動き始めます。
+              </p>
+              <p>
+                1966年頃から続くこの歴史は、一つの世代だけのものではありません。現役部員、卒部生、OBOG、そして共同加盟校としてともに歩んだ仲間たちの思いと実績が積み重なり、今日へと受け継がれてきました。
+              </p>
+            </article>
+
+            <aside class="history-bib-wall" aria-label="理科大背番号モチーフ">
+              <div class="history-bib-grid">
+                <div class="history-bib history-bib--wide">
+                  <div class="history-bib__number">580</div>
+                  <div class="history-bib__line"></div>
+                  <div class="history-bib__name">理科大</div>
+                  <div class="history-bib__caption">理科大一部生の系譜を伝える象徴番号です。</div>
+                </div>
+
+                <div class="history-bib">
+                  <div class="history-bib__number">500</div>
+                  <div class="history-bib__line"></div>
+                  <div class="history-bib__name">理科大</div>
+                  <div class="history-bib__caption">500番台は、東部学連主催試合で使われる理科大二部系譜の番号です。</div>
+                </div>
+
+                <div class="history-bib">
+                  <div class="history-bib__number">120</div>
+                  <div class="history-bib__line"></div>
+                  <div class="history-bib__name">理科大</div>
+                  <div class="history-bib__caption">120番台は、全日本学連主催試合（夏全・冬全）で使われる理科大の番号です。</div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light">
+        <div class="container">
+          <div class="section-head section-head--center">
+            <p class="section-head__kicker"><span class="label-ja">概要</span><span class="label-en">Overview</span></p>
+            <h2>歴史をつかむ4つの節目</h2>
+          </div>
+
+          <div class="history-kpis">
+            <article class="history-kpi">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l2 4 4 .6-3 3 .7 4.4-3.7-2-3.7 2 .7-4.4-3-3 4-.6 2-4Z" /></svg></span>
+              <span>Founding</span>
+              <strong>1960s</strong>
+              <p>1960年代半ば、吉澤幸男氏らによる創部から、現在に続く本格的な歩みが始まりました。</p>
+            </article>
+
+            <article class="history-kpi">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v3a4 4 0 0 1-8 0V4Z" /><path d="M9 18h6" /><path d="M12 11v7" /><path d="M8 5H5a2 2 0 0 0 2 4h1" /><path d="M16 5h3a2 2 0 0 1-2 4h-1" /></svg></span>
+              <span>Division I</span>
+              <strong>2004</strong>
+              <p>創部以来初めて一部校となり、部全体の厚みとチーム力が結実しました。</p>
+            </article>
+
+            <article class="history-kpi">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v3a4 4 0 0 1-8 0V4Z" /><path d="M9 18h6" /><path d="M12 11v7" /><path d="M8 5H5a2 2 0 0 0 2 4h1" /><path d="M16 5h3a2 2 0 0 1-2 4h-1" /></svg></span>
+              <span>Grand Slam</span>
+              <strong>2006</strong>
+              <p>豊嶋・岸野組が、理科大舞研史に刻まれる特筆すべき偉業を成し遂げました。</p>
+            </article>
+
+            <article class="history-kpi">
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l2 4 4 .6-3 3 .7 4.4-3.7-2-3.7 2 .7-4.4-3-3 4-.6 2-4Z" /></svg></span>
+              <span>60th</span>
+              <strong>2026</strong>
+              <p>60周年は到達点ではなく、次の10年、20年へと歴史を渡す節目です。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section">
+        <div class="container">
+          <div class="section-head section-head--center">
+            <p class="section-head__kicker">Four Eras</p>
+            <h2>4つの時代でたどる</h2>
+          </div>
+
+          <p class="history-section-note">
+            舞踏研究部の歴史は、創部の時代から共同加盟校との広がり、競技成績の飛躍、困難を越えた復調、そして次代へ続く継承へと、いくつもの相を重ねながら続いてきました。
+          </p>
+
+          <div class="history-era-grid">
+            <article class="history-era">
+              <span class="history-era__year">1960s - 1970s</span>
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l2 4 4 .6-3 3 .7 4.4-3.7-2-3.7 2 .7-4.4-3-3 4-.6 2-4Z" /></svg></span>
+              <h3>創部と拡張</h3>
+              <p>
+                理科大一部生を中心に始まった活動は、理科大二部生、そして共同加盟校の仲間たちを迎えながら、より大きな組織へと育っていきました。
+              </p>
+            </article>
+
+            <article class="history-era">
+              <span class="history-era__year">1980s - 1990s</span>
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v3a4 4 0 0 1-8 0V4Z" /><path d="M9 18h6" /><path d="M12 11v7" /><path d="M8 5H5a2 2 0 0 0 2 4h1" /><path d="M16 5h3a2 2 0 0 1-2 4h-1" /></svg></span>
+              <h3>強豪校としての存在感</h3>
+              <p>
+                東部日本の優勝者を輩出し、1990年代後半には全日本の舞台で理科大の名を鮮やかに刻む時代を迎えました。
+              </p>
+            </article>
+
+            <article class="history-era">
+              <span class="history-era__year">2004 - 2009</span>
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v3a4 4 0 0 1-8 0V4Z" /><path d="M9 18h6" /><path d="M12 11v7" /><path d="M8 5H5a2 2 0 0 0 2 4h1" /><path d="M16 5h3a2 2 0 0 1-2 4h-1" /></svg></span>
+              <h3>一部校と黄金の到達点</h3>
+              <p>
+                初の一部校、団体上位、グランドスラム、モダン種目での全日本優勝、冬全クイック連覇と、歴史に残る成果が続きました。
+              </p>
+            </article>
+
+            <article class="history-era">
+              <span class="history-era__year">2010s - 2020s</span>
+              <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13l-2 2a3 3 0 1 1-4-4l3-3a3 3 0 0 1 4 0" /><path d="M14 11l2-2a3 3 0 1 1 4 4l-3 3a3 3 0 0 1-4 0" /><path d="M9 15l6-6" /></svg></span>
+              <h3>再起と次代への継承</h3>
+              <p>
+                苦しい時期を越えて一部校復帰を果たし、コロナ禍の制約を経てもなお、現役生は再び力を示し始めています。
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light" id="history-schools">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Partner Schools</p>
+            <h2>共同加盟校の変遷</h2>
+          </div>
+
+          <div class="history-school-timeline-wrap">
+            <div class="history-school-timeline">
+              <article class="history-school-item">
+                <div class="history-school-year">1960s Mid</div>
+                <div class="history-school-body">
+                  <h3>創部期の広がり</h3>
+                  <p>理科大一部生を中心に始まった活動に、東京成徳大学、東京成徳短期大学、慈恵看護専門学校が共同加盟校として加わりました。</p>
+                </div>
+              </article>
+
+              <article class="history-school-item">
+                <div class="history-school-year">Same Era</div>
+                <div class="history-school-body">
+                  <h3>理科大二部生の始動</h3>
+                  <p>理科大二部生もほぼ同じ時期に活動を開始し、のちの二部系譜と背番号文化へつながっていきます。</p>
+                </div>
+              </article>
+
+              <article class="history-school-item">
+                <div class="history-school-year">1970s Mid</div>
+                <div class="history-school-body">
+                  <h3>板橋看護が加わる</h3>
+                  <p>1970年代中盤には板橋看護が加わり、共同加盟校体制はさらに厚みを増していきました。</p>
+                </div>
+              </article>
+
+              <article class="history-school-item">
+                <div class="history-school-year">1970s Late</div>
+                <div class="history-school-body">
+                  <h3>厚生年金看護と一部・二部合流</h3>
+                  <p>1970年代後半には厚生年金看護も加わり、同時期に一部と二部が合流して、舞踏研究部はより大きな組織となりました。</p>
+                </div>
+              </article>
+
+              <article class="history-school-item">
+                <div class="history-school-year">1980s - 2010s</div>
+                <div class="history-school-body">
+                  <h3>女子栄養大学との長い協力</h3>
+                  <p>女子栄養大学は長きにわたり共同加盟校として活動をともにし、特に理科大二部生の活動や二部制の練習会、大井での練習会を支えました。</p>
+                </div>
+              </article>
+
+              <article class="history-school-item">
+                <div class="history-school-year">2010 - 2012</div>
+                <div class="history-school-body">
+                  <h3>新たな参加と一区切り</h3>
+                  <p>2010年には学習院大学が加わり、2012年度の最後の卒部をもって東京成徳大学・東京成徳短期大学は共同加盟校としての歩みを終えました。</p>
+                </div>
+              </article>
+
+              <article class="history-school-item">
+                <div class="history-school-year">Heisei Final Years</div>
+                <div class="history-school-body">
+                  <h3>東京音楽大学が加わる</h3>
+                  <p>平成最後の時期には東京音楽大学も共同加盟校として加わり、歴史は次の世代の広がりへとつながっていきました。</p>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="history-school-summary">
+            <p>
+              東京理科大学舞踏研究部の歴史は、理科大一部だけの歴史ではありません。理科大二部生の歩みであり、共同加盟校としてともに学び、踊り、支えてくれた仲間たちの歴史でもあります。その広がりこそが、この部の品格と厚みを形づくってきました。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section" id="history-numbers">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Back Numbers</p>
+            <h2>背番号が語る系譜</h2>
+          </div>
+
+          <p class="history-section-note">
+            背番号は、単なる数字ではありません。黒い生地に黄色の数字、一本の横線、その下に記された「理科大」の意匠は、舞踏研究部の歴史と誇りを映す印として受け継がれてきました。東部学連主催試合では500番台・580番台、全日本学連主催試合（夏全・冬全）では120番台が用いられます。
+          </p>
+
+          <div class="history-number-grid">
+            <article class="history-number-card">
+              <div class="history-number-card__inner">
+                <div class="history-bib">
+                  <div class="history-bib__number">580</div>
+                  <div class="history-bib__line"></div>
+                  <div class="history-bib__name">理科大</div>
+                </div>
+                <div class="history-number-card__meta">
+                  580番台は、東部学連主催試合で使われる理科大一部系譜の番号です。主将が580番を背負う伝統も受け継がれています。
+                </div>
+              </div>
+            </article>
+
+            <article class="history-number-card">
+              <div class="history-number-card__inner">
+                <div class="history-bib">
+                  <div class="history-bib__number">500</div>
+                  <div class="history-bib__line"></div>
+                  <div class="history-bib__name">理科大</div>
+                </div>
+                <div class="history-number-card__meta">
+                  500番台は、東部学連主催試合で使われる理科大二部系譜の番号です。もう一つの流れもまた、部の歴史に欠かせない柱です。
+                </div>
+              </div>
+            </article>
+
+            <article class="history-number-card">
+              <div class="history-number-card__inner">
+                <div class="history-bib">
+                  <div class="history-bib__number">120</div>
+                  <div class="history-bib__line"></div>
+                  <div class="history-bib__name">理科大</div>
+                </div>
+                <div class="history-number-card__meta">
+                  120番台は、全日本学連主催試合（夏全・冬全）で使われる理科大の番号です。東部学連の番号とは別に、全国の舞台で受け継がれています。
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light" id="history-results">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Achievements</p>
+            <h2>競技史に刻まれた節目</h2>
+          </div>
+
+          <div class="history-timeline">
+            <article class="history-milestone">
+              <time>1980年代</time>
+              <h3>強豪校としての存在感を高める</h3>
+              <p>
+                1980年代、理科大舞研は東部日本の優勝者を輩出するなど、強豪校として存在感を高めました。水谷組をはじめ、1980年代後半にも優勝者を送り出し、黄金期への礎を築いていきます。
+              </p>
+            </article>
+
+            <article class="history-milestone">
+              <time>1990年代</time>
+              <h3>復活と全国舞台への飛躍</h3>
+              <p>
+                1990年代前半には低迷期もありましたが、1990年代後半に大きく復活しました。1996年には田中・木戸組が冬の全日本戦サンバの部で優勝し、1999年には伊從・大崎組が夏の全日本ラテンの部を制して、理科大初の夏の全日本覇者となりました。2001年には三森・高橋組が夏の全日本モダンの部で準優勝しています。
+              </p>
+            </article>
+
+            <article class="history-milestone">
+              <time>2004年 - 2005年</time>
+              <h3>初の一部校と団体3位</h3>
+              <p>
+                2004年、東京理科大学舞踏研究部は創部以来初めて一部校となりました。それは一人の絶対的エースに依るものではなく、部全体の厚みとチーム力による成果でした。翌2005年には冬の全日本で団体3位を記録します。
+              </p>
+            </article>
+
+            <article class="history-milestone">
+              <time>2006年</time>
+              <h3>グランドスラムという偉業</h3>
+              <p>
+                2006年、豊嶋・岸野組は、春東都、春東部、秋東都、秋東部、夏の全日本、冬の全日本を含むレギュラー戦で出場可能なすべての種目を制し、いわゆるグランドスラムを達成しました。理科大舞研の歴史に残る、特筆すべき偉業です。
+              </p>
+            </article>
+
+            <article class="history-milestone">
+              <time>2008年 - 2009年</time>
+              <h3>モダン種目初制覇と冬全クイック連覇</h3>
+              <p>
+                2008年、松本・水島組が冬の全日本戦クイックステップの部で優勝し、理科大として初めてモダン種目での全日本優勝を果たしました。この年の団体成績は4位。さらに2009年には若代・伊藤組が冬の全日本戦クイックステップの部で優勝し、理科大は冬全クイック連覇を達成しました。
+              </p>
+            </article>
+
+            <article class="history-milestone">
+              <time>2010年代前半</time>
+              <h3>苦しい時期を越えて次代へつなぐ</h3>
+              <p>
+                2010年代前半、理科大舞研は二部校への陥落や活動上の困難など、苦しい時期を経験しました。それでも部を支え、次の世代へつなぐ努力は続き、のちの一部校復帰へと結びついていきます。
+              </p>
+            </article>
+
+            <article class="history-milestone">
+              <time>2016年</time>
+              <h3>一部校復帰、50周年、そして新たな広がり</h3>
+              <p>
+                2016年、春東部戦で団体5位となり、2009年以来の一部校復帰を果たしました。同年、春東部のフォーメーションでは準優勝。創部50周年記念パーティーには多くのOBOGプロが集い、冬の全日本戦では山本・君島組がルンバの部で優勝しました。また、この年、東京音楽大学が共同加盟校として加わっています。
+              </p>
+            </article>
+
+            <article class="history-milestone">
+              <time>2017年 - 2019年</time>
+              <h3>冬の全日本で4年連続チャンピオン</h3>
+              <p>
+                2017年には米倉・野永組が冬の全日本戦クイックステップの部で優勝し、2018年には國井・平本（立教）組が冬の全日本戦ルンバの部で優勝、2019年には和田・佐藤組が冬の全日本戦タンゴの部で優勝しました。理科大は冬の全日本で4年連続チャンピオンを輩出しています。
+              </p>
+            </article>
+
+            <article class="history-milestone">
+              <time>2020年代</time>
+              <h3>制約を越えて、再び示される力</h3>
+              <p>
+                2020年、新型コロナの影響により活動や大会は大きく制限されました。その中で鈴木・寺坂組が冬の全日本戦ワルツの部で準優勝。2021年には春東部団体6位、2022年には澁谷・浅田組が春東都で優勝し、冬の全日本戦チャチャチャの部で準優勝を果たしました。コロナ禍を越え、現役生は再び力を示し始めています。
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section" id="history-anniversary">
+        <div class="container">
+          <article class="history-anniversary">
+            <div class="section-head">
+              <p class="section-head__kicker">60th Anniversary</p>
+              <h2>60周年は、次代へつなぐ節目</h2>
+            </div>
+            <p>
+              60周年は、到達点ではありません。次の10年、20年へ、東京理科大学舞踏研究部の歴史を手渡していくための節目です。
+            </p>
+            <p>
+              創部以来の歩みを支えてきた現役部員、卒部生、OBOG、そして共同加盟校の皆さまが、世代を越えて集うことには、60周年にふさわしい大きな意義があります。
+            </p>
+            <p>
+              60周年 FANTASISTA FESTA は、これまでの歩みを顕彰するとともに、次の世代へと歴史をつなぐ場でありたいと考えています。
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
+      </div>
+    </footer>
+  <!-- MOBILE_NAV_SCRIPT_START -->
+<script>
+(function () {
+  const toggle = document.querySelector('.menu-toggle');
+  const header = document.querySelector('.site-header, .header');
+  const nav = document.getElementById(toggle ? toggle.getAttribute('aria-controls') : 'site-nav');
+
+  if (!header || !toggle || !nav) return;
+
+  function setMenuOpen(open) {
+    header.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle.addEventListener('click', function () {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    setMenuOpen(!isOpen);
+  });
+
+  nav.addEventListener('click', function (event) {
+    const link = event.target.closest('a');
+    if (link) setMenuOpen(false);
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') setMenuOpen(false);
+  });
+
+  window.addEventListener('resize', function () {
+    if (window.matchMedia('(min-width: 861px)').matches) {
+      setMenuOpen(false);
+    }
+  });
+})();
+</script>
+<!-- MOBILE_NAV_SCRIPT_END -->
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

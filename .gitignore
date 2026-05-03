@@ -1,0 +1,23 @@
+﻿# review repo housekeeping
+*.zip
+*.bak
+*.bak-*
+*.tmp
+*.tmp.*
+.DS_Store
+Thumbs.db
+
+# local backup/work files
+backup/
+_backup*/
+*.log
+
+# unpublished / private working materials
+private/
+drafts/
+memo/
+notes/
+
+# git / OS
+.git/
+_backup_*
