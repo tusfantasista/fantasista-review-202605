@@ -2985,6 +2985,76 @@
       }
     </style>
     <!-- REVIEW_DATA_FINAL_RESPONSIVE_FIX_END -->
+      <!-- REVIEW_DATA_DEVICE_STABILIZE_START -->
+    <style>
+      @media (max-width: 1024px) {
+        .stats-two-col,
+        .specialty-layout,
+        .heatmap-layout,
+        .rolling-layout {
+          grid-template-columns: 1fr !important;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+
+        .mobile-simplify,
+        .device-advice-section {
+          display: block !important;
+        }
+
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll,
+        .scroll-hint--heatmap,
+        .scroll-hint--rolling,
+        .rolling-axis-note {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .stats-grid {
+          grid-template-columns: 1fr !important;
+        }
+
+        .stats-panel {
+          padding: 14px 12px !important;
+          border-radius: 14px !important;
+        }
+
+        .stat-card,
+        .donut-card,
+        .summary-card,
+        .ranking-card,
+        .rolling-callout,
+        .device-advice,
+        .group-row,
+        .balance-summary {
+          padding: 12px 10px !important;
+          border-radius: 12px !important;
+        }
+
+        .stats-head h2 {
+          font-size: clamp(1.12rem, 5vw, 1.42rem) !important;
+          line-height: 1.22 !important;
+        }
+
+        .stats-head p,
+        .stats-footnote,
+        .school-note,
+        .device-advice p,
+        .rolling-callout,
+        .mobile-simplify-note p,
+        .mobile-simplify-table th,
+        .mobile-simplify-table td {
+          font-size: 0.82rem !important;
+          line-height: 1.62 !important;
+        }
+      }
+    </style>
+    <!-- REVIEW_DATA_DEVICE_STABILIZE_END -->
   </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
@@ -4331,93 +4401,9 @@
 })();
 </script>
 <!-- MOBILE_NAV_SCRIPT_END -->
-  <script id="mobile-horizontal-scroll-fix-script">
-(function () {
-  function alreadyWrapped(el) {
-    return el.parentElement && el.parentElement.classList.contains("mobile-x-scroll");
-  }
-
-  function wrap(el) {
-    if (!el || alreadyWrapped(el)) return;
-
-    var wrapper = document.createElement("div");
-    wrapper.className = "mobile-x-scroll";
-
-    var hint = document.createElement("div");
-    hint.className = "mobile-scroll-hint";
-    hint.textContent = "横にスクロールできます →";
-
-    el.parentNode.insertBefore(hint, el);
-    el.parentNode.insertBefore(wrapper, el);
-    wrapper.appendChild(el);
-  }
-
-  function textOf(el) {
-    return ((el.id || "") + " " + (el.className || "") + " " + (el.textContent || "")).toLowerCase();
-  }
-
-  function isTargetContext(el) {
-    var t = textOf(el);
-    return (
-      t.indexOf("4年") !== -1 ||
-      t.indexOf("４年") !== -1 ||
-      t.indexOf("ローリング") !== -1 ||
-      t.indexOf("rolling") !== -1 ||
-      t.indexOf("ヒートマップ") !== -1 ||
-      t.indexOf("heatmap") !== -1 ||
-      t.indexOf("heat map") !== -1
-    );
-  }
-
-  function findNearbyVisualBlock(heading) {
-    var node = heading.nextElementSibling;
-
-    for (var i = 0; node && i < 6; i++, node = node.nextElementSibling) {
-      if (node.matches && node.matches("table, svg, canvas, .plotly-graph-div, .chart, .heatmap, .rolling, [class*='heatmap'], [class*='rolling'], [id*='heatmap'], [id*='rolling']")) {
-        return node;
-      }
-
-      var inner = node.querySelector && node.querySelector("table, svg, canvas, .plotly-graph-div, .chart, .heatmap, .rolling, [class*='heatmap'], [class*='rolling'], [id*='heatmap'], [id*='rolling']");
-      if (inner) return inner;
-    }
-
-    return null;
-  }
-
-  function applyMobileScroll() {
-    var directTargets = document.querySelectorAll(
-      "table[id*='heatmap'], table[class*='heatmap'], table[id*='rolling'], table[class*='rolling'], " +
-      "svg[id*='heatmap'], svg[class*='heatmap'], svg[id*='rolling'], svg[class*='rolling'], " +
-      "canvas[id*='heatmap'], canvas[class*='heatmap'], canvas[id*='rolling'], canvas[class*='rolling'], " +
-      ".plotly-graph-div[id*='heatmap'], .plotly-graph-div[class*='heatmap'], " +
-      ".plotly-graph-div[id*='rolling'], .plotly-graph-div[class*='rolling'], " +
-      ".heatmap, .rolling, [id*='heatmap'], [class*='heatmap'], [id*='rolling'], [class*='rolling']"
-    );
-
-    directTargets.forEach(function (el) {
-      if (el.closest(".mobile-x-scroll")) return;
-      wrap(el);
-    });
-
-    var headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6, caption, .title, .section-title");
-    headings.forEach(function (heading) {
-      if (!isTargetContext(heading)) return;
-      var visual = findNearbyVisualBlock(heading);
-      if (visual && !visual.closest(".mobile-x-scroll")) {
-        wrap(visual);
-      }
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", applyMobileScroll);
-  } else {
-    applyMobileScroll();
-  }
-})();
-</script>
-</body>
+  </body>
 </html>
+
 
 
 
