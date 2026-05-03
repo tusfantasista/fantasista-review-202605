@@ -143,6 +143,159 @@
         }
       }
       /* REVIEW_SCROLL_MOBILE_END */
+          /* REVIEW_MOBILE_COMPACT_START */
+      .heatmap-scroll,
+      .rolling-chart-scroll,
+      .rolling-strip-scroll {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x;
+      }
+
+      @media (max-width: 1024px) {
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll {
+          margin-inline: -8px;
+          padding-inline: 8px;
+        }
+
+        .heatmap-board {
+          min-width: 860px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 104px minmax(0, 1fr);
+          gap: 10px;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(62px, 1fr));
+          gap: 8px;
+        }
+
+        .heatmap-cell {
+          min-height: 72px;
+          padding: 8px 6px;
+          border-radius: 14px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.68rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.86rem;
+        }
+
+        .heatmap-cell__flag {
+          padding: 1px 5px;
+          font-size: 0.56rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 720px;
+        }
+
+        .rolling-chart-svg {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 56px;
+          gap: 6px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 60px;
+          padding: 6px 4px;
+          border-radius: 12px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.66rem;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.82rem;
+        }
+
+        .scroll-hint {
+          font-size: 0.86rem;
+          line-height: 1.7;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .heatmap-board {
+          min-width: 760px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 88px minmax(0, 1fr);
+          gap: 8px;
+        }
+
+        .heatmap-row__label {
+          padding: 10px 8px;
+          border-radius: 14px;
+        }
+
+        .heatmap-row__label strong {
+          font-size: 0.84rem;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.74rem;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(54px, 1fr));
+          gap: 6px;
+        }
+
+        .heatmap-cell {
+          min-height: 64px;
+          padding: 7px 5px;
+          border-radius: 12px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.62rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.78rem;
+          line-height: 1.1;
+        }
+
+        .heatmap-cell__flag {
+          font-size: 0.52rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 640px;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 50px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 56px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.62rem;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.76rem;
+        }
+      }
+      /* REVIEW_MOBILE_COMPACT_END */
     </style>
     <!-- REVIEW_NOTICE_STYLE_END -->
     <style>
@@ -959,6 +1112,159 @@
         }
       }
       /* REVIEW_SCROLL_MOBILE_END */
+          /* REVIEW_MOBILE_COMPACT_START */
+      .heatmap-scroll,
+      .rolling-chart-scroll,
+      .rolling-strip-scroll {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x;
+      }
+
+      @media (max-width: 1024px) {
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll {
+          margin-inline: -8px;
+          padding-inline: 8px;
+        }
+
+        .heatmap-board {
+          min-width: 860px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 104px minmax(0, 1fr);
+          gap: 10px;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(62px, 1fr));
+          gap: 8px;
+        }
+
+        .heatmap-cell {
+          min-height: 72px;
+          padding: 8px 6px;
+          border-radius: 14px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.68rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.86rem;
+        }
+
+        .heatmap-cell__flag {
+          padding: 1px 5px;
+          font-size: 0.56rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 720px;
+        }
+
+        .rolling-chart-svg {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 56px;
+          gap: 6px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 60px;
+          padding: 6px 4px;
+          border-radius: 12px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.66rem;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.82rem;
+        }
+
+        .scroll-hint {
+          font-size: 0.86rem;
+          line-height: 1.7;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .heatmap-board {
+          min-width: 760px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 88px minmax(0, 1fr);
+          gap: 8px;
+        }
+
+        .heatmap-row__label {
+          padding: 10px 8px;
+          border-radius: 14px;
+        }
+
+        .heatmap-row__label strong {
+          font-size: 0.84rem;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.74rem;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(54px, 1fr));
+          gap: 6px;
+        }
+
+        .heatmap-cell {
+          min-height: 64px;
+          padding: 7px 5px;
+          border-radius: 12px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.62rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.78rem;
+          line-height: 1.1;
+        }
+
+        .heatmap-cell__flag {
+          font-size: 0.52rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 640px;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 50px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 56px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.62rem;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.76rem;
+        }
+      }
+      /* REVIEW_MOBILE_COMPACT_END */
     </style>
   <style id="mobile-horizontal-scroll-fix">
   /* Mobile horizontal scroll support for wide tables/charts */
@@ -1092,6 +1398,159 @@
         }
       }
       /* REVIEW_SCROLL_MOBILE_END */
+          /* REVIEW_MOBILE_COMPACT_START */
+      .heatmap-scroll,
+      .rolling-chart-scroll,
+      .rolling-strip-scroll {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x;
+      }
+
+      @media (max-width: 1024px) {
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll {
+          margin-inline: -8px;
+          padding-inline: 8px;
+        }
+
+        .heatmap-board {
+          min-width: 860px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 104px minmax(0, 1fr);
+          gap: 10px;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(62px, 1fr));
+          gap: 8px;
+        }
+
+        .heatmap-cell {
+          min-height: 72px;
+          padding: 8px 6px;
+          border-radius: 14px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.68rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.86rem;
+        }
+
+        .heatmap-cell__flag {
+          padding: 1px 5px;
+          font-size: 0.56rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 720px;
+        }
+
+        .rolling-chart-svg {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 56px;
+          gap: 6px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 60px;
+          padding: 6px 4px;
+          border-radius: 12px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.66rem;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.82rem;
+        }
+
+        .scroll-hint {
+          font-size: 0.86rem;
+          line-height: 1.7;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .heatmap-board {
+          min-width: 760px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 88px minmax(0, 1fr);
+          gap: 8px;
+        }
+
+        .heatmap-row__label {
+          padding: 10px 8px;
+          border-radius: 14px;
+        }
+
+        .heatmap-row__label strong {
+          font-size: 0.84rem;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.74rem;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(54px, 1fr));
+          gap: 6px;
+        }
+
+        .heatmap-cell {
+          min-height: 64px;
+          padding: 7px 5px;
+          border-radius: 12px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.62rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.78rem;
+          line-height: 1.1;
+        }
+
+        .heatmap-cell__flag {
+          font-size: 0.52rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 640px;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 50px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 56px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.62rem;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.76rem;
+        }
+      }
+      /* REVIEW_MOBILE_COMPACT_END */
     </style>
 </head>
   <body>
@@ -2455,5 +2914,6 @@
 </script>
 </body>
 </html>
+
 
 
