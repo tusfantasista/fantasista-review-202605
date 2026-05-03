@@ -142,59 +142,72 @@
           font-size: 0.88rem;
         }
       }
-      /* REVIEW_SCROLL_MOBILE_END */
-          /* REVIEW_MOBILE_COMPACT_START */
-      .heatmap-scroll,
-      .rolling-chart-scroll,
-      .rolling-strip-scroll {
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-x: contain;
-        touch-action: pan-x;
-      }
-
+      /* REVIEW_SCROLL_MOBILE_END */      /* REVIEW_MOBILE_COMPACT_START */
       @media (max-width: 1024px) {
         .heatmap-scroll,
         .rolling-chart-scroll,
         .rolling-strip-scroll {
-          margin-inline: -8px;
-          padding-inline: 8px;
+          margin-inline: -6px;
+          padding-inline: 6px;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-x: contain;
+          touch-action: pan-x;
         }
 
         .heatmap-board {
-          min-width: 860px;
-        }
-
-        .heatmap-row {
-          grid-template-columns: 104px minmax(0, 1fr);
-          gap: 10px;
-        }
-
-        .heatmap-row__cells {
-          grid-template-columns: repeat(10, minmax(62px, 1fr));
+          min-width: 720px;
           gap: 8px;
         }
 
-        .heatmap-cell {
-          min-height: 72px;
-          padding: 8px 6px;
+        .heatmap-row {
+          grid-template-columns: 84px minmax(0, 1fr);
+          gap: 8px;
+        }
+
+        .heatmap-row__label {
+          padding: 9px 7px;
           border-radius: 14px;
         }
 
+        .heatmap-row__label strong {
+          font-size: 0.8rem;
+          line-height: 1.2;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.7rem;
+          line-height: 1.25;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(48px, 1fr));
+          gap: 5px;
+        }
+
+        .heatmap-cell {
+          min-height: 58px;
+          padding: 6px 4px;
+          border-radius: 11px;
+        }
+
         .heatmap-cell__year {
-          font-size: 0.68rem;
+          font-size: 0.58rem;
+          line-height: 1.15;
         }
 
         .heatmap-cell__count {
-          font-size: 0.86rem;
+          font-size: 0.72rem;
+          line-height: 1.05;
         }
 
         .heatmap-cell__flag {
-          padding: 1px 5px;
-          font-size: 0.56rem;
+          margin-top: 3px;
+          padding: 1px 4px;
+          font-size: 0.48rem;
         }
 
         .rolling-chart-shell {
-          min-width: 720px;
+          min-width: 560px;
         }
 
         .rolling-chart-svg {
@@ -203,96 +216,126 @@
           height: auto;
         }
 
+        #rollingChartSvg text {
+          font-size: 8px !important;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.84rem;
+          line-height: 1.65;
+        }
+
+        .rolling-callouts {
+          gap: 8px;
+          margin-top: 12px;
+        }
+
+        .rolling-callout {
+          padding: 10px 12px;
+          border-radius: 14px;
+          font-size: 0.86rem;
+          line-height: 1.6;
+        }
+
         .rolling-strip {
-          grid-auto-columns: 56px;
-          gap: 6px;
+          grid-auto-columns: 44px;
+          gap: 5px;
         }
 
         .rolling-strip__cell {
-          min-height: 60px;
-          padding: 6px 4px;
-          border-radius: 12px;
+          min-height: 50px;
+          padding: 5px 3px;
+          border-radius: 10px;
         }
 
         .rolling-strip__year {
-          font-size: 0.66rem;
+          font-size: 0.56rem;
+          line-height: 1.1;
         }
 
         .rolling-strip__count {
-          font-size: 0.82rem;
-        }
-
-        .scroll-hint {
-          font-size: 0.86rem;
-          line-height: 1.7;
+          font-size: 0.68rem;
+          line-height: 1.05;
         }
       }
 
       @media (max-width: 640px) {
         .heatmap-board {
-          min-width: 760px;
-        }
-
-        .heatmap-row {
-          grid-template-columns: 88px minmax(0, 1fr);
-          gap: 8px;
-        }
-
-        .heatmap-row__label {
-          padding: 10px 8px;
-          border-radius: 14px;
-        }
-
-        .heatmap-row__label strong {
-          font-size: 0.84rem;
-        }
-
-        .heatmap-row__label span {
-          font-size: 0.74rem;
-        }
-
-        .heatmap-row__cells {
-          grid-template-columns: repeat(10, minmax(54px, 1fr));
-          gap: 6px;
-        }
-
-        .heatmap-cell {
-          min-height: 64px;
-          padding: 7px 5px;
-          border-radius: 12px;
-        }
-
-        .heatmap-cell__year {
-          font-size: 0.62rem;
-        }
-
-        .heatmap-cell__count {
-          font-size: 0.78rem;
-          line-height: 1.1;
-        }
-
-        .heatmap-cell__flag {
-          font-size: 0.52rem;
-        }
-
-        .rolling-chart-shell {
           min-width: 640px;
         }
 
-        .rolling-strip {
-          grid-auto-columns: 50px;
+        .heatmap-row {
+          grid-template-columns: 72px minmax(0, 1fr);
+          gap: 6px;
         }
 
-        .rolling-strip__cell {
-          min-height: 56px;
+        .heatmap-row__label {
+          padding: 8px 6px;
+          border-radius: 12px;
         }
 
-        .rolling-strip__year {
+        .heatmap-row__label strong {
+          font-size: 0.72rem;
+        }
+
+        .heatmap-row__label span {
           font-size: 0.62rem;
         }
 
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(42px, 1fr));
+          gap: 4px;
+        }
+
+        .heatmap-cell {
+          min-height: 52px;
+          padding: 5px 3px;
+          border-radius: 9px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.54rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.66rem;
+        }
+
+        .heatmap-cell__flag {
+          font-size: 0.44rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 500px;
+        }
+
+        #rollingChartSvg text {
+          font-size: 7px !important;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 40px;
+          gap: 4px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 46px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.52rem;
+        }
+
         .rolling-strip__count {
-          font-size: 0.76rem;
+          font-size: 0.62rem;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.8rem;
         }
       }
       /* REVIEW_MOBILE_COMPACT_END */
@@ -1111,59 +1154,72 @@
           font-size: 0.88rem;
         }
       }
-      /* REVIEW_SCROLL_MOBILE_END */
-          /* REVIEW_MOBILE_COMPACT_START */
-      .heatmap-scroll,
-      .rolling-chart-scroll,
-      .rolling-strip-scroll {
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-x: contain;
-        touch-action: pan-x;
-      }
-
+      /* REVIEW_SCROLL_MOBILE_END */      /* REVIEW_MOBILE_COMPACT_START */
       @media (max-width: 1024px) {
         .heatmap-scroll,
         .rolling-chart-scroll,
         .rolling-strip-scroll {
-          margin-inline: -8px;
-          padding-inline: 8px;
+          margin-inline: -6px;
+          padding-inline: 6px;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-x: contain;
+          touch-action: pan-x;
         }
 
         .heatmap-board {
-          min-width: 860px;
-        }
-
-        .heatmap-row {
-          grid-template-columns: 104px minmax(0, 1fr);
-          gap: 10px;
-        }
-
-        .heatmap-row__cells {
-          grid-template-columns: repeat(10, minmax(62px, 1fr));
+          min-width: 720px;
           gap: 8px;
         }
 
-        .heatmap-cell {
-          min-height: 72px;
-          padding: 8px 6px;
+        .heatmap-row {
+          grid-template-columns: 84px minmax(0, 1fr);
+          gap: 8px;
+        }
+
+        .heatmap-row__label {
+          padding: 9px 7px;
           border-radius: 14px;
         }
 
+        .heatmap-row__label strong {
+          font-size: 0.8rem;
+          line-height: 1.2;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.7rem;
+          line-height: 1.25;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(48px, 1fr));
+          gap: 5px;
+        }
+
+        .heatmap-cell {
+          min-height: 58px;
+          padding: 6px 4px;
+          border-radius: 11px;
+        }
+
         .heatmap-cell__year {
-          font-size: 0.68rem;
+          font-size: 0.58rem;
+          line-height: 1.15;
         }
 
         .heatmap-cell__count {
-          font-size: 0.86rem;
+          font-size: 0.72rem;
+          line-height: 1.05;
         }
 
         .heatmap-cell__flag {
-          padding: 1px 5px;
-          font-size: 0.56rem;
+          margin-top: 3px;
+          padding: 1px 4px;
+          font-size: 0.48rem;
         }
 
         .rolling-chart-shell {
-          min-width: 720px;
+          min-width: 560px;
         }
 
         .rolling-chart-svg {
@@ -1172,96 +1228,126 @@
           height: auto;
         }
 
+        #rollingChartSvg text {
+          font-size: 8px !important;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.84rem;
+          line-height: 1.65;
+        }
+
+        .rolling-callouts {
+          gap: 8px;
+          margin-top: 12px;
+        }
+
+        .rolling-callout {
+          padding: 10px 12px;
+          border-radius: 14px;
+          font-size: 0.86rem;
+          line-height: 1.6;
+        }
+
         .rolling-strip {
-          grid-auto-columns: 56px;
-          gap: 6px;
+          grid-auto-columns: 44px;
+          gap: 5px;
         }
 
         .rolling-strip__cell {
-          min-height: 60px;
-          padding: 6px 4px;
-          border-radius: 12px;
+          min-height: 50px;
+          padding: 5px 3px;
+          border-radius: 10px;
         }
 
         .rolling-strip__year {
-          font-size: 0.66rem;
+          font-size: 0.56rem;
+          line-height: 1.1;
         }
 
         .rolling-strip__count {
-          font-size: 0.82rem;
-        }
-
-        .scroll-hint {
-          font-size: 0.86rem;
-          line-height: 1.7;
+          font-size: 0.68rem;
+          line-height: 1.05;
         }
       }
 
       @media (max-width: 640px) {
         .heatmap-board {
-          min-width: 760px;
-        }
-
-        .heatmap-row {
-          grid-template-columns: 88px minmax(0, 1fr);
-          gap: 8px;
-        }
-
-        .heatmap-row__label {
-          padding: 10px 8px;
-          border-radius: 14px;
-        }
-
-        .heatmap-row__label strong {
-          font-size: 0.84rem;
-        }
-
-        .heatmap-row__label span {
-          font-size: 0.74rem;
-        }
-
-        .heatmap-row__cells {
-          grid-template-columns: repeat(10, minmax(54px, 1fr));
-          gap: 6px;
-        }
-
-        .heatmap-cell {
-          min-height: 64px;
-          padding: 7px 5px;
-          border-radius: 12px;
-        }
-
-        .heatmap-cell__year {
-          font-size: 0.62rem;
-        }
-
-        .heatmap-cell__count {
-          font-size: 0.78rem;
-          line-height: 1.1;
-        }
-
-        .heatmap-cell__flag {
-          font-size: 0.52rem;
-        }
-
-        .rolling-chart-shell {
           min-width: 640px;
         }
 
-        .rolling-strip {
-          grid-auto-columns: 50px;
+        .heatmap-row {
+          grid-template-columns: 72px minmax(0, 1fr);
+          gap: 6px;
         }
 
-        .rolling-strip__cell {
-          min-height: 56px;
+        .heatmap-row__label {
+          padding: 8px 6px;
+          border-radius: 12px;
         }
 
-        .rolling-strip__year {
+        .heatmap-row__label strong {
+          font-size: 0.72rem;
+        }
+
+        .heatmap-row__label span {
           font-size: 0.62rem;
         }
 
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(42px, 1fr));
+          gap: 4px;
+        }
+
+        .heatmap-cell {
+          min-height: 52px;
+          padding: 5px 3px;
+          border-radius: 9px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.54rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.66rem;
+        }
+
+        .heatmap-cell__flag {
+          font-size: 0.44rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 500px;
+        }
+
+        #rollingChartSvg text {
+          font-size: 7px !important;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 40px;
+          gap: 4px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 46px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.52rem;
+        }
+
         .rolling-strip__count {
-          font-size: 0.76rem;
+          font-size: 0.62rem;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.8rem;
         }
       }
       /* REVIEW_MOBILE_COMPACT_END */
@@ -1397,59 +1483,72 @@
           font-size: 0.88rem;
         }
       }
-      /* REVIEW_SCROLL_MOBILE_END */
-          /* REVIEW_MOBILE_COMPACT_START */
-      .heatmap-scroll,
-      .rolling-chart-scroll,
-      .rolling-strip-scroll {
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-x: contain;
-        touch-action: pan-x;
-      }
-
+      /* REVIEW_SCROLL_MOBILE_END */      /* REVIEW_MOBILE_COMPACT_START */
       @media (max-width: 1024px) {
         .heatmap-scroll,
         .rolling-chart-scroll,
         .rolling-strip-scroll {
-          margin-inline: -8px;
-          padding-inline: 8px;
+          margin-inline: -6px;
+          padding-inline: 6px;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-x: contain;
+          touch-action: pan-x;
         }
 
         .heatmap-board {
-          min-width: 860px;
-        }
-
-        .heatmap-row {
-          grid-template-columns: 104px minmax(0, 1fr);
-          gap: 10px;
-        }
-
-        .heatmap-row__cells {
-          grid-template-columns: repeat(10, minmax(62px, 1fr));
+          min-width: 720px;
           gap: 8px;
         }
 
-        .heatmap-cell {
-          min-height: 72px;
-          padding: 8px 6px;
+        .heatmap-row {
+          grid-template-columns: 84px minmax(0, 1fr);
+          gap: 8px;
+        }
+
+        .heatmap-row__label {
+          padding: 9px 7px;
           border-radius: 14px;
         }
 
+        .heatmap-row__label strong {
+          font-size: 0.8rem;
+          line-height: 1.2;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.7rem;
+          line-height: 1.25;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(48px, 1fr));
+          gap: 5px;
+        }
+
+        .heatmap-cell {
+          min-height: 58px;
+          padding: 6px 4px;
+          border-radius: 11px;
+        }
+
         .heatmap-cell__year {
-          font-size: 0.68rem;
+          font-size: 0.58rem;
+          line-height: 1.15;
         }
 
         .heatmap-cell__count {
-          font-size: 0.86rem;
+          font-size: 0.72rem;
+          line-height: 1.05;
         }
 
         .heatmap-cell__flag {
-          padding: 1px 5px;
-          font-size: 0.56rem;
+          margin-top: 3px;
+          padding: 1px 4px;
+          font-size: 0.48rem;
         }
 
         .rolling-chart-shell {
-          min-width: 720px;
+          min-width: 560px;
         }
 
         .rolling-chart-svg {
@@ -1458,96 +1557,126 @@
           height: auto;
         }
 
+        #rollingChartSvg text {
+          font-size: 8px !important;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.84rem;
+          line-height: 1.65;
+        }
+
+        .rolling-callouts {
+          gap: 8px;
+          margin-top: 12px;
+        }
+
+        .rolling-callout {
+          padding: 10px 12px;
+          border-radius: 14px;
+          font-size: 0.86rem;
+          line-height: 1.6;
+        }
+
         .rolling-strip {
-          grid-auto-columns: 56px;
-          gap: 6px;
+          grid-auto-columns: 44px;
+          gap: 5px;
         }
 
         .rolling-strip__cell {
-          min-height: 60px;
-          padding: 6px 4px;
-          border-radius: 12px;
+          min-height: 50px;
+          padding: 5px 3px;
+          border-radius: 10px;
         }
 
         .rolling-strip__year {
-          font-size: 0.66rem;
+          font-size: 0.56rem;
+          line-height: 1.1;
         }
 
         .rolling-strip__count {
-          font-size: 0.82rem;
-        }
-
-        .scroll-hint {
-          font-size: 0.86rem;
-          line-height: 1.7;
+          font-size: 0.68rem;
+          line-height: 1.05;
         }
       }
 
       @media (max-width: 640px) {
         .heatmap-board {
-          min-width: 760px;
-        }
-
-        .heatmap-row {
-          grid-template-columns: 88px minmax(0, 1fr);
-          gap: 8px;
-        }
-
-        .heatmap-row__label {
-          padding: 10px 8px;
-          border-radius: 14px;
-        }
-
-        .heatmap-row__label strong {
-          font-size: 0.84rem;
-        }
-
-        .heatmap-row__label span {
-          font-size: 0.74rem;
-        }
-
-        .heatmap-row__cells {
-          grid-template-columns: repeat(10, minmax(54px, 1fr));
-          gap: 6px;
-        }
-
-        .heatmap-cell {
-          min-height: 64px;
-          padding: 7px 5px;
-          border-radius: 12px;
-        }
-
-        .heatmap-cell__year {
-          font-size: 0.62rem;
-        }
-
-        .heatmap-cell__count {
-          font-size: 0.78rem;
-          line-height: 1.1;
-        }
-
-        .heatmap-cell__flag {
-          font-size: 0.52rem;
-        }
-
-        .rolling-chart-shell {
           min-width: 640px;
         }
 
-        .rolling-strip {
-          grid-auto-columns: 50px;
+        .heatmap-row {
+          grid-template-columns: 72px minmax(0, 1fr);
+          gap: 6px;
         }
 
-        .rolling-strip__cell {
-          min-height: 56px;
+        .heatmap-row__label {
+          padding: 8px 6px;
+          border-radius: 12px;
         }
 
-        .rolling-strip__year {
+        .heatmap-row__label strong {
+          font-size: 0.72rem;
+        }
+
+        .heatmap-row__label span {
           font-size: 0.62rem;
         }
 
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(42px, 1fr));
+          gap: 4px;
+        }
+
+        .heatmap-cell {
+          min-height: 52px;
+          padding: 5px 3px;
+          border-radius: 9px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.54rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.66rem;
+        }
+
+        .heatmap-cell__flag {
+          font-size: 0.44rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 500px;
+        }
+
+        #rollingChartSvg text {
+          font-size: 7px !important;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 40px;
+          gap: 4px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 46px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.52rem;
+        }
+
         .rolling-strip__count {
-          font-size: 0.76rem;
+          font-size: 0.62rem;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.8rem;
         }
       }
       /* REVIEW_MOBILE_COMPACT_END */
@@ -2914,6 +3043,7 @@
 </script>
 </body>
 </html>
+
 
 
 
