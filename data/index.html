@@ -339,6 +339,64 @@
         }
       }
       /* REVIEW_MOBILE_COMPACT_END */
+          /* REVIEW_DEVICE_ADVICE_START */
+      .device-advice-section {
+        display: none;
+      }
+
+      .device-advice {
+        padding: 18px 18px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7e8 100%);
+        box-shadow: 0 14px 34px rgba(12, 18, 28, 0.08);
+      }
+
+      .device-advice strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #191f2a;
+        font-size: 1.02rem;
+      }
+
+      .device-advice p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.8;
+      }
+
+      .device-advice p + p {
+        margin-top: 8px;
+      }
+
+      @media (max-width: 1024px) {
+        .device-advice-section {
+          display: block;
+          padding-top: 28px;
+          padding-bottom: 0;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .device-advice-section {
+          padding-top: 20px;
+        }
+
+        .device-advice {
+          padding: 16px 14px 14px;
+          border-radius: 16px;
+        }
+
+        .device-advice strong {
+          font-size: 0.96rem;
+        }
+
+        .device-advice p {
+          font-size: 0.9rem;
+          line-height: 1.75;
+        }
+      }
+      /* REVIEW_DEVICE_ADVICE_END */
     </style>
     <!-- REVIEW_NOTICE_STYLE_END -->
     <style>
@@ -1351,6 +1409,64 @@
         }
       }
       /* REVIEW_MOBILE_COMPACT_END */
+          /* REVIEW_DEVICE_ADVICE_START */
+      .device-advice-section {
+        display: none;
+      }
+
+      .device-advice {
+        padding: 18px 18px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7e8 100%);
+        box-shadow: 0 14px 34px rgba(12, 18, 28, 0.08);
+      }
+
+      .device-advice strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #191f2a;
+        font-size: 1.02rem;
+      }
+
+      .device-advice p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.8;
+      }
+
+      .device-advice p + p {
+        margin-top: 8px;
+      }
+
+      @media (max-width: 1024px) {
+        .device-advice-section {
+          display: block;
+          padding-top: 28px;
+          padding-bottom: 0;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .device-advice-section {
+          padding-top: 20px;
+        }
+
+        .device-advice {
+          padding: 16px 14px 14px;
+          border-radius: 16px;
+        }
+
+        .device-advice strong {
+          font-size: 0.96rem;
+        }
+
+        .device-advice p {
+          font-size: 0.9rem;
+          line-height: 1.75;
+        }
+      }
+      /* REVIEW_DEVICE_ADVICE_END */
     </style>
   <style id="mobile-horizontal-scroll-fix">
   /* Mobile horizontal scroll support for wide tables/charts */
@@ -1680,6 +1796,64 @@
         }
       }
       /* REVIEW_MOBILE_COMPACT_END */
+          /* REVIEW_DEVICE_ADVICE_START */
+      .device-advice-section {
+        display: none;
+      }
+
+      .device-advice {
+        padding: 18px 18px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7e8 100%);
+        box-shadow: 0 14px 34px rgba(12, 18, 28, 0.08);
+      }
+
+      .device-advice strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #191f2a;
+        font-size: 1.02rem;
+      }
+
+      .device-advice p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.8;
+      }
+
+      .device-advice p + p {
+        margin-top: 8px;
+      }
+
+      @media (max-width: 1024px) {
+        .device-advice-section {
+          display: block;
+          padding-top: 28px;
+          padding-bottom: 0;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .device-advice-section {
+          padding-top: 20px;
+        }
+
+        .device-advice {
+          padding: 16px 14px 14px;
+          border-radius: 16px;
+        }
+
+        .device-advice strong {
+          font-size: 0.96rem;
+        }
+
+        .device-advice p {
+          font-size: 0.9rem;
+          line-height: 1.75;
+        }
+      }
+      /* REVIEW_DEVICE_ADVICE_END */
     </style>
 </head>
   <body>
@@ -1763,6 +1937,17 @@
         </div>
       </section>
 
+      <!-- REVIEW_DEVICE_ADVICE_START -->
+      <section class="page-section stats-section device-advice-section" aria-label="閲覧案内">
+        <div class="container">
+          <div class="device-advice" role="note">
+            <strong>スマートフォン・タブレットで見づらい場合</strong>
+            <p>このページの年表・ヒートマップ・4年ローリングは、PCの方が見やすくなっています。</p>
+            <p>横向き表示や横スクロールでも見づらい場合は、同じページをPCブラウザでご覧ください。</p>
+          </div>
+        </div>
+      </section>
+      <!-- REVIEW_DEVICE_ADVICE_END -->
       <section class="page-section page-section--light stats-section">
         <div class="container">
           <div class="stats-grid">
@@ -3043,6 +3228,7 @@
 </script>
 </body>
 </html>
+
 
 
 
