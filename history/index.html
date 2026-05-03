@@ -717,6 +717,554 @@
       }
     </style>
     <!-- REVIEW_NOTICE_STYLE_END -->
+      <!-- REVIEW_HISTORY_MOTION_STYLE_START -->
+    <style>
+      .history-digital-stage {
+        display: grid;
+        grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+        gap: clamp(18px, 2.4vw, 28px);
+        margin-top: 28px;
+      }
+
+      .history-digital-panel,
+      .history-digital-stat,
+      .history-flow-current,
+      .history-flow-card,
+      .history-data-card {
+        border-radius: 28px;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
+      }
+
+      .history-digital-panel {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(22px, 3vw, 32px);
+        border: 1px solid rgba(254, 192, 0, 0.16);
+        background:
+          linear-gradient(180deg, rgba(254, 192, 0, 0.08) 0%, rgba(254, 192, 0, 0.02) 100%),
+          rgba(255, 255, 255, 0.06);
+      }
+
+      .history-digital-panel::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.04) 50%, transparent 100%);
+        pointer-events: none;
+      }
+
+      .history-digital-panel__eyebrow {
+        margin: 0 0 10px;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .history-digital-counter {
+        color: #ffffff;
+        font-family: "Oswald", sans-serif;
+        font-size: clamp(3.3rem, 8vw, 6.8rem);
+        line-height: 0.92;
+        letter-spacing: 0.08em;
+        text-shadow: 0 0 24px rgba(254, 192, 0, 0.12);
+      }
+
+      .history-digital-counter.is-changing {
+        animation: historyDigitFlip 0.34s ease;
+      }
+
+      .history-digital-subline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .history-digital-subline span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 0 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(254, 192, 0, 0.18);
+        background: rgba(255, 255, 255, 0.06);
+        color: #ffffff;
+        font-size: 0.88rem;
+        font-weight: 700;
+      }
+
+      .history-digital-note,
+      .history-hero-footnote {
+        color: rgba(255, 255, 255, 0.82);
+        line-height: 1.85;
+      }
+
+      .history-digital-note {
+        margin: 16px 0 0;
+        max-width: 54rem;
+      }
+
+      .history-hero-footnote {
+        margin: 16px 0 0;
+        font-size: 0.88rem;
+      }
+
+      .history-digital-track {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      .history-digital-track span {
+        display: grid;
+        place-items: center;
+        min-height: 42px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.82);
+        font-family: "Oswald", sans-serif;
+        letter-spacing: 0.08em;
+      }
+
+      .history-digital-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .history-digital-stat {
+        padding: 18px 16px 16px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff8ee 100%);
+      }
+
+      .history-digital-stat span:first-child {
+        display: block;
+        margin-bottom: 8px;
+        color: #8a6a00;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .history-digital-stat strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--history-head);
+        font-size: clamp(1.24rem, 2.2vw, 1.74rem);
+        line-height: 1.18;
+      }
+
+      .history-digital-stat p {
+        margin: 0;
+        color: var(--history-text);
+        line-height: 1.65;
+        font-size: 0.9rem;
+      }
+
+      .history-flow-shell {
+        display: grid;
+        grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+        gap: clamp(18px, 2.4vw, 30px);
+        align-items: start;
+      }
+
+      .history-flow-current {
+        position: sticky;
+        top: 112px;
+        padding: 24px 22px;
+        background: linear-gradient(180deg, #151a21 0%, #202630 100%);
+        color: #ffffff;
+      }
+
+      .history-flow-current__eyebrow {
+        margin: 0 0 8px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .history-flow-current__year {
+        font-family: "Oswald", sans-serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        line-height: 0.92;
+        letter-spacing: 0.08em;
+      }
+
+      .history-flow-current__label {
+        margin: 10px 0 0;
+        color: rgba(255, 255, 255, 0.88);
+        line-height: 1.65;
+      }
+
+      .history-flow-progress {
+        height: 8px;
+        margin-top: 16px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .history-flow-progress__bar {
+        display: block;
+        width: 0;
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--history-gold) 0%, #ffd867 100%);
+        transition: width 0.32s ease;
+      }
+
+      .history-flow-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .history-flow-chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 0 12px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .history-flow-chip.is-active {
+        color: #191f2a;
+        background: var(--history-gold);
+        border-color: transparent;
+      }
+
+      .history-flow-list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .history-flow-card {
+        position: relative;
+        overflow: hidden;
+        padding: 22px 22px 18px;
+        border: 1px solid rgba(25, 31, 42, 0.08);
+        background: linear-gradient(180deg, #fffdfa 0%, #fff8ee 100%);
+        transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+      }
+
+      .history-flow-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 6px;
+        background: linear-gradient(180deg, rgba(254, 192, 0, 0.92) 0%, rgba(254, 192, 0, 0.3) 100%);
+      }
+
+      .history-flow-card.is-active {
+        transform: translateY(-2px);
+        border-color: rgba(254, 192, 0, 0.24);
+        box-shadow: 0 20px 46px rgba(12, 18, 28, 0.10);
+      }
+
+      .history-flow-card__year {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        margin-bottom: 10px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: rgba(254, 192, 0, 0.12);
+        color: #8a6a00;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.94rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .history-flow-card h3 {
+        margin: 0 0 8px;
+        color: var(--history-head);
+      }
+
+      .history-flow-card p {
+        margin: 0;
+        color: var(--history-text);
+        line-height: 1.85;
+      }
+
+      .history-flow-card__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .history-flow-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.06);
+        color: #4f5661;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .history-flow-badge--peak {
+        background: rgba(254, 192, 0, 0.18);
+        color: #8a6a00;
+      }
+
+      .history-flow-card__meter {
+        height: 6px;
+        margin-top: 14px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.08);
+      }
+
+      .history-flow-card__meter span {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--history-gold) 0%, #ffd867 100%);
+      }
+
+      .history-data-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.04fr) minmax(280px, 0.96fr);
+        gap: clamp(18px, 2.4vw, 28px);
+        align-items: start;
+      }
+
+      .history-data-stack {
+        display: grid;
+        gap: 16px;
+      }
+
+      .history-data-card {
+        padding: 24px 22px;
+        background: #ffffff;
+      }
+
+      .history-data-card h3 {
+        margin: 0 0 8px;
+        color: var(--history-head);
+      }
+
+      .history-data-card p {
+        margin: 0 0 14px;
+        color: var(--history-text);
+        line-height: 1.8;
+      }
+
+      .history-data-note {
+        margin: 14px 0 0;
+        color: #6a7079;
+        line-height: 1.7;
+        font-size: 0.88rem;
+      }
+
+      .history-decade-bars,
+      .history-lineage {
+        display: grid;
+        gap: 12px;
+      }
+
+      .history-decade-bar__head,
+      .history-lineage__head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 6px;
+      }
+
+      .history-decade-bar__head strong,
+      .history-lineage__head strong {
+        color: var(--history-head);
+      }
+
+      .history-decade-bar__head span,
+      .history-lineage__head span {
+        color: var(--history-text);
+        font-weight: 700;
+      }
+
+      .history-decade-bar__track,
+      .history-lineage__track {
+        height: 16px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.08);
+      }
+
+      .history-decade-bar__track span,
+      .history-lineage__track span {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--history-gold) 0%, #ffd867 100%);
+      }
+
+      .history-lineage__fill--alt {
+        background: linear-gradient(90deg, #273142 0%, #46556e 100%) !important;
+      }
+
+      .history-peak-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .history-peak-item {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px 10px;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff8ee 100%);
+      }
+
+      .history-peak-item strong {
+        color: #8a6a00;
+        font-size: 0.84rem;
+      }
+
+      .history-peak-item span {
+        color: var(--history-head);
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .history-peak-item em {
+        color: var(--history-head);
+        font-style: normal;
+        font-size: 1rem;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .history-peak-item--top {
+        box-shadow: inset 0 0 0 1px rgba(254, 192, 0, 0.18);
+      }
+
+      @keyframes historyDigitFlip {
+        0% {
+          opacity: 0.45;
+          transform: translateY(8px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 1080px) {
+        .history-digital-stage,
+        .history-data-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .history-flow-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .history-flow-current {
+          position: relative;
+          top: auto;
+        }
+      }
+
+      @media (max-width: 820px) {
+        .history-digital-stats {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .history-digital-track {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 640px) {
+        .history-digital-panel,
+        .history-data-card,
+        .history-flow-current,
+        .history-flow-card {
+          border-radius: 22px;
+        }
+
+        .history-digital-panel,
+        .history-data-card,
+        .history-flow-current {
+          padding: 20px 16px;
+        }
+
+        .history-flow-card {
+          padding: 18px 16px 16px;
+        }
+
+        .history-digital-stats {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .history-digital-track {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .history-digital-subline span,
+        .history-flow-chip {
+          min-height: 32px;
+          padding: 0 10px;
+          font-size: 0.78rem;
+        }
+
+        .history-flow-card__meta {
+          gap: 6px;
+        }
+
+        .history-flow-badge {
+          font-size: 0.78rem;
+        }
+
+        .history-peak-item {
+          grid-template-columns: auto 1fr auto;
+          padding: 10px 12px;
+        }
+
+        .history-peak-item span {
+          font-size: 0.88rem;
+        }
+
+        .history-peak-item em {
+          font-size: 0.92rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .history-digital-counter.is-changing,
+        .history-flow-card,
+        .history-flow-progress__bar {
+          animation: none !important;
+          transition: none !important;
+        }
+
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+    <!-- REVIEW_HISTORY_MOTION_STYLE_END -->
   </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
@@ -769,14 +1317,79 @@
         <img class="page-hero__seal" src="../assets/img/university-seal.png" alt="" aria-hidden="true" />
         <div class="container page-hero__inner">
           <p class="page-hero__eyebrow"><span class="label-ja">歩み</span><span class="label-en">History</span></p>
-          <h1 class="page-hero__title">東京理科大学舞踏研究部の歴史</h1>
+          <h1 class="page-hero__title">FANTASISTA HISTORY</h1>
           <p class="page-hero__lead">
-            創部以来受け継がれてきた歩みを、節目ごとの事実とともにたどります。
+            1966年の創部から、世代を超えて受け継がれてきたダンスとつながりの記録。
           </p>
           <p class="history-hero-note">
             東京理科大学における舞踏研究活動には1950年代の源流があります。現在に続く東京理科大学舞踏研究部の本格的な歩みは、1960年代半ば、吉澤幸男氏らによる創部から始まりました。その歩みは、現役部員、卒部生、OBOG、そして共同加盟校としてともに活動した仲間たちによって受け継がれ、今日の60周年へと至っています。
           </p>
 
+          <!-- REVIEW_HISTORY_HERO_STATS_START -->
+          <div class="history-digital-stage" aria-label="歴史の主要数字">
+            <div class="history-digital-panel">
+              <p class="history-digital-panel__eyebrow">FANTASISTA HISTORY</p>
+              <div class="history-digital-counter" data-history-hero-year data-sequence="1965,1966,1968,1987,2003,2025" data-final="1966–2025">1966–2025</div>
+              <div class="history-digital-subline">
+                <span>1966 創部</span>
+                <span>58年の歩み</span>
+                <span>562名のつながり</span>
+              </div>
+              <p class="history-digital-note">
+                1965年の準備、1966年の創部、1968年から見え始める卒部年度データ、そして2003年の最大値へ。歴史とデータを重ねると、FANTASISTAの時間の流れが立体的に見えてきます。
+              </p>
+
+              <div class="history-digital-track" aria-hidden="true">
+                <span>1965</span>
+                <span>1966</span>
+                <span>1968</span>
+                <span>1987</span>
+                <span>2003</span>
+                <span>2025</span>
+              </div>
+            </div>
+
+            <div class="history-digital-stats">
+              <article class="history-digital-stat">
+                <span>創部</span>
+                <strong>1966年</strong>
+                <p>現在につながる本格的な歩みの始まりです。</p>
+              </article>
+
+              <article class="history-digital-stat">
+                <span>名簿登録者数</span>
+                <strong><span class="history-digital-stat__value" data-count-to="562">562</span>名</strong>
+                <p>FANTASISTA会に登録されている総数です。</p>
+              </article>
+
+              <article class="history-digital-stat">
+                <span>卒部年度データ</span>
+                <strong><span class="history-digital-stat__value" data-count-to="560">560</span>名</strong>
+                <p>年代別・年表集計の対象になっている人数です。</p>
+              </article>
+
+              <article class="history-digital-stat">
+                <span>対象年度</span>
+                <strong>1968–2025</strong>
+                <p>卒部年度データとして見える58年分の歩みです。</p>
+              </article>
+
+              <article class="history-digital-stat">
+                <span>最大年度</span>
+                <strong>2003年 <span class="history-digital-stat__value" data-count-to="20">20</span>名</strong>
+                <p>年度別ヒートマップで最も厚い年です。</p>
+              </article>
+
+              <article class="history-digital-stat">
+                <span>4年ローリング最大</span>
+                <strong>2002・2003年 <span class="history-digital-stat__value" data-count-to="68">68</span>名</strong>
+                <p>4年単位で見た世代の厚みが最も大きい時期です。</p>
+              </article>
+            </div>
+          </div>
+
+          <p class="history-hero-footnote">※名簿登録者数562名、卒部年度データあり560名は data/index.html の集計結果に基づく表示です。</p>
+          <!-- REVIEW_HISTORY_HERO_STATS_END -->
           <div class="history-jump">
             <a href="#history-origin">創部と原点</a>
             <a href="#history-schools">共同加盟校の変遷</a>
@@ -787,6 +1400,240 @@
         </div>
       </section>
 
+      <!-- REVIEW_HISTORY_FLOW_START -->
+      <section class="page-section page-section--light" id="history-flow">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Time Flow</p>
+            <h2>時を進めて見るFANTASISTA</h2>
+            <p>年表を追うだけでなく、時代の流れと人数の変化を重ねることで、FANTASISTAの歩みがより立体的に見えてきます。</p>
+          </div>
+
+          <div class="history-flow-shell">
+            <aside class="history-flow-current" aria-label="現在表示中の時代">
+              <p class="history-flow-current__eyebrow">Current Time</p>
+              <div class="history-flow-current__year" data-history-current-year>1965</div>
+              <p class="history-flow-current__label" data-history-current-label>準備の始まり</p>
+              <div class="history-flow-progress" aria-hidden="true">
+                <span class="history-flow-progress__bar" data-history-current-progress></span>
+              </div>
+
+              <div class="history-flow-chips" aria-label="年代チップ">
+                <a class="history-flow-chip is-active" data-decade-chip="1960s" href="#history-prep">1960s</a>
+                <a class="history-flow-chip" data-decade-chip="1970s" href="#history-1970s">1970s</a>
+                <a class="history-flow-chip" data-decade-chip="1980s" href="#history-1980s">1980s</a>
+                <a class="history-flow-chip" data-decade-chip="1990s" href="#history-1990s">1990s</a>
+                <a class="history-flow-chip" data-decade-chip="2000s" href="#history-2000s">2000s</a>
+                <a class="history-flow-chip" data-decade-chip="2010s" href="#history-2010s">2010s</a>
+                <a class="history-flow-chip" data-decade-chip="2020s" href="#history-2020s">2020s</a>
+              </div>
+            </aside>
+
+            <div class="history-flow-list">
+              <article id="history-prep" class="history-flow-card is-active" data-year="1965" data-display="1965" data-label="準備の始まり" data-decade="1960s" data-progress="0">
+                <div class="history-flow-card__year">1965</div>
+                <h3>準備の始まり</h3>
+                <p>1968年卒部の方が1965年から組織化の準備を進め、FANTASISTAの原点となる流れが生まれました。</p>
+                <div class="history-flow-card__meter"><span style="width: 2%;"></span></div>
+              </article>
+
+              <article class="history-flow-card" data-year="1966" data-display="1966" data-label="創部" data-decade="1960s" data-progress="2">
+                <div class="history-flow-card__year">1966</div>
+                <h3>創部</h3>
+                <p>1966年、2世代が揃い、東京理科大学舞踏研究部としての歩みが本格的に始まりました。</p>
+                <div class="history-flow-card__meta">
+                  <span class="history-flow-badge history-flow-badge--peak">1966 創部</span>
+                </div>
+                <div class="history-flow-card__meter"><span style="width: 6%;"></span></div>
+              </article>
+
+              <article class="history-flow-card" data-year="1968" data-display="1968" data-label="初期卒部世代" data-decade="1960s" data-progress="5">
+                <div class="history-flow-card__year">1968</div>
+                <h3>初期卒部世代</h3>
+                <p>卒部年度データでは1968年から記録が見え始めます。1968年は2名、1969年は5名。初期の小さな歩みが、後の大きなつながりにつながっていきます。</p>
+                <div class="history-flow-card__meta">
+                  <span class="history-flow-badge">1968年 2名</span>
+                  <span class="history-flow-badge">1969年 5名</span>
+                </div>
+                <div class="history-flow-card__meter"><span style="width: 10%;"></span></div>
+              </article>
+
+              <article id="history-1970s" class="history-flow-card" data-year="1975" data-display="1975" data-label="1970年代 拡大" data-decade="1970s" data-progress="17">
+                <div class="history-flow-card__year">1970年代</div>
+                <h3>拡大</h3>
+                <p>1970年代には人数が大きく増え、FANTASISTAの基盤が広がっていきました。</p>
+                <div class="history-flow-card__meta">
+                  <span class="history-flow-badge">1970年代 93名</span>
+                  <span class="history-flow-badge">ピーク 1975年 15名</span>
+                </div>
+                <div class="history-flow-card__meter"><span style="width: 26%;"></span></div>
+              </article>
+
+              <article id="history-1980s" class="history-flow-card" data-year="1987" data-display="1987" data-label="1980年代 定着と厚み" data-decade="1980s" data-progress="37">
+                <div class="history-flow-card__year">1980年代</div>
+                <h3>定着と厚み</h3>
+                <p>1980年代は、長い歴史の中でも厚みのある時代です。4年ローリングでも1984〜1987年卒が54名となり、大きな山のひとつになっています。</p>
+                <div class="history-flow-card__meta">
+                  <span class="history-flow-badge">1980年代 114名</span>
+                  <span class="history-flow-badge history-flow-badge--peak">1987年 17名</span>
+                  <span class="history-flow-badge">1984〜1987年卒 54名</span>
+                </div>
+                <div class="history-flow-card__meter"><span style="width: 40%;"></span></div>
+              </article>
+
+              <article id="history-1990s" class="history-flow-card" data-year="1990" data-display="1990" data-label="1990年代 継続" data-decade="1990s" data-progress="42">
+                <div class="history-flow-card__year">1990年代</div>
+                <h3>継続</h3>
+                <p>1990年代は、人数の波がありながらも活動が継続され、次の大きな山につながっていきます。</p>
+                <div class="history-flow-card__meta">
+                  <span class="history-flow-badge">1990年代 81名</span>
+                  <span class="history-flow-badge">ピーク 1990年 14名</span>
+                </div>
+                <div class="history-flow-card__meter"><span style="width: 48%;"></span></div>
+              </article>
+
+              <article id="history-2000s" class="history-flow-card" data-year="2003" data-display="2003" data-label="2000年代 最大の山" data-decade="2000s" data-progress="63">
+                <div class="history-flow-card__year">2000年代</div>
+                <h3>最大の山</h3>
+                <p>データ上、2000年代は最も人数が多い時代です。特に2002〜2006年卒を中心とする時期は、4年ローリング合計でも最大となり、FANTASISTAの大きな山が見えてきます。</p>
+                <div class="history-flow-card__meta">
+                  <span class="history-flow-badge">2000年代 133名</span>
+                  <span class="history-flow-badge history-flow-badge--peak">2003年 20名</span>
+                  <span class="history-flow-badge history-flow-badge--peak">2002・2003年 68名</span>
+                </div>
+                <div class="history-flow-card__meter"><span style="width: 72%;"></span></div>
+              </article>
+
+              <article id="history-2010s" class="history-flow-card" data-year="2018" data-display="2018" data-label="2010年代 安定" data-decade="2010s" data-progress="88">
+                <div class="history-flow-card__year">2010年代</div>
+                <h3>安定</h3>
+                <p>2010年代は安定した人数を保ちながら、次の世代へとつながっていきました。</p>
+                <div class="history-flow-card__meta">
+                  <span class="history-flow-badge">2010年代 90名</span>
+                  <span class="history-flow-badge">ピーク 2018年 13名</span>
+                </div>
+                <div class="history-flow-card__meter"><span style="width: 88%;"></span></div>
+              </article>
+
+              <article id="history-2020s" class="history-flow-card" data-year="2021" data-display="2021" data-label="2020年代 新しい世代" data-decade="2020s" data-progress="93">
+                <div class="history-flow-card__year">2020年代</div>
+                <h3>新しい世代</h3>
+                <p>2020年代は2025年までの途中集計です。新しい世代が加わり、FANTASISTAの歴史は今も続いています。</p>
+                <div class="history-flow-card__meta">
+                  <span class="history-flow-badge">2020年代 42名</span>
+                  <span class="history-flow-badge">ピーク 2021年 17名</span>
+                  <span class="history-flow-badge">2020〜2025年集計</span>
+                </div>
+                <div class="history-flow-card__meter"><span style="width: 94%;"></span></div>
+              </article>
+
+              <article class="history-flow-card" data-year="2025" data-display="2025" data-label="これからへ" data-decade="2020s" data-progress="100">
+                <div class="history-flow-card__year">2025</div>
+                <h3>これからへ</h3>
+                <p>数字の向こう側にあるのは、ひとりひとりのダンスとつながりの記憶。FANTASISTA会は、これからも世代を超えた交流の場であり続けます。</p>
+                <div class="history-flow-card__meter"><span style="width: 100%;"></span></div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- REVIEW_HISTORY_FLOW_END -->
+
+      <!-- REVIEW_HISTORY_DATA_STORY_START -->
+      <section class="page-section" id="history-data-story">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Data Story</p>
+            <h2>データが語るFANTASISTAの山</h2>
+            <p>卒部年度データを重ねると、歴史の中で人数の厚みが増した時期が見えてきます。</p>
+          </div>
+
+          <div class="history-data-grid">
+            <article class="history-data-card">
+              <h3>年代別の人数推移</h3>
+              <p>時代ごとの人数差を見ると、2000年代前半の厚みと、1980年代の大きな山が際立ちます。</p>
+
+              <div class="history-decade-bars" aria-label="年代別人数推移">
+                <div class="history-decade-bar">
+                  <div class="history-decade-bar__head"><strong>1960年代</strong><span>7名</span></div>
+                  <div class="history-decade-bar__track"><span style="width: 5.3%;"></span></div>
+                </div>
+
+                <div class="history-decade-bar">
+                  <div class="history-decade-bar__head"><strong>1970年代</strong><span>93名</span></div>
+                  <div class="history-decade-bar__track"><span style="width: 69.9%;"></span></div>
+                </div>
+
+                <div class="history-decade-bar">
+                  <div class="history-decade-bar__head"><strong>1980年代</strong><span>114名</span></div>
+                  <div class="history-decade-bar__track"><span style="width: 85.7%;"></span></div>
+                </div>
+
+                <div class="history-decade-bar">
+                  <div class="history-decade-bar__head"><strong>1990年代</strong><span>81名</span></div>
+                  <div class="history-decade-bar__track"><span style="width: 60.9%;"></span></div>
+                </div>
+
+                <div class="history-decade-bar">
+                  <div class="history-decade-bar__head"><strong>2000年代</strong><span>133名</span></div>
+                  <div class="history-decade-bar__track"><span style="width: 100%;"></span></div>
+                </div>
+
+                <div class="history-decade-bar">
+                  <div class="history-decade-bar__head"><strong>2010年代</strong><span>90名</span></div>
+                  <div class="history-decade-bar__track"><span style="width: 67.7%;"></span></div>
+                </div>
+
+                <div class="history-decade-bar">
+                  <div class="history-decade-bar__head"><strong>2020年代</strong><span>42名</span></div>
+                  <div class="history-decade-bar__track"><span style="width: 31.6%;"></span></div>
+                </div>
+              </div>
+
+              <p class="history-data-note">※卒部年度が確認できる560名を対象にしています。※2020年代は2020〜2025年までの集計です。</p>
+            </article>
+
+            <div class="history-data-stack">
+              <article class="history-data-card">
+                <h3>最も厚かった4年間</h3>
+                <p>4年単位で見ると、2000年代前半に最も大きな山がありました。</p>
+
+                <div class="history-peak-list" aria-label="4年ローリングのピーク">
+                  <div class="history-peak-item history-peak-item--top"><strong>1位</strong><span>2002 / 2002〜2005年卒</span><em>68名</em></div>
+                  <div class="history-peak-item history-peak-item--top"><strong>1位</strong><span>2003 / 2003〜2006年卒</span><em>68名</em></div>
+                  <div class="history-peak-item"><strong>3位</strong><span>2001 / 2001〜2004年卒</span><em>62名</em></div>
+                  <div class="history-peak-item"><strong>4位</strong><span>2004 / 2004〜2007年卒</span><em>60名</em></div>
+                  <div class="history-peak-item"><strong>5位</strong><span>2005 / 2005〜2008年卒</span><em>56名</em></div>
+                  <div class="history-peak-item"><strong>6位</strong><span>1984 / 1984〜1987年卒</span><em>54名</em></div>
+                </div>
+
+                <p class="history-data-note">※4年ローリング合計は、卒部年度から大学4年間の在籍期間を簡易的に推定したものです。※1966年創部の流れに合わせ、4年ローリング推移は1966年を起点にしています。</p>
+              </article>
+
+              <article class="history-data-card">
+                <h3>2つの舞研系統</h3>
+                <p>歴史を学校名だけでなく、当時の所属母体の流れで見ると、2つの大きな系統が見えてきます。</p>
+
+                <div class="history-lineage" aria-label="2つの舞研系統">
+                  <div class="history-lineage__item">
+                    <div class="history-lineage__head"><strong>Ⅰ部舞研系</strong><span>372名 / 66.4%</span></div>
+                    <div class="history-lineage__track"><span style="width: 66.4%;"></span></div>
+                  </div>
+
+                  <div class="history-lineage__item">
+                    <div class="history-lineage__head"><strong>Ⅱ部舞研系</strong><span>188名 / 33.6%</span></div>
+                    <div class="history-lineage__track"><span class="history-lineage__fill--alt" style="width: 33.6%;"></span></div>
+                  </div>
+                </div>
+
+                <p class="history-data-note">理科大Ⅱ部と女子栄養系はⅡ部舞研系、それ以外はⅠ部舞研系として集計しています。</p>
+                <a class="button button--ghost" href="../data/">詳しいデータを見る</a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- REVIEW_HISTORY_DATA_STORY_END -->
       <section class="page-section" id="history-origin">
         <div class="container">
           <div class="history-opening">
@@ -1200,8 +2047,137 @@
 })();
 </script>
 <!-- MOBILE_NAV_SCRIPT_END -->
-  </body>
+    <!-- REVIEW_HISTORY_MOTION_SCRIPT_START -->
+  <script>
+(function () {
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const heroYear = document.querySelector('[data-history-hero-year]');
+  const countNodes = Array.from(document.querySelectorAll('[data-count-to]'));
+
+  function animateCount(el) {
+    const target = Number(el.getAttribute('data-count-to'));
+    if (!target || reduceMotion) {
+      el.textContent = String(target);
+      return;
+    }
+
+    const duration = 950;
+    const start = performance.now();
+
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = String(Math.round(target * eased));
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = String(target);
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  function runHeroSequence() {
+    if (!heroYear) return;
+
+    const finalValue = heroYear.getAttribute('data-final') || heroYear.textContent.trim();
+    const sequence = (heroYear.getAttribute('data-sequence') || '')
+      .split(',')
+      .map(function (value) { return value.trim(); })
+      .filter(Boolean);
+
+    if (reduceMotion || sequence.length === 0) {
+      heroYear.textContent = finalValue;
+      return;
+    }
+
+    let index = 0;
+
+    function updateDisplay(value) {
+      heroYear.classList.remove('is-changing');
+      void heroYear.offsetWidth;
+      heroYear.textContent = value;
+      heroYear.classList.add('is-changing');
+    }
+
+    updateDisplay(sequence[0]);
+
+    const timer = setInterval(function () {
+      index += 1;
+
+      if (index >= sequence.length) {
+        clearInterval(timer);
+        setTimeout(function () {
+          updateDisplay(finalValue);
+        }, 180);
+        return;
+      }
+
+      updateDisplay(sequence[index]);
+    }, 300);
+  }
+
+  const currentYear = document.querySelector('[data-history-current-year]');
+  const currentLabel = document.querySelector('[data-history-current-label]');
+  const currentProgress = document.querySelector('[data-history-current-progress]');
+  const cards = Array.from(document.querySelectorAll('.history-flow-card'));
+  const chips = Array.from(document.querySelectorAll('[data-decade-chip]'));
+
+  function activateCard(card) {
+    if (!card) return;
+
+    cards.forEach(function (item) {
+      item.classList.toggle('is-active', item === card);
+    });
+
+    const display = card.getAttribute('data-display') || card.getAttribute('data-year') || '';
+    const label = card.getAttribute('data-label') || '';
+    const progress = card.getAttribute('data-progress') || '0';
+    const decade = card.getAttribute('data-decade') || '';
+
+    if (currentYear) currentYear.textContent = display;
+    if (currentLabel) currentLabel.textContent = label;
+    if (currentProgress) currentProgress.style.width = progress + '%';
+
+    chips.forEach(function (chip) {
+      chip.classList.toggle('is-active', chip.getAttribute('data-decade-chip') === decade);
+    });
+  }
+
+  runHeroSequence();
+  countNodes.forEach(animateCount);
+
+  if (cards.length > 0) {
+    activateCard(cards[0]);
+  }
+
+  if ('IntersectionObserver' in window && cards.length > 0) {
+    const observer = new IntersectionObserver(function (entries) {
+      const visible = entries
+        .filter(function (entry) { return entry.isIntersecting; })
+        .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; });
+
+      if (visible.length > 0) {
+        activateCard(visible[0].target);
+      }
+    }, {
+      threshold: [0.3, 0.55, 0.8],
+      rootMargin: window.innerWidth <= 820 ? '-12% 0px -45% 0px' : '-18% 0px -30% 0px'
+    });
+
+    cards.forEach(function (card) {
+      observer.observe(card);
+    });
+  }
+})();
+</script>
+<!-- REVIEW_HISTORY_MOTION_SCRIPT_END -->
+</body>
 </html>
+
 
 
 
