@@ -1265,6 +1265,78 @@
       }
     </style>
     <!-- REVIEW_HISTORY_MOTION_STYLE_END -->
+      <!-- REVIEW_HISTORY_OFFICIAL_CHRONICLE_STYLE_START -->
+    <style>
+      .history-chronicle-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .history-chronicle-card {
+        padding: 24px 22px;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
+        border: 1px solid rgba(25, 31, 42, 0.08);
+      }
+
+      .history-chronicle-card time {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        margin-bottom: 10px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: rgba(254, 192, 0, 0.12);
+        color: #8a6a00;
+        font-size: 0.84rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .history-chronicle-card h3 {
+        margin: 0 0 8px;
+        color: var(--history-head);
+      }
+
+      .history-chronicle-card p {
+        margin: 0;
+        color: var(--history-text);
+        line-height: 1.82;
+      }
+
+      .history-chronicle-note {
+        margin: 0 0 18px;
+        color: #6a7079;
+        line-height: 1.8;
+      }
+
+      @media (max-width: 900px) {
+        .history-chronicle-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .history-chronicle-card {
+          padding: 18px 16px;
+          border-radius: 20px;
+        }
+
+        .history-chronicle-card time {
+          min-height: 30px;
+          padding: 0 10px;
+          font-size: 0.78rem;
+        }
+
+        .history-chronicle-card p {
+          font-size: 0.92rem;
+        }
+      }
+    </style>
+    <!-- REVIEW_HISTORY_OFFICIAL_CHRONICLE_STYLE_END -->
   </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
@@ -1461,7 +1533,7 @@
               <article id="history-1970s" class="history-flow-card" data-year="1975" data-display="1975" data-label="1970年代 拡大" data-decade="1970s" data-progress="17">
                 <div class="history-flow-card__year">1970年代</div>
                 <h3>拡大</h3>
-                <p>1970年代には人数が大きく増え、FANTASISTAの基盤が広がっていきました。</p>
+                <p>1970年代、Ⅰ部・Ⅱ部それぞれの活動を経て、後の組織体制の基礎が形づくられていきました。</p>
                 <div class="history-flow-card__meta">
                   <span class="history-flow-badge">1970年代 93名</span>
                   <span class="history-flow-badge">ピーク 1975年 15名</span>
@@ -1472,7 +1544,7 @@
               <article id="history-1980s" class="history-flow-card" data-year="1987" data-display="1987" data-label="1980年代 定着と厚み" data-decade="1980s" data-progress="37">
                 <div class="history-flow-card__year">1980年代</div>
                 <h3>定着と厚み</h3>
-                <p>1980年代は、長い歴史の中でも厚みのある時代です。4年ローリングでも1984〜1987年卒が54名となり、大きな山のひとつになっています。</p>
+                <p>1980年代、パートナー校との連携を深めながら競技面でも力をつけていきました。4年ローリングでも1984〜1987年卒が54名となり、厚みのある時代だったことが見えてきます。</p>
                 <div class="history-flow-card__meta">
                   <span class="history-flow-badge">1980年代 114名</span>
                   <span class="history-flow-badge history-flow-badge--peak">1987年 17名</span>
@@ -1484,7 +1556,7 @@
               <article id="history-1990s" class="history-flow-card" data-year="1990" data-display="1990" data-label="1990年代 継続" data-decade="1990s" data-progress="42">
                 <div class="history-flow-card__year">1990年代</div>
                 <h3>継続</h3>
-                <p>1990年代は、人数の波がありながらも活動が継続され、次の大きな山につながっていきます。</p>
+                <p>1996年の部員増、1998年の再成長、1999年の夏全ラテン優勝などを経て、次の大きな山につながっていきます。</p>
                 <div class="history-flow-card__meta">
                   <span class="history-flow-badge">1990年代 81名</span>
                   <span class="history-flow-badge">ピーク 1990年 14名</span>
@@ -1507,7 +1579,7 @@
               <article id="history-2010s" class="history-flow-card" data-year="2018" data-display="2018" data-label="2010年代 安定" data-decade="2010s" data-progress="88">
                 <div class="history-flow-card__year">2010年代</div>
                 <h3>安定</h3>
-                <p>2010年代は安定した人数を保ちながら、次の世代へとつながっていきました。</p>
+                <p>2010年の新体制、2014年の活動体制見直し、2015年のツバメ杯団体優勝、2016年の50周年とⅠ部校復帰、そして2017〜2019年の全国大会での好成績へとつながっていきました。</p>
                 <div class="history-flow-card__meta">
                   <span class="history-flow-badge">2010年代 90名</span>
                   <span class="history-flow-badge">ピーク 2018年 13名</span>
@@ -1518,7 +1590,7 @@
               <article id="history-2020s" class="history-flow-card" data-year="2021" data-display="2021" data-label="2020年代 新しい世代" data-decade="2020s" data-progress="93">
                 <div class="history-flow-card__year">2020年代</div>
                 <h3>新しい世代</h3>
-                <p>2020年代は2025年までの途中集計です。新しい世代が加わり、FANTASISTAの歴史は今も続いています。</p>
+                <p>2020年代は2025年までの途中集計です。新型コロナウイルスの影響下でも活動を継続し、2021年の春東部団体6位、2022年の春東都優勝などを経て、歴史は今も続いています。</p>
                 <div class="history-flow-card__meta">
                   <span class="history-flow-badge">2020年代 42名</span>
                   <span class="history-flow-badge">ピーク 2021年 17名</span>
@@ -1634,6 +1706,95 @@
         </div>
       </section>
       <!-- REVIEW_HISTORY_DATA_STORY_END -->
+      <!-- REVIEW_HISTORY_OFFICIAL_CHRONICLE_START -->
+      <section class="page-section page-section--light" id="history-chronicle">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Official Chronicle</p>
+            <h2>年表でたどる歩み</h2>
+            <p>記念誌と既存公開情報をもとに、公式ページとして掲載できる節目を簡潔に整理しました。</p>
+          </div>
+
+          <p class="history-chronicle-note">
+            競技成績だけでなく、組織体制、パートナー校との連携、周年行事、コロナ禍での活動継続までを含めて、東京理科大学舞踏研究部の歩みを振り返ります。
+          </p>
+
+          <div class="history-chronicle-grid">
+            <article class="history-chronicle-card">
+              <time>1960年代半ば</time>
+              <h3>現在につながる歩みが始まる</h3>
+              <p>1960年代半ば、現在につながる舞踏研究部の歩みが始まる。1966年の創部を起点に、世代を超えて受け継がれる基盤が形づくられていった。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>1970年代</time>
+              <h3>組織体制の基礎が形づくられる</h3>
+              <p>1970年代、Ⅰ部・Ⅱ部それぞれの活動を経て、後の組織体制の基礎が形づくられる。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>1980年代</time>
+              <h3>パートナー校との連携を深める</h3>
+              <p>1980年代、パートナー校との連携を深めながら、競技面でも着実に力を伸ばしていく。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>1996年</time>
+              <h3>部員増と一体感の高まり</h3>
+              <p>1996年、部員数が大きく増加し、ALL理科大舞踏研究部としての一体感が高まる。競技面でも全国大会で大きな成果を収めた。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>1998年 - 1999年</time>
+              <h3>再成長と全国大会での節目</h3>
+              <p>1998年、夏全・Ⅰ部戦への出場を果たし、競技面での再成長が始まる。1999年には夏全ラテンで理科大カップルが優勝し、部にとって大きな節目となる。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>2001年</time>
+              <h3>団体と個人の両面で成果</h3>
+              <p>2001年、東部Ⅱ部戦で団体優勝。個人成績でも全国大会上位入賞が続き、部の存在感を高めた。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>2004年 - 2006年</time>
+              <h3>Ⅰ部校昇格と競技史に残る時期</h3>
+              <p>2004年、Ⅰ部校へ昇格。2005年には主要大会で団体上位に入り、2006年には主力カップルが年間を通じて圧倒的な成績を収めるなど、競技史に残る時期となった。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>2008年 - 2009年</time>
+              <h3>冬全クイックで連続優勝</h3>
+              <p>2008年、冬全クイックで理科大カップルが優勝。2009年にも同種目で優勝し、団体でも上位成績を収めた。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>2010年 - 2012年</time>
+              <h3>新体制と次の広がり</h3>
+              <p>2010年、初の女性主将のもとで新たな体制へ。学習院大学がパートナー校として加わり、2012年には六大学戦や冬全で好成績を収めた。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>2014年 - 2016年</time>
+              <h3>体制見直しを経て50周年へ</h3>
+              <p>2014年、活動体制を見直す期間を経て、OBOGの支援も受けながら活動を再開。2015年のツバメ杯団体優勝を経て、2016年には創部50周年記念パーティーとⅠ部校復帰、冬全ルンバ優勝などの成果が重なった。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>2017年 - 2019年</time>
+              <h3>全国大会で優勝者を重ねて輩出</h3>
+              <p>2017年の冬全クイック、2018年の冬全ルンバ、2019年の冬全タンゴで優勝。全国大会で好成績が続いた。</p>
+            </article>
+
+            <article class="history-chronicle-card">
+              <time>2020年 - 2022年</time>
+              <h3>制約下でも続いた歩み</h3>
+              <p>2020年、新型コロナウイルスの影響により活動や大会が大きく制限される中でも、競技面で成果を残した。2021年は春東部で団体6位、2022年は春東都で優勝し、冬全チャチャチャで準優勝を収めている。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+      <!-- REVIEW_HISTORY_OFFICIAL_CHRONICLE_END -->
       <section class="page-section" id="history-origin">
         <div class="container">
           <div class="history-opening">
@@ -1921,7 +2082,7 @@
               <time>1990年代</time>
               <h3>復活と全国舞台への飛躍</h3>
               <p>
-                1990年代前半には低迷期もありましたが、1990年代後半に大きく復活しました。1996年には田中・木戸組が冬の全日本戦サンバの部で優勝し、1999年には伊從・大崎組が夏の全日本ラテンの部を制して、理科大初の夏の全日本覇者となりました。2001年には三森・高橋組が夏の全日本モダンの部で準優勝しています。
+                1990年代後半には部員数の増加とともに競技面でも再び存在感を高めました。1996年の冬全サンバ優勝、1999年の夏全ラテン優勝、2001年の夏全モダン準優勝など、全国大会での成果が次々と重なりました。
               </p>
             </article>
 
@@ -1929,7 +2090,7 @@
               <time>2004年 - 2005年</time>
               <h3>初の一部校と団体3位</h3>
               <p>
-                2004年、東京理科大学舞踏研究部は創部以来初めて一部校となりました。それは一人の絶対的エースに依るものではなく、部全体の厚みとチーム力による成果でした。翌2005年には冬の全日本で団体3位を記録します。
+                2004年、東京理科大学舞踏研究部はⅠ部校となりました。部全体の厚みとチーム力を背景に、翌2005年には主要大会で団体上位入賞が続き、冬全では団体3位を記録しました。
               </p>
             </article>
 
@@ -1945,7 +2106,7 @@
               <time>2008年 - 2009年</time>
               <h3>モダン種目初制覇と冬全クイック連覇</h3>
               <p>
-                2008年、松本・水島組が冬の全日本戦クイックステップの部で優勝し、理科大として初めてモダン種目での全日本優勝を果たしました。この年の団体成績は4位。さらに2009年には若代・伊藤組が冬の全日本戦クイックステップの部で優勝し、理科大は冬全クイック連覇を達成しました。
+                2008年、松本・水島組が冬の全日本戦クイックステップの部で優勝し、モダン種目でも大きな成果を残しました。この年の団体成績は4位。さらに2009年には若代・伊藤組が同種目で優勝し、理科大は冬全クイック連覇を達成しました。
               </p>
             </article>
 
@@ -1953,7 +2114,7 @@
               <time>2010年代前半</time>
               <h3>苦しい時期を越えて次代へつなぐ</h3>
               <p>
-                2010年代前半、理科大舞研は二部校への陥落や活動上の困難など、苦しい時期を経験しました。それでも部を支え、次の世代へつなぐ努力は続き、のちの一部校復帰へと結びついていきます。
+                2010年代前半、理科大舞研は活動体制を見直す時期を経験しました。それでも部を支え、次の世代へつなぐ努力は続き、のちのⅠ部校復帰へと結びついていきます。
               </p>
             </article>
 
@@ -1969,7 +2130,7 @@
               <time>2017年 - 2019年</time>
               <h3>冬の全日本で4年連続チャンピオン</h3>
               <p>
-                2017年には米倉・野永組が冬の全日本戦クイックステップの部で優勝し、2018年には國井・平本（立教）組が冬の全日本戦ルンバの部で優勝、2019年には和田・佐藤組が冬の全日本戦タンゴの部で優勝しました。理科大は冬の全日本で4年連続チャンピオンを輩出しています。
+                2017年には米倉・野永組が冬の全日本戦クイックステップの部で優勝し、2018年には國井・平本（立教）組が冬の全日本戦ルンバの部で優勝、2019年には和田・佐藤組が冬の全日本戦タンゴの部で優勝しました。理科大は冬の全日本で優勝者を重ねて輩出しました。
               </p>
             </article>
 
@@ -2177,6 +2338,7 @@
 <!-- REVIEW_HISTORY_MOTION_SCRIPT_END -->
 </body>
 </html>
+
 
 
 
