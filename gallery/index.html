@@ -47,6 +47,561 @@
       }
     </style>
     <!-- REVIEW_NOTICE_STYLE_END -->
+      <!-- REVIEW_GALLERY_REFRAME_STYLE_START -->
+    <style>
+      #gallery-albums,
+      #gallery-latest,
+      #gallery-details,
+      #gallery-submit,
+      #gallery-related,
+      [id^="festa-"] {
+        scroll-margin-top: 96px;
+      }
+
+      a {
+        cursor: pointer;
+      }
+
+      .gallery-count-badge,
+      .gallery-meta-chip,
+      .gallery-strip__hint {
+        cursor: default;
+      }
+
+      .site-nav a[aria-current="page"] {
+        color: #191f2a;
+        background: rgba(254, 192, 0, 0.18);
+        border-radius: 999px;
+      }
+
+      .site-nav a:hover,
+      .site-nav a:focus-visible {
+        background: rgba(254, 192, 0, 0.16);
+        outline: 3px solid rgba(254, 192, 0, 0.35);
+        outline-offset: 2px;
+      }
+
+      .site-nav--mobile a {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+
+      .gallery-hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .gallery-action-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        font-weight: 800;
+        text-decoration: none;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+      }
+
+      .gallery-action-link--gold {
+        background: #fec000;
+        border: 1px solid rgba(138, 106, 0, 0.24);
+        color: #191f2a;
+        box-shadow: 0 14px 30px rgba(12, 18, 28, 0.10);
+      }
+
+      .gallery-action-link--ghost {
+        background: rgba(255, 255, 255, 0.10);
+        border: 1px solid rgba(254, 192, 0, 0.24);
+        color: #ffffff;
+      }
+
+      .gallery-action-link:hover,
+      .gallery-action-link:focus-visible,
+      .gallery-album-card__link:hover,
+      .gallery-album-card__link:focus-visible,
+      .gallery-thumb-card:hover,
+      .gallery-thumb-card:focus-visible,
+      .gallery-submit-card__button:hover,
+      .gallery-submit-card__button:focus-visible,
+      .gallery-related-card:hover,
+      .gallery-related-card:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 38px rgba(12, 18, 28, 0.14);
+      }
+
+      .gallery-album-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .gallery-album-card {
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.08);
+        overflow: hidden;
+      }
+
+      .gallery-album-card__link {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .gallery-album-card__cover {
+        background: linear-gradient(180deg, #fffdf8 0%, #f9f4e6 100%);
+      }
+
+      .gallery-album-card__cover img {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        display: block;
+      }
+
+      .gallery-album-card__body {
+        padding: 18px 18px 20px;
+      }
+
+      .gallery-album-card__eyebrow {
+        margin: 0 0 8px;
+        color: #6f5600;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .gallery-album-card h3 {
+        margin: 0;
+        color: #191f2a;
+        font-size: 1.1rem;
+        line-height: 1.45;
+      }
+
+      .gallery-album-card__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .gallery-meta-chip,
+      .gallery-count-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 0 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(138, 106, 0, 0.22);
+        background: #fff8e8;
+        color: #5f4700;
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
+
+      .gallery-album-card__button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 16px;
+        margin-top: 16px;
+        border-radius: 999px;
+        background: #fec000;
+        color: #191f2a;
+        font-weight: 800;
+      }
+
+      .gallery-highlight-panel,
+      .gallery-submit-card {
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.08);
+        padding: 24px 22px;
+      }
+
+      .gallery-highlight-panel__head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .gallery-highlight-panel__head h3 {
+        margin: 0;
+        color: #191f2a;
+      }
+
+      .gallery-highlight-panel__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .gallery-highlight-panel__lead {
+        color: #59606b;
+        line-height: 1.82;
+        margin: 0 0 12px;
+      }
+
+      .gallery-strip__hint {
+        margin: 0 0 12px;
+        color: #7b838f;
+        font-size: 0.92rem;
+      }
+
+      .gallery-strip {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(240px, 320px);
+        gap: 16px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scroll-snap-type: x mandatory;
+      }
+
+      .gallery-strip__item {
+        margin: 0;
+        scroll-snap-align: start;
+      }
+
+      .gallery-thumb-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .gallery-thumb-card {
+        display: block;
+        overflow: hidden;
+        border-radius: 18px;
+        background: #ffffff;
+        color: #191f2a;
+        text-decoration: none;
+        box-shadow: 0 12px 28px rgba(12, 18, 28, 0.08);
+        transition: transform 0.16s ease, box-shadow 0.16s ease;
+      }
+
+      .gallery-thumb-card img {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        display: block;
+        background: #f3f5f8;
+      }
+
+      .gallery-thumb-card__caption {
+        display: block;
+        padding: 10px 12px 12px;
+        font-weight: 700;
+        font-size: 0.92rem;
+        line-height: 1.6;
+      }
+
+      .gallery-thumb-card__caption small {
+        display: block;
+        margin-top: 4px;
+        color: #6f5600;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .gallery-year-details {
+        display: grid;
+        gap: 16px;
+      }
+
+      .gallery-year-detail {
+        border: 1px solid rgba(138, 106, 0, 0.18);
+        border-radius: 22px;
+        background: #ffffff;
+        box-shadow: 0 14px 34px rgba(12, 18, 28, 0.06);
+        overflow: hidden;
+      }
+
+      .gallery-year-detail summary,
+      .gallery-more-details summary {
+        list-style: none;
+        cursor: pointer;
+      }
+
+      .gallery-year-detail summary::-webkit-details-marker,
+      .gallery-more-details summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .gallery-year-detail summary {
+        display: flex;
+        align-items: center;
+        min-height: 56px;
+        padding: 16px 18px;
+      }
+
+      .gallery-year-detail summary::after {
+        content: "+";
+        margin-left: auto;
+        color: #8a6a00;
+        font-size: 1.2rem;
+        font-weight: 800;
+      }
+
+      .gallery-year-detail[open] summary::after {
+        content: "−";
+      }
+
+      .gallery-year-detail[open] summary {
+        border-bottom: 1px solid rgba(138, 106, 0, 0.12);
+      }
+
+      .gallery-year-detail__summary strong {
+        display: block;
+        color: #191f2a;
+        font-size: 1.05rem;
+      }
+
+      .gallery-year-detail__summary span {
+        display: block;
+        margin-top: 4px;
+        color: #6c7380;
+        font-size: 0.92rem;
+      }
+
+      .gallery-year-detail__body {
+        padding: 18px;
+      }
+
+      .gallery-year-detail__lead {
+        margin: 0 0 18px;
+        color: #59606b;
+        line-height: 1.82;
+      }
+
+      .gallery-category + .gallery-category {
+        margin-top: 22px;
+        padding-top: 22px;
+        border-top: 1px solid rgba(138, 106, 0, 0.12);
+      }
+
+      .gallery-category__head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+
+      .gallery-category__head h3 {
+        margin: 0;
+        color: #191f2a;
+      }
+
+      .gallery-category__head p {
+        margin: 6px 0 0;
+        color: #7b838f;
+        font-size: 0.92rem;
+      }
+
+      .gallery-more-details {
+        margin-top: 14px;
+        border: 1px solid rgba(138, 106, 0, 0.14);
+        border-radius: 18px;
+        background: #fffdfa;
+      }
+
+      .gallery-more-details summary {
+        display: flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 0 16px;
+        color: #2b2418;
+        font-weight: 800;
+      }
+
+      .gallery-more-details summary::after {
+        content: "+";
+        margin-left: auto;
+        color: #8a6a00;
+        font-size: 1.05rem;
+      }
+
+      .gallery-more-details[open] summary::after {
+        content: "−";
+      }
+
+      .gallery-more-details > div {
+        padding: 0 16px 16px;
+      }
+
+      .gallery-submit-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(220px, 0.9fr);
+        gap: 20px;
+        align-items: center;
+      }
+
+      .gallery-submit-card__copy h2 {
+        margin-bottom: 10px;
+      }
+
+      .gallery-submit-card__copy p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.82;
+      }
+
+      .gallery-submit-card__copy p + p {
+        margin-top: 10px;
+      }
+
+      .gallery-submit-card__actions {
+        margin-top: 18px;
+      }
+
+      .gallery-submit-card__button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        background: #fec000;
+        color: #191f2a;
+        font-weight: 800;
+        text-decoration: none;
+        transition: transform 0.16s ease, box-shadow 0.16s ease;
+      }
+
+      .gallery-submit-placeholder {
+        display: grid;
+        place-items: center;
+        min-height: 220px;
+        aspect-ratio: 4 / 3;
+        border-radius: 20px;
+        border: 1px dashed rgba(138, 106, 0, 0.24);
+        background:
+          radial-gradient(circle at 18% 18%, rgba(254, 192, 0, 0.14), transparent 24%),
+          linear-gradient(180deg, #fffdf8 0%, #f9f4e6 100%);
+      }
+
+      .gallery-submit-placeholder span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 0 14px;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.78);
+        color: #ffffff;
+        font-weight: 800;
+      }
+
+      .gallery-related-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .gallery-related-card {
+        display: grid;
+        gap: 8px;
+        padding: 22px;
+        border-radius: 22px;
+        background: #ffffff;
+        border: 1px solid rgba(138, 106, 0, 0.16);
+        box-shadow: 0 14px 34px rgba(12, 18, 28, 0.06);
+        color: #191f2a;
+        text-decoration: none;
+        transition: transform 0.16s ease, box-shadow 0.16s ease;
+      }
+
+      .gallery-related-card__eyebrow {
+        color: #6f5600;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .gallery-related-card strong {
+        font-size: 1.04rem;
+      }
+
+      .gallery-related-card span {
+        color: #59606b;
+        line-height: 1.75;
+      }
+
+      .gallery-related-card em {
+        color: #5f4700;
+        font-style: normal;
+        font-weight: 800;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+
+      .gallery-action-link:focus-visible,
+      .gallery-album-card__link:focus-visible,
+      .gallery-thumb-card:focus-visible,
+      .gallery-year-detail summary:focus-visible,
+      .gallery-more-details summary:focus-visible,
+      .gallery-submit-card__button:focus-visible,
+      .gallery-related-card:focus-visible {
+        outline: 3px solid rgba(254, 192, 0, 0.45);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 980px) {
+        .gallery-album-grid,
+        .gallery-related-grid,
+        .gallery-thumb-grid,
+        .gallery-submit-card {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .gallery-submit-card {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .gallery-hero-actions,
+        .gallery-album-grid,
+        .gallery-related-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .gallery-hero-actions {
+          display: grid;
+        }
+
+        .gallery-action-link,
+        .gallery-submit-card__button {
+          width: 100%;
+        }
+
+        .gallery-strip {
+          grid-auto-columns: minmax(72%, 1fr);
+        }
+
+        .gallery-thumb-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .gallery-year-detail summary,
+        .gallery-more-details summary {
+          min-height: 48px;
+        }
+      }
+    </style>
+    <!-- REVIEW_GALLERY_REFRAME_STYLE_END -->
   </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
@@ -93,7 +648,7 @@
       </div>
     </header>
 
-    <main>
+        <main>
       <section class="page-hero">
         <div class="page-hero__grid" aria-hidden="true"></div>
         <img class="page-hero__seal" src="../assets/img/university-seal.png" alt="" aria-hidden="true" />
@@ -101,857 +656,612 @@
           <p class="page-hero__eyebrow"><span class="label-ja">写真・ギャラリー</span><span class="label-en">Gallery</span></p>
           <h1 class="page-hero__title">活動風景</h1>
           <p class="page-hero__lead">
-            FANTASISTA FESTA の写真を、年度ごとにまとめて掲載しています。
+            FANTASISTA FESTA の記録写真を、年度ごとに整理して掲載しています。まずは年度別アルバムから、当日の雰囲気やダンスシーン、交流の様子をご覧ください。
           </p>
+
+          <div class="gallery-hero-actions">
+            <a class="gallery-action-link gallery-action-link--gold" href="#gallery-latest">最新アルバムを見る ↓</a>
+            <a class="gallery-action-link gallery-action-link--ghost" href="#gallery-albums">年度別アルバムを見る ↓</a>
+          </div>
         </div>
       </section>
 
-      <section class="page-section page-section--light">
+      <section class="page-section page-section--light" id="gallery-albums">
         <div class="container">
           <div class="section-head">
             <p class="section-head__kicker">Albums</p>
-            <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="8" cy="10" r="1.5" /><path d="M6 16l4-4 3 3 3-2 2 3" /></svg></span>
-            <h2>年度別ギャラリー</h2>
-            <p class="gallery-guide__lead">
-              開催年度ごとに写真をまとめています。見たい年度を選ぶと、その年のギャラリーへ移動できます。
-            </p>
+            <h2>年度別アルバム</h2>
+            <p>まずは開催年度ごとのアルバムから選べるようにしています。各年度の代表写真と開催情報を見てから、詳しい写真一覧へ進めます。</p>
           </div>
 
-          <div class="gallery-grid gallery-grid--years">
-            <figure class="gallery-photo-card">
-              <a href="#festa-2025">
-                <img src="../assets/img/gallery/festa-2025/festa-2025-01.jpg" alt="2025年度 FANTASISTA FESTA" loading="lazy" decoding="async" />
+          <div class="gallery-album-grid">
+            <article class="gallery-album-card">
+              <a class="gallery-album-card__link" href="#festa-2025-detail">
+                <div class="gallery-album-card__cover">
+                  <img src="../assets/img/gallery/festa-2025/festa-2025-01.jpg" alt="2025年度 FANTASISTA FESTA のカバー写真" loading="lazy" decoding="async" />
+                </div>
+                <div class="gallery-album-card__body">
+                  <p class="gallery-album-card__eyebrow">FESTA 2025</p>
+                  <h3>2025年度 FANTASISTA FESTA</h3>
+                  <div class="gallery-album-card__meta">
+                    <span class="gallery-meta-chip">2026年2月7日（土）開催</span>
+                    <span class="gallery-meta-chip">25枚掲載</span>
+                  </div>
+                  <span class="gallery-album-card__button">この年度を見る →</span>
+                </div>
               </a>
-              <figcaption>
-                <span>FESTA 2025</span>
+            </article>
+            <article class="gallery-album-card">
+              <a class="gallery-album-card__link" href="#festa-2024-detail">
+                <div class="gallery-album-card__cover">
+                  <img src="../assets/img/gallery/festa-2024/festa-2024-03.jpg" alt="2024年度 FANTASISTA FESTA のカバー写真" loading="lazy" decoding="async" />
+                </div>
+                <div class="gallery-album-card__body">
+                  <p class="gallery-album-card__eyebrow">FESTA 2024</p>
+                  <h3>2024年度 FANTASISTA FESTA</h3>
+                  <div class="gallery-album-card__meta">
+                    <span class="gallery-meta-chip">2025年2月1日（土）開催</span>
+                    <span class="gallery-meta-chip">25枚掲載</span>
+                  </div>
+                  <span class="gallery-album-card__button">この年度を見る →</span>
+                </div>
+              </a>
+            </article>
+            <article class="gallery-album-card">
+              <a class="gallery-album-card__link" href="#festa-2023-detail">
+                <div class="gallery-album-card__cover">
+                  <img src="../assets/img/gallery/festa-2023/festa-2023-thumb.jpg" alt="FANTASISTA FESTA 2023 のカバー写真" loading="lazy" decoding="async" />
+                </div>
+                <div class="gallery-album-card__body">
+                  <p class="gallery-album-card__eyebrow">FESTA 2023</p>
+                  <h3>FANTASISTA FESTA 2023</h3>
+                  <div class="gallery-album-card__meta">
+                    <span class="gallery-meta-chip">2023年12月9日（土）開催</span>
+                    <span class="gallery-meta-chip">12枚掲載</span>
+                  </div>
+                  <span class="gallery-album-card__button">この年度を見る →</span>
+                </div>
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section" id="gallery-latest">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Latest</p>
+            <h2>最新アルバム</h2>
+            <p>現在の最新年度は、2025年度 FANTASISTA FESTA です。まずは代表写真から、その年の雰囲気をご覧ください。</p>
+          </div>
+
+          <article class="gallery-highlight-panel">
+            <div class="gallery-highlight-panel__head">
+              <div>
+                <h3>2025年度 FANTASISTA FESTA</h3>
+              </div>
+              <div class="gallery-highlight-panel__meta">
+                <span class="gallery-meta-chip">2026年2月7日（土）開催</span>
+                <span class="gallery-meta-chip">25枚掲載</span>
+              </div>
+            </div>
+
+            <p class="gallery-highlight-panel__lead">現在の最新アルバムです。会場の雰囲気、ダンスシーン、交流の場面から代表写真を抜粋しています。</p>
+            <p class="gallery-strip__hint">横にスライドして見る</p>
+
+            <div class="gallery-strip" aria-label="2025年度 FANTASISTA FESTA の代表写真">
+              <figure class="gallery-strip__item">
+                <a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-01.jpg" aria-label="2025年度 FANTASISTA FESTA 集合写真 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-01.jpg" alt="2025年度 FANTASISTA FESTA 集合写真" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">集合写真<small>写真を見る →</small></span>
+</a>
+              </figure>
+              <figure class="gallery-strip__item">
+                <a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-03.jpg" aria-label="2025年度 FANTASISTA FESTA ラテンデモンストレーション を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-03.jpg" alt="2025年度 FANTASISTA FESTA ラテンデモンストレーション" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンデモンストレーション<small>写真を見る →</small></span>
+</a>
+              </figure>
+              <figure class="gallery-strip__item">
+                <a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-06.jpg" aria-label="2025年度 FANTASISTA FESTA スタンダードのひととき を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-06.jpg" alt="2025年度 FANTASISTA FESTA スタンダードのひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードのひととき<small>写真を見る →</small></span>
+</a>
+              </figure>
+              <figure class="gallery-strip__item">
+                <a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-10.jpg" aria-label="2025年度 FANTASISTA FESTA ダンスタイム を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-10.jpg" alt="2025年度 FANTASISTA FESTA ダンスタイム" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ダンスタイム<small>写真を見る →</small></span>
+</a>
+              </figure>
+              <figure class="gallery-strip__item">
+                <a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-14.jpg" aria-label="2025年度 FANTASISTA FESTA 記念写真 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-14.jpg" alt="2025年度 FANTASISTA FESTA 記念写真" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">記念写真<small>写真を見る →</small></span>
+</a>
+              </figure>
+              <figure class="gallery-strip__item">
+                <a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-21.jpg" aria-label="2025年度 FANTASISTA FESTA 交流の様子 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-21.jpg" alt="2025年度 FANTASISTA FESTA 交流の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">交流の様子<small>写真を見る →</small></span>
+</a>
+              </figure>
+            </div>
+
+            <div style="margin-top: 18px;">
+              <a class="gallery-action-link gallery-action-link--gold" href="#festa-2025-detail">2025年度 FANTASISTA FESTA の写真をすべて見る →</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light" id="gallery-details">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Details</p>
+            <h2>年度別ギャラリー詳細</h2>
+            <p>各年度の写真は、カテゴリごとに整理しています。最新年度は開いた状態にし、過年度は必要なときに展開できる構成にしています。</p>
+          </div>
+
+          <div class="gallery-year-details">
+          <details class="gallery-year-detail" id="festa-2025-detail" open>
+            <summary>
+              <div class="gallery-year-detail__summary">
                 <strong>2025年度 FANTASISTA FESTA</strong>
-                <p>2026年2月7日開催</p>
-              </figcaption>
-            </figure>
-
-            <figure class="gallery-photo-card">
-              <a href="#festa-2024">
-                <img src="../assets/img/gallery/festa-2024/festa-2024-03.jpg" alt="2024年度 FANTASISTA FESTA" loading="lazy" decoding="async" />
-              </a>
-              <figcaption>
-                <span>FESTA 2024</span>
+                <span>2026年2月7日（土）開催 / 25枚掲載</span>
+              </div>
+            </summary>
+            <div class="gallery-year-detail__body">
+              <p class="gallery-year-detail__lead">2025年度 FANTASISTA FESTA の様子を、記録・会場、ダンスシーン、交流・ダンスタイムに分けて整理しています。</p>
+              <article class="gallery-category">
+                <div class="gallery-category__head">
+                  <div>
+                    <h3>記録・会場</h3>
+                    <p>代表写真を先に表示しています。</p>
+                  </div>
+                  <span class="gallery-count-badge">8枚</span>
+                </div>
+                <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-01.jpg" aria-label="2025年度 FANTASISTA FESTA 集合写真 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-01.jpg" alt="2025年度 FANTASISTA FESTA 集合写真" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">集合写真<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-02.jpg" aria-label="2025年度 FANTASISTA FESTA 会場の様子 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-02.jpg" alt="2025年度 FANTASISTA FESTA 会場の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">会場の様子<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-05.jpg" aria-label="2025年度 FANTASISTA FESTA 開会のひととき を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-05.jpg" alt="2025年度 FANTASISTA FESTA 開会のひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">開会のひととき<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-07.jpg" aria-label="2025年度 FANTASISTA FESTA 記念写真 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-07.jpg" alt="2025年度 FANTASISTA FESTA 記念写真" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">記念写真<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-11.jpg" aria-label="2025年度 FANTASISTA FESTA 進行の様子 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-11.jpg" alt="2025年度 FANTASISTA FESTA 進行の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">進行の様子<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-14.jpg" aria-label="2025年度 FANTASISTA FESTA 集合写真 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-14.jpg" alt="2025年度 FANTASISTA FESTA 集合写真" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">集合写真<small>写真を見る →</small></span>
+</a>
+                </div>
+                <details class="gallery-more-details">
+                  <summary>記録・会場の写真をすべて見る</summary>
+                  <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-18.jpg" aria-label="2025年度 FANTASISTA FESTA 会場全体の様子 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-18.jpg" alt="2025年度 FANTASISTA FESTA 会場全体の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">会場全体の様子<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-22.jpg" aria-label="2025年度 FANTASISTA FESTA の記録 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-22.jpg" alt="2025年度 FANTASISTA FESTA の記録" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">FESTA 2025の記録<small>写真を見る →</small></span>
+</a>
+                  </div>
+                </details>
+              </article>
+              <article class="gallery-category">
+                <div class="gallery-category__head">
+                  <div>
+                    <h3>ダンスシーン</h3>
+                    <p>代表写真を先に表示しています。</p>
+                  </div>
+                  <span class="gallery-count-badge">11枚</span>
+                </div>
+                <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-03.jpg" aria-label="2025年度 FANTASISTA FESTA ラテンデモンストレーション を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-03.jpg" alt="2025年度 FANTASISTA FESTA ラテンデモンストレーション" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンデモンストレーション<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-06.jpg" aria-label="2025年度 FANTASISTA FESTA スタンダードのひととき を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-06.jpg" alt="2025年度 FANTASISTA FESTA スタンダードのひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードのひととき<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-08.jpg" aria-label="2025年度 FANTASISTA FESTA ラテンの一場面 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-08.jpg" alt="2025年度 FANTASISTA FESTA ラテンの一場面" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンの一場面<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-09.jpg" aria-label="2025年度 FANTASISTA FESTA スタンダードダンス を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-09.jpg" alt="2025年度 FANTASISTA FESTA スタンダードダンス" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードダンス<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-12.jpg" aria-label="2025年度 FANTASISTA FESTA ラテンデモンストレーション を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-12.jpg" alt="2025年度 FANTASISTA FESTA ラテンデモンストレーション" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンデモンストレーション<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-13.jpg" aria-label="2025年度 FANTASISTA FESTA ダンスを通じた交流 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-13.jpg" alt="2025年度 FANTASISTA FESTA ダンスを通じた交流" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ダンスを通じた交流<small>写真を見る →</small></span>
+</a>
+                </div>
+                <details class="gallery-more-details">
+                  <summary>ダンスシーンの写真をすべて見る</summary>
+                  <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-17.jpg" aria-label="2025年度 FANTASISTA FESTA スタンダードの演技 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-17.jpg" alt="2025年度 FANTASISTA FESTA スタンダードの演技" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードの演技<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-19.jpg" aria-label="2025年度 FANTASISTA FESTA ラテンの演技 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-19.jpg" alt="2025年度 FANTASISTA FESTA ラテンの演技" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンの演技<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-20.jpg" aria-label="2025年度 FANTASISTA FESTA フロアの一場面 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-20.jpg" alt="2025年度 FANTASISTA FESTA フロアの一場面" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">フロアの一場面<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-23.jpg" aria-label="2025年度 FANTASISTA FESTA 躍動感あふれる一場面 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-23.jpg" alt="2025年度 FANTASISTA FESTA 躍動感あふれる一場面" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">躍動感あふれる一場面<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-24.jpg" aria-label="2025年度 FANTASISTA FESTA スタンダードデモンストレーション を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-24.jpg" alt="2025年度 FANTASISTA FESTA スタンダードデモンストレーション" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードデモンストレーション<small>写真を見る →</small></span>
+</a>
+                  </div>
+                </details>
+              </article>
+              <article class="gallery-category">
+                <div class="gallery-category__head">
+                  <div>
+                    <h3>交流・ダンスタイム</h3>
+                    <p>代表写真を先に表示しています。</p>
+                  </div>
+                  <span class="gallery-count-badge">6枚</span>
+                </div>
+                <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-04.jpg" aria-label="2025年度 FANTASISTA FESTA 交流のひととき を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-04.jpg" alt="2025年度 FANTASISTA FESTA 交流のひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">交流のひととき<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-10.jpg" aria-label="2025年度 FANTASISTA FESTA ダンスタイム を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-10.jpg" alt="2025年度 FANTASISTA FESTA ダンスタイム" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ダンスタイム<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-15.jpg" aria-label="2025年度 FANTASISTA FESTA 歓談の時間 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-15.jpg" alt="2025年度 FANTASISTA FESTA 歓談の時間" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">歓談の時間<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-16.jpg" aria-label="2025年度 FANTASISTA FESTA 交流の一場面 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-16.jpg" alt="2025年度 FANTASISTA FESTA 交流の一場面" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">交流の一場面<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-21.jpg" aria-label="2025年度 FANTASISTA FESTA 交流の様子 を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-21.jpg" alt="2025年度 FANTASISTA FESTA 交流の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">交流の様子<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2025/festa-2025-25.jpg" aria-label="2025年度 FANTASISTA FESTA 記念のひととき を表示">
+  <img src="../assets/img/gallery/festa-2025/festa-2025-25.jpg" alt="2025年度 FANTASISTA FESTA 記念のひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">記念のひととき<small>写真を見る →</small></span>
+</a>
+                </div>
+              </article>
+            </div>
+          </details>
+          <details class="gallery-year-detail" id="festa-2024-detail">
+            <summary>
+              <div class="gallery-year-detail__summary">
                 <strong>2024年度 FANTASISTA FESTA</strong>
-                <p>2025年2月1日開催</p>
-              </figcaption>
-            </figure>
-
-            <figure class="gallery-photo-card">
-              <a href="#festa-2023">
-                <img src="../assets/img/gallery/festa-2023/festa-2023-thumb.jpg" alt="FANTASISTA FESTA 2023" loading="lazy" decoding="async" />
-              </a>
-              <figcaption>
-                <span>FESTA 2023</span>
+                <span>2025年2月1日（土）開催 / 25枚掲載</span>
+              </div>
+            </summary>
+            <div class="gallery-year-detail__body">
+              <p class="gallery-year-detail__lead">2024年度 FANTASISTA FESTA の写真を、記録・会場、ダンスシーン、交流・ダンスタイムごとに整理しています。</p>
+              <article class="gallery-category">
+                <div class="gallery-category__head">
+                  <div>
+                    <h3>記録・会場</h3>
+                    <p>代表写真を先に表示しています。</p>
+                  </div>
+                  <span class="gallery-count-badge">5枚</span>
+                </div>
+                <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-01.jpg" aria-label="2024年度 FANTASISTA FESTA 会場の様子 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-01.jpg" alt="2024年度 FANTASISTA FESTA 会場の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">会場の様子<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-02.jpg" aria-label="2024年度 FANTASISTA FESTA 開会前の様子 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-02.jpg" alt="2024年度 FANTASISTA FESTA 開会前の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">開会前の様子<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-03.jpg" aria-label="2024年度 FANTASISTA FESTA 集合写真 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-03.jpg" alt="2024年度 FANTASISTA FESTA 集合写真" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">集合写真<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-04.jpg" aria-label="2024年度 FANTASISTA FESTA 記録のひととき を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-04.jpg" alt="2024年度 FANTASISTA FESTA 記録のひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">記録のひととき<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-05.jpg" aria-label="2024年度 FANTASISTA FESTA 記念写真 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-05.jpg" alt="2024年度 FANTASISTA FESTA 記念写真" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">記念写真<small>写真を見る →</small></span>
+</a>
+                </div>
+              </article>
+              <article class="gallery-category">
+                <div class="gallery-category__head">
+                  <div>
+                    <h3>ダンスシーン</h3>
+                    <p>代表写真を先に表示しています。</p>
+                  </div>
+                  <span class="gallery-count-badge">8枚</span>
+                </div>
+                <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-06.jpg" aria-label="2024年度 FANTASISTA FESTA ラテンデモンストレーション を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-06.jpg" alt="2024年度 FANTASISTA FESTA ラテンデモンストレーション" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンデモンストレーション<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-07.jpg" aria-label="2024年度 FANTASISTA FESTA ラテンの一場面 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-07.jpg" alt="2024年度 FANTASISTA FESTA ラテンの一場面" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンの一場面<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-08.jpg" aria-label="2024年度 FANTASISTA FESTA スタンダードの演技 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-08.jpg" alt="2024年度 FANTASISTA FESTA スタンダードの演技" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードの演技<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-09.jpg" aria-label="2024年度 FANTASISTA FESTA スタンダードダンス を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-09.jpg" alt="2024年度 FANTASISTA FESTA スタンダードダンス" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードダンス<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-10.jpg" aria-label="2024年度 FANTASISTA FESTA 優雅なステップ を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-10.jpg" alt="2024年度 FANTASISTA FESTA 優雅なステップ" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">優雅なステップ<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-11.jpg" aria-label="2024年度 FANTASISTA FESTA フロアの一場面 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-11.jpg" alt="2024年度 FANTASISTA FESTA フロアの一場面" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">フロアの一場面<small>写真を見る →</small></span>
+</a>
+                </div>
+                <details class="gallery-more-details">
+                  <summary>ダンスシーンの写真をすべて見る</summary>
+                  <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-12.jpg" aria-label="2024年度 FANTASISTA FESTA スタンダードのフロア風景 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-12.jpg" alt="2024年度 FANTASISTA FESTA スタンダードのフロア風景" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードのフロア風景<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-25.jpg" aria-label="2024年度 FANTASISTA FESTA スタンダードのフロア風景 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-25.jpg" alt="2024年度 FANTASISTA FESTA スタンダードのフロア風景" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードのフロア風景<small>写真を見る →</small></span>
+</a>
+                  </div>
+                </details>
+              </article>
+              <article class="gallery-category">
+                <div class="gallery-category__head">
+                  <div>
+                    <h3>交流・ダンスタイム</h3>
+                    <p>代表写真を先に表示しています。</p>
+                  </div>
+                  <span class="gallery-count-badge">12枚</span>
+                </div>
+                <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-13.jpg" aria-label="2024年度 FANTASISTA FESTA ラテンデモンストレーション を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-13.jpg" alt="2024年度 FANTASISTA FESTA ラテンデモンストレーション" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンデモンストレーション<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-14.jpg" aria-label="2024年度 FANTASISTA FESTA ラテンのひととき を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-14.jpg" alt="2024年度 FANTASISTA FESTA ラテンのひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンのひととき<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-15.jpg" aria-label="2024年度 FANTASISTA FESTA 華やかなステップ を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-15.jpg" alt="2024年度 FANTASISTA FESTA 華やかなステップ" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">華やかなステップ<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-16.jpg" aria-label="2024年度 FANTASISTA FESTA ラテンの演技 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-16.jpg" alt="2024年度 FANTASISTA FESTA ラテンの演技" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンの演技<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-17.jpg" aria-label="2024年度 FANTASISTA FESTA 躍動感あふれる一場面 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-17.jpg" alt="2024年度 FANTASISTA FESTA 躍動感あふれる一場面" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">躍動感あふれる一場面<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-18.jpg" aria-label="2024年度 FANTASISTA FESTA 交流のひととき を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-18.jpg" alt="2024年度 FANTASISTA FESTA 交流のひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">交流のひととき<small>写真を見る →</small></span>
+</a>
+                </div>
+                <details class="gallery-more-details">
+                  <summary>交流・ダンスタイムの写真をすべて見る</summary>
+                  <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-19.jpg" aria-label="2024年度 FANTASISTA FESTA ダンスタイム を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-19.jpg" alt="2024年度 FANTASISTA FESTA ダンスタイム" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ダンスタイム<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-20.jpg" aria-label="2024年度 FANTASISTA FESTA 交流の様子 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-20.jpg" alt="2024年度 FANTASISTA FESTA 交流の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">交流の様子<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-21.jpg" aria-label="2024年度 FANTASISTA FESTA フロアでの交流 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-21.jpg" alt="2024年度 FANTASISTA FESTA フロアでの交流" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">フロアでの交流<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-22.jpg" aria-label="2024年度 FANTASISTA FESTA にぎやかなひととき を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-22.jpg" alt="2024年度 FANTASISTA FESTA にぎやかなひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">にぎやかなひととき<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-23.jpg" aria-label="2024年度 FANTASISTA FESTA デモンストレーションの一場面 を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-23.jpg" alt="2024年度 FANTASISTA FESTA デモンストレーションの一場面" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">デモンストレーションの一場面<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2024/festa-2024-24.jpg" aria-label="2024年度 FANTASISTA FESTA 華やかなデモンストレーション を表示">
+  <img src="../assets/img/gallery/festa-2024/festa-2024-24.jpg" alt="2024年度 FANTASISTA FESTA 華やかなデモンストレーション" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">華やかなデモンストレーション<small>写真を見る →</small></span>
+</a>
+                  </div>
+                </details>
+              </article>
+            </div>
+          </details>
+          <details class="gallery-year-detail" id="festa-2023-detail">
+            <summary>
+              <div class="gallery-year-detail__summary">
                 <strong>FANTASISTA FESTA 2023</strong>
-                <p>2023年12月9日開催</p>
-              </figcaption>
-            </figure>
+                <span>2023年12月9日（土）開催 / 12枚掲載</span>
+              </div>
+            </summary>
+            <div class="gallery-year-detail__body">
+              <p class="gallery-year-detail__lead">4年ぶりに開催した FANTASISTA FESTA 2023 の様子を、記録・会場、ダンスシーン、交流・ダンスタイムごとに整理しています。</p>
+              <article class="gallery-category">
+                <div class="gallery-category__head">
+                  <div>
+                    <h3>記録・会場</h3>
+                    <p>代表写真を先に表示しています。</p>
+                  </div>
+                  <span class="gallery-count-badge">5枚</span>
+                </div>
+                <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-01.jpg" aria-label="FANTASISTA FESTA 2023 集合写真 を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-01.jpg" alt="FANTASISTA FESTA 2023 集合写真" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">集合写真<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-05.jpg" aria-label="FANTASISTA FESTA 2023 当日の進行 を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-05.jpg" alt="FANTASISTA FESTA 2023 当日の進行" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">当日の進行<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-09.jpg" aria-label="FANTASISTA FESTA 2023 会場の様子 を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-09.jpg" alt="FANTASISTA FESTA 2023 会場の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">会場の様子<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-10.jpg" aria-label="FANTASISTA FESTA 2023 記念のひととき を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-10.jpg" alt="FANTASISTA FESTA 2023 記念のひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">記念のひととき<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-12.jpg" aria-label="FANTASISTA FESTA 2023 記念写真 を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-12.jpg" alt="FANTASISTA FESTA 2023 記念写真" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">記念写真<small>写真を見る →</small></span>
+</a>
+                </div>
+              </article>
+              <article class="gallery-category">
+                <div class="gallery-category__head">
+                  <div>
+                    <h3>ダンスシーン</h3>
+                    <p>代表写真を先に表示しています。</p>
+                  </div>
+                  <span class="gallery-count-badge">4枚</span>
+                </div>
+                <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-02.jpg" aria-label="FANTASISTA FESTA 2023 スタンダードデモンストレーション を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-02.jpg" alt="FANTASISTA FESTA 2023 スタンダードデモンストレーション" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">スタンダードデモンストレーション<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-04.jpg" aria-label="FANTASISTA FESTA 2023 ラテンデモンストレーション を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-04.jpg" alt="FANTASISTA FESTA 2023 ラテンデモンストレーション" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンデモンストレーション<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-06.jpg" aria-label="FANTASISTA FESTA 2023 フロアの一場面 を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-06.jpg" alt="FANTASISTA FESTA 2023 フロアの一場面" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">フロアの一場面<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-07.jpg" aria-label="FANTASISTA FESTA 2023 ラテンのひととき を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-07.jpg" alt="FANTASISTA FESTA 2023 ラテンのひととき" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ラテンのひととき<small>写真を見る →</small></span>
+</a>
+                </div>
+              </article>
+              <article class="gallery-category">
+                <div class="gallery-category__head">
+                  <div>
+                    <h3>交流・ダンスタイム</h3>
+                    <p>代表写真を先に表示しています。</p>
+                  </div>
+                  <span class="gallery-count-badge">3枚</span>
+                </div>
+                <div class="gallery-thumb-grid">
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-03.jpg" aria-label="FANTASISTA FESTA 2023 ダンスタイム を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-03.jpg" alt="FANTASISTA FESTA 2023 ダンスタイム" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">ダンスタイム<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-08.jpg" aria-label="FANTASISTA FESTA 2023 OBOGと現役部員の交流 を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-08.jpg" alt="FANTASISTA FESTA 2023 OBOGと現役部員の交流" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">OBOGと現役部員の交流<small>写真を見る →</small></span>
+</a>
+<a class="gallery-thumb-card" href="../assets/img/gallery/festa-2023/festa-2023-11.jpg" aria-label="FANTASISTA FESTA 2023 交流の様子 を表示">
+  <img src="../assets/img/gallery/festa-2023/festa-2023-11.jpg" alt="FANTASISTA FESTA 2023 交流の様子" loading="lazy" decoding="async" />
+  <span class="gallery-thumb-card__caption">交流の様子<small>写真を見る →</small></span>
+</a>
+                </div>
+              </article>
+            </div>
+          </details>
           </div>
         </div>
       </section>
 
-      <section class="page-section">
+      <section class="page-section" id="gallery-submit">
         <div class="container">
-          <div class="gallery-year" id="festa-2025">
-            <div class="gallery-year__head">
-              <div>
-                <p class="section-head__kicker">FESTA 2025</p>
-                <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="8" cy="10" r="1.5" /><path d="M6 16l4-4 3 3 3-2 2 3" /></svg></span>
-                <h2>2025年度 FANTASISTA FESTA</h2>
+          <article class="gallery-submit-card">
+            <div class="gallery-submit-card__copy">
+              <div class="section-head" style="margin-bottom: 0;">
+                <p class="section-head__kicker">Contribute</p>
+                <h2>写真・記録をお持ちのOBOGへ</h2>
               </div>
-              <p class="gallery-year__meta">2026年2月7日（土）開催 / 25枚掲載</p>
+              <p>FANTASISTA FESTA の写真や、過去の活動記録、集合写真、デモンストレーション、交流の様子などをお持ちの方は、ぜひFANTASISTA会までお知らせください。</p>
+              <p>掲載可否を確認のうえ、ギャラリーや記念企画に活用していきます。</p>
+
+              <div class="gallery-submit-card__actions">
+                <a class="gallery-submit-card__button" href="../contact/">写真・資料について問い合わせる →</a>
+              </div>
             </div>
-            <p class="gallery-year__intro">2025年度 FANTASISTA FESTA の様子を、記録写真、ダンスシーン、交流の場面ごとに紹介します。</p>
 
-            <section class="gallery-cluster" aria-labelledby="festa-2025-record">
-              <div class="gallery-cluster__head">
-                <h3 id="festa-2025-record">記録・会場</h3>
+            <div class="gallery-submit-card__media">
+              <div class="gallery-submit-placeholder" role="img" aria-label="写真募集中">
+                <span>写真募集中</span>
               </div>
-              <div class="gallery-masonry">
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-01.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-01.jpg"
-                      alt="FANTASISTA FESTA 2025 集合写真"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>集合写真</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-02.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-02.jpg"
-                      alt="FANTASISTA FESTA 2025 会場の様子"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>会場の様子</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-05.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-05.jpg"
-                      alt="FANTASISTA FESTA 2025 開会のひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>開会のひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-07.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-07.jpg"
-                      alt="FANTASISTA FESTA 2025 記念写真"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>記念写真</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-11.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-11.jpg"
-                      alt="FANTASISTA FESTA 2025 進行の様子"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>進行の様子</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-14.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-14.jpg"
-                      alt="FANTASISTA FESTA 2025 集合写真"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>集合写真</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-18.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-18.jpg"
-                      alt="FANTASISTA FESTA 2025 会場全体の様子"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>会場全体の様子</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-22.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-22.jpg"
-                      alt="FANTASISTA FESTA 2025 の記録"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>FESTA 2025の記録</figcaption>
-                </figure>
-              </div>
-            </section>
-
-            <section class="gallery-cluster" aria-labelledby="festa-2025-dance">
-              <div class="gallery-cluster__head">
-                <h3 id="festa-2025-dance">ダンスシーン</h3>
-              </div>
-              <div class="gallery-masonry">
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-03.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-03.jpg"
-                      alt="FANTASISTA FESTA 2025 ラテンデモンストレーション"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ラテンデモンストレーション</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-06.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-06.jpg"
-                      alt="FANTASISTA FESTA 2025 スタンダードのひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードのひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-08.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-08.jpg"
-                      alt="FANTASISTA FESTA 2025 ラテンの一場面"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ラテンの一場面</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-09.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-09.jpg"
-                      alt="FANTASISTA FESTA 2025 スタンダードダンス"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードダンス</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-12.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-12.jpg"
-                      alt="FANTASISTA FESTA 2025 ラテンデモンストレーション"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ラテンデモンストレーション</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-13.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-13.jpg"
-                      alt="FANTASISTA FESTA 2025 ダンスを通じた交流"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ダンスを通じた交流</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-17.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-17.jpg"
-                      alt="FANTASISTA FESTA 2025 スタンダードの演技"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードの演技</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-19.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-19.jpg"
-                      alt="FANTASISTA FESTA 2025 ラテンの演技"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ラテンの演技</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-20.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-20.jpg"
-                      alt="FANTASISTA FESTA 2025 フロアの一場面"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>フロアの一場面</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-23.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-23.jpg"
-                      alt="FANTASISTA FESTA 2025 躍動感あふれる一場面"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>躍動感あふれる一場面</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-24.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-24.jpg"
-                      alt="FANTASISTA FESTA 2025 スタンダードデモンストレーション"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードデモンストレーション</figcaption>
-                </figure>
-              </div>
-            </section>
-
-            <section class="gallery-cluster" aria-labelledby="festa-2025-social">
-              <div class="gallery-cluster__head">
-                <h3 id="festa-2025-social">交流・ダンスタイム</h3>
-              </div>
-              <div class="gallery-masonry">
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-04.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-04.jpg"
-                      alt="FANTASISTA FESTA 2025 交流のひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>交流のひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-10.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-10.jpg"
-                      alt="FANTASISTA FESTA 2025 ダンスタイム"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ダンスタイム</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-15.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-15.jpg"
-                      alt="FANTASISTA FESTA 2025 にぎやかなひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>にぎやかなひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-16.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-16.jpg"
-                      alt="FANTASISTA FESTA 2025 交流の様子"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>交流の様子</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-21.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-21.jpg"
-                      alt="FANTASISTA FESTA 2025 世代を越えた交流"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>世代を越えた交流</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2025/festa-2025-25.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2025/festa-2025-25.jpg"
-                      alt="FANTASISTA FESTA 2025 交流のひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>交流のひととき</figcaption>
-                </figure>
-              </div>
-            </section>
-          </div>
+            </div>
+          </article>
         </div>
       </section>
 
-      <section class="page-section page-section--light">
+      <section class="page-section page-section--light" id="gallery-related">
         <div class="container">
-          <div class="gallery-year" id="festa-2024">
-            <div class="gallery-year__head">
-              <div>
-                <p class="section-head__kicker">FESTA 2024</p>
-                <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="8" cy="10" r="1.5" /><path d="M6 16l4-4 3 3 3-2 2 3" /></svg></span>
-                <h2>2024年度 FANTASISTA FESTA</h2>
-              </div>
-              <p class="gallery-year__meta">2025年2月1日開催 / 25枚掲載</p>
-            </div>
-            <p class="gallery-year__intro">2024年度 FANTASISTA FESTA の様子を、記録写真、ダンスシーン、交流の場面ごとに紹介します。</p>
-
-            <section class="gallery-cluster" aria-labelledby="festa-2024-record">
-              <div class="gallery-cluster__head">
-                <h3 id="festa-2024-record">記録・会場</h3>
-              </div>
-              <div class="gallery-masonry">
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-01.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-01.jpg"
-                      alt="FANTASISTA FESTA 2024 会場の様子"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>会場の様子</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-02.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-02.jpg"
-                      alt="FANTASISTA FESTA 2024 フロアの様子"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>フロアの様子</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-03.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-03.jpg"
-                      alt="FANTASISTA FESTA 2024 集合写真"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>集合写真</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-04.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-04.jpg"
-                      alt="FANTASISTA FESTA 2024 記念のひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>記念のひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-05.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-05.jpg"
-                      alt="FANTASISTA FESTA 2024 OBOGと現役部員の交流"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>OBOGと現役部員の交流</figcaption>
-                </figure>
-              </div>
-            </section>
-
-            <section class="gallery-cluster" aria-labelledby="festa-2024-dance">
-              <div class="gallery-cluster__head">
-                <h3 id="festa-2024-dance">ダンスシーン</h3>
-              </div>
-              <div class="gallery-masonry">
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-06.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-06.jpg"
-                      alt="FANTASISTA FESTA 2024 スタンダードデモンストレーション"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードデモンストレーション</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-07.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-07.jpg"
-                      alt="FANTASISTA FESTA 2024 スタンダードのひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードのひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-08.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-08.jpg"
-                      alt="FANTASISTA FESTA 2024 スタンダードの演技"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードの演技</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-09.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-09.jpg"
-                      alt="FANTASISTA FESTA 2024 スタンダードダンス"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードダンス</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-10.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-10.jpg"
-                      alt="FANTASISTA FESTA 2024 優雅なステップ"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>優雅なステップ</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-11.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-11.jpg"
-                      alt="FANTASISTA FESTA 2024 フロアの一場面"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>フロアの一場面</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-12.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-12.jpg"
-                      alt="FANTASISTA FESTA 2024 スタンダードのフロア風景"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードのフロア風景</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-25.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-25.jpg"
-                      alt="FANTASISTA FESTA 2024 スタンダードのフロア風景"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードのフロア風景</figcaption>
-                </figure>
-              </div>
-            </section>
-
-            <section class="gallery-cluster" aria-labelledby="festa-2024-social">
-              <div class="gallery-cluster__head">
-                <h3 id="festa-2024-social">交流・ダンスタイム</h3>
-              </div>
-              <div class="gallery-masonry">
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-13.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-13.jpg"
-                      alt="FANTASISTA FESTA 2024 ラテンデモンストレーション"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ラテンデモンストレーション</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-14.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-14.jpg"
-                      alt="FANTASISTA FESTA 2024 ラテンのひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ラテンのひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-15.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-15.jpg"
-                      alt="FANTASISTA FESTA 2024 華やかなステップ"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>華やかなステップ</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-16.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-16.jpg"
-                      alt="FANTASISTA FESTA 2024 ラテンの演技"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ラテンの演技</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-17.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-17.jpg"
-                      alt="FANTASISTA FESTA 2024 躍動感あふれる一場面"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>躍動感あふれる一場面</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-18.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-18.jpg"
-                      alt="FANTASISTA FESTA 2024 交流のひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>交流のひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-19.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-19.jpg"
-                      alt="FANTASISTA FESTA 2024 ダンスタイム"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ダンスタイム</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-20.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-20.jpg"
-                      alt="FANTASISTA FESTA 2024 交流の様子"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>交流の様子</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-21.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-21.jpg"
-                      alt="FANTASISTA FESTA 2024 フロアでの交流"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>フロアでの交流</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-22.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-22.jpg"
-                      alt="FANTASISTA FESTA 2024 にぎやかなひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>にぎやかなひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-23.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-23.jpg"
-                      alt="FANTASISTA FESTA 2024 デモンストレーションの一場面"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>デモンストレーションの一場面</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2024/festa-2024-24.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2024/festa-2024-24.jpg"
-                      alt="FANTASISTA FESTA 2024 華やかなデモンストレーション"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>華やかなデモンストレーション</figcaption>
-                </figure>
-              </div>
-            </section>
+          <div class="section-head">
+            <p class="section-head__kicker">Related</p>
+            <h2>関連リンク</h2>
+            <p>写真とあわせて、FESTAやサイト全体の案内もご覧いただけます。</p>
           </div>
-        </div>
-      </section>
 
-      <section class="page-section">
-        <div class="container">
-          <div class="gallery-year" id="festa-2023">
-            <div class="gallery-year__head">
-              <div>
-                <p class="section-head__kicker">FESTA 2023</p>
-                <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="8" cy="10" r="1.5" /><path d="M6 16l4-4 3 3 3-2 2 3" /></svg></span>
-                <h2>FANTASISTA FESTA 2023</h2>
-              </div>
-              <p class="gallery-year__meta">2023年12月9日（土）開催 / 12枚掲載</p>
-            </div>
-            <p class="gallery-year__intro">4年ぶりに開催した FANTASISTA FESTA 2023 の様子を、記録写真、ダンスシーン、交流の場面ごとに紹介します。</p>
+          <div class="gallery-related-grid">
+            <a class="gallery-related-card" href="../festa/">
+              <span class="gallery-related-card__eyebrow">FESTA</span>
+              <strong>通常FESTAページを見る</strong>
+              <span>開催情報やFESTAの案内をまとめた通常ページです。</span>
+              <em>ページを見る →</em>
+            </a>
 
-            <section class="gallery-cluster" aria-labelledby="festa-2023-record">
-              <div class="gallery-cluster__head">
-                <h3 id="festa-2023-record">記録・会場</h3>
-              </div>
-              <div class="gallery-masonry">
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-01.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-01.jpg"
-                      alt="FANTASISTA FESTA 2023 集合写真"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>集合写真</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-05.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-05.jpg"
-                      alt="FANTASISTA FESTA 2023 当日の進行"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>当日の進行</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-09.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-09.jpg"
-                      alt="FANTASISTA FESTA 2023 会場の様子"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>会場の様子</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-10.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-10.jpg"
-                      alt="FANTASISTA FESTA 2023 記念のひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>記念のひととき</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-12.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-12.jpg"
-                      alt="FANTASISTA FESTA 2023 記念写真"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>記念写真</figcaption>
-                </figure>
-              </div>
-            </section>
+            <a class="gallery-related-card" href="../festa-60th/">
+              <span class="gallery-related-card__eyebrow">60th</span>
+              <strong>60周年記念FESTAを見る</strong>
+              <span>60周年記念FESTAの案内ページへ進めます。</span>
+              <em>特設ページを見る →</em>
+            </a>
 
-            <section class="gallery-cluster" aria-labelledby="festa-2023-dance">
-              <div class="gallery-cluster__head">
-                <h3 id="festa-2023-dance">ダンスシーン</h3>
-              </div>
-              <div class="gallery-masonry">
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-02.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-02.jpg"
-                      alt="FANTASISTA FESTA 2023 スタンダードデモンストレーション"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>スタンダードデモンストレーション</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-04.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-04.jpg"
-                      alt="FANTASISTA FESTA 2023 ラテンデモンストレーション"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ラテンデモンストレーション</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-06.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-06.jpg"
-                      alt="FANTASISTA FESTA 2023 フロアの一場面"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>フロアの一場面</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-07.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-07.jpg"
-                      alt="FANTASISTA FESTA 2023 ラテンのひととき"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ラテンのひととき</figcaption>
-                </figure>
-              </div>
-            </section>
-
-            <section class="gallery-cluster" aria-labelledby="festa-2023-social">
-              <div class="gallery-cluster__head">
-                <h3 id="festa-2023-social">交流・ダンスタイム</h3>
-              </div>
-              <div class="gallery-masonry">
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-03.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-03.jpg"
-                      alt="FANTASISTA FESTA 2023 ダンスタイム"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>ダンスタイム</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-08.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-08.jpg"
-                      alt="FANTASISTA FESTA 2023 OBOGと現役部員の交流"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>OBOGと現役部員の交流</figcaption>
-                </figure>
-                <figure class="gallery-tile">
-                  <a href="../assets/img/gallery/festa-2023/festa-2023-11.jpg">
-                    <img
-                      src="../assets/img/gallery/festa-2023/festa-2023-11.jpg"
-                      alt="FANTASISTA FESTA 2023 交流の様子"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                  <figcaption>交流の様子</figcaption>
-                </figure>
-              </div>
-            </section>
+            <a class="gallery-related-card" href="../">
+              <span class="gallery-related-card__eyebrow">Home</span>
+              <strong>本サイトへ戻る</strong>
+              <span>FANTASISTAサイト全体の入口に戻ります。</span>
+              <em>ホームへ戻る →</em>
+            </a>
           </div>
         </div>
       </section>
@@ -1001,6 +1311,7 @@
 <!-- MOBILE_NAV_SCRIPT_END -->
   </body>
 </html>
+
 
 
 
