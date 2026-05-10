@@ -1564,28 +1564,31 @@
           }
         }
       </style>
-      <!-- REVIEW_HISTORY_LINK_STYLE_END -->
-      <!-- REVIEW_HISTORY_HERO_BALANCE_STYLE_START -->
+      <!-- REVIEW_HISTORY_LINK_STYLE_END -->      <!-- REVIEW_HISTORY_HERO_BALANCE_STYLE_START -->
       <style>
         .history-digital-stats {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 14px;
+          gap: clamp(12px, 1.4vw, 18px);
+          align-content: stretch;
         }
 
         .history-digital-stat {
           min-width: 0;
-          padding: clamp(18px, 2.4vw, 28px);
-          border-radius: 26px;
+          min-height: 164px;
+          padding: clamp(20px, 2.3vw, 30px);
+          border-radius: 28px;
+          background: linear-gradient(180deg, #fffdfa 0%, #fff8ee 100%);
         }
 
         .history-digital-stat--wide {
           grid-column: 1 / -1;
+          min-height: 150px;
         }
 
         .history-digital-stat__label {
           display: block;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           color: #8a6a00;
           font-size: 0.78rem;
           font-weight: 800;
@@ -1600,30 +1603,43 @@
           white-space: nowrap;
           color: #111827;
           font-family: "Oswald", "Noto Sans JP", sans-serif;
-          font-size: clamp(1.9rem, 3vw, 2.8rem);
+          font-size: clamp(2.35rem, 3.8vw, 3.55rem);
           font-weight: 700;
-          line-height: 1.05;
-          letter-spacing: 0.02em;
+          line-height: 1;
+          letter-spacing: 0.01em;
+        }
+
+        .history-digital-stat__number--range {
+          font-size: clamp(2.05rem, 3vw, 2.85rem);
+          letter-spacing: 0;
+        }
+
+        .history-digital-stat__number--minor {
+          font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+          letter-spacing: 0;
         }
 
         .history-digital-stat__unit {
-          font-size: 0.55em;
+          font-size: 0.52em;
           font-family: "Noto Sans JP", sans-serif;
           font-weight: 800;
+          line-height: 1;
         }
 
         .history-digital-stat__sub {
           display: block;
-          margin-top: 6px;
+          margin-top: 8px;
           color: #8a6a00;
+          font-size: clamp(1rem, 1.6vw, 1.25rem);
           font-weight: 800;
-          line-height: 1.5;
+          line-height: 1.55;
         }
 
         .history-digital-stat__text {
-          margin-top: 10px !important;
+          margin-top: 12px !important;
           color: #4b5563;
           line-height: 1.75;
+          font-size: 0.96rem;
         }
 
         .history-digital-stat strong {
@@ -1637,17 +1653,92 @@
           white-space: nowrap;
         }
 
+        .history-hero-milestones {
+          margin-top: 26px;
+          display: grid;
+          gap: 16px;
+        }
+
+        .history-hero-milestone-group {
+          display: grid;
+          gap: 10px;
+        }
+
+        .history-hero-milestone-title {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.72);
+          font-size: 0.78rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .history-hero-milestone-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .history-hero-milestone {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          min-height: 38px;
+          padding: 0 12px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.10);
+          border: 1px solid rgba(254, 192, 0, 0.24);
+          color: #ffffff;
+          font-weight: 800;
+          cursor: default;
+        }
+
+        .history-hero-milestone b {
+          font-family: "Oswald", sans-serif;
+          font-size: 1.02rem;
+          letter-spacing: 0.04em;
+        }
+
+        .history-hero-milestone span {
+          font-size: 0.82rem;
+          color: rgba(255, 255, 255, 0.86);
+          line-height: 1.35;
+        }
+
+        .history-hero-milestone--key {
+          background: rgba(254, 192, 0, 0.18);
+          border-color: rgba(254, 192, 0, 0.48);
+        }
+
         @media (max-width: 860px) {
           .history-digital-stats {
             grid-template-columns: 1fr;
           }
 
+          .history-digital-stat,
           .history-digital-stat--wide {
             grid-column: auto;
+            min-height: auto;
           }
 
           .history-digital-stat__number {
-            font-size: clamp(1.85rem, 8vw, 2.5rem);
+            font-size: clamp(2.1rem, 9vw, 3rem);
+          }
+
+          .history-digital-stat__number--range {
+            font-size: clamp(1.9rem, 7.5vw, 2.55rem);
+          }
+        }
+
+        @media (max-width: 760px) {
+          .history-hero-milestone-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          }
+
+          .history-hero-milestone {
+            justify-content: flex-start;
+            min-width: 0;
           }
         }
       </style>
@@ -1712,31 +1803,44 @@
             年表では、創部期から現在までの主な節目を年代順に整理します。
           </p>
 
-                    <!-- REVIEW_HISTORY_HERO_STATS_START -->
+                              <!-- REVIEW_HISTORY_HERO_STATS_START -->
           <div class="history-digital-stage" aria-label="歴史の主要数字">
             <div class="history-digital-panel">
               <p class="history-digital-panel__eyebrow">東京理科大学舞踏研究部 HISTORY</p>
-              <div class="history-digital-counter" data-history-hero-year data-sequence="1965,1966,1968,1987,2003,2026" data-final="1966-2026">1966-2026</div>
+              <div class="history-digital-counter" data-history-hero-year data-sequence="1965,1966,1968,1996,2003,2005,2006,2026" data-final="1966-2026">1966-2026</div>
               <div class="history-digital-subline">
                 <span>1966 創部</span>
                 <span>60年の歩み</span>
                 <span>560名の名簿記録</span>
               </div>
               <p class="history-digital-note">
-                1965年の準備、1966年の創部、1968年から見え始める卒部生名簿の記録、そして2003年の最多記録へ。名簿に残る登録者数を重ねると、舞踏研究部からFANTASISTAへ受け継がれてきた歩みの広がりが見えてきます。
+                1965年の準備、1966年の創部、1968年から見え始める卒部生名簿の記録。1996年の初の全日本優勝を経て、2005年・2006年には団体・個人の両面で大きな成果を残しました。名簿に残る登録者数と競技史の節目を重ねると、舞踏研究部からFANTASISTAへ受け継がれてきた歩みの広がりが見えてきます。
               </p>
 
-              <div class="history-digital-track" aria-hidden="true">
-                <span>1965</span>
-                <span>1966</span>
-                <span>1968</span>
-                <span>1987</span>
-                <span>2003</span>
-                <span>2026</span>
+              <div class="history-hero-milestones" aria-label="歴史の重要な節目">
+                <div class="history-hero-milestone-group">
+                  <p class="history-hero-milestone-title">歩みの起点</p>
+                  <div class="history-hero-milestone-list">
+                    <span class="history-hero-milestone"><b>1965</b><span>準備</span></span>
+                    <span class="history-hero-milestone history-hero-milestone--key"><b>1966</b><span>創部</span></span>
+                    <span class="history-hero-milestone"><b>1968</b><span>名簿記録</span></span>
+                    <span class="history-hero-milestone history-hero-milestone--key"><b>2026</b><span>60周年</span></span>
+                  </div>
+                </div>
+
+                <div class="history-hero-milestone-group">
+                  <p class="history-hero-milestone-title">競技と世代の山</p>
+                  <div class="history-hero-milestone-list">
+                    <span class="history-hero-milestone"><b>1996</b><span>初の全日本優勝</span></span>
+                    <span class="history-hero-milestone"><b>2003</b><span>最多年度</span></span>
+                    <span class="history-hero-milestone"><b>2005</b><span>冬全団体3位</span></span>
+                    <span class="history-hero-milestone history-hero-milestone--key"><b>2006</b><span>夏全・冬全優勝</span></span>
+                  </div>
+                </div>
               </div>
             </div>
 
-                        <div class="history-digital-stats">
+            <div class="history-digital-stats">
               <article class="history-digital-stat">
                 <span class="history-digital-stat__label">創部</span>
                 <strong class="history-digital-stat__number">1966<span class="history-digital-stat__unit">年</span></strong>
@@ -1751,14 +1855,14 @@
 
               <article class="history-digital-stat">
                 <span class="history-digital-stat__label">記録対象期間</span>
-                <strong class="history-digital-stat__number">1968-2025</strong>
+                <strong class="history-digital-stat__number history-digital-stat__number--range">1968-2025</strong>
                 <p class="history-digital-stat__text">卒部年度が確認できる記録の対象期間です。</p>
               </article>
 
               <article class="history-digital-stat">
                 <span class="history-digital-stat__label">最多年度</span>
                 <strong class="history-digital-stat__number">2003<span class="history-digital-stat__unit">年</span></strong>
-                <span class="history-digital-stat__sub"><span class="history-digital-stat__number"><span class="history-digital-stat__value" data-count-to="20">20</span><span class="history-digital-stat__unit">名</span></span></span>
+                <span class="history-digital-stat__sub"><span class="history-digital-stat__number history-digital-stat__number--minor"><span class="history-digital-stat__value" data-count-to="20">20</span><span class="history-digital-stat__unit">名</span></span></span>
                 <p class="history-digital-stat__text">卒部生名簿に残る人数が最も多い年度です。</p>
               </article>
 
@@ -2624,6 +2728,7 @@
 <!-- REVIEW_HISTORY_MOTION_SCRIPT_END -->
 </body>
 </html>
+
 
 
 
