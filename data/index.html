@@ -3380,6 +3380,278 @@
       }
     </style>
     <!-- REVIEW_DATA_LINK_VISUAL_END -->
+    <!-- REVIEW_DATA_INSIGHT_STYLE_START -->
+    <style>
+      .data-overview-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .data-overview__lead-card {
+        padding: 28px 26px;
+        border-radius: 28px;
+        background: linear-gradient(180deg, #191f2a 0%, #262c36 100%);
+        box-shadow: 0 20px 48px rgba(12, 18, 28, 0.16);
+        color: #ffffff;
+      }
+
+      .data-overview__eyebrow {
+        display: block;
+        margin-bottom: 10px;
+        color: #f3d78d;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .data-lead-number {
+        display: block;
+        margin: 0;
+        color: #ffffff;
+        font-size: clamp(3rem, 6vw, 5.8rem);
+        line-height: 1;
+        font-family: "Oswald", sans-serif;
+        letter-spacing: 0.02em;
+      }
+
+      .data-overview__lead-card p {
+        margin: 14px 0 0;
+        color: rgba(255, 255, 255, 0.84);
+        line-height: 1.85;
+      }
+
+      .data-insight-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .data-insight-card {
+        padding: 22px 20px;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.08);
+      }
+
+      .data-insight-card__eyebrow {
+        display: block;
+        margin-bottom: 10px;
+        color: #8a6a00;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .data-insight-card strong {
+        display: block;
+        color: #191f2a;
+        font-size: clamp(1.9rem, 3.2vw, 3rem);
+        line-height: 1.08;
+      }
+
+      .data-insight-card__sub {
+        display: block;
+        margin-top: 8px;
+        color: #5f6671;
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.55;
+      }
+
+      .data-insight-card p {
+        margin: 12px 0 0;
+        color: #59606b;
+        line-height: 1.78;
+      }
+
+      .paired-stat {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 4px;
+      }
+
+      .paired-stat__item {
+        padding: 14px 12px;
+        border-radius: 18px;
+        background: #f8fafc;
+      }
+
+      .paired-stat__label {
+        display: block;
+        margin-bottom: 6px;
+        color: #6f5600;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .paired-stat__value {
+        display: block;
+        color: #191f2a;
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+        line-height: 1.05;
+      }
+
+      .mini-bar-compare {
+        display: grid;
+        gap: 12px;
+        margin-top: 6px;
+      }
+
+      .mini-bar {
+        display: grid;
+        gap: 6px;
+      }
+
+      .mini-bar__head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .mini-bar__head b {
+        color: #191f2a;
+        font-size: 0.92rem;
+      }
+
+      .mini-bar__head span {
+        color: #5f6671;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .mini-bar__track {
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.08);
+        overflow: hidden;
+      }
+
+      .mini-bar__fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #fec000 0%, #c89200 100%);
+      }
+
+      .data-collection-note {
+        margin-top: 20px;
+        padding: 18px 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(138, 106, 0, 0.16);
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7ea 100%);
+      }
+
+      .data-collection-note__label {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #6f5600;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .data-collection-note p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.82;
+      }
+
+      .data-collection-note p + p {
+        margin-top: 8px;
+      }
+
+      .specialty-compare-layout {
+        display: grid;
+        gap: 18px;
+      }
+
+      .specialty-context {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 34px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: rgba(254, 192, 0, 0.12);
+        color: #5f4700;
+        font-size: 0.9rem;
+        font-weight: 800;
+      }
+
+      .specialty-context span {
+        color: #191f2a;
+      }
+
+      .specialty-pair-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .specialty-pair-card {
+        padding: 20px 18px;
+        border-radius: 22px;
+        background: #ffffff;
+        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.08);
+      }
+
+      .specialty-pair-card span {
+        display: block;
+        margin-bottom: 8px;
+        color: #8a6a00;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .specialty-pair-card strong {
+        display: block;
+        color: #191f2a;
+        font-size: clamp(1.9rem, 3vw, 3rem);
+        line-height: 1.08;
+      }
+
+      .specialty-pair-card p {
+        margin: 10px 0 0;
+        color: #59606b;
+        line-height: 1.7;
+        font-weight: 700;
+      }
+
+      .specialty-note {
+        margin: 0;
+        color: #6a7079;
+        line-height: 1.8;
+      }
+
+      @media (max-width: 1024px) {
+        .data-overview-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .data-insight-grid,
+        .specialty-pair-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .paired-stat {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+    </style>
+    <!-- REVIEW_DATA_INSIGHT_STYLE_END -->
 </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
@@ -3433,13 +3705,12 @@
         <div class="container page-hero__inner">
           <p class="page-hero__eyebrow"><span class="label-ja">データで見るFANTASISTA</span><span class="label-en">FANTASISTA in Numbers</span></p>
           <h1 class="page-hero__title">数字で見るFANTASISTA</h1>
-          <p class="page-hero__lead">
-            1968年から2025年まで、FANTASISTAには多くのOB・OGが集まり、世代を超えてつながり続けてきました。
-            名簿に登録されたデータをもとに、FANTASISTA会の広がりを数字で紹介します。
+                    <p class="page-hero__lead">
+            登録者数だけでなく、世代の厚み、人数の山、男女・専攻・所属系統のバランスから、
+            FANTASISTA会の広がりを数字で読み解きます。
           </p>
-          <p class="data-note">
-            ※卒部年度別の集計は、卒部年度が確認できる560名を対象にしています。<br />
-            ※専攻別の集計は、専攻登録がある306名を対象にしています。
+                    <p class="data-note">
+            集計対象の違いは、ページ冒頭の「集計対象について」にまとめています。
           </p>
         </div>
       </section>
@@ -3589,11 +3860,11 @@
             <div class="stats-head">
               <p class="stats-head__kicker"><span class="label-ja">男女構成</span><span class="label-en">Gender Balance</span></p>
               <h2>時代ごとの男女バランス</h2>
-              <p>卒部年度が確認できる560名ベースでは、各年代ごとの違いがありつつも、全体としては均衡した構成になっています。</p>
+              <p>名簿登録者全体では、男女はほぼ同数です。年代別の男女構成は、卒部年度が確認できるデータをもとに整理しています。</p>
             </div>
 
             <div class="balance-summary">
-              <strong>全体では 男277名 / 女285名</strong>
+              <strong>名簿登録者全体では 男277名 / 女285名</strong>
               <p>以下の年代別グラフは、卒部年度が確認できる560名を対象にした集計です。</p>
             </div>
 
@@ -3709,106 +3980,102 @@
         </div>
       </section>
 
-      <section class="page-section page-section--light stats-section">
+            <section class="page-section page-section--light stats-section" id="data-gender-specialty">
         <div class="container">
           <div class="stats-panel">
             <div class="stats-head">
               <p class="stats-head__kicker"><span class="label-ja">専攻構成</span><span class="label-en">Specialty</span></p>
-              <h2>スタンダード派？ラテン派？</h2>
-              <p>専攻登録がある306名の内訳では、スタンダード133名、ラテン173名。未登録者256名はこの比較に含めていません。</p>
+              <h2>専攻登録がある306名の内訳</h2>
+              <p>専攻登録がある306名では、スタンダード133名、ラテン173名です。未登録256名はこの比較に含めていません。</p>
             </div>
 
-            <div class="specialty-layout">
-              <div class="donut-card">
-                <div class="donut" aria-hidden="true">
-                  <div class="donut__center">
-                    <div>
-                      <strong>306名</strong>
-                      <span>専攻登録あり</span>
-                    </div>
+            <div class="specialty-compare-layout">
+              <div class="specialty-context">専攻登録あり 306 / 562名 <span>約54.4%</span></div>
+
+              <div class="specialty-pair-grid" aria-label="専攻構成">
+                <article class="specialty-pair-card">
+                  <span>スタンダード</span>
+                  <strong>133名</strong>
+                  <p>43.5%</p>
+                </article>
+
+                <article class="specialty-pair-card">
+                  <span>ラテン</span>
+                  <strong>173名</strong>
+                  <p>56.5%</p>
+                </article>
+              </div>
+
+              <p class="specialty-note">未登録256名はこの比較に含めていません。</p>
+            </div>
+
+            <div style="margin-top:22px;">
+              <div class="stats-head" style="margin-bottom:16px;">
+                <p class="stats-head__kicker"><span class="label-ja">年代別内訳</span><span class="label-en">By Decade</span></p>
+                <h2 style="font-size:1.3rem; margin-bottom:8px;">年代別の専攻内訳</h2>
+                <p>専攻登録がある年代のみを対象にし、スタンダード、ラテンの順に表示しています。</p>
+              </div>
+
+              <div class="specialty-breakdown" aria-label="年代別の専攻内訳">
+                <div class="specialty-row">
+                  <div class="specialty-row__head">
+                    <strong>1980年代</strong>
+                    <span>スタンダード1名 / ラテン4名</span>
+                  </div>
+                  <div class="stacked-track">
+                    <span class="stacked-track__standard" style="width: 20%;"></span>
+                    <span class="stacked-track__latin" style="width: 80%;"></span>
                   </div>
                 </div>
 
-                <div class="legend-list" aria-label="スタンダード・ラテン比率">
-                  <div class="legend-item legend-item--standard">
-                    <span class="legend-item__label">スタンダード</span>
-                    <span>133名 / 43.5%</span>
+                <div class="specialty-row">
+                  <div class="specialty-row__head">
+                    <strong>1990年代</strong>
+                    <span>スタンダード14名 / ラテン22名</span>
                   </div>
-                  <div class="legend-item legend-item--latin">
-                    <span class="legend-item__label">ラテン</span>
-                    <span>173名 / 56.5%</span>
+                  <div class="stacked-track">
+                    <span class="stacked-track__standard" style="width: 38.9%;"></span>
+                    <span class="stacked-track__latin" style="width: 61.1%;"></span>
+                  </div>
+                </div>
+
+                <div class="specialty-row">
+                  <div class="specialty-row__head">
+                    <strong>2000年代</strong>
+                    <span>スタンダード59名 / ラテン74名</span>
+                  </div>
+                  <div class="stacked-track">
+                    <span class="stacked-track__standard" style="width: 44.4%;"></span>
+                    <span class="stacked-track__latin" style="width: 55.6%;"></span>
+                  </div>
+                </div>
+
+                <div class="specialty-row">
+                  <div class="specialty-row__head">
+                    <strong>2010年代</strong>
+                    <span>スタンダード38名 / ラテン52名</span>
+                  </div>
+                  <div class="stacked-track">
+                    <span class="stacked-track__standard" style="width: 42.2%;"></span>
+                    <span class="stacked-track__latin" style="width: 57.8%;"></span>
+                  </div>
+                </div>
+
+                <div class="specialty-row">
+                  <div class="specialty-row__head">
+                    <strong>2020年代</strong>
+                    <span>スタンダード21名 / ラテン21名</span>
+                  </div>
+                  <div class="stacked-track">
+                    <span class="stacked-track__standard" style="width: 50%;"></span>
+                    <span class="stacked-track__latin" style="width: 50%;"></span>
                   </div>
                 </div>
               </div>
 
-              <div>
-                <div class="stats-head" style="margin-bottom:16px;">
-                  <p class="stats-head__kicker"><span class="label-ja">年代別内訳</span><span class="label-en">By Decade</span></p>
-                  <h2 style="font-size:1.3rem; margin-bottom:8px;">年代別の専攻内訳</h2>
-                  <p>専攻登録がある年代のみを対象にし、スタンダード、ラテンの順に表示しています。</p>
-                </div>
-
-                <div class="specialty-breakdown" aria-label="年代別の専攻内訳">
-                  <div class="specialty-row">
-                    <div class="specialty-row__head">
-                      <strong>1980年代</strong>
-                      <span>スタンダード1名 / ラテン4名</span>
-                    </div>
-                    <div class="stacked-track">
-                      <span class="stacked-track__standard" style="width: 20%;"></span>
-                      <span class="stacked-track__latin" style="width: 80%;"></span>
-                    </div>
-                  </div>
-
-                  <div class="specialty-row">
-                    <div class="specialty-row__head">
-                      <strong>1990年代</strong>
-                      <span>スタンダード14名 / ラテン22名</span>
-                    </div>
-                    <div class="stacked-track">
-                      <span class="stacked-track__standard" style="width: 38.9%;"></span>
-                      <span class="stacked-track__latin" style="width: 61.1%;"></span>
-                    </div>
-                  </div>
-
-                  <div class="specialty-row">
-                    <div class="specialty-row__head">
-                      <strong>2000年代</strong>
-                      <span>スタンダード59名 / ラテン74名</span>
-                    </div>
-                    <div class="stacked-track">
-                      <span class="stacked-track__standard" style="width: 44.4%;"></span>
-                      <span class="stacked-track__latin" style="width: 55.6%;"></span>
-                    </div>
-                  </div>
-
-                  <div class="specialty-row">
-                    <div class="specialty-row__head">
-                      <strong>2010年代</strong>
-                      <span>スタンダード38名 / ラテン52名</span>
-                    </div>
-                    <div class="stacked-track">
-                      <span class="stacked-track__standard" style="width: 42.2%;"></span>
-                      <span class="stacked-track__latin" style="width: 57.8%;"></span>
-                    </div>
-                  </div>
-
-                  <div class="specialty-row">
-                    <div class="specialty-row__head">
-                      <strong>2020年代</strong>
-                      <span>スタンダード21名 / ラテン21名</span>
-                    </div>
-                    <div class="stacked-track">
-                      <span class="stacked-track__standard" style="width: 50%;"></span>
-                      <span class="stacked-track__latin" style="width: 50%;"></span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="stacked-meta" style="margin-top:16px;">
-                  <span class="stacked-chip stacked-chip--standard">スタンダード 133名</span>
-                  <span class="stacked-chip stacked-chip--latin">ラテン 173名</span>
-                </div>
+              <div class="stacked-meta" style="margin-top:16px;">
+                <span class="stacked-chip stacked-chip--standard">スタンダード 133名</span>
+                <span class="stacked-chip stacked-chip--latin">ラテン 173名</span>
               </div>
             </div>
           </div>
@@ -4727,6 +4994,7 @@
     </script>
 </body>
 </html>
+
 
 
 
