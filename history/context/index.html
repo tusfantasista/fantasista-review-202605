@@ -250,7 +250,298 @@
           gap: 8px;
         }
       }
-    </style></head>
+    </style>    <!-- REVIEW_CONTEXT_LINK_VISUAL_START -->
+    <style>
+      #context-summary,
+      #context-discipline-timeline,
+      #context-tournament-paths,
+      #context-touchpoints,
+      #context-rules,
+      #context-glossary,
+      #context-sources {
+        scroll-margin-top: 96px;
+      }
+
+      a {
+        cursor: pointer;
+      }
+
+      .context-hero-badge,
+      .context-source-chip,
+      .context-era-tag,
+      .history-photo-label,
+      .context-glossary-item strong {
+        cursor: default;
+      }
+
+      .site-nav a[aria-current="page"] {
+        color: #191f2a;
+        background: rgba(254, 192, 0, 0.18);
+        border-radius: 999px;
+      }
+
+      .site-nav a:hover,
+      .site-nav a:focus-visible {
+        background: rgba(254, 192, 0, 0.16);
+        outline: 3px solid rgba(254, 192, 0, 0.35);
+        outline-offset: 2px;
+      }
+
+      .site-nav--mobile a {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+
+      .context-primary-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        font-weight: 800;
+        text-decoration: none;
+        transition: transform 0.16s ease, background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
+      }
+
+      .context-primary-link--ghost {
+        border: 1px solid rgba(254, 192, 0, 0.28);
+        background: rgba(255, 255, 255, 0.06);
+        color: #ffffff;
+      }
+
+      .context-primary-link--gold {
+        border: 1px solid rgba(254, 192, 0, 0.28);
+        background: #fec000;
+        color: #191f2a;
+        box-shadow: 0 14px 30px rgba(12, 18, 28, 0.18);
+      }
+
+      .context-primary-link:hover,
+      .context-primary-link:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.16);
+      }
+
+      .page-toc {
+        margin-top: 18px;
+        border: 1px solid rgba(254, 192, 0, 0.28);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .page-toc summary {
+        min-height: 46px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        color: #ffffff;
+        font-weight: 800;
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .page-toc summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .page-toc summary::after {
+        content: "+";
+        margin-left: auto;
+        color: #fec000;
+        font-size: 1.05rem;
+      }
+
+      .page-toc[open] summary::after {
+        content: "−";
+      }
+
+      .page-toc__links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 0 16px 16px;
+      }
+
+      .page-toc__links a {
+        min-height: 42px;
+        padding: 10px 12px;
+        border: 1px solid rgba(254, 192, 0, 0.20);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.09);
+        color: #ffffff;
+        font-weight: 800;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .page-toc__links a:hover,
+      .page-toc__links a:focus-visible {
+        background: #fec000;
+        color: #191f2a;
+      }
+
+      .context-source-details,
+      .context-followup {
+        margin-top: 14px;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        border-radius: 16px;
+        background: #ffffff;
+        box-shadow: 0 10px 26px rgba(12, 18, 28, 0.05);
+      }
+
+      .context-source-details summary,
+      .context-followup summary {
+        min-height: 44px;
+        padding: 0 14px;
+        display: flex;
+        align-items: center;
+        color: #191f2a;
+        font-weight: 800;
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .context-source-details summary::-webkit-details-marker,
+      .context-followup summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .context-source-details summary::after,
+      .context-followup summary::after {
+        content: "+";
+        margin-left: auto;
+        color: #8a6a00;
+      }
+
+      .context-source-details[open] summary::after,
+      .context-followup[open] summary::after {
+        content: "−";
+      }
+
+      .context-source-links a,
+      .context-compact-details__body a,
+      .context-followup__body a {
+        color: #5f4700;
+        text-decoration: underline;
+        text-decoration-thickness: 1.5px;
+        text-underline-offset: 4px;
+      }
+
+      .context-source-links a[target="_blank"]::after {
+        content: " ↗";
+        font-size: 0.85em;
+      }
+
+      .photo-submit-cta,
+      .return-cta {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 18px;
+        align-items: center;
+        margin-top: 20px;
+        padding: 22px;
+        border-radius: 24px;
+        border: 1px solid rgba(138, 106, 0, 0.20);
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
+      }
+
+      .photo-submit-cta {
+        background: linear-gradient(180deg, #fff8e4 0%, #fffdf7 100%);
+      }
+
+      .return-cta {
+        background: linear-gradient(180deg, #fffdfa 0%, #fff6e6 100%);
+      }
+
+      .photo-submit-cta__eyebrow,
+      .return-cta__eyebrow {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #6f5600;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .photo-submit-cta h3,
+      .return-cta h3 {
+        margin: 0 0 8px;
+        color: var(--context-head);
+      }
+
+      .photo-submit-cta p,
+      .return-cta p {
+        margin: 0;
+        color: var(--context-text);
+        line-height: 1.8;
+      }
+
+      .photo-submit-cta__button,
+      .return-cta__button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        background: #fec000;
+        color: #191f2a;
+        font-weight: 800;
+        text-decoration: none;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+        white-space: nowrap;
+      }
+
+      .photo-submit-cta__button:hover,
+      .photo-submit-cta__button:focus-visible,
+      .return-cta__button:hover,
+      .return-cta__button:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.14);
+      }
+
+      .context-primary-link:focus-visible,
+      .page-toc summary:focus-visible,
+      .page-toc__links a:focus-visible,
+      .photo-submit-cta__button:focus-visible,
+      .return-cta__button:focus-visible,
+      .context-source-details summary:focus-visible,
+      .context-followup summary:focus-visible,
+      .site-nav a:focus-visible {
+        outline: 3px solid rgba(254, 192, 0, 0.45);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 760px) {
+        .context-hero-actions,
+        .page-toc__links,
+        .photo-submit-cta,
+        .return-cta {
+          grid-template-columns: 1fr;
+        }
+
+        .context-hero-actions {
+          display: grid;
+          gap: 12px;
+        }
+
+        .context-primary-link,
+        .photo-submit-cta__button,
+        .return-cta__button {
+          width: 100%;
+        }
+
+        .page-toc__links a {
+          min-height: 44px;
+        }
+      }
+    </style>
+    <!-- REVIEW_CONTEXT_LINK_VISUAL_END -->
+</head>
   <body>
     <div class="review-notice">
       レビュー用サイトです。正式公開前の確認用です。
@@ -319,21 +610,21 @@
           </p>
 
           <div class="context-hero-actions">
-            <a class="button button--ghost" href="../">理科大舞研の歩みに戻る</a>
-            <a class="button button--ghost" href="#context-discipline-timeline">種目変遷を見る</a>
+            <a class="context-primary-link context-primary-link--ghost" href="../">理科大舞研の歩みに戻る →</a>
+            <a class="context-primary-link context-primary-link--gold" href="#context-discipline-timeline">種目変遷を見る ↓</a>
           </div>
 
-          <details class="context-page-toc">
+          <details class="page-toc">
             <summary>このページの目次を開く</summary>
-            <div class="context-page-toc__links">
-              <a href="#context-summary">3分要約</a>
-              <a href="#context-discipline-timeline">競技種目の変遷</a>
-              <a href="#context-tournament-paths">どの大会で増えたか</a>
-              <a href="#context-touchpoints">理科大舞研との関係</a>
-              <a href="#context-rules">制度の補足</a>
-              <a href="#context-glossary">略称・用語</a>
-              <a href="#context-sources">出典・確認方針</a>
-            </div>
+            <nav class="page-toc__links" aria-label="このページの目次">
+              <a href="#context-summary">3分要約 ↓</a>
+              <a href="#context-discipline-timeline">競技種目の変遷 ↓</a>
+              <a href="#context-tournament-paths">どの大会で増えたか ↓</a>
+              <a href="#context-touchpoints">理科大舞研との関係 ↓</a>
+              <a href="#context-rules">制度の補足 ↓</a>
+              <a href="#context-glossary">略称・用語 ↓</a>
+              <a href="#context-sources">資料と確認方針 ↓</a>
+            </nav>
           </details>
         </div>
       </section>
@@ -732,7 +1023,7 @@
               </figure>
             </div>
           </article>
-          <!-- REVIEW_CONTEXT_TOUCHPOINT_PHOTO_END -->`r`n
+          <!-- REVIEW_CONTEXT_TOUCHPOINT_PHOTO_END -->
         </div>
       </section>
 
@@ -849,9 +1140,14 @@
               </figure>
             </div>
 
-            <div class="context-photo-callout__actions">
-              <a class="button button--ghost" href="../../contact/">写真・資料について問い合わせる</a>
-            </div>
+            <aside class="photo-submit-cta">
+              <div>
+                <span class="photo-submit-cta__eyebrow">Photo Archive</span>
+                <h3>写真・記録をお持ちのOBOGへ</h3>
+                <p>競技会、練習風景、フォーメーション、集合写真などをお持ちの方は、FANTASISTA会までお知らせください。</p>
+              </div>
+              <a class="photo-submit-cta__button" href="../../contact/">写真・記録を提供する →</a>
+            </aside>
           </article>
         </div>
       </section>
@@ -869,7 +1165,7 @@
           </article>
 
           <details class="context-source-details">
-            <summary>FANTASISTA内部記録</summary>
+            <summary>FANTASISTA内部記録を開く</summary>
             <div class="context-source-details__body">
               <ul class="context-source-links">
                 <li>FANTASISTA会保有資料・卒部生名簿</li>
@@ -878,7 +1174,7 @@
           </details>
 
           <details class="context-source-details">
-            <summary>競技団体・公開資料</summary>
+            <summary>競技団体・公開資料を開く</summary>
             <div class="context-source-details__body">
               <ul class="context-source-links">
                 <li><a href="https://www.jdsf.or.jp/wp/wp-content/uploads/2022/07/2021jigyouhoukoku.pdf" target="_blank" rel="noopener noreferrer">JDSF 事業報告書</a></li>
@@ -900,7 +1196,7 @@
           </details>
 
           <details class="context-source-details">
-            <summary>OB回想・観察</summary>
+            <summary>OB回想・観察資料を開く</summary>
             <div class="context-source-details__body">
               <p class="context-muted">OB個人の回想・観察であり、FANTASISTA公式記録そのものではありません。制度や大会形式は公開資料を優先し、当時の雰囲気や運用を補う資料として参照しています。</p>
               <ul class="context-source-links">
@@ -929,9 +1225,14 @@
             </div>
           </details>
 
-          <p style="margin-top: 22px;">
-            <a class="button button--ghost" href="../">理科大舞研の歩みに戻る</a>
-          </p>
+          <aside class="return-cta">
+            <div>
+              <span class="return-cta__eyebrow">Back to History</span>
+              <h3>理科大舞研の歩みに戻る</h3>
+              <p>競技ダンス背景資料を踏まえて、年表・戦歴・背番号の記録を読み直せます。</p>
+            </div>
+            <a class="return-cta__button" href="../">Historyへ戻る →</a>
+          </aside>
         </div>
       </section>
     </main>
@@ -979,6 +1280,7 @@
     </script>
   </body>
 </html>
+
 
 
 

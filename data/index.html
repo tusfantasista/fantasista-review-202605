@@ -3158,7 +3158,229 @@
       }
     </style>
     <!-- REVIEW_DATA_BALANCE_RESPONSIVE_END -->
-  </head>
+      <!-- REVIEW_DATA_LINK_VISUAL_START -->
+    <style>
+      #data-overview,
+      #data-decade,
+      #data-gender-specialty,
+      #data-lineages,
+      #data-timeline,
+      #data-rolling,
+      #data-peak,
+      [id^="context-"] {
+        scroll-margin-top: 96px;
+      }
+
+      a {
+        cursor: pointer;
+      }
+
+      .stacked-chip,
+      .stats-head__kicker,
+      .stat-card span,
+      .viewing-note__label {
+        cursor: default;
+      }
+
+      .site-nav a[aria-current="page"] {
+        color: #191f2a;
+        background: rgba(254, 192, 0, 0.18);
+        border-radius: 999px;
+      }
+
+      .site-nav a:hover,
+      .site-nav a:focus-visible {
+        background: rgba(254, 192, 0, 0.16);
+        outline: 3px solid rgba(254, 192, 0, 0.35);
+        outline-offset: 2px;
+      }
+
+      .site-nav--mobile a {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+
+      .page-toc {
+        margin-top: 12px;
+        border: 1px solid rgba(138, 106, 0, 0.22);
+        border-radius: 18px;
+        background: #ffffff;
+        box-shadow: 0 14px 34px rgba(12, 18, 28, 0.06);
+      }
+
+      .page-toc summary {
+        min-height: 46px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        color: #191f2a;
+        font-weight: 800;
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .page-toc summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .page-toc summary::after {
+        content: "+";
+        margin-left: auto;
+        color: #8a6a00;
+        font-size: 1.05rem;
+      }
+
+      .page-toc[open] summary::after {
+        content: "−";
+      }
+
+      .page-toc__links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 0 16px 16px;
+      }
+
+      .page-toc__links a {
+        min-height: 42px;
+        padding: 10px 12px;
+        border: 1px solid rgba(138, 106, 0, 0.22);
+        border-radius: 12px;
+        background: #fffaf0;
+        color: #2b2418;
+        font-weight: 800;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .page-toc__links a:hover,
+      .page-toc__links a:focus-visible {
+        background: #fec000;
+        color: #191f2a;
+      }
+
+      .viewing-note {
+        padding: 18px 20px;
+        border-radius: 18px;
+        background: rgba(25, 31, 42, 0.04);
+        border: 1px solid rgba(25, 31, 42, 0.08);
+        color: #59606b;
+      }
+
+      .viewing-note__label {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #6f5600;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .viewing-note h3 {
+        margin: 0 0 8px;
+        color: #191f2a;
+      }
+
+      .viewing-note p {
+        margin: 0;
+        line-height: 1.75;
+      }
+
+      .viewing-note p + p {
+        margin-top: 8px;
+      }
+
+      .data-cta-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .data-cta-card {
+        display: grid;
+        gap: 10px;
+        padding: 22px;
+        border-radius: 22px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff6df 100%);
+        border: 1px solid rgba(138, 106, 0, 0.22);
+        color: #2b2418;
+        text-decoration: none;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+      }
+
+      .data-cta-card__eyebrow {
+        color: #6f5600;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .data-cta-card strong {
+        color: #191f2a;
+        font-size: 1.05rem;
+      }
+
+      .data-cta-card span {
+        color: #59606b;
+        line-height: 1.75;
+      }
+
+      .data-cta-card em {
+        color: #5f4700;
+        font-style: normal;
+        font-weight: 800;
+        text-decoration: underline;
+        text-decoration-thickness: 1.5px;
+        text-underline-offset: 4px;
+      }
+
+      .data-cta-card:hover,
+      .data-cta-card:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.14);
+      }
+
+      .stats-footnote a,
+      .school-note a,
+      .scroll-hint a,
+      .viewing-note a {
+        color: #5f4700;
+        text-decoration: underline;
+        text-decoration-thickness: 1.5px;
+        text-underline-offset: 4px;
+      }
+
+      .page-toc summary:focus-visible,
+      .page-toc__links a:focus-visible,
+      .data-cta-card:focus-visible,
+      .site-nav a:focus-visible {
+        outline: 3px solid rgba(254, 192, 0, 0.45);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 860px) {
+        .data-cta-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .page-toc__links {
+          grid-template-columns: 1fr;
+        }
+
+        .page-toc__links a {
+          min-height: 44px;
+        }
+      }
+    </style>
+    <!-- REVIEW_DATA_LINK_VISUAL_END -->
+</head>
   <body>
 <!-- REVIEW_NOTICE_START -->
 <div class="review-notice">
@@ -3243,11 +3465,12 @@
       <!-- REVIEW_DEVICE_ADVICE_START -->
       <section class="page-section stats-section device-advice-section" aria-label="閲覧案内">
         <div class="container">
-          <div class="device-advice" role="note">
-            <strong>スマートフォン・タブレットで見づらい場合</strong>
-            <p>このページの年表・ヒートマップ・4年ローリングは、PCの方が見やすくなっています。</p>
+          <aside class="viewing-note" aria-label="表示について">
+            <span class="viewing-note__label">表示について</span>
+            <h3>スマートフォン・タブレットで見づらい場合</h3>
+            <p>年表・ヒートマップ・4年ローリングは、PCの方が見やすくなっています。スマホでは簡易表示も用意しています。</p>
             <p>横向き表示や横スクロールでも見づらい場合は、同じページをPCブラウザでご覧ください。</p>
-          </div>
+          </aside>
         </div>
       </section>
       <!-- REVIEW_DEVICE_ADVICE_END -->
@@ -3895,7 +4118,7 @@
           <div class="stats-panel stats-panel--white">
             <div class="stats-head">
               <p class="stats-head__kicker"><span class="label-ja">最も厚かった4年間</span><span class="label-en">Peak Windows</span></p>
-              <h2>最も厚かった4年間</h2>
+              <h2 id="data-peak">最も厚かった4年間</h2>
               <p>4年分の合計で見ると、2002〜2006年卒を中心に大きな山が見えてきます。</p>
             </div>
 
@@ -3946,6 +4169,42 @@
           </div>
         </div>
       </section>
+          <!-- REVIEW_DATA_NEXT_START -->
+      <section class="page-section stats-section" id="data-next-reading">
+        <div class="container">
+          <div class="stats-panel stats-panel--white">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">次に読む</span><span class="label-en">Next</span></p>
+              <h2>次に読む</h2>
+              <p>数字で全体像を見たあとは、年表・戦歴・写真の記録もあわせてご覧ください。</p>
+            </div>
+
+            <div class="data-cta-grid">
+              <a class="data-cta-card" href="../history/">
+                <span class="data-cta-card__eyebrow">History</span>
+                <strong>理科大舞研の歩み</strong>
+                <span>年表、戦歴、共同加盟校、背番号の流れを読み直せます。</span>
+                <em>Historyを見る →</em>
+              </a>
+
+              <a class="data-cta-card" href="../history/context/">
+                <span class="data-cta-card__eyebrow">Context</span>
+                <strong>競技ダンス背景資料</strong>
+                <span>8種目時代から10種目化までの変遷や、学連制度の背景を確認できます。</span>
+                <em>背景資料を見る →</em>
+              </a>
+
+              <a class="data-cta-card" href="../gallery/">
+                <span class="data-cta-card__eyebrow">Gallery</span>
+                <strong>写真・ギャラリー</strong>
+                <span>数字では見えない競技会、練習風景、集合写真の記録につながります。</span>
+                <em>写真を見る →</em>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- REVIEW_DATA_NEXT_END -->
     </main>
 
     <footer class="site-footer">
@@ -4734,6 +4993,7 @@ function renderRollingChart() {
 <!-- REVIEW_DATA_RESPONSIVE_SCRIPT_END -->
 </body>
 </html>
+
 
 
 
