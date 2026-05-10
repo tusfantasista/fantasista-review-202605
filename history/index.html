@@ -1575,22 +1575,17 @@
 
         .history-digital-stat {
           min-width: 0;
-          min-height: 164px;
-          padding: clamp(20px, 2.3vw, 30px);
+          min-height: 158px;
+          padding: clamp(18px, 2vw, 26px);
           border-radius: 28px;
           background: linear-gradient(180deg, #fffdfa 0%, #fff8ee 100%);
         }
 
-        .history-digital-stat--wide {
-          grid-column: 1 / -1;
-          min-height: 150px;
-        }
-
         .history-digital-stat__label {
           display: block;
-          margin-bottom: 12px;
+          margin-bottom: 10px;
           color: #8a6a00;
-          font-size: 0.78rem;
+          font-size: 0.76rem;
           font-weight: 800;
           letter-spacing: 0.08em;
           text-transform: uppercase;
@@ -1603,24 +1598,24 @@
           white-space: nowrap;
           color: #111827;
           font-family: "Oswald", "Noto Sans JP", sans-serif;
-          font-size: clamp(2.35rem, 3.8vw, 3.55rem);
+          font-size: clamp(2.8rem, 4.6vw, 4.25rem);
           font-weight: 700;
-          line-height: 1;
-          letter-spacing: 0.01em;
+          line-height: 0.95;
+          letter-spacing: 0.005em;
         }
 
         .history-digital-stat__number--range {
-          font-size: clamp(2.05rem, 3vw, 2.85rem);
-          letter-spacing: 0;
+          font-size: clamp(2.25rem, 3.4vw, 3.25rem);
+          letter-spacing: -0.01em;
         }
 
         .history-digital-stat__number--minor {
-          font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+          font-size: clamp(1.25rem, 2vw, 1.55rem);
           letter-spacing: 0;
         }
 
         .history-digital-stat__unit {
-          font-size: 0.52em;
+          font-size: 0.48em;
           font-family: "Noto Sans JP", sans-serif;
           font-weight: 800;
           line-height: 1;
@@ -1628,18 +1623,18 @@
 
         .history-digital-stat__sub {
           display: block;
-          margin-top: 8px;
+          margin-top: 10px;
           color: #8a6a00;
-          font-size: clamp(1rem, 1.6vw, 1.25rem);
+          font-size: clamp(1.08rem, 1.9vw, 1.45rem);
           font-weight: 800;
-          line-height: 1.55;
+          line-height: 1.45;
         }
 
         .history-digital-stat__text {
           margin-top: 12px !important;
           color: #4b5563;
-          line-height: 1.75;
-          font-size: 0.96rem;
+          line-height: 1.7;
+          font-size: 0.94rem;
         }
 
         .history-digital-stat strong {
@@ -1676,38 +1671,44 @@
         .history-hero-milestone-list {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
+          gap: 9px;
         }
 
         .history-hero-milestone {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          min-height: 38px;
-          padding: 0 12px;
-          border-radius: 999px;
+          display: inline-grid;
+          grid-template-columns: auto;
+          gap: 2px;
+          min-height: 44px;
+          padding: 8px 13px;
+          border-radius: 16px;
           background: rgba(255, 255, 255, 0.10);
           border: 1px solid rgba(254, 192, 0, 0.24);
           color: #ffffff;
-          font-weight: 800;
           cursor: default;
         }
 
         .history-hero-milestone b {
           font-family: "Oswald", sans-serif;
-          font-size: 1.02rem;
+          font-size: 1.15rem;
+          line-height: 1;
           letter-spacing: 0.04em;
         }
 
         .history-hero-milestone span {
-          font-size: 0.82rem;
-          color: rgba(255, 255, 255, 0.86);
+          font-size: 0.78rem;
           line-height: 1.35;
+          color: rgba(255, 255, 255, 0.86);
+          font-weight: 800;
         }
 
         .history-hero-milestone--key {
-          background: rgba(254, 192, 0, 0.18);
-          border-color: rgba(254, 192, 0, 0.48);
+          background: rgba(254, 192, 0, 0.20);
+          border-color: rgba(254, 192, 0, 0.55);
+        }
+
+        .history-hero-milestone--anniversary {
+          background: rgba(255, 255, 255, 0.16);
+          border-color: rgba(255, 255, 255, 0.30);
         }
 
         @media (max-width: 860px) {
@@ -1715,30 +1716,31 @@
             grid-template-columns: 1fr;
           }
 
-          .history-digital-stat,
-          .history-digital-stat--wide {
-            grid-column: auto;
+          .history-digital-stat {
             min-height: auto;
           }
 
           .history-digital-stat__number {
-            font-size: clamp(2.1rem, 9vw, 3rem);
+            font-size: clamp(2.4rem, 11vw, 3.35rem);
           }
 
           .history-digital-stat__number--range {
-            font-size: clamp(1.9rem, 7.5vw, 2.55rem);
+            font-size: clamp(2rem, 8vw, 2.8rem);
           }
         }
 
         @media (max-width: 760px) {
           .history-hero-milestone-list {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
 
           .history-hero-milestone {
-            justify-content: flex-start;
             min-width: 0;
+          }
+
+          .history-hero-milestone span {
+            font-size: 0.74rem;
           }
         }
       </style>
@@ -1803,38 +1805,44 @@
             年表では、創部期から現在までの主な節目を年代順に整理します。
           </p>
 
-                              <!-- REVIEW_HISTORY_HERO_STATS_START -->
+                                        <!-- REVIEW_HISTORY_HERO_STATS_START -->
           <div class="history-digital-stage" aria-label="歴史の主要数字">
             <div class="history-digital-panel">
               <p class="history-digital-panel__eyebrow">東京理科大学舞踏研究部 HISTORY</p>
-              <div class="history-digital-counter" data-history-hero-year data-sequence="1965,1966,1968,1996,2003,2005,2006,2026" data-final="1966-2026">1966-2026</div>
+              <div class="history-digital-counter" data-history-hero-year data-sequence="1966,1996,2004,2006,2016,2018,2019,2026" data-final="1966-2026">1966-2026</div>
               <div class="history-digital-subline">
                 <span>1966 創部</span>
                 <span>60年の歩み</span>
                 <span>560名の名簿記録</span>
               </div>
               <p class="history-digital-note">
-                1965年の準備、1966年の創部、1968年から見え始める卒部生名簿の記録。1996年の初の全日本優勝を経て、2005年・2006年には団体・個人の両面で大きな成果を残しました。名簿に残る登録者数と競技史の節目を重ねると、舞踏研究部からFANTASISTAへ受け継がれてきた歩みの広がりが見えてきます。
+                1966年の創部から、1996年の冬全サンバ優勝による初の全日本制覇、2004年のⅠ部校昇格、2006年の夏全・冬全での優勝へ。2016年の50周年とフォーメーションの躍進、2018年の冬全フォーメーション初出場、2019年まで続く全国大会での成果を経て、舞踏研究部の歩みは60周年へとつながっています。
               </p>
 
               <div class="history-hero-milestones" aria-label="歴史の重要な節目">
                 <div class="history-hero-milestone-group">
-                  <p class="history-hero-milestone-title">歩みの起点</p>
+                  <p class="history-hero-milestone-title">部の始まりと節目</p>
                   <div class="history-hero-milestone-list">
-                    <span class="history-hero-milestone"><b>1965</b><span>準備</span></span>
-                    <span class="history-hero-milestone history-hero-milestone--key"><b>1966</b><span>創部</span></span>
-                    <span class="history-hero-milestone"><b>1968</b><span>名簿記録</span></span>
-                    <span class="history-hero-milestone history-hero-milestone--key"><b>2026</b><span>60周年</span></span>
+                    <span class="history-hero-milestone history-hero-milestone--anniversary"><b>1966</b><span>創部</span></span>
+                    <span class="history-hero-milestone history-hero-milestone--anniversary"><b>2026</b><span>60周年</span></span>
                   </div>
                 </div>
 
                 <div class="history-hero-milestone-group">
-                  <p class="history-hero-milestone-title">競技と世代の山</p>
+                  <p class="history-hero-milestone-title">競技史の転機</p>
                   <div class="history-hero-milestone-list">
-                    <span class="history-hero-milestone"><b>1996</b><span>初の全日本優勝</span></span>
-                    <span class="history-hero-milestone"><b>2003</b><span>最多年度</span></span>
-                    <span class="history-hero-milestone"><b>2005</b><span>冬全団体3位</span></span>
+                    <span class="history-hero-milestone"><b>1996</b><span>冬全初制覇</span></span>
+                    <span class="history-hero-milestone"><b>2004</b><span>Ⅰ部校昇格</span></span>
                     <span class="history-hero-milestone history-hero-milestone--key"><b>2006</b><span>夏全・冬全優勝</span></span>
+                  </div>
+                </div>
+
+                <div class="history-hero-milestone-group">
+                  <p class="history-hero-milestone-title">近年の躍進</p>
+                  <div class="history-hero-milestone-list">
+                    <span class="history-hero-milestone history-hero-milestone--key"><b>2016</b><span>50周年・FM躍進</span></span>
+                    <span class="history-hero-milestone"><b>2018</b><span>冬全FM初出場</span></span>
+                    <span class="history-hero-milestone"><b>2019</b><span>冬全4年連続優勝</span></span>
                   </div>
                 </div>
               </div>
@@ -1854,19 +1862,13 @@
               </article>
 
               <article class="history-digital-stat">
-                <span class="history-digital-stat__label">記録対象期間</span>
-                <strong class="history-digital-stat__number history-digital-stat__number--range">1968-2025</strong>
-                <p class="history-digital-stat__text">卒部年度が確認できる記録の対象期間です。</p>
-              </article>
-
-              <article class="history-digital-stat">
                 <span class="history-digital-stat__label">最多年度</span>
                 <strong class="history-digital-stat__number">2003<span class="history-digital-stat__unit">年</span></strong>
                 <span class="history-digital-stat__sub"><span class="history-digital-stat__number history-digital-stat__number--minor"><span class="history-digital-stat__value" data-count-to="20">20</span><span class="history-digital-stat__unit">名</span></span></span>
                 <p class="history-digital-stat__text">卒部生名簿に残る人数が最も多い年度です。</p>
               </article>
 
-              <article class="history-digital-stat history-digital-stat--wide">
+              <article class="history-digital-stat">
                 <span class="history-digital-stat__label">最も厚かった4年間</span>
                 <strong class="history-digital-stat__number"><span class="history-digital-stat__value" data-count-to="68">68</span><span class="history-digital-stat__unit">名</span></strong>
                 <span class="history-digital-stat__sub">2002-2005年卒 / 2003-2006年卒</span>
@@ -1875,7 +1877,7 @@
             </div>
           </div>
 
-          <p class="history-hero-footnote">※このページの人数は、FANTASISTAに記録された卒部生名簿のうち、卒部年度が確認できる560名を対象にしています。</p>
+          <p class="history-hero-footnote">※このページの人数は、FANTASISTAに記録された卒部生名簿のうち、卒部年度が確認できる560名を対象にしています。記録対象期間は1968年卒〜2025年卒です。</p>
           <!-- REVIEW_HISTORY_HERO_STATS_END -->
                                                                                                                                   <!-- REVIEW_HISTORY_POLISH_JUMP_START -->
           <div class="history-jump-desktop">
@@ -2066,27 +2068,29 @@
                 <div class="history-flow-card__meter"><span style="width: 84%;"></span></div>
               </article>
 
-              <article id="history-2010s" class="history-flow-card" data-year="2010" data-display="2010-2016" data-label="新体制と50周年" data-decade="2010s" data-progress="90">
+                            <article id="history-2010s" class="history-flow-card" data-year="2010" data-display="2010-2016" data-label="新体制と50周年" data-decade="2010s" data-progress="90">
                 <div class="history-flow-card__year">2010 - 2016</div>
                 <h3>新体制と活動再開、50周年へ</h3>
-                <p>2010年、初の女性主将のもとで新たな体制へ。2010年の冬全ワルツ準優勝、2012年の夏全ラテン5位・冬全ルンバ4位などを経て、2014年には活動体制を見直す期間を越え、OBOGの支援も受けながら活動を再開しました。2016年には創部50周年記念パーティー、Ⅰ部校へ昇格、冬全ルンバ優勝、東京音楽大学の参加などの節目が重なりました。</p>
+                <p>2010年、初の女性主将のもとで新たな体制へ。2010年の冬全ワルツ準優勝、2012年の夏全ラテン5位・冬全ルンバ4位などを経て、2014年には活動体制を見直す期間を越え、OBOGの支援も受けながら活動を再開しました。2016年には創部50周年記念パーティー、Ⅰ部校へ昇格、フォーメーション春東部2位、冬全ルンバ優勝、東京音楽大学の参加などの節目が重なりました。</p>
                 <div class="history-flow-card__meta">
                   <span class="history-flow-badge">女性主将の誕生</span>
                   <span class="history-flow-badge">2010 冬全ワルツ 準優勝</span>
+                  <span class="history-flow-badge">2016 FM春東部 2位</span>
                   <span class="history-flow-badge history-flow-badge--peak">2016 冬全ルンバ 優勝</span>
                 </div>
                 <div class="history-flow-card__meter"><span style="width: 92%;"></span></div>
               </article>
 
-              <article class="history-flow-card" data-year="2017" data-display="2017-2019" data-label="全国大会での好成績" data-decade="2010s" data-progress="96">
+                            <article class="history-flow-card" data-year="2017" data-display="2017-2019" data-label="全国大会での好成績" data-decade="2010s" data-progress="96">
                 <div class="history-flow-card__year">2017 - 2019</div>
                 <h3>全国大会で優勝者を重ねて輩出</h3>
-                <p>2017年の冬全クイックステップ優勝、2018年の夏全ラテン複数組決勝進出と冬全ルンバ優勝・冬全チャチャチャ3位、2019年の冬全タンゴ優勝と、全国大会での好成績が続きました。</p>
+                <p>2017年の冬全クイックステップ優勝、2018年の夏全ラテン複数組決勝進出と冬全ルンバ優勝・冬全チャチャチャ3位、2018年の冬全フォーメーション初出場、2019年の冬全タンゴ優勝と、全国大会での好成績が続きました。2019年には、2016年から続く冬全4年連続優勝の節目も重なります。</p>
                 <div class="history-flow-card__meta">
                   <span class="history-flow-badge">2017 冬全クイック 優勝</span>
                   <span class="history-flow-badge">2018 夏全ラテン 複数組決勝進出</span>
+                  <span class="history-flow-badge">2018 冬全FM 初出場</span>
                   <span class="history-flow-badge">2018 冬全ルンバ 優勝</span>
-                  <span class="history-flow-badge history-flow-badge--peak">2019 冬全タンゴ 優勝</span>
+                  <span class="history-flow-badge history-flow-badge--peak">2019 冬全4年連続優勝</span>
                 </div>
                 <div class="history-flow-card__meter"><span style="width: 97%;"></span></div>
               </article>
@@ -2728,6 +2732,7 @@
 <!-- REVIEW_HISTORY_MOTION_SCRIPT_END -->
 </body>
 </html>
+
 
 
 
