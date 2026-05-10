@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>東京理科大学舞踏研究部 60周年記念FESTA｜FANTASISTA会</title>
-    <meta name="description" content="東京理科大学舞踏研究部の創部60周年を記念し、2027年2月11日（木・祝）に「東京理科大学舞踏研究部 60周年記念FESTA」を開催します。会場は東京都立産業貿易センター 台東館 6階展示室。詳細は決定次第お知らせします。" />
+    <meta name="description" content="東京理科大学舞踏研究部の創部60周年を記念し、2027年2月11日（木・祝）に記念FESTAを開催します。学生競技ダンスを経験したOBOG、現役生、関係者が世代を超えて集い、60年の歩みと記憶を振り返る一日です。" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="東京理科大学舞踏研究部 60周年記念FESTA" />
-    <meta property="og:description" content="あの日の夢を、もう一度語ろう。60年の歩みを振り返り、懐かしい仲間とこれからのFANTASISTAの物語を語る記念FESTAです。" />
+    <meta property="og:description" content="踊った日々も、悔しかった日も、すべてを連れて集まろう。東京理科大学舞踏研究部の創部60周年を祝う、世代を超えた記念FESTAです。" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -1250,6 +1250,324 @@
       /* REVIEW_SPECIAL_TABLET_END */
     </style>
     <!-- REVIEW_NOTICE_STYLE_END -->
+      <!-- REVIEW_FESTA60_REFRAME_STYLE_START -->
+    <style>
+      .btn,
+      .nav a {
+        cursor: pointer;
+      }
+
+      .btn:focus-visible,
+      .nav a:focus-visible {
+        outline: 3px solid rgba(255, 210, 28, 0.42);
+        outline-offset: 3px;
+      }
+
+      .nav a::after {
+        content: "→";
+      }
+
+      .keyword-chip,
+      .memory-photo-label {
+        cursor: default;
+      }
+
+      .hero__copy {
+        max-width: 18em;
+      }
+
+      .hero__lead + .hero__lead {
+        margin-top: 14px;
+      }
+
+      .hero__fact strong {
+        line-height: 1.7;
+      }
+
+      .hero__fact strong small {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .memory-photo-block {
+        display: grid;
+        gap: 18px;
+      }
+
+      .memory-photo-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .memory-photo-grid--three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .memory-photo-card {
+        margin: 0;
+        padding: 18px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        border-radius: 26px;
+        background:
+          radial-gradient(circle at 82% 18%, rgba(255, 210, 28, 0.10), transparent 22%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+      }
+
+      .memory-photo-placeholder {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 220px;
+        aspect-ratio: 4 / 3;
+        border-radius: 20px;
+        border: 1px dashed rgba(255, 210, 28, 0.28);
+        background:
+          radial-gradient(circle at 22% 18%, rgba(255, 210, 28, 0.10), transparent 20%),
+          repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0 10px, rgba(255, 210, 28, 0.04) 10px 20px),
+          rgba(8, 7, 5, 0.65);
+        overflow: hidden;
+      }
+
+      .memory-photo-placeholder::before {
+        content: "";
+        position: absolute;
+        width: 58px;
+        height: 58px;
+        border: 2px solid rgba(255, 210, 28, 0.18);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+      }
+
+      .memory-photo-placeholder::after {
+        content: "";
+        position: absolute;
+        inset: 8%;
+        border: 1px solid rgba(255, 210, 28, 0.08);
+        border-radius: 16px;
+      }
+
+      .memory-photo-placeholder--wide {
+        aspect-ratio: 16 / 9;
+        min-height: 260px;
+      }
+
+      .memory-photo-label {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 0 14px;
+        margin-top: 72px;
+        border-radius: 999px;
+        background: rgba(8, 7, 5, 0.78);
+        color: #fff8df;
+        font-size: 0.9rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+      }
+
+      .memory-photo-caption {
+        margin-top: 14px;
+        color: #fff1c5;
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.65;
+      }
+
+      .memory-photo-note {
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.75;
+        font-size: 0.94rem;
+      }
+
+      .emotion-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .emotion-card {
+        padding: 24px 22px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        border-radius: 24px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.20);
+      }
+
+      .emotion-card h3 {
+        margin: 0 0 10px;
+        color: #fff3ca;
+        font-size: 1.2rem;
+      }
+
+      .emotion-card p {
+        color: var(--muted);
+        line-height: 1.85;
+      }
+
+      .memory-keywords {
+        border-top: 1px solid rgba(255, 210, 28, 0.12);
+        border-bottom: 1px solid rgba(255, 210, 28, 0.12);
+        background:
+          radial-gradient(circle at 14% 20%, rgba(255, 210, 28, 0.10), transparent 24%),
+          linear-gradient(180deg, rgba(8, 7, 5, 0.88), rgba(18, 16, 12, 0.92));
+      }
+
+      .keyword-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .keyword-chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 38px;
+        padding: 0 14px;
+        border-radius: 999px;
+        background: rgba(255, 210, 28, 0.12);
+        border: 1px solid rgba(255, 210, 28, 0.22);
+        color: #fff3ca;
+        font-weight: 800;
+      }
+
+      .outline-item--wide {
+        grid-column: 1 / -1;
+      }
+
+      .outline-note {
+        margin-top: 16px;
+        color: var(--muted);
+        line-height: 1.9;
+      }
+
+      .story-card strong {
+        color: #fff1c5;
+      }
+
+      .welcome-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .welcome-card {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 20px 18px;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .welcome-card::before {
+        content: "•";
+        color: var(--gold);
+        font-size: 1.2rem;
+        line-height: 1.4;
+        font-weight: 800;
+      }
+
+      .welcome-card p {
+        color: var(--muted);
+        line-height: 1.78;
+      }
+
+      .welcome-note {
+        margin-top: 18px;
+        color: #f0dfaf;
+        line-height: 1.9;
+      }
+
+      .festa-callout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(240px, 0.9fr);
+        gap: 20px;
+        align-items: center;
+      }
+
+      .festa-callout__copy p + p {
+        margin-top: 12px;
+      }
+
+      .festa-callout__copy p {
+        color: var(--muted);
+        line-height: 1.9;
+      }
+
+      .festa-callout__actions {
+        margin-top: 20px;
+      }
+
+      .festa-callout__media .memory-photo-card,
+      .festa-callout__media .memory-photo-placeholder {
+        height: 100%;
+      }
+
+      .festa-updates p + p {
+        margin-top: 14px;
+      }
+
+      .festa-updates p {
+        color: var(--muted);
+        line-height: 1.95;
+      }
+
+      .footer-cta-panel {
+        display: grid;
+        gap: 18px;
+        text-align: center;
+      }
+
+      .footer-cta-panel p {
+        color: var(--muted);
+        line-height: 1.9;
+      }
+
+      .footer-links {
+        justify-content: center;
+      }
+
+      @media (max-width: 960px) {
+        .emotion-grid,
+        .welcome-grid,
+        .festa-callout,
+        .memory-photo-grid--three {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .memory-photo-placeholder--wide {
+          aspect-ratio: 4 / 3;
+          min-height: 220px;
+        }
+
+        .memory-photo-placeholder {
+          min-height: 200px;
+        }
+
+        .keyword-list {
+          gap: 10px;
+        }
+
+        .keyword-chip {
+          min-height: 36px;
+          font-size: 0.92rem;
+        }
+      }
+    </style>
+    <!-- REVIEW_FESTA60_REFRAME_STYLE_END -->
   </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
@@ -1280,26 +1598,26 @@
         </div>
       </header>
 
-      <main>
+            <main>
         <section class="hero">
           <div class="wrap hero__grid">
             <div>
               <p class="eyebrow"><span class="label-ja">開催決定</span><span class="label-en">Save the Date</span></p>
               <h1>東京理科大学舞踏研究部 60周年記念FESTA</h1>
-              <p class="hero__copy">あの日の夢を、もう一度語ろう。</p>
+              <p class="hero__copy">踊った日々も、悔しかった日も、すべてを連れて集まろう。</p>
               <p class="hero__lead">
-                東京理科大学舞踏研究部の創部60周年を記念し、
-                OBOG、現役生、関係者の皆さまが世代を超えて集う
-                記念FESTAを開催いたします。
+                東京理科大学舞踏研究部の創部60周年を記念し、OBOG、現役生、関係者の皆さまが世代を超えて集う記念FESTAを開催いたします。
               </p>
               <p class="hero__lead">
-                踊った日々、支え合った仲間、胸に残る一曲。
-                60年の歩みを振り返りながら、
-                これからのFANTASISTAの物語をともに語る一日です。
+                華やかな衣装、背番号、レギュラー戦、練習場、同期、先輩、後輩。その一つひとつに、それぞれの記憶があります。
+              </p>
+              <p class="hero__lead">
+                勝った日も、届かなかった日も、誰かの背中を追いかけた日も。60年の歩みを振り返りながら、あの頃を知る仲間と再び語り合う一日です。
               </p>
 
               <div class="cta-row">
                 <a class="btn btn--primary" href="#overview">開催概要を見る</a>
+                <a class="btn btn--ghost" href="#updates">今後のご案内を見る</a>
               </div>
             </div>
 
@@ -1314,8 +1632,115 @@
               </div>
               <div class="hero__fact">
                 <span>ご案内</span>
-                <strong>時間未定・詳細は順次公開</strong>
+                <strong>時間・参加方法は順次公開<small>詳細公開をお待ちください</small></strong>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="memory-album">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Memory Album</span><span class="label-en">Photo Placeholders</span></p>
+              <h2>60年の記憶をたどる写真を掲載予定</h2>
+              <p>競技会、練習場、集合写真、フォーメーション。その時代にしか残せなかった空気を、少しずつこのページにも並べていく予定です。</p>
+            </div>
+
+            <div class="memory-photo-block">
+              <figure class="memory-photo-card">
+                <!-- ここに画像を追加可能 -->
+                <div class="memory-photo-placeholder memory-photo-placeholder--wide" role="img" aria-label="写真準備中">
+                  <span class="memory-photo-label">写真準備中</span>
+                </div>
+                <figcaption class="memory-photo-caption">60年の記憶をたどる写真を掲載予定</figcaption>
+                <p class="memory-photo-note">競技会・練習場・集合写真・フォーメーションなど、世代を超えて共有できる記録を準備していきます。</p>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="memory-depth">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Behind the Floor</span><span class="label-en">Memory</span></p>
+              <h2>華やかさの奥にあったもの</h2>
+              <p>学生競技ダンスは、外から見れば華やかな世界です。けれど、その時間を過ごした私たちには、フロアの外にあった緊張や迷い、努力や悔しさもまた、大切な記憶として残っています。</p>
+            </div>
+
+            <div class="emotion-grid">
+              <article class="emotion-card">
+                <h3>誰と踊るのか</h3>
+                <p>ペアが決まるまでの緊張。組んでから見えてくる距離感。うまくいく日も、同じ方向を向けなくなる日もありました。それでも、誰かと一曲をつくる経験は、学生競技ダンスならではの記憶です。</p>
+              </article>
+
+              <article class="emotion-card">
+                <h3>選ばれること、選ばれないこと</h3>
+                <p>レギュラーを目指して練習した時間。結果表の前で交わした言葉。同期と競い、先輩の背中を追い、後輩に見られる立場になっていく。その重みを知っている人たちが、このFESTAに集まります。</p>
+              </article>
+
+              <article class="emotion-card">
+                <h3>練習場に残った時間</h3>
+                <p>限られた時間、限られた場所、限られた体力の中で、もう一度だけ踊った夜。研究、単位、進路、生活の事情を抱えながら、それでもフロアに向かった日々がありました。</p>
+              </article>
+
+              <article class="emotion-card">
+                <h3>痛みも、悔しさも、今は記憶になる</h3>
+                <p>思うように動けなかった日、結果が出なかった日、誰かの上達がまぶしかった日。その時は言葉にできなかった感情も、年月を経た今なら、懐かしい仲間と笑って話せるかもしれません。</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="memory-keywords" id="memory-keywords">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Keywords</span><span class="label-en">Memory Cues</span></p>
+              <h2>記憶のキーワード</h2>
+              <p>一人ひとりの舞研生活は違っていても、フロアに立った人にしか分からない言葉があります。</p>
+            </div>
+
+            <div class="keyword-list" aria-label="記憶のキーワード">
+              <span class="keyword-chip">背番号</span>
+              <span class="keyword-chip">レギュラー戦</span>
+              <span class="keyword-chip">練習場</span>
+              <span class="keyword-chip">先輩の背中</span>
+              <span class="keyword-chip">同期の存在</span>
+              <span class="keyword-chip">組み替え</span>
+              <span class="keyword-chip">結果表</span>
+              <span class="keyword-chip">フォーメーション</span>
+              <span class="keyword-chip">夏全・冬全</span>
+              <span class="keyword-chip">研究と練習</span>
+              <span class="keyword-chip">怪我との付き合い</span>
+              <span class="keyword-chip">最後の一曲</span>
+            </div>
+
+            <div class="memory-photo-grid memory-photo-grid--three" style="margin-top: 22px;">
+              <figure class="memory-photo-card">
+                <!-- ここに画像を追加可能 -->
+                <div class="memory-photo-placeholder" role="img" aria-label="競技会の記憶の写真準備中">
+                  <span class="memory-photo-label">写真準備中</span>
+                </div>
+                <figcaption class="memory-photo-caption">競技会の記憶</figcaption>
+                <p class="memory-photo-note">背番号をつけて臨んだ一日を思い出す写真を掲載予定です。</p>
+              </figure>
+
+              <figure class="memory-photo-card">
+                <!-- ここに画像を追加可能 -->
+                <div class="memory-photo-placeholder" role="img" aria-label="練習場の記憶の写真準備中">
+                  <span class="memory-photo-label">写真準備中</span>
+                </div>
+                <figcaption class="memory-photo-caption">練習場の記憶</figcaption>
+                <p class="memory-photo-note">踊っても踊っても足りなかった時間を伝える写真を掲載予定です。</p>
+              </figure>
+
+              <figure class="memory-photo-card">
+                <!-- ここに画像を追加可能 -->
+                <div class="memory-photo-placeholder" role="img" aria-label="仲間との記憶の写真準備中">
+                  <span class="memory-photo-label">写真準備中</span>
+                </div>
+                <figcaption class="memory-photo-caption">仲間との記憶</figcaption>
+                <p class="memory-photo-note">同期、先輩、後輩と過ごした時間が伝わる写真を掲載予定です。</p>
+              </figure>
             </div>
           </div>
         </section>
@@ -1333,40 +1758,44 @@
                   <span>名称</span>
                   <strong>東京理科大学舞踏研究部 60周年記念FESTA</strong>
                 </div>
+
                 <div class="outline-item">
                   <span>日付</span>
                   <strong>2027年2月11日（木・祝）</strong>
                 </div>
+
                 <div class="outline-item">
                   <span>時間</span>
                   <strong>未定</strong>
                 </div>
-                                <div class="outline-item">
+
+                <div class="outline-item">
                   <span>会場</span>
                   <strong>東京都立産業貿易センター 台東館 6階展示室</strong>
                   <p>〒111-0033 東京都台東区花川戸2-6-5</p>
                 </div>
-                <!-- REVIEW_TAITOKAN_ACCESS_60_START -->
-                <div class="outline-item" style="grid-column: 1 / -1;">
+
+                <div class="outline-item outline-item--wide">
                   <span>アクセス</span>
                   <p>東京メトロ銀座線・東武スカイツリーライン「浅草駅」から徒歩5分、都営浅草線「浅草駅」から徒歩8分、つくばエクスプレス「浅草駅」から徒歩9分です。</p>
-                  <p>会場に一般駐車場はありません。お車でお越しの際は近隣駐車場をご利用ください。</p></div>
-                                  <!-- REVIEW_TAITOKAN_VENUE_LINK_START -->
+                  <p>会場に一般駐車場はありません。お車でお越しの際は近隣駐車場をご利用ください。</p>
                   <p style="margin-top: 12px;">
                     <a class="btn btn--ghost" href="https://www.sanbo.metro.tokyo.lg.jp/taito/access/" target="_blank" rel="noopener noreferrer">台東館の交通アクセスを見る</a>
                   </p>
-                  <!-- REVIEW_TAITOKAN_VENUE_LINK_END -->
-                <!-- REVIEW_TAITOKAN_ACCESS_60_END -->
-                <div class="outline-item" style="grid-column: 1 / -1;">
+                </div>
+
+                <div class="outline-item outline-item--wide">
                   <span>詳細</span>
-                  <p>参加方法、企画内容、広告・協賛募集等は決定次第お知らせします。</p>
+                  <p>時間・参加方法・企画内容は、決定次第このページで順次ご案内します。</p>
                 </div>
               </div>
+
+              <p class="outline-note">参加方法、企画内容、広告・協賛募集等の詳細は、決定次第、本ページで順次お知らせします。</p>
             </div>
           </div>
         </section>
 
-        <section>
+        <section id="anniversary">
           <div class="wrap">
             <div class="section-head">
               <p class="eyebrow"><span class="label-ja">記念FESTAについて</span><span class="label-en">Anniversary</span></p>
@@ -1375,51 +1804,95 @@
 
             <div class="story-grid">
               <div class="story-card">
-                <p>
-                  60周年記念FESTAは、ただ過去を懐かしむだけの場ではありません。
-                </p>
-                <p>
-                  学生時代の思い出を振り返り、
-                  それぞれが歩んできた時間を持ち寄り、
-                  あの日の夢や熱量をもう一度語り合うための一日です。
-                </p>
-                <p>
-                  同期、先輩、後輩、現役生、関係者の皆さまが世代を超えて集い、
-                  東京理科大学舞踏研究部の60年を祝う場として開催いたします。
-                </p>
+                <p>60周年記念FESTAは、ただ過去を懐かしむだけの場ではありません。</p>
+                <p><strong>背番号をつけてフロアに立った日。</strong><br />練習場で同じ曲を何度もかけた日。結果に喜び、悔しさを飲み込み、それでも次の一曲へ向かった日。</p>
+                <p>それぞれの時代に、それぞれの舞研がありました。このFESTAは、その記憶を持ち寄り、世代を超えて語り合うための一日です。</p>
+                <p>同期、先輩、後輩、現役生、関係者の皆さまが集い、東京理科大学舞踏研究部の60年を祝う場として開催いたします。</p>
               </div>
 
               <div class="story-mark">
                 <strong>ANNIVERSARY MESSAGE</strong>
-                <p>
-                  懐かしい仲間との再会と、
-                  これからの物語を語るための
-                  記念FESTAです。
-                </p>
+                <p>華やかなフロアの奥にあった時間も、今なら笑って語り合える。そんな再会のきっかけになる一日を目指します。</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section>
+        <section id="welcome">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Welcome</span><span class="label-en">Invitation</span></p>
+              <h2>こんな方に来てほしい</h2>
+              <p>久しぶりの方も、最近は少し離れていた方も。あの時間を少しでも共有した方に、気軽に参加していただける場を目指しています。</p>
+            </div>
+
+            <div class="welcome-grid">
+              <article class="welcome-card"><p>卒部以来、舞研の集まりから少し離れていた方</p></article>
+              <article class="welcome-card"><p>久しぶりに同期や先輩・後輩に会いたい方</p></article>
+              <article class="welcome-card"><p>現役時代の写真や記録を見返したい方</p></article>
+              <article class="welcome-card"><p>当時は話せなかった思い出を、今なら少し話せそうな方</p></article>
+              <article class="welcome-card"><p>現役生や若い世代の舞研を応援したい方</p></article>
+              <article class="welcome-card"><p>踊る・踊らないに関わらず、理科大舞研の60年を一緒に祝いたい方</p></article>
+            </div>
+
+            <p class="welcome-note">踊れるかどうか、最近つながりがあるかどうかは問いません。あの時間を少しでも共有した方に、気軽に参加していただける場を目指しています。</p>
+          </div>
+        </section>
+
+        <section id="photo-submit">
+          <div class="wrap">
+            <div class="panel festa-callout">
+              <div class="festa-callout__copy">
+                <div class="section-head" style="margin-bottom: 0;">
+                  <p class="eyebrow"><span class="label-ja">Photo Archive</span><span class="label-en">Contribute</span></p>
+                  <h2>写真・記録をお持ちのOBOGへ</h2>
+                </div>
+                <p>60周年記念FESTAに向けて、競技会、練習風景、フォーメーション、集合写真、背番号が分かる写真などを掲載・展示できるよう準備しています。</p>
+                <p>掲載候補の写真や資料をお持ちの方は、FANTASISTA会までお知らせください。</p>
+
+                <div class="festa-callout__actions">
+                  <a class="btn btn--primary" href="../contact/">写真・資料について問い合わせる</a>
+                </div>
+              </div>
+
+              <div class="festa-callout__media">
+                <figure class="memory-photo-card">
+                  <!-- ここに画像を追加可能 -->
+                  <div class="memory-photo-placeholder" role="img" aria-label="写真募集中">
+                    <span class="memory-photo-label">写真募集中</span>
+                  </div>
+                  <figcaption class="memory-photo-caption">展示・掲載用の写真を順次募集しています</figcaption>
+                  <p class="memory-photo-note">競技会、練習場、集合写真、フォーメーションなど、世代を超えて共有できる写真を歓迎します。</p>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="updates">
           <div class="wrap">
             <div class="section-head">
               <p class="eyebrow"><span class="label-ja">今後のご案内</span><span class="label-en">Updates</span></p>
               <h2>今後のご案内</h2>
             </div>
 
-            <div class="panel updates">
-              <p>
-                参加方法、企画内容、広告・協賛募集等の詳細は、
-                決定次第、本ページにて順次お知らせいたします。
-              </p>
-              <p>
-                協賛をご検討いただける企業・関係者の皆さまには、
-                歴史ある学生舞踏文化と、世代を超えたFANTASISTAのつながりに寄り添う
-                記念事業として、改めてご案内いたします。
-              </p>
+            <div class="panel festa-updates">
+              <p>参加方法、企画内容、広告・協賛募集等の詳細は、決定次第、本ページで順次お知らせします。</p>
+              <p>当日は、60年の歩みを振り返る時間、世代を超えて語り合う時間、懐かしい仲間と再会する時間を準備していく予定です。</p>
+              <p>久しぶりの方も、現役に近い世代の方も、どうぞ続報をお待ちください。</p>
+              <p>協賛をご検討いただける企業・関係者の皆さまには、歴史ある学生舞踏文化と、世代を超えたFANTASISTAのつながりに寄り添う記念事業として、改めてご案内いたします。</p>
+            </div>
+          </div>
+        </section>
 
-              <!-- TODO: 参加案内・協賛案内の正式フォームが決まり次第、CTAを追加する -->
+        <section id="footer-cta">
+          <div class="wrap">
+            <div class="panel footer-cta-panel">
+              <div class="section-head" style="margin-bottom: 0;">
+                <p class="eyebrow"><span class="label-ja">Next</span><span class="label-en">Links</span></p>
+                <h2>続報とあわせて、こちらもご覧ください</h2>
+                <p>60周年記念FESTAのご案内とあわせて、本サイトや通常FESTAページにもお立ち寄りください。</p>
+              </div>
 
               <div class="cta-row footer-links">
                 <a class="btn btn--ghost" href="../">本サイトへ戻る</a>
@@ -1476,6 +1949,7 @@
 <!-- MOBILE_NAV_SCRIPT_END -->
   </body>
 </html>
+
 
 
 
