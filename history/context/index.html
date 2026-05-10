@@ -1,0 +1,683 @@
+﻿<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>競技ダンスと学生競技ダンスの背景 | 東京理科大学舞踏研究部 OBOG会</title>
+    <meta
+      name="description"
+      content="東京理科大学舞踏研究部の歩みを理解するために、日本の競技ダンス、学生競技ダンス、学連制度、種目やルールの変遷を補足的に整理したページです。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../../assets/css/pages.css" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="googlebot" content="noindex, nofollow, noarchive" />
+    <style>
+      :root {
+        --context-head: #191f2a;
+        --context-text: #59606b;
+        --context-gold: #fec000;
+      }
+
+      .context-hero {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 16% 18%, rgba(254, 192, 0, 0.18), transparent 24%),
+          radial-gradient(circle at 84% 16%, rgba(254, 192, 0, 0.10), transparent 20%),
+          linear-gradient(180deg, #0d0f13 0%, #1a1e26 100%);
+      }
+
+      .context-hero::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, rgba(254, 192, 0, 0.9) 18%, rgba(254, 192, 0, 0.18) 100%);
+      }
+
+      .context-hero .page-hero__eyebrow,
+      .context-hero .page-hero__title,
+      .context-hero .page-hero__lead {
+        color: #ffffff;
+      }
+
+      .context-hero-note {
+        max-width: 780px;
+        margin-top: 16px;
+        color: rgba(255, 255, 255, 0.82);
+        line-height: 1.9;
+      }
+
+      .context-jump {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 26px;
+      }
+
+      .context-jump a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 42px;
+        padding: 0 16px;
+        border: 1px solid rgba(254, 192, 0, 0.22);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        color: #ffffff;
+        font-size: 0.92rem;
+        font-weight: 800;
+      }
+
+      .context-snapshot,
+      .context-grid,
+      .context-rule-grid,
+      .context-source-list {
+        display: grid;
+      }
+
+      .context-snapshot {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .context-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .context-rule-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .context-card,
+      .context-snapshot-card,
+      .context-rule-card,
+      .context-source-card,
+      .context-fastline {
+        border-radius: 28px;
+        background: #ffffff;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
+      }
+
+      .context-card,
+      .context-snapshot-card,
+      .context-rule-card,
+      .context-source-card {
+        padding: 28px 24px;
+      }
+
+      .context-card span,
+      .context-snapshot-card span,
+      .context-rule-card span {
+        display: block;
+        margin-bottom: 10px;
+        color: #8a6a00;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .context-card h3,
+      .context-snapshot-card h3,
+      .context-rule-card h3,
+      .context-source-card h3,
+      .context-fastline h3 {
+        margin: 0 0 10px;
+        color: var(--context-head);
+      }
+
+      .context-card p,
+      .context-snapshot-card p,
+      .context-rule-card p,
+      .context-source-card p,
+      .context-fastline p {
+        margin: 0;
+        color: var(--context-text);
+        line-height: 1.85;
+      }
+
+      .context-fastline {
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .context-fastline__item {
+        display: grid;
+        grid-template-columns: 140px minmax(0, 1fr);
+        gap: 16px;
+        padding: 18px 22px;
+        border-top: 1px solid rgba(25, 31, 42, 0.08);
+      }
+
+      .context-fastline__item:first-child {
+        border-top: 0;
+      }
+
+      .context-fastline__year {
+        color: #8a6a00;
+        font-family: "Oswald", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .context-fastline__body strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--context-head);
+      }
+
+      .context-fastline__body p {
+        margin: 0;
+        color: var(--context-text);
+        line-height: 1.8;
+      }
+
+      .context-principles,
+      .context-todo-list {
+        margin: 16px 0 0;
+        padding-left: 1.2em;
+        color: var(--context-text);
+        line-height: 1.9;
+      }
+
+      .context-principles li + li,
+      .context-todo-list li + li {
+        margin-top: 6px;
+      }
+
+      .context-source-card {
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7e8 100%);
+      }
+
+      .context-source-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 20px;
+        margin: 18px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .context-source-list li {
+        color: var(--context-text);
+        line-height: 1.8;
+      }
+
+      .context-source-list a {
+        color: var(--context-head);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .context-note {
+        margin-top: 18px;
+        color: #7c8491;
+        line-height: 1.85;
+      }
+
+      .review-notice {
+        position: relative;
+        z-index: 80;
+        padding: 8px 16px;
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.6;
+        color: #f3e3b6;
+        background: rgba(255, 210, 28, 0.08);
+        border-bottom: 1px solid rgba(255, 210, 28, 0.16);
+      }
+
+      @media (max-width: 960px) {
+        .context-snapshot,
+        .context-grid,
+        .context-rule-grid,
+        .context-source-list {
+          grid-template-columns: 1fr;
+        }
+
+        .context-fastline__item {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+      }
+    </style>
+      <!-- REVIEW_CONTEXT_TOUCHPOINT_STYLE_START -->
+      <style>
+        .context-source-group + .context-source-group {
+          margin-top: 24px;
+          padding-top: 24px;
+          border-top: 1px solid rgba(25, 31, 42, 0.08);
+        }
+
+        .context-source-group h3 {
+          margin: 0 0 10px;
+          color: var(--context-head);
+        }
+
+        .context-source-group ul {
+          margin: 0;
+          padding-left: 1.2em;
+          color: var(--context-text);
+          line-height: 1.9;
+        }
+
+        .context-source-group li + li {
+          margin-top: 6px;
+        }
+      </style>
+      <!-- REVIEW_CONTEXT_TOUCHPOINT_STYLE_END -->
+  </head>
+  <body>
+    <div class="review-notice">
+      レビュー用サイトです。正式公開前の確認用です。
+    </div>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="brand" href="../../" aria-label="FANTASISTA ホームへ戻る">
+          <img class="brand__logo" src="../../assets/img/logo-wordmark-dark.png" alt="東京理科大学舞踏研究部 FANTASISTA" />
+        </a>
+
+        <nav class="site-nav site-nav--desktop" aria-label="主要メニュー">
+          <a href="../../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
+          <a href="../../about/"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
+          <a href="../../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
+          <a href="../../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+          <a href="../../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
+          <a href="../" aria-current="page"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
+          <a href="../../data/"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
+          <a href="../../gallery/"><span class="nav-copy"><span class="nav-ja">写真・ギャラリー</span><span class="nav-en">Gallery</span></span></a>
+          <a href="../../contact/"><span class="nav-copy"><span class="nav-ja">お問い合わせ</span><span class="nav-en">Contact</span></span></a>
+        </nav>
+
+        <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+          <span class="sr-only">メニューを開閉</span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+        </button>
+
+        <nav id="site-nav" class="site-nav site-nav--mobile" aria-label="モバイルメニュー">
+          <a href="../../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
+          <a href="../../about/"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
+          <a href="../../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
+          <a href="../../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+          <a href="../../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
+          <a href="../" aria-current="page"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
+          <a href="../../data/"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
+          <a href="../../gallery/"><span class="nav-copy"><span class="nav-ja">写真・ギャラリー</span><span class="nav-en">Gallery</span></span></a>
+          <a href="../../contact/"><span class="nav-copy"><span class="nav-ja">お問い合わせ</span><span class="nav-en">Contact</span></span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero context-hero">
+        <div class="page-hero__grid" aria-hidden="true"></div>
+        <img class="page-hero__seal" src="../../assets/img/university-seal.png" alt="" aria-hidden="true" />
+        <div class="container page-hero__inner">
+          <p class="page-hero__eyebrow"><span class="label-ja">補足</span><span class="label-en">Context</span></p>
+          <h1 class="page-hero__title">競技ダンスと学生競技ダンスの背景</h1>
+          <p class="page-hero__lead">
+            理科大舞研の歩みをより深く理解するために、日本の競技ダンス、学生競技ダンス、学連制度、種目やルールの変遷を補足的に整理します。
+          </p>
+          <p class="context-hero-note">
+            ここでは網羅よりも理解の速さを優先し、理科大舞研の外部環境がどう変わってきたかを、要点中心にまとめています。
+          </p>
+
+                    <div class="context-jump">
+            <a href="../">理科大舞研の歩みへ</a>
+            <a href="#context-snapshot">要点</a>
+            <a href="#context-national">日本の競技ダンス</a>
+            <a href="#context-student">学生競技ダンス</a>
+            <a href="#context-touchpoints">理科大舞研との接点</a>
+            <a href="#context-rules">制度・ルール</a>
+            <a href="#context-sources">出典</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light" id="context-snapshot">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Quick View</p>
+            <h2>まずは外部環境の変遷を一目で</h2>
+            <p>理科大舞研の歩みを読む前提として、外部環境の変化だけを先に短くつかめるようにしています。</p>
+          </div>
+
+          <div class="context-snapshot">
+            <article class="context-snapshot-card">
+              <span>National Bodies</span>
+              <h3>全国団体の整備</h3>
+              <p>1977年のJDSF前身、1992年のJBDF設立、1999年以降のJDSF体制整備によって、競技・資格・普及の全国基盤が整えられてきました。</p>
+            </article>
+
+            <article class="context-snapshot-card">
+              <span>Gakuren Culture</span>
+              <h3>学生主体の競技文化</h3>
+              <p>学生競技ダンスでは、学校を背景とする団体競技、学生による自主運営、現役中心主義が長く大切にされています。</p>
+            </article>
+
+            <article class="context-snapshot-card">
+              <span>Rules</span>
+              <h3>制度も変わり続けてきた</h3>
+              <p>シャドー制度、夏全と冬全の形式差、種目構成、登録や服装の細則は、時代や支部の運用とともに整備されてきました。</p>
+            </article>
+          </div>
+
+          <article class="context-fastline" style="margin-top: 24px;">
+            <div class="context-fastline__item">
+              <div class="context-fastline__year">基本原則</div>
+              <div class="context-fastline__body">
+                <strong>学校を背負う団体競技</strong>
+                <p>東部学連の公開規約には、学校を背景とする団体競技、アマチュア性、学生の自主運営、現役中心主義が基本4原則として掲げられています。</p>
+              </div>
+            </div>
+
+            <div class="context-fastline__item">
+              <div class="context-fastline__year">1977</div>
+              <div class="context-fastline__body">
+                <strong>JDSF前身の発足</strong>
+                <p>日本アマチュアダンス協会が始まり、後のダンススポーツ統括組織へつながっていきます。</p>
+              </div>
+            </div>
+
+            <div class="context-fastline__item">
+              <div class="context-fastline__year">1992</div>
+              <div class="context-fastline__body">
+                <strong>JBDF設立</strong>
+                <p>競技会、資格制度、普及活動、学校教育への働きかけを担う全国団体として整備されます。</p>
+              </div>
+            </div>
+
+            <div class="context-fastline__item">
+              <div class="context-fastline__year">1999 - 2011</div>
+              <div class="context-fastline__body">
+                <strong>JDSFが現在の体制へ</strong>
+                <p>1999年の連盟発足、2002年の社団法人化、2011年の公益社団法人化が確認できます。</p>
+              </div>
+            </div>
+
+            <div class="context-fastline__item">
+              <div class="context-fastline__year">2007</div>
+              <div class="context-fastline__body">
+                <strong>学連定款と東部のシャドー規約</strong>
+                <p>JDSF掲載の全日本学生競技ダンス選手権大会案内では全日本学連が7つの学連で構成されると説明され、東部学連の公開規約では2007年11月30日制定のシャドーカップル規約が確認できます。</p>
+              </div>
+            </div>
+
+            <div class="context-fastline__item">
+              <div class="context-fastline__year">2025案内</div>
+              <div class="context-fastline__body">
+                <strong>夏全は総合戦、冬全は単科戦</strong>
+                <p>公開大会案内で、夏全と冬全の形式差が明示されています。</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="page-section" id="context-national">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">National</p>
+            <h2>日本の競技ダンスの流れ</h2>
+            <p>理科大舞研の外側にある全国レベルの変化だけを、短く押さえます。</p>
+          </div>
+
+          <div class="context-grid">
+            <article class="context-card">
+              <span>Origins</span>
+              <h3>欧州起源と種目の標準化</h3>
+              <p>JBDFの歴史解説では、ボールルームダンスのルーツは中世ヨーロッパにあり、現在のスタンダード種目につながる型が整えられたと説明されています。</p>
+            </article>
+
+            <article class="context-card">
+              <span>Latin</span>
+              <h3>1950年前後のラテン標準化</h3>
+              <p>JBDFの解説では、ラテン・ミュージックによる踊りが1950年前後にイギリスで標準化され、競技会にも取り入れられながら発展したとされています。</p>
+            </article>
+
+            <article class="context-card">
+              <span>Organizations</span>
+              <h3>競技・資格・普及の全国基盤</h3>
+              <p>JDSFとJBDFの公開資料から、競技会、競技規則、資格認定、普及活動、学校教育へのアプローチが全国的に整備されてきたことが確認できます。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light" id="context-student">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Student</p>
+            <h2>学生競技ダンスの流れ</h2>
+            <p>理科大舞研が歩んできたのは、学生が学校を背負い、自ら競技会を支える文化の中でした。</p>
+          </div>
+
+          <div class="context-grid">
+            <article class="context-card">
+              <span>4 Principles</span>
+              <h3>学連の基本4原則</h3>
+              <p>東部日本学生競技ダンス連盟の公開規約には、連盟の基本4原則として次の4点が掲げられています。</p>
+              <ol class="context-principles">
+                <li>競技会は学校を背景とする団体競技を主体とすること</li>
+                <li>リーダーもパートナーもアマチュアであること</li>
+                <li>学生の自主運営によること</li>
+                <li>現役中心主義をとること</li>
+              </ol>
+            </article>
+
+            <article class="context-card">
+              <span>Structure</span>
+              <h3>全日本学連と東部学連</h3>
+              <p>JDSF掲載の2025年度第70回全日本学生競技ダンス選手権大会案内では、全日本学生競技ダンス連盟は北は北海道から九州まで7つの学連で構成されると説明されています。東部学連の対全日本学生競技ダンス連盟規約でも、東部学連がその一構成団体として参加すると示されています。</p>
+            </article>
+
+            <article class="context-card">
+              <span>TUS Position</span>
+              <h3>理科大舞研の位置づけ</h3>
+              <p>2026年5月確認時点の東部学連公開加盟校一覧では、東京理科大学は学習院大学、東京音楽大学、女子栄養大学2部とともに記載されています。共同加盟の枠組みも、理科大舞研の歴史を理解する重要な背景です。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+      <!-- REVIEW_CONTEXT_TOUCHPOINTS_START -->
+      <section class="page-section page-section--light" id="context-touchpoints">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">TUS Touchpoints</p>
+            <h2>理科大舞研との接点</h2>
+            <p>ここでは、理科大舞研のHistory本体で触れている戦歴や背番号、共同加盟校の記録を、学生競技ダンスの制度や時代背景と結びつけて補足します。</p>
+          </div>
+
+          <div class="context-grid">
+            <article class="context-card">
+              <span>1996</span>
+              <h3>1996年前後の社交ダンスブームと理科大</h3>
+              <p>1996年は、理科大舞研にとって冬全サンバ優勝の年です。OBの回想によれば、映画やテレビ番組をきっかけに社交ダンスへの社会的関心が高まった時期とも重なります。ブームと入部者増の因果関係は断定せず、重なった時期として位置づけます。</p>
+            </article>
+
+            <article class="context-card">
+              <span>Tournaments</span>
+              <h3>東部日本ブロックと東都大学</h3>
+              <p>理科大舞研の戦歴に出てくる春東都、春東部、夏全、冬全などは、初見の読者には分かりにくい言葉です。東部学連の公開日程と大会案内をもとに読むと、東部の公式戦から全国大会へと続く競技の流れが見えてきます。</p>
+            </article>
+
+            <article class="context-card">
+              <span>Numbers</span>
+              <h3>背番号と共同加盟校</h3>
+              <p>東部学連主催試合での500番台・580番台、全日本学連主催試合での120番台は、理科大舞研の系譜を示す番号です。共同加盟校の変遷はHistory本体の記述を優先し、ここでは制度上の意味と現在の公開加盟校情報を中心に整理しています。</p>
+            </article>
+
+            <article class="context-card">
+              <span>Formation</span>
+              <h3>フォーメーション競技</h3>
+              <p>フォーメーションは、複数組で構成・隊形・統一感を競う団体競技です。東部学連の公開規約では、東部戦とⅠ・Ⅱ部戦で採用が定められています。理科大舞研の戦歴と結びつけて読むと、個人戦だけでは見えにくい団体史の厚みが分かります。</p>
+            </article>
+
+            <article class="context-card">
+              <span>After COVID</span>
+              <h3>コロナ後の再編</h3>
+              <p>コロナ禍は新歓、練習、大会運営、部員数に大きな影響を与えました。公開規約ではⅠ部・Ⅱ部戦やフォーメーション採用が確認でき、OBの観察では2026年にレギュラー戦の完全10種目化や制度再編への言及も見られます。公開資料と回想は分けて読んでいます。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+      <!-- REVIEW_CONTEXT_TOUCHPOINTS_END -->
+<section class="page-section" id="context-rules">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Rules</p>
+            <h2>制度とルールの変遷</h2>
+            <p>規約全文ではなく、理科大舞研の歩みに関係する外部制度の変化だけを、速く読める形で整理します。</p>
+          </div>
+
+          <div class="context-rule-grid">
+            <article class="context-rule-card">
+              <span>Shadow</span>
+              <h3>シャドー制度・推奨選手制度</h3>
+              <p>東部学連の公開規約では、2007年11月30日制定のシャドーカップル規約が確認できます。同一加盟校内の男女比不一致への救済措置とされ、公開成績表には「東部推奨」の表記も見られます。全国的な導入年は引き続き要確認です。</p>
+            </article>
+
+            <article class="context-rule-card">
+              <span>Disciplines</span>
+              <h3>公開要領で確認できる種目</h3>
+              <p>公開要領で確認できる種目として、ワルツ、タンゴ、スローフォックストロット、クイックステップ、チャチャチャ、サンバ、ルンバ、パソドブレなどが示されています。年度や大会区分によって扱いが異なる可能性があるため、最新の大会要項を優先します。</p>
+            </article>
+
+            <article class="context-rule-card">
+              <span>Formats</span>
+              <h3>夏全・冬全・新人戦の違い</h3>
+              <p>2025年度公開の大会案内では、夏全はスタンダード・ラテン各4種目総合、冬全は1大学・1種目・1カップルの単科戦として説明されています。公開規約や公開成績からは、新人戦、八種目戦、フォーメーション競技の存在も確認できます。</p>
+            </article>
+
+            <article class="context-rule-card">
+              <span>Qualification</span>
+              <h3>登録・服装・アマチュア性</h3>
+              <p>東部学連の公開規約には、加盟登録、アマチュア性、服装、有料講習会、シャドー届などの細目が掲載されています。学生競技ダンスの細則と一般競技規程は同じではありません。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+            <section class="page-section page-section--light" id="context-sources">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__kicker">Sources</p>
+            <h2>出典・注記</h2>
+            <p>背景資料ページでは、理科大舞研のHistory本体を補うため、内部記録、競技団体の公開資料、OBの回想・観察を性格ごとに分けて整理しています。2026年5月確認時点の情報です。</p>
+          </div>
+
+          <article class="context-source-card">
+            <div class="context-source-group">
+              <h3>FANTASISTA内部記録</h3>
+              <ul>
+                <li>FANTASISTA会保有資料・卒部生名簿</li>
+              </ul>
+            </div>
+
+            <div class="context-source-group">
+              <h3>競技団体・公開資料</h3>
+              <ul>
+                <li><a href="https://jbdf.or.jp/ballroom/history.html" target="_blank" rel="noopener noreferrer">JBDF ボールルームダンスの歴史</a></li>
+                <li><a href="https://jbdf.or.jp/profile/purpose.html" target="_blank" rel="noopener noreferrer">JBDFの目的</a></li>
+                <li><a href="https://www.jdsf.or.jp/wp/wp-content/uploads/2022/07/2021jigyouhoukoku.pdf" target="_blank" rel="noopener noreferrer">JDSF 2021年度事業報告書</a></li>
+                <li><a href="https://www.jdsf.or.jp/document/regulations-gamerule/" target="_blank" rel="noopener noreferrer">JDSF 競技関連規程集</a></li>
+                <li><a href="https://www.jdsf.or.jp/wp/wp-content/uploads/2026/03/DDD118.pdf" target="_blank" rel="noopener noreferrer">2025年度 第70回全日本学生競技ダンス選手権大会案内（JDSF掲載PDF）</a></li>
+                <li><a href="https://www.toubugakuren.com/" target="_blank" rel="noopener noreferrer">東部日本学生競技ダンス連盟 公式サイト</a></li>
+                <li><a href="https://www.toubugakuren.com/gamerule.html" target="_blank" rel="noopener noreferrer">東部日本学生競技ダンス連盟 競技会要領</a></li>
+                <li><a href="https://www.toubugakuren.com/kiyaku.html" target="_blank" rel="noopener noreferrer">東部日本学生競技ダンス連盟 規約</a></li>
+                <li><a href="https://www.toubugakuren.com/kameikou.html" target="_blank" rel="noopener noreferrer">東部日本学生競技ダンス連盟 加盟校</a></li>
+                <li><a href="https://www.toubugakuren.com/schedule.html" target="_blank" rel="noopener noreferrer">東部日本学生競技ダンス連盟 スケジュール</a></li>
+              </ul>
+            </div>
+
+            <div class="context-source-group">
+              <h3>OB回想・観察</h3>
+              <p class="context-note">OB個人の回想・観察であり、FANTASISTA公式記録そのものではありません。制度や大会形式は公開資料を優先し、当時の雰囲気や運用を補う資料として参照しています。</p>
+              <ul>
+                <li><a href="https://www.kouno-teate.info/2014/05/26/%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E3%81%A8%E7%A7%81-%E3%81%9D%E3%81%AE%EF%BC%91/" target="_blank" rel="noopener noreferrer">競技ダンスと私 その1</a></li>
+                <li><a href="https://www.kouno-teate.info/2026/04/13/%E5%AD%A6%E9%80%A3%E3%82%92%E7%9F%A5%E3%81%A3%E3%81%A6%EF%BC%93%EF%BC%90%E5%B9%B4/" target="_blank" rel="noopener noreferrer">学連を知って30年</a></li>
+                <li><a href="https://www.kouno-teate.info/2026/04/27/%EF%BC%92%EF%BC%90%EF%BC%92%EF%BC%96%E5%B9%B4%E6%98%A5%E6%9D%B1%E9%83%BD%E6%88%A6%E8%A6%96%E5%AF%9F/" target="_blank" rel="noopener noreferrer">2026年春東都戦視察</a></li>
+                <li><a href="https://www.kouno-teate.info/2025/12/13/%EF%BC%91%EF%BC%99%EF%BC%99%EF%BC%98%E5%B9%B4%E3%81%A8%EF%BC%92%EF%BC%90%EF%BC%92%EF%BC%95%E5%B9%B4%E3%81%AE%E5%AD%A6%E9%80%A3%E5%8A%A0%E7%9B%9F%E6%A0%A1%E3%81%AE%E6%AF%94%E8%BC%83/" target="_blank" rel="noopener noreferrer">1998年と2025年の学連加盟校の比較</a></li>
+                <li><a href="https://www.kouno-teate.info/2016/04/19/%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E7%AB%B6%E6%8A%80/" target="_blank" rel="noopener noreferrer">フォーメーション競技</a></li>
+                <li><a href="https://www.kouno-teate.info/2016/06/21/%E6%9D%B1%E9%83%A8%E6%88%A6%E3%81%A8%E8%BA%8D%E9%80%B2/" target="_blank" rel="noopener noreferrer">東部戦と躍進</a></li>
+                <li><a href="https://www.kouno-teate.info/2025/12/20/%E7%A4%BE%E4%BA%A4%E3%83%80%E3%83%B3%E3%82%B9%E3%81%A8%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9/" target="_blank" rel="noopener noreferrer">社交ダンスと競技ダンス</a></li>
+              </ul>
+            </div>
+
+            <p class="context-note">※東部学連については、2026年5月確認時点で公開資料として有効だった `toubugakuren.com` のURLを掲載しています。旧い大会結果や規約の改訂履歴は、同ドメイン配下の公開ページで確認した範囲に基づきます。</p>
+
+            <h3 style="margin-top: 22px;">未確認事項</h3>
+            <ul class="context-todo-list">
+              <li>1948年前後の学連前史の一次資料確認</li>
+              <li>1956年 / 1963年の大会節目の一次資料確認</li>
+              <li>シャドー制度・推奨選手制度の全国的な初出年</li>
+              <li>モダンからスタンダードへの表記移行年</li>
+              <li>八種目戦・新人戦・フォーメーションを含む種目変遷の完全年表</li>
+              <li>1999年の JDSF との関係・合意書の一次資料確認</li>
+            </ul>
+
+            <p style="margin-top: 22px;">
+              <a class="button button--ghost" href="../">理科大舞研の歩みに戻る</a>
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
+      </div>
+    </footer>
+
+    <script>
+(function () {
+  const toggle = document.querySelector('.menu-toggle');
+  const header = document.querySelector('.site-header, .header');
+  const nav = document.getElementById(toggle ? toggle.getAttribute('aria-controls') : 'site-nav');
+
+  if (!header || !toggle || !nav) return;
+
+  function setMenuOpen(open) {
+    header.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle.addEventListener('click', function () {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    setMenuOpen(!isOpen);
+  });
+
+  nav.addEventListener('click', function (event) {
+    const link = event.target.closest('a');
+    if (link) setMenuOpen(false);
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') setMenuOpen(false);
+  });
+
+  window.addEventListener('resize', function () {
+    if (window.matchMedia('(min-width: 861px)').matches) {
+      setMenuOpen(false);
+    }
+  });
+})();
+    </script>
+  </body>
+</html>
+
