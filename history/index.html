@@ -1565,6 +1565,93 @@
         }
       </style>
       <!-- REVIEW_HISTORY_LINK_STYLE_END -->
+      <!-- REVIEW_HISTORY_HERO_BALANCE_STYLE_START -->
+      <style>
+        .history-digital-stats {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 14px;
+        }
+
+        .history-digital-stat {
+          min-width: 0;
+          padding: clamp(18px, 2.4vw, 28px);
+          border-radius: 26px;
+        }
+
+        .history-digital-stat--wide {
+          grid-column: 1 / -1;
+        }
+
+        .history-digital-stat__label {
+          display: block;
+          margin-bottom: 10px;
+          color: #8a6a00;
+          font-size: 0.78rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .history-digital-stat__number {
+          display: inline-flex;
+          align-items: baseline;
+          gap: 0.08em;
+          white-space: nowrap;
+          color: #111827;
+          font-family: "Oswald", "Noto Sans JP", sans-serif;
+          font-size: clamp(1.9rem, 3vw, 2.8rem);
+          font-weight: 700;
+          line-height: 1.05;
+          letter-spacing: 0.02em;
+        }
+
+        .history-digital-stat__unit {
+          font-size: 0.55em;
+          font-family: "Noto Sans JP", sans-serif;
+          font-weight: 800;
+        }
+
+        .history-digital-stat__sub {
+          display: block;
+          margin-top: 6px;
+          color: #8a6a00;
+          font-weight: 800;
+          line-height: 1.5;
+        }
+
+        .history-digital-stat__text {
+          margin-top: 10px !important;
+          color: #4b5563;
+          line-height: 1.75;
+        }
+
+        .history-digital-stat strong {
+          margin-bottom: 0;
+          font-size: inherit;
+          line-height: inherit;
+        }
+
+        .history-digital-stat__value {
+          display: inline-block;
+          white-space: nowrap;
+        }
+
+        @media (max-width: 860px) {
+          .history-digital-stats {
+            grid-template-columns: 1fr;
+          }
+
+          .history-digital-stat--wide {
+            grid-column: auto;
+          }
+
+          .history-digital-stat__number {
+            font-size: clamp(1.85rem, 8vw, 2.5rem);
+          }
+        }
+      </style>
+      <!-- REVIEW_HISTORY_HERO_BALANCE_STYLE_END -->
 </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
@@ -1649,41 +1736,37 @@
               </div>
             </div>
 
-            <div class="history-digital-stats">
+                        <div class="history-digital-stats">
               <article class="history-digital-stat">
-                <span>創部</span>
-                <strong>1966年</strong>
-                <p>現在につながる本格的な歩みの始まりです。</p>
+                <span class="history-digital-stat__label">創部</span>
+                <strong class="history-digital-stat__number">1966<span class="history-digital-stat__unit">年</span></strong>
+                <p class="history-digital-stat__text">現在につながる本格的な歩みの始まりです。</p>
               </article>
 
               <article class="history-digital-stat">
-                <span>卒部年度確認済み</span>
-                <strong><span class="history-digital-stat__value" data-count-to="560">560</span>名</strong>
-                <p>卒部年度が確認できる卒部生名簿の記録です。</p>
+                <span class="history-digital-stat__label">名簿記録</span>
+                <strong class="history-digital-stat__number"><span class="history-digital-stat__value" data-count-to="560">560</span><span class="history-digital-stat__unit">名</span></strong>
+                <p class="history-digital-stat__text">卒部年度が確認できる卒部生名簿の記録です。</p>
               </article>
 
               <article class="history-digital-stat">
-                <span>名簿記録対象</span>
-                <strong>1968-2025</strong>
-                <p>卒部年度が確認できる名簿記録の対象期間です。</p>
+                <span class="history-digital-stat__label">記録対象期間</span>
+                <strong class="history-digital-stat__number">1968-2025</strong>
+                <p class="history-digital-stat__text">卒部年度が確認できる記録の対象期間です。</p>
               </article>
 
               <article class="history-digital-stat">
-                <span>対象年度</span>
-                <strong>1968-2025</strong>
-                <p>卒部年度記録として見える58年分の歩みです。</p>
+                <span class="history-digital-stat__label">最多年度</span>
+                <strong class="history-digital-stat__number">2003<span class="history-digital-stat__unit">年</span></strong>
+                <span class="history-digital-stat__sub"><span class="history-digital-stat__number"><span class="history-digital-stat__value" data-count-to="20">20</span><span class="history-digital-stat__unit">名</span></span></span>
+                <p class="history-digital-stat__text">卒部生名簿に残る人数が最も多い年度です。</p>
               </article>
 
-              <article class="history-digital-stat">
-                <span>最大年度</span>
-                <strong>2003年 <span class="history-digital-stat__value" data-count-to="20">20</span>名</strong>
-                <p>卒部生名簿に残る人数が最も多い年度です。</p>
-              </article>
-
-              <article class="history-digital-stat">
-                <span>4年間の最多記録</span>
-                <strong>2002・2003年 <span class="history-digital-stat__value" data-count-to="68">68</span>名</strong>
-                <p>4年間で見た世代の厚みが最も大きい時期です。</p>
+              <article class="history-digital-stat history-digital-stat--wide">
+                <span class="history-digital-stat__label">最も厚かった4年間</span>
+                <strong class="history-digital-stat__number"><span class="history-digital-stat__value" data-count-to="68">68</span><span class="history-digital-stat__unit">名</span></strong>
+                <span class="history-digital-stat__sub">2002-2005年卒 / 2003-2006年卒</span>
+                <p class="history-digital-stat__text">4年間で見た世代の厚みが最も大きい時期です。</p>
               </article>
             </div>
           </div>
@@ -2541,6 +2624,7 @@
 <!-- REVIEW_HISTORY_MOTION_SCRIPT_END -->
 </body>
 </html>
+
 
 
 
