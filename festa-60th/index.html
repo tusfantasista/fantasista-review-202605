@@ -1568,6 +1568,150 @@
       }
     </style>
     <!-- REVIEW_FESTA60_REFRAME_STYLE_END -->
+      <!-- REVIEW_FESTA60_MEMORY_STYLE_START -->
+    <style>
+      .memory-yearflow {
+        border-top: 1px solid rgba(255, 210, 28, 0.12);
+        border-bottom: 1px solid rgba(255, 210, 28, 0.12);
+        background:
+          radial-gradient(circle at 88% 14%, rgba(255, 210, 28, 0.10), transparent 24%),
+          linear-gradient(180deg, rgba(10, 9, 7, 0.78), rgba(14, 12, 9, 0.92));
+      }
+
+      .memory-yearflow-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .memory-season-card {
+        padding: 24px 22px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.20);
+      }
+
+      .memory-season-card--winter {
+        background:
+          radial-gradient(circle at 82% 18%, rgba(255, 210, 28, 0.12), transparent 24%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.04));
+        border-color: rgba(255, 210, 28, 0.22);
+      }
+
+      .memory-season-card__season {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: rgba(255, 210, 28, 0.14);
+        color: var(--gold);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .memory-season-card h3 {
+        margin: 14px 0 10px;
+        color: #fff3ca;
+        font-size: 1.18rem;
+        line-height: 1.4;
+      }
+
+      .memory-season-card p {
+        color: var(--muted);
+        line-height: 1.88;
+      }
+
+      .memory-season-card__keywords {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .memory-season-card__keywords span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 210, 28, 0.12);
+        color: #f0dfaf;
+        font-size: 0.82rem;
+        font-weight: 700;
+        cursor: default;
+      }
+
+      .memory-mini-photo-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .memory-mini-photo-card {
+        margin: 0;
+      }
+
+      .keyword-group-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 22px;
+      }
+
+      .keyword-group {
+        padding: 20px 18px;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 210, 28, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .keyword-group h3 {
+        margin: 0;
+        color: #fff3ca;
+        font-size: 1.05rem;
+      }
+
+      .keyword-group .keyword-list {
+        margin-top: 14px;
+      }
+
+      .keyword-chip--accent {
+        background: rgba(255, 210, 28, 0.22);
+        border-color: rgba(255, 210, 28, 0.36);
+        color: #fff8dd;
+      }
+
+      @media (max-width: 960px) {
+        .memory-yearflow-grid,
+        .keyword-group-grid,
+        .memory-mini-photo-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .memory-season-card {
+          padding: 22px 18px;
+        }
+
+        .memory-season-card__keywords,
+        .keyword-list {
+          gap: 10px;
+        }
+
+        .memory-season-card__keywords span,
+        .keyword-chip {
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+    <!-- REVIEW_FESTA60_MEMORY_STYLE_END -->
   </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
@@ -1608,8 +1752,8 @@
               <p class="hero__lead">
                 東京理科大学舞踏研究部の創部60周年を記念し、OBOG、現役生、関係者の皆さまが世代を超えて集う記念FESTAを開催いたします。
               </p>
-              <p class="hero__lead">
-                華やかな衣装、背番号、レギュラー戦、練習場、同期、先輩、後輩。その一つひとつに、それぞれの記憶があります。
+                            <p class="hero__lead">
+                背番号、シャドーコンペ、カップル発表、レギュラー戦、理大祭、冬全。その一つひとつに、それぞれの記憶があります。
               </p>
               <p class="hero__lead">
                 勝った日も、届かなかった日も、誰かの背中を追いかけた日も。60年の歩みを振り返りながら、あの頃を知る仲間と再び語り合う一日です。
@@ -1690,33 +1834,211 @@
             </div>
           </div>
         </section>
+        <section class="memory-yearflow" id="memory-yearflow">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Seasonal Memory</span><span class="label-en">Year Flow</span></p>
+              <h2>一年の記憶をたどる</h2>
+              <p>春の新歓から、冬全のフロアまで。舞研の一年は、ただ大会が並ぶだけではありませんでした。新歓、理工戦、春東都、春東部、夏合宿、シャドーコンペ、カップル発表、松前杯、理大祭、桜凛祭、冬全、そして春合宿へ。季節ごとに、期待、悔しさ、高揚、迷い、誇りがありました。</p>
+            </div>
 
-        <section class="memory-keywords" id="memory-keywords">
+            <div class="memory-yearflow-grid">
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">春</span>
+                <h3>新歓、ステップ講習会、理工戦</h3>
+                <p>4月の新歓。新歓ハイク、合同コンパ、各種交流、ステップ講習会。初めて聞く種目名、先輩の踊り、慣れない礼儀。5月には、1年生がワルツとジルバで理工戦デビューを迎えました。</p>
+                <div class="memory-season-card__keywords" aria-label="春のキーワード">
+                  <span>新歓ハイク</span><span>合同コンパ</span><span>ステップ講習会</span><span>理工戦</span><span>ワルツ</span><span>ジルバ</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">春のレギュラー戦</span>
+                <h3>春東都、春東部、そして夏全へ</h3>
+                <p>2年生以上にとって春は、春東都、春東部へ向かう季節。団体成績、Ⅰ部校への昇格、夏全出場の可能性。その結果が、次の景色を大きく変えていきました。</p>
+                <div class="memory-season-card__keywords" aria-label="春のレギュラー戦のキーワード">
+                  <span>春東都</span><span>春東部</span><span>Ⅰ部校</span><span>夏全</span><span>団体成績</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">夏</span>
+                <h3>夏合宿とシャドーコンペ</h3>
+                <p>夏合宿は、体力も気持ちも試される時間でした。最終日のシャドーコンペに向けて、踊り込み、先輩からの厳しい声、何度も繰り返したワルツのボックス。つらかったはずなのに、なぜか今も鮮明に残っている記憶です。</p>
+                <div class="memory-season-card__keywords" aria-label="夏のキーワード">
+                  <span>夏合宿</span><span>シャドーコンペ</span><span>一時間モノ</span><span>ワルツのボックス</span><span>踊り込み</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">夏合宿後</span>
+                <h3>カップル発表</h3>
+                <p>シャドーコンペの結果を受けて、翌日に発表されるカップル。期待した人、悔しさを抱えた人、続けるかどうか迷った人。それぞれの気持ちを抱えたまま、秋初戦へ向かっていきました。</p>
+                <div class="memory-season-card__keywords" aria-label="カップル発表のキーワード">
+                  <span>カップル発表</span><span>組むこと</span><span>組めなかったこと</span><span>期待</span><span>悔しさ</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">秋初戦</span>
+                <h3>松前杯、秋東都、秋東部</h3>
+                <p>秋初戦の松前杯。新しいカップルで迎える最初の試合。秋東都、秋東部へ進む中で、レギュラーに選ばれること、選ばれないこと、結果表の前で味わう一喜一憂がありました。あと一チェックで届かなかった日もありました。</p>
+                <div class="memory-season-card__keywords" aria-label="秋初戦のキーワード">
+                  <span>松前杯</span><span>秋東都</span><span>秋東部</span><span>レギュラー戦</span><span>結果表</span><span>あと一チェック</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">秋のイベント</span>
+                <h3>理大祭、桜凛祭、デモと出店</h3>
+                <p>競技だけが舞研ではありませんでした。理大祭や桜凛祭でのデモ披露、出店、準備、片付け。試合とは違う表情で、仲間と過ごした秋の記憶もあります。</p>
+                <div class="memory-season-card__keywords" aria-label="秋イベントのキーワード">
+                  <span>理大祭</span><span>桜凛祭</span><span>デモ披露</span><span>出店</span><span>仲間との時間</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card memory-season-card--winter">
+                <span class="memory-season-card__season">冬</span>
+                <h3>冬全、ファイナルソロ、オナーダンス</h3>
+                <p>4年生にとって、冬全は大きなクライマックスでした。最後の追い込み、予選のチェック数、あと一歩で届かなかった悔しさ、ファイナルソロに立つ誇り。そして、人によっては優勝後のオナーダンスへ。舞研生活のすべてが集まるような一日でした。</p>
+                <div class="memory-season-card__keywords" aria-label="冬のキーワード">
+                  <span>冬全</span><span>チェック数</span><span>あと一チェック</span><span>ファイナルソロ</span><span>オナーダンス</span><span>優勝</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">冬全後〜春</span>
+                <h3>春合宿、新体制、次の新歓へ</h3>
+                <p>冬全が終わると、4年生が抜けた少し寂しい春合宿。新しい幹部、新しい体制、新しい練習場の空気。そしてまた4月、新歓が始まる。そうして舞研の一年は、次の世代へ受け継がれていきました。</p>
+                <div class="memory-season-card__keywords" aria-label="次の春のキーワード">
+                  <span>春合宿</span><span>新幹部</span><span>新体制</span><span>4年生が抜けた後</span><span>新歓</span><span>次の世代</span>
+                </div>
+              </article>
+            </div>
+
+            <div class="memory-mini-photo-grid">
+              <figure class="memory-photo-card memory-mini-photo-card">
+                <div class="memory-photo-placeholder" role="img" aria-label="夏合宿の写真を掲載予定">
+                  <span class="memory-photo-label">写真準備中</span>
+                </div>
+                <figcaption class="memory-photo-caption">夏合宿の記憶</figcaption>
+                <p class="memory-photo-note">シャドーコンペ、踊り込み、集合写真などを掲載予定</p>
+              </figure>
+
+              <figure class="memory-photo-card memory-mini-photo-card">
+                <div class="memory-photo-placeholder" role="img" aria-label="秋イベントの写真を掲載予定">
+                  <span class="memory-photo-label">写真準備中</span>
+                </div>
+                <figcaption class="memory-photo-caption">秋のイベント</figcaption>
+                <p class="memory-photo-note">理大祭、桜凛祭、デモ披露、出店などを掲載予定</p>
+              </figure>
+
+              <figure class="memory-photo-card memory-mini-photo-card">
+                <div class="memory-photo-placeholder" role="img" aria-label="冬全の写真を掲載予定">
+                  <span class="memory-photo-label">写真準備中</span>
+                </div>
+                <figcaption class="memory-photo-caption">冬全のフロア</figcaption>
+                <p class="memory-photo-note">ファイナルソロ、オナーダンス、4年生の最後の一曲などを掲載予定</p>
+              </figure>
+            </div>
+          </div>
+        </section>
+                <section class="memory-keywords" id="memory-keywords">
           <div class="wrap">
             <div class="section-head">
               <p class="eyebrow"><span class="label-ja">Keywords</span><span class="label-en">Memory Cues</span></p>
               <h2>記憶のキーワード</h2>
-              <p>一人ひとりの舞研生活は違っていても、フロアに立った人にしか分からない言葉があります。</p>
+              <p>言葉を見ただけで、音楽や練習場の空気まで思い出す。そんな舞研だけの言葉を、少しずつ並べました。</p>
             </div>
 
-            <div class="keyword-list" aria-label="記憶のキーワード">
-              <span class="keyword-chip">背番号</span>
-              <span class="keyword-chip">レギュラー戦</span>
-              <span class="keyword-chip">練習場</span>
-              <span class="keyword-chip">先輩の背中</span>
-              <span class="keyword-chip">同期の存在</span>
-              <span class="keyword-chip">組み替え</span>
-              <span class="keyword-chip">結果表</span>
-              <span class="keyword-chip">フォーメーション</span>
-              <span class="keyword-chip">夏全・冬全</span>
-              <span class="keyword-chip">研究と練習</span>
-              <span class="keyword-chip">怪我との付き合い</span>
-              <span class="keyword-chip">最後の一曲</span>
+            <div class="keyword-group-grid">
+              <article class="keyword-group">
+                <h3>試合と結果</h3>
+                <div class="keyword-list" aria-label="試合と結果のキーワード">
+                  <span class="keyword-chip">背番号</span>
+                  <span class="keyword-chip">レギュラー戦</span>
+                  <span class="keyword-chip">春東都</span>
+                  <span class="keyword-chip">春東部</span>
+                  <span class="keyword-chip">秋東都</span>
+                  <span class="keyword-chip">秋東部</span>
+                  <span class="keyword-chip keyword-chip--accent">夏全</span>
+                  <span class="keyword-chip keyword-chip--accent">冬全</span>
+                  <span class="keyword-chip">松前杯</span>
+                  <span class="keyword-chip">チェック数</span>
+                  <span class="keyword-chip keyword-chip--accent">あと一チェック</span>
+                  <span class="keyword-chip">結果表</span>
+                  <span class="keyword-chip keyword-chip--accent">ファイナルソロ</span>
+                  <span class="keyword-chip keyword-chip--accent">オナーダンス</span>
+                </div>
+              </article>
+
+              <article class="keyword-group">
+                <h3>合宿と練習</h3>
+                <div class="keyword-list" aria-label="合宿と練習のキーワード">
+                  <span class="keyword-chip keyword-chip--accent">夏合宿</span>
+                  <span class="keyword-chip">春合宿</span>
+                  <span class="keyword-chip keyword-chip--accent">シャドーコンペ</span>
+                  <span class="keyword-chip">一時間モノ</span>
+                  <span class="keyword-chip">ワルツのボックス</span>
+                  <span class="keyword-chip">踊り込み</span>
+                  <span class="keyword-chip">練習場</span>
+                  <span class="keyword-chip">ステップ講習会</span>
+                  <span class="keyword-chip">曲かけ</span>
+                  <span class="keyword-chip">先輩の声</span>
+                  <span class="keyword-chip">最後の追い込み</span>
+                </div>
+              </article>
+
+              <article class="keyword-group">
+                <h3>カップルとチーム</h3>
+                <div class="keyword-list" aria-label="カップルとチームのキーワード">
+                  <span class="keyword-chip keyword-chip--accent">カップル発表</span>
+                  <span class="keyword-chip">組み替え</span>
+                  <span class="keyword-chip">誰と踊るのか</span>
+                  <span class="keyword-chip">同期の存在</span>
+                  <span class="keyword-chip">先輩の背中</span>
+                  <span class="keyword-chip">後輩に見られる立場</span>
+                  <span class="keyword-chip">フォーメーション</span>
+                  <span class="keyword-chip">幹部交代</span>
+                  <span class="keyword-chip">新体制</span>
+                </div>
+              </article>
+
+              <article class="keyword-group">
+                <h3>イベントと日常</h3>
+                <div class="keyword-list" aria-label="イベントと日常のキーワード">
+                  <span class="keyword-chip">新歓</span>
+                  <span class="keyword-chip">新歓ハイク</span>
+                  <span class="keyword-chip">合同コンパ</span>
+                  <span class="keyword-chip">理工戦</span>
+                  <span class="keyword-chip keyword-chip--accent">理大祭</span>
+                  <span class="keyword-chip keyword-chip--accent">桜凛祭</span>
+                  <span class="keyword-chip">デモ披露</span>
+                  <span class="keyword-chip">出店</span>
+                  <span class="keyword-chip">集合写真</span>
+                  <span class="keyword-chip">最後の一曲</span>
+                </div>
+              </article>
+
+              <article class="keyword-group" style="grid-column: 1 / -1;">
+                <h3>それぞれの記憶</h3>
+                <div class="keyword-list" aria-label="それぞれの記憶のキーワード">
+                  <span class="keyword-chip">期待</span>
+                  <span class="keyword-chip">悔しさ</span>
+                  <span class="keyword-chip">高揚</span>
+                  <span class="keyword-chip">緊張</span>
+                  <span class="keyword-chip">涙</span>
+                  <span class="keyword-chip">研究と練習</span>
+                  <span class="keyword-chip">単位と練習</span>
+                  <span class="keyword-chip">怪我との付き合い</span>
+                  <span class="keyword-chip">続けるか迷った日</span>
+                  <span class="keyword-chip">今なら笑える話</span>
+                </div>
+              </article>
             </div>
 
             <div class="memory-photo-grid memory-photo-grid--three" style="margin-top: 22px;">
               <figure class="memory-photo-card">
-                <!-- ここに画像を追加可能 -->
                 <div class="memory-photo-placeholder" role="img" aria-label="競技会の記憶の写真準備中">
                   <span class="memory-photo-label">写真準備中</span>
                 </div>
@@ -1725,7 +2047,6 @@
               </figure>
 
               <figure class="memory-photo-card">
-                <!-- ここに画像を追加可能 -->
                 <div class="memory-photo-placeholder" role="img" aria-label="練習場の記憶の写真準備中">
                   <span class="memory-photo-label">写真準備中</span>
                 </div>
@@ -1734,7 +2055,6 @@
               </figure>
 
               <figure class="memory-photo-card">
-                <!-- ここに画像を追加可能 -->
                 <div class="memory-photo-placeholder" role="img" aria-label="仲間との記憶の写真準備中">
                   <span class="memory-photo-label">写真準備中</span>
                 </div>
@@ -1810,9 +2130,9 @@
                 <p>同期、先輩、後輩、現役生、関係者の皆さまが集い、東京理科大学舞踏研究部の60年を祝う場として開催いたします。</p>
               </div>
 
-              <div class="story-mark">
+                            <div class="story-mark">
                 <strong>ANNIVERSARY MESSAGE</strong>
-                <p>華やかなフロアの奥にあった時間も、今なら笑って語り合える。そんな再会のきっかけになる一日を目指します。</p>
+                <p>華やかなフロアの奥にあった時間も、夏合宿の踊り込みも、結果表の前で止まった言葉も。今なら笑って語り合える。そんな再会のきっかけになる一日を目指します。</p>
               </div>
             </div>
           </div>
@@ -1826,13 +2146,15 @@
               <p>久しぶりの方も、最近は少し離れていた方も。あの時間を少しでも共有した方に、気軽に参加していただける場を目指しています。</p>
             </div>
 
-            <div class="welcome-grid">
+                        <div class="welcome-grid">
               <article class="welcome-card"><p>卒部以来、舞研の集まりから少し離れていた方</p></article>
               <article class="welcome-card"><p>久しぶりに同期や先輩・後輩に会いたい方</p></article>
               <article class="welcome-card"><p>現役時代の写真や記録を見返したい方</p></article>
               <article class="welcome-card"><p>当時は話せなかった思い出を、今なら少し話せそうな方</p></article>
               <article class="welcome-card"><p>現役生や若い世代の舞研を応援したい方</p></article>
               <article class="welcome-card"><p>踊る・踊らないに関わらず、理科大舞研の60年を一緒に祝いたい方</p></article>
+              <article class="welcome-card"><p>シャドーコンペ、夏合宿、冬全という言葉に、少しでも胸が動く方</p></article>
+              <article class="welcome-card"><p>理大祭や桜凛祭、出店やデモの記憶を誰かと話したい方</p></article>
             </div>
 
             <p class="welcome-note">踊れるかどうか、最近つながりがあるかどうかは問いません。あの時間を少しでも共有した方に、気軽に参加していただける場を目指しています。</p>
@@ -1949,6 +2271,7 @@
 <!-- MOBILE_NAV_SCRIPT_END -->
   </body>
 </html>
+
 
 
 
