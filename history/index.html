@@ -1260,7 +1260,312 @@
           scroll-behavior: auto;
         }
       }</style>
-    <!-- REVIEW_HISTORY_MOTION_STYLE_END --></head>
+    <!-- REVIEW_HISTORY_MOTION_STYLE_END -->      <!-- REVIEW_HISTORY_LINK_STYLE_START -->
+      <style>
+        .history-jump-desktop {
+          display: block;
+          margin-top: 28px;
+        }
+
+        .history-jump-mobile {
+          display: none;
+          margin-top: 24px;
+        }
+
+        .history-jump__label {
+          margin: 0 0 10px;
+          color: #f3d78d;
+          font-size: 0.82rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .history-jump__links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .history-jump__links a {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          min-height: 42px;
+          padding: 0 16px;
+          border: 1px solid rgba(138, 106, 0, 0.35);
+          border-radius: 999px;
+          background: #fffaf0;
+          color: #2b2418;
+          font-size: 0.92rem;
+          font-weight: 800;
+          text-decoration: none;
+        }
+
+        .history-jump__links a::after {
+          content: "↓";
+          font-size: 0.82em;
+          color: #8a6a00;
+        }
+
+        .history-jump__links a[href="./context/"]::after {
+          content: "→";
+        }
+
+        .history-jump-mobile__primary {
+          margin: 0;
+        }
+
+        .history-jump-mobile__primary .button {
+          min-height: 46px;
+        }
+
+        .history-jump-details {
+          margin-top: 12px;
+          border: 1px solid rgba(138, 106, 0, 0.28);
+          border-radius: 18px;
+          background: rgba(255, 255, 255, 0.06);
+        }
+
+        .history-jump-details summary {
+          display: flex;
+          align-items: center;
+          min-height: 46px;
+          padding: 12px 16px;
+          cursor: pointer;
+          color: #ffffff;
+          font-weight: 800;
+          list-style: none;
+        }
+
+        .history-jump-details summary::-webkit-details-marker {
+          display: none;
+        }
+
+        .history-jump-details[open] summary {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .history-jump-details .history-jump__links {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 10px;
+          padding: 12px 14px 14px;
+        }
+
+        .history-jump-details .history-jump__links a {
+          justify-content: flex-start;
+          min-height: 44px;
+        }
+
+        .decade-nav {
+          margin-top: 16px;
+          padding: 14px;
+          border-radius: 18px;
+          background: rgba(254, 192, 0, 0.08);
+        }
+
+        .decade-nav__label {
+          margin: 0 0 8px;
+          font-size: 0.78rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          color: #f3d78d;
+          text-transform: uppercase;
+        }
+
+        .history-flow-chips {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .history-flow-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          min-height: 34px;
+          padding: 0 10px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.04);
+          color: #ffffff;
+          font-weight: 800;
+          text-decoration: underline;
+          text-decoration-thickness: 1.5px;
+          text-underline-offset: 4px;
+        }
+
+        .history-flow-chip::after {
+          content: "↓";
+          font-size: 0.82em;
+          color: #fec000;
+        }
+
+        .history-flow-chip.is-active {
+          color: #ffd867;
+          background: rgba(254, 192, 0, 0.12);
+          text-decoration-thickness: 2px;
+        }
+
+        .history-cta-card,
+        .history-context-cta {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          gap: 18px;
+          align-items: center;
+          margin-top: 18px;
+          padding: 22px;
+          border-radius: 24px;
+          box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
+        }
+
+        .history-cta-card {
+          background: linear-gradient(180deg, #fff8e4 0%, #fffdf7 100%);
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .history-cta-card__copy {
+          display: grid;
+          gap: 6px;
+        }
+
+        .history-cta-card__eyebrow,
+        .history-context-cta__eyebrow {
+          display: inline-block;
+          color: #6f5600;
+          font-size: 0.76rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .history-cta-card strong,
+        .history-context-cta h3 {
+          color: var(--history-head);
+          font-size: 1.1rem;
+          line-height: 1.35;
+        }
+
+        .history-cta-card span,
+        .history-context-cta p {
+          color: var(--history-text);
+          line-height: 1.78;
+        }
+
+        .history-cta-card em,
+        .history-cta-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 46px;
+          padding: 0 18px;
+          border-radius: 999px;
+          background: #fec000;
+          color: #191f2a;
+          font-style: normal;
+          font-weight: 800;
+          text-decoration: none;
+          white-space: nowrap;
+        }
+
+        .history-context-cta {
+          background: linear-gradient(180deg, #fff7de 0%, #fffdf8 100%);
+        }
+
+        .history-context-cta__copy {
+          display: grid;
+          gap: 6px;
+        }
+
+        .history-context-cta h3,
+        .history-context-cta p {
+          margin: 0;
+        }
+
+        .history-cta-card,
+        .history-context-cta .history-cta-button,
+        .history-jump__links a,
+        .history-flow-chip {
+          transition: transform 0.16s ease, background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
+        }
+
+        .history-cta-card:hover,
+        .history-cta-card:focus-visible,
+        .history-jump__links a:hover,
+        .history-jump__links a:focus-visible,
+        .history-flow-chip:hover,
+        .history-flow-chip:focus-visible,
+        .history-context-cta .history-cta-button:hover,
+        .history-context-cta .history-cta-button:focus-visible {
+          transform: translateY(-1px);
+          box-shadow: 0 16px 34px rgba(12, 18, 28, 0.14);
+        }
+
+        .history-jump__links a:hover,
+        .history-jump__links a:focus-visible {
+          background: #fec000;
+          color: #191f2a;
+        }
+
+        .history-flow-chip:hover,
+        .history-flow-chip:focus-visible {
+          background: rgba(254, 192, 0, 0.18);
+          color: #ffffff;
+        }
+
+        .history-cta-card:focus-visible,
+        .history-cta-button:focus-visible,
+        .history-jump__links a:focus-visible,
+        .history-flow-chip:focus-visible,
+        .history-jump-details summary:focus-visible {
+          outline: 3px solid rgba(254, 192, 0, 0.45);
+          outline-offset: 3px;
+        }
+
+        .history-flow-badge,
+        .history-bib,
+        .history-kpi,
+        .history-digital-stat,
+        .history-era__year {
+          cursor: default;
+        }
+
+        .history-supplement-note p:last-of-type {
+          margin-bottom: 0;
+        }
+
+        @media (max-width: 860px) {
+          .history-jump-desktop {
+            display: none;
+          }
+
+          .history-jump-mobile {
+            display: block;
+          }
+        }
+
+        @media (max-width: 760px) {
+          .history-cta-card,
+          .history-context-cta {
+            grid-template-columns: 1fr;
+            gap: 14px;
+          }
+
+          .history-cta-card em,
+          .history-context-cta .history-cta-button {
+            width: 100%;
+            min-height: 46px;
+            justify-content: center;
+          }
+
+          .history-jump-details summary {
+            min-height: 46px;
+          }
+        }
+      </style>
+      <!-- REVIEW_HISTORY_LINK_STYLE_END -->
+</head>
   <body>
 <!-- REVIEW_NOTICE_START -->
 <div class="review-notice">
@@ -1385,15 +1690,16 @@
 
           <p class="history-hero-footnote">※このページの人数は、FANTASISTAに記録された卒部生名簿のうち、卒部年度が確認できる560名を対象にしています。</p>
           <!-- REVIEW_HISTORY_HERO_STATS_END -->
-                                                                                                                        <!-- REVIEW_HISTORY_POLISH_JUMP_START -->
+                                                                                                                                  <!-- REVIEW_HISTORY_POLISH_JUMP_START -->
           <div class="history-jump-desktop">
-            <div class="history-jump">
+            <p class="history-jump__label">このページの目次</p>
+            <div class="history-jump__links">
               <a href="#history-flow">あゆみ</a>
               <a href="#history-data-story">名簿記録</a>
               <a href="#history-schools">共同加盟校</a>
               <a href="#history-numbers">背番号</a>
               <a href="#history-results">競技史</a>
-              <a href="#history-competition-context">競技ダンス史</a>
+              <a href="#history-competition-context">競技ダンスの補助線</a>
               <a href="#history-anniversary">60周年</a>
               <a href="./context/">競技ダンス背景資料</a>
             </div>
@@ -1406,13 +1712,13 @@
 
             <details class="history-jump-details">
               <summary>このページの目次を開く</summary>
-              <div class="history-jump">
+              <div class="history-jump__links">
                 <a href="#history-flow">あゆみ</a>
                 <a href="#history-data-story">名簿記録</a>
                 <a href="#history-schools">共同加盟校</a>
                 <a href="#history-numbers">背番号</a>
                 <a href="#history-results">競技史</a>
-                <a href="#history-competition-context">競技ダンス史</a>
+                <a href="#history-competition-context">競技ダンスの補助線</a>
                 <a href="#history-anniversary">60周年</a>
                 <a href="./context/">競技ダンス背景資料</a>
               </div>
@@ -1438,14 +1744,17 @@
                 <span class="history-flow-progress__bar" data-history-current-progress></span>
               </div>
 
-              <div class="history-flow-chips" aria-label="年代チップ">
-                <a class="history-flow-chip is-active" data-decade-chip="1960s" href="#history-prep">1960s</a>
-                <a class="history-flow-chip" data-decade-chip="1970s" href="#history-1970s">1970s</a>
-                <a class="history-flow-chip" data-decade-chip="1980s" href="#history-1980s">1980s</a>
-                <a class="history-flow-chip" data-decade-chip="1990s" href="#history-1996">1990s</a>
-                <a class="history-flow-chip" data-decade-chip="2000s" href="#history-2001">2000s</a>
-                <a class="history-flow-chip" data-decade-chip="2010s" href="#history-2010s">2010s</a>
-                <a class="history-flow-chip" data-decade-chip="2020s" href="#history-2020s">2020s</a>
+              <div class="decade-nav" aria-label="年代へ移動">
+                <p class="decade-nav__label">年代へ移動</p>
+                <div class="history-flow-chips" aria-label="年代チップ">
+                  <a class="history-flow-chip is-active" data-decade-chip="1960s" href="#history-prep">1960s</a>
+                  <a class="history-flow-chip" data-decade-chip="1970s" href="#history-1970s">1970s</a>
+                  <a class="history-flow-chip" data-decade-chip="1980s" href="#history-1980s">1980s</a>
+                  <a class="history-flow-chip" data-decade-chip="1990s" href="#history-1996">1990s</a>
+                  <a class="history-flow-chip" data-decade-chip="2000s" href="#history-2001">2000s</a>
+                  <a class="history-flow-chip" data-decade-chip="2010s" href="#history-2010s">2010s</a>
+                  <a class="history-flow-chip" data-decade-chip="2020s" href="#history-2020s">2020s</a>
+                </div>
               </div>
             </aside>
 
@@ -1709,7 +2018,14 @@
                 </div>
 
                 <p class="history-data-note">理科大Ⅱ部と女子栄養系はⅡ部舞研系、それ以外はⅠ部舞研系として整理しています。</p>
-                <a class="button button--ghost" href="../data/">関連する数字を見る</a>
+                                <a class="history-cta-card" href="../data/">
+                  <span class="history-cta-card__copy">
+                    <span class="history-cta-card__eyebrow">Data</span>
+                    <strong>卒部生データを見る</strong>
+                    <span>年代別の登録者数や世代の厚みを、データページで確認できます。</span>
+                  </span>
+                  <em>データページへ →</em>
+                </a>
               </article>
             </div>
           </div>
@@ -1864,9 +2180,14 @@
 
             <p class="history-data-note">正式名称や制度の詳しい説明は、背景資料ページの略称・用語欄で整理しています。</p>
 
-            <div class="history-supplement-actions">
-              <a class="button button--ghost" href="./context/#context-glossary">背景資料を見る</a>
-            </div>
+            <aside class="history-context-cta" aria-label="競技ダンス背景資料">
+              <div class="history-context-cta__copy">
+                <span class="history-context-cta__eyebrow">Context</span>
+                <h3>競技ダンス背景資料</h3>
+                <p>学連制度、夏全・冬全、背番号、種目やルールの変遷は、背景資料ページで整理しています。</p>
+              </div>
+              <a class="history-cta-button" href="./context/#context-glossary">背景資料を見る →</a>
+            </aside>
           </article>
         </div>
       </section>
@@ -2012,16 +2333,17 @@
 
             <article class="history-supplement-card">
               <h3>詳しい背景</h3>
-              <p>学連制度、夏全・冬全、背番号、種目やルールの背景は、別ページに整理しています。</p>
+              <p>詳しい制度と時代背景は、背景資料ページで整理しています。</p>
             </article>
           </div>
 
-          <article class="history-supplement-note">
-            <p>学連制度、夏全・冬全、背番号、種目やルールの背景は、別ページに整理しています。</p>
-
-            <div class="history-supplement-actions">
-              <a class="button button--ghost" href="./context/">競技ダンスと学生競技ダンスの背景を見る</a>
+          <article class="history-context-cta" aria-label="競技ダンス背景資料">
+            <div class="history-context-cta__copy">
+              <span class="history-context-cta__eyebrow">Context</span>
+              <h3>8種目時代から10種目化までの変遷を見る</h3>
+              <p>長く学生競技ダンスから離れていたOBOGに向けて、学連の種目変遷、大会形式、制度の変化を背景資料にまとめています。</p>
             </div>
+            <a class="history-cta-button" href="./context/">競技ダンスと学生競技ダンスの背景を見る →</a>
           </article>
         </div>
       </section>
@@ -2219,6 +2541,7 @@
 <!-- REVIEW_HISTORY_MOTION_SCRIPT_END -->
 </body>
 </html>
+
 
 
 
