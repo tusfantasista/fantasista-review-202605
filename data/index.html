@@ -3379,17 +3379,16 @@
         }
       }
     </style>
-    <!-- REVIEW_DATA_LINK_VISUAL_END -->
-    <!-- REVIEW_DATA_INSIGHT_STYLE_START -->
+    <!-- REVIEW_DATA_LINK_VISUAL_END -->    <!-- REVIEW_DATA_OVERVIEW_REFRAME_STYLE_START -->
     <style>
-      .data-overview-layout {
+      .overview-highlight-layout {
         display: grid;
         grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
         gap: 18px;
         align-items: stretch;
       }
 
-      .data-overview__lead-card {
+      .overview-lead-card {
         padding: 28px 26px;
         border-radius: 28px;
         background: linear-gradient(180deg, #191f2a 0%, #262c36 100%);
@@ -3397,7 +3396,7 @@
         color: #ffffff;
       }
 
-      .data-overview__eyebrow {
+      .overview-lead-card__eyebrow {
         display: block;
         margin-bottom: 10px;
         color: #f3d78d;
@@ -3407,36 +3406,35 @@
         text-transform: uppercase;
       }
 
-      .data-lead-number {
+      .overview-lead-card__number {
         display: block;
-        margin: 0;
         color: #ffffff;
+        font-family: "Oswald", sans-serif;
         font-size: clamp(3rem, 6vw, 5.8rem);
         line-height: 1;
-        font-family: "Oswald", sans-serif;
         letter-spacing: 0.02em;
       }
 
-      .data-overview__lead-card p {
+      .overview-lead-card p {
         margin: 14px 0 0;
         color: rgba(255, 255, 255, 0.84);
         line-height: 1.85;
       }
 
-      .data-insight-grid {
+      .overview-insight-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
       }
 
-      .data-insight-card {
+      .overview-insight-card {
         padding: 22px 20px;
         border-radius: 24px;
         background: #ffffff;
         box-shadow: 0 16px 34px rgba(12, 18, 28, 0.08);
       }
 
-      .data-insight-card__eyebrow {
+      .overview-insight-card__eyebrow {
         display: block;
         margin-bottom: 10px;
         color: #8a6a00;
@@ -3446,14 +3444,14 @@
         text-transform: uppercase;
       }
 
-      .data-insight-card strong {
+      .overview-insight-card strong {
         display: block;
         color: #191f2a;
         font-size: clamp(1.9rem, 3.2vw, 3rem);
         line-height: 1.08;
       }
 
-      .data-insight-card__sub {
+      .overview-insight-card__sub {
         display: block;
         margin-top: 8px;
         color: #5f6671;
@@ -3462,26 +3460,26 @@
         line-height: 1.55;
       }
 
-      .data-insight-card p {
+      .overview-insight-card p {
         margin: 12px 0 0;
         color: #59606b;
         line-height: 1.78;
       }
 
-      .paired-stat {
+      .overview-pair {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
         margin-top: 4px;
       }
 
-      .paired-stat__item {
+      .overview-pair__item {
         padding: 14px 12px;
         border-radius: 18px;
         background: #f8fafc;
       }
 
-      .paired-stat__label {
+      .overview-pair__label {
         display: block;
         margin-bottom: 6px;
         color: #6f5600;
@@ -3491,57 +3489,57 @@
         text-transform: uppercase;
       }
 
-      .paired-stat__value {
+      .overview-pair__value {
         display: block;
         color: #191f2a;
         font-size: clamp(1.8rem, 3vw, 2.8rem);
         line-height: 1.05;
       }
 
-      .mini-bar-compare {
+      .overview-mini-bars {
         display: grid;
         gap: 12px;
         margin-top: 6px;
       }
 
-      .mini-bar {
+      .overview-mini-bar {
         display: grid;
         gap: 6px;
       }
 
-      .mini-bar__head {
+      .overview-mini-bar__head {
         display: flex;
         align-items: baseline;
         justify-content: space-between;
         gap: 10px;
       }
 
-      .mini-bar__head b {
+      .overview-mini-bar__head b {
         color: #191f2a;
         font-size: 0.92rem;
       }
 
-      .mini-bar__head span {
+      .overview-mini-bar__head span {
         color: #5f6671;
         font-size: 0.9rem;
         font-weight: 700;
       }
 
-      .mini-bar__track {
+      .overview-mini-bar__track {
         height: 10px;
         border-radius: 999px;
         background: rgba(25, 31, 42, 0.08);
         overflow: hidden;
       }
 
-      .mini-bar__fill {
+      .overview-mini-bar__fill {
         display: block;
         height: 100%;
         border-radius: inherit;
         background: linear-gradient(90deg, #fec000 0%, #c89200 100%);
       }
 
-      .data-collection-note {
+      .overview-collection-note {
         margin-top: 20px;
         padding: 18px 20px;
         border-radius: 20px;
@@ -3549,7 +3547,7 @@
         background: linear-gradient(180deg, #fffdfa 0%, #fff7ea 100%);
       }
 
-      .data-collection-note__label {
+      .overview-collection-note__label {
         display: inline-block;
         margin-bottom: 8px;
         color: #6f5600;
@@ -3559,99 +3557,33 @@
         text-transform: uppercase;
       }
 
-      .data-collection-note p {
+      .overview-collection-note p {
         margin: 0;
         color: #59606b;
         line-height: 1.82;
       }
 
-      .data-collection-note p + p {
+      .overview-collection-note p + p {
         margin-top: 8px;
       }
 
-      .specialty-compare-layout {
-        display: grid;
-        gap: 18px;
-      }
-
-      .specialty-context {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        min-height: 34px;
-        padding: 0 12px;
-        border-radius: 999px;
-        background: rgba(254, 192, 0, 0.12);
-        color: #5f4700;
-        font-size: 0.9rem;
-        font-weight: 800;
-      }
-
-      .specialty-context span {
-        color: #191f2a;
-      }
-
-      .specialty-pair-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-      }
-
-      .specialty-pair-card {
-        padding: 20px 18px;
-        border-radius: 22px;
-        background: #ffffff;
-        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.08);
-      }
-
-      .specialty-pair-card span {
-        display: block;
-        margin-bottom: 8px;
-        color: #8a6a00;
-        font-size: 0.8rem;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .specialty-pair-card strong {
-        display: block;
-        color: #191f2a;
-        font-size: clamp(1.9rem, 3vw, 3rem);
-        line-height: 1.08;
-      }
-
-      .specialty-pair-card p {
-        margin: 10px 0 0;
-        color: #59606b;
-        line-height: 1.7;
-        font-weight: 700;
-      }
-
-      .specialty-note {
-        margin: 0;
-        color: #6a7079;
-        line-height: 1.8;
-      }
-
       @media (max-width: 1024px) {
-        .data-overview-layout {
+        .overview-highlight-layout {
           grid-template-columns: 1fr;
         }
       }
 
       @media (max-width: 760px) {
-        .data-insight-grid,
-        .specialty-pair-grid {
+        .overview-insight-grid {
           grid-template-columns: 1fr;
         }
 
-        .paired-stat {
+        .overview-pair {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
     </style>
-    <!-- REVIEW_DATA_INSIGHT_STYLE_END -->
+    <!-- REVIEW_DATA_OVERVIEW_REFRAME_STYLE_END -->
 </head>
   <body>
 <!-- REVIEW_NOTICE_START -->
@@ -3715,74 +3647,86 @@
         </div>
       </section>
 
-      <section class="page-section stats-section">
+            <section class="page-section stats-section" id="data-overview">
         <div class="container">
-          <div class="stats-panel">
-            <div class="stats-intro">
-              <div class="stats-head">
-                <p class="stats-head__kicker"><span class="label-ja">全体像</span><span class="label-en">Overview</span></p>
-                <h2>FANTASISTA会の広がりを、ひと目で</h2>
-                <p>歴史の長さ、人数規模、男女バランス、専攻、学校系統まで。集計済みの統計データだけを使い、FANTASISTA会の輪郭を見渡せるように整理しました。</p>
-              </div>
-              <ul class="stats-notes">
-                <li>※表示している数値は、個人が特定されないよう集計済みデータのみを使用しています。</li>
-                <li>※2020年代の人数は、2025年までの途中集計です。</li>
-              </ul>
+          <div class="stats-panel stats-panel--white">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">全体像</span><span class="label-en">Overview</span></p>
+              <h2>FANTASISTAの広がりを、数字で見る</h2>
+              <p>登録者数だけでなく、世代の厚み、人数の山、男女・所属系統のバランスから、FANTASISTA会の60年を読み解きます。</p>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <!-- REVIEW_DEVICE_ADVICE_START -->
-      <section class="page-section stats-section device-advice-section" aria-label="閲覧案内">
-        <div class="container">
-          <aside class="viewing-note" aria-label="表示について">
-            <span class="viewing-note__label">表示について</span>
-            <h3>スマートフォン・タブレットで見づらい場合</h3>
-            <p>年表・ヒートマップ・4年ローリングは、PCの方が見やすくなっています。スマホでは簡易表示も用意しています。</p>
-            <p>横向き表示や横スクロールでも見づらい場合は、同じページをPCブラウザでご覧ください。</p>
-          </aside>
-        </div>
-      </section>
-      <!-- REVIEW_DEVICE_ADVICE_END -->
-      <section class="page-section page-section--light stats-section">
-        <div class="container">
-          <div class="stats-grid">
-            <article class="stat-card">
-              <span>名簿登録者数</span>
-              <strong>562名</strong>
-              <p>賛助会員を含む登録総数です。</p>
-            </article>
+            <div class="overview-highlight-layout">
+              <article class="overview-lead-card">
+                <span class="overview-lead-card__eyebrow">名簿登録者総数</span>
+                <strong class="overview-lead-card__number">562名</strong>
+                <p>賛助会員を含む登録総数です。</p>
+                <p>卒部年度別の集計は、卒部年度が確認できる560名を対象にしています。</p>
+              </article>
 
-            <article class="stat-card">
-              <span>対象年度</span>
-              <strong><span class="stat-range">1968年〜</span><span class="stat-break">2025年</span></strong>
-              <p>58年分の歩みです。</p>
-            </article>
+              <div class="overview-insight-grid">
+                <article class="overview-insight-card">
+                  <span class="overview-insight-card__eyebrow">最多の年代</span>
+                  <strong>2000年代</strong>
+                  <span class="overview-insight-card__sub">133名 / 23.8%</span>
+                  <p>通常の年代区切りでは、2000年代卒が最も人数の厚い年代です。</p>
+                </article>
 
-            <article class="stat-card">
-              <span>卒部年度データあり</span>
-              <strong>560名</strong>
-              <p>年代別・年表集計の対象です。</p>
-            </article>
+                <article class="overview-insight-card">
+                  <span class="overview-insight-card__eyebrow">最も厚かった4年間</span>
+                  <strong>68名</strong>
+                  <span class="overview-insight-card__sub">2002〜2005年卒<br />2003〜2006年卒</span>
+                  <p>大学4年間をひとまとまりで見ると、2000年代前半に最大の世代の重なりが見えます。</p>
+                </article>
 
-            <article class="stat-card">
-              <span>男女比</span>
-              <strong>男277名<span class="stat-subline">女285名</span></strong>
-              <p>ほぼ半々のバランスです。</p>
-            </article>
+                <article class="overview-insight-card">
+                  <span class="overview-insight-card__eyebrow">男女構成</span>
+                  <div class="overview-pair" aria-label="男女構成">
+                    <div class="overview-pair__item">
+                      <b class="overview-pair__label">男</b>
+                      <strong class="overview-pair__value">277名</strong>
+                    </div>
+                    <div class="overview-pair__item">
+                      <b class="overview-pair__label">女</b>
+                      <strong class="overview-pair__value">285名</strong>
+                    </div>
+                  </div>
+                  <p>名簿登録者全体562名ベースで、男女がほぼ同数です。</p>
+                </article>
 
-            <article class="stat-card">
-              <span>専攻登録あり</span>
-              <strong>306名</strong>
-              <p>スタンダード133名 / ラテン173名です。</p>
-            </article>
+                <article class="overview-insight-card">
+                  <span class="overview-insight-card__eyebrow">2つの舞研系統</span>
+                  <div class="overview-mini-bars" aria-label="2つの舞研系統">
+                    <div class="overview-mini-bar">
+                      <div class="overview-mini-bar__head">
+                        <b>Ⅰ部舞研系</b>
+                        <span>372名 / 66.4%</span>
+                      </div>
+                      <div class="overview-mini-bar__track"><span class="overview-mini-bar__fill" style="width: 66.4%;"></span></div>
+                    </div>
 
-            <article class="stat-card">
-              <span>舞研系統</span>
-              <strong>Ⅰ部舞研系 372名<span class="stat-subline">Ⅱ部舞研系 188名</span></strong>
-              <p>当時の所属母体による2分類です。</p>
-            </article>
+                    <div class="overview-mini-bar">
+                      <div class="overview-mini-bar__head">
+                        <b>Ⅱ部舞研系</b>
+                        <span>188名 / 33.6%</span>
+                      </div>
+                      <div class="overview-mini-bar__track"><span class="overview-mini-bar__fill" style="width: 33.6%;"></span></div>
+                    </div>
+                  </div>
+                  <p>当時の所属母体による2つの流れです。</p>
+                </article>
+              </div>
+            </div>
+
+            <aside class="overview-collection-note" aria-label="集計対象について">
+              <span class="overview-collection-note__label">集計対象について</span>
+              <p>このページでは、名簿登録者総数562名のうち、卒部年度が確認できる560名を年代別・年表・4年ローリングの集計対象としています。専攻別集計は、専攻登録がある306名を対象にしています。卒部年度が確認できる記録は1968年卒から2025年卒までです。</p>
+            </aside>
+
+            <ul class="stats-notes" style="margin-top: 16px;">
+              <li>※表示している数値は、個人が特定されないよう集計済みデータのみを使用しています。</li>
+              <li>※2020年代の人数は、2025年までの途中集計です。</li>
+            </ul>
           </div>
         </div>
       </section>
@@ -4204,7 +4148,22 @@
         </div>
       </section>
 
-      <section class="page-section page-section--light stats-section">
+      
+
+      <!-- REVIEW_DEVICE_ADVICE_START -->
+      <section class="page-section stats-section device-advice-section" aria-label="閲覧案内">
+        <div class="container">
+          <aside class="viewing-note" aria-label="表示について">
+            <span class="viewing-note__label">表示について</span>
+            <h3>スマートフォン・タブレットで見づらい場合</h3>
+            <p>年表・ヒートマップ・4年ローリングは、PCの方が見やすくなっています。スマホでは簡易表示も用意しています。</p>
+            <p>横向き表示や横スクロールでも見づらい場合は、同じページをPCブラウザでご覧ください。</p>
+          </aside>
+        </div>
+      </section>
+      <!-- REVIEW_DEVICE_ADVICE_END -->
+      
+<section class="page-section page-section--light stats-section">
         <div class="container heatmap-layout">
           <div class="stats-panel">
             <div class="stats-head">
@@ -4994,6 +4953,7 @@
     </script>
 </body>
 </html>
+
 
 
 
