@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&amp;family=Oswald:wght@500;600;700&amp;display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../../assets/css/style.css" />
@@ -23,14 +23,17 @@
         --context-head: #191f2a;
         --context-text: #59606b;
         --context-gold: #fec000;
+        --context-navy: #2e4571;
+        --context-wine: #70263f;
+        --context-cream: #fffaf0;
+        --context-line: rgba(25, 31, 42, 0.10);
       }
 
       .context-hero {
         position: relative;
         overflow: hidden;
         background:
-          radial-gradient(circle at 16% 18%, rgba(254, 192, 0, 0.18), transparent 24%),
-          radial-gradient(circle at 84% 16%, rgba(254, 192, 0, 0.10), transparent 20%),
+          linear-gradient(135deg, rgba(112, 38, 63, 0.38) 0%, rgba(46, 69, 113, 0.28) 48%, rgba(13, 15, 19, 0) 100%),
           linear-gradient(180deg, #0d0f13 0%, #1a1e26 100%);
       }
 
@@ -55,10 +58,40 @@
         line-height: 1.9;
       }
 
+      .context-hero-tagline {
+        max-width: 760px;
+        margin: 18px 0 0;
+        color: #f8d881;
+        font-size: clamp(1.18rem, 2.2vw, 1.72rem);
+        font-weight: 800;
+        line-height: 1.45;
+      }
+
+      .context-hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+      }
+
+      .context-hero-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 12px;
+        border: 1px solid rgba(254, 192, 0, 0.28);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
+
+      .context-hero-actions,
       .context-jump {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 12px;
         margin-top: 26px;
       }
 
@@ -144,6 +177,490 @@
         margin: 0;
         color: var(--context-text);
         line-height: 1.85;
+      }
+
+      .context-toc {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        width: min(100%, 980px);
+        margin-top: 32px;
+      }
+
+      .context-toc a {
+        min-height: 76px;
+        padding: 14px 16px;
+        border: 1px solid rgba(254, 192, 0, 0.22);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        text-decoration: none;
+        transition: transform 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+      }
+
+      .context-toc a:hover,
+      .context-toc a:focus-visible {
+        transform: translateY(-2px);
+        border-color: rgba(254, 192, 0, 0.58);
+        background: rgba(254, 192, 0, 0.14);
+      }
+
+      .context-toc span,
+      .context-toc small {
+        display: block;
+      }
+
+      .context-toc span {
+        font-weight: 800;
+      }
+
+      .context-toc small {
+        margin-top: 4px;
+        color: rgba(255, 255, 255, 0.72);
+        line-height: 1.45;
+      }
+
+      .context-summary-grid,
+      .discipline-era-grid,
+      .history-photo-grid,
+      .history-photo-compare,
+      .tournament-lanes,
+      .context-mini-grid,
+      .context-glossary-grid,
+      .comparison-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .context-summary-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .context-story-card,
+      .context-era-card,
+      .context-lane,
+      .context-mini-card,
+      .history-photo-card,
+      .context-policy-card,
+      .context-photo-callout,
+      .comparison-card,
+      .comparison-note {
+        border: 1px solid var(--context-line);
+        border-radius: 22px;
+        background: #ffffff;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.07);
+      }
+
+      .context-story-card {
+        position: relative;
+        min-height: 250px;
+        padding: 26px 22px 24px;
+        overflow: hidden;
+      }
+
+      .context-story-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--context-wine), var(--context-gold));
+      }
+
+      .context-card-icon {
+        display: inline-grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        margin-bottom: 16px;
+        border-radius: 50%;
+        background: #fff3bf;
+        color: #6f5600;
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .context-story-card h3,
+      .context-era-card h3,
+      .context-lane h3,
+      .context-mini-card h3,
+      .comparison-card h3 {
+        margin: 0 0 10px;
+        color: var(--context-head);
+        line-height: 1.45;
+      }
+
+      .context-story-card p,
+      .context-era-card p,
+      .context-lane p,
+      .context-mini-card p,
+      .comparison-card p,
+      .context-policy-card p,
+      .context-photo-callout p {
+        margin: 0;
+        color: var(--context-text);
+        line-height: 1.85;
+      }
+
+      .context-card-note {
+        margin: 22px 0 0;
+        color: #707784;
+        line-height: 1.8;
+      }
+
+      .discipline-era-grid {
+        position: relative;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .discipline-era-grid::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 38px;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(112, 38, 63, 0.18), rgba(254, 192, 0, 0.58), rgba(46, 69, 113, 0.18));
+      }
+
+      .context-era-card {
+        position: relative;
+        padding: 26px 22px;
+        overflow: hidden;
+      }
+
+      .context-era-card::before {
+        content: "";
+        position: absolute;
+        top: 30px;
+        left: 22px;
+        width: 18px;
+        height: 18px;
+        border: 4px solid #ffffff;
+        border-radius: 50%;
+        background: var(--context-wine);
+        box-shadow: 0 0 0 3px rgba(112, 38, 63, 0.22);
+      }
+
+      .context-era-card--highlight {
+        border-color: rgba(112, 38, 63, 0.22);
+        background: linear-gradient(180deg, #ffffff 0%, #fff8f2 100%);
+      }
+
+      .context-era-card--future {
+        border-color: rgba(46, 69, 113, 0.22);
+        background: linear-gradient(180deg, #ffffff 0%, #f4f7fd 100%);
+      }
+
+      .context-era-card__years {
+        display: block;
+        margin-left: 34px;
+        color: #6f5600;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+      }
+
+      .context-era-card__count {
+        display: block;
+        margin: 12px 0 8px;
+        color: var(--context-head);
+        font-family: "Oswald", sans-serif;
+        font-size: 2.3rem;
+        line-height: 1;
+      }
+
+      .context-era-system,
+      .discipline-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 18px;
+      }
+
+      .context-era-system span,
+      .discipline-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 34px;
+        min-height: 30px;
+        padding: 0 9px;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        border-radius: 999px;
+        background: #ffffff;
+        color: var(--context-navy);
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+      }
+
+      .context-era-tag,
+      .context-source-chip {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        margin-top: 14px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(254, 192, 0, 0.16);
+        color: #6f5600;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .comparison-panel {
+        margin-top: 34px;
+        padding: 28px;
+        border: 1px solid rgba(112, 38, 63, 0.18);
+        border-radius: 24px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7ea 100%);
+      }
+
+      .comparison-panel h3 {
+        margin: 0 0 10px;
+        color: var(--context-head);
+      }
+
+      .comparison-panel > p {
+        max-width: 760px;
+        margin: 0;
+        color: var(--context-text);
+        line-height: 1.85;
+      }
+
+      .comparison-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 20px;
+      }
+
+      .comparison-card {
+        padding: 24px;
+      }
+
+      .comparison-card h4 {
+        margin: 0 0 12px;
+        color: var(--context-head);
+        font-size: 1.05rem;
+      }
+
+      .comparison-card .discipline-badges {
+        margin-bottom: 18px;
+      }
+
+      .comparison-card dl {
+        display: grid;
+        gap: 12px;
+        margin: 0;
+      }
+
+      .comparison-card dl > div {
+        padding-top: 12px;
+        border-top: 1px solid rgba(25, 31, 42, 0.08);
+      }
+
+      .comparison-card dl > div:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      .comparison-card dt {
+        margin-bottom: 4px;
+        color: #6f5600;
+        font-weight: 800;
+      }
+
+      .comparison-card dd {
+        margin: 0;
+        color: var(--context-text);
+        line-height: 1.75;
+      }
+
+      .history-photo-block {
+        margin-top: 34px;
+      }
+
+      .history-photo-block--compact {
+        margin-top: 18px;
+      }
+
+      .history-photo-block__head {
+        margin-bottom: 16px;
+      }
+
+      .history-photo-block__head h2,
+      .history-photo-block__head h3 {
+        margin: 0 0 8px;
+        color: var(--context-head);
+      }
+
+      .history-photo-block__head p {
+        margin: 0;
+        color: var(--context-text);
+        line-height: 1.8;
+      }
+
+      .history-photo-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .history-photo-compare {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .history-photo-card {
+        margin: 0;
+        padding: 16px;
+      }
+
+      .history-photo-card--soft {
+        background: linear-gradient(180deg, #ffffff 0%, #fff9ec 100%);
+      }
+
+      .history-photo-placeholder {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 180px;
+        border: 1.5px dashed rgba(112, 38, 63, 0.28);
+        border-radius: 18px;
+        background:
+          linear-gradient(135deg, rgba(46, 69, 113, 0.08) 0%, rgba(254, 192, 0, 0.08) 100%),
+          #fffdfa;
+        overflow: hidden;
+      }
+
+      .history-photo-placeholder--wide {
+        min-height: clamp(220px, 30vw, 340px);
+      }
+
+      .history-photo-placeholder::before {
+        content: "";
+        width: 54px;
+        height: 38px;
+        border: 3px solid rgba(112, 38, 63, 0.44);
+        border-radius: 10px;
+        box-shadow: inset 0 0 0 9px rgba(112, 38, 63, 0.06);
+      }
+
+      .history-photo-placeholder::after {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border: 3px solid rgba(112, 38, 63, 0.44);
+        border-radius: 50%;
+      }
+
+      .history-photo-label {
+        position: absolute;
+        left: 16px;
+        bottom: 14px;
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--context-wine);
+        font-weight: 800;
+        box-shadow: 0 10px 24px rgba(12, 18, 28, 0.08);
+      }
+
+      .history-photo-caption {
+        margin-top: 12px;
+        color: var(--context-head);
+        font-weight: 800;
+      }
+
+      .history-photo-note {
+        margin: 4px 0 0;
+        color: var(--context-text);
+        line-height: 1.7;
+      }
+
+      .tournament-lanes {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: start;
+      }
+
+      .context-lane {
+        padding: 26px 22px;
+      }
+
+      .context-lane__lead {
+        margin-bottom: 18px !important;
+      }
+
+      .context-lane-item {
+        padding: 16px 0;
+        border-top: 1px solid rgba(25, 31, 42, 0.08);
+      }
+
+      .context-lane-item__year {
+        display: block;
+        margin-bottom: 6px;
+        color: #6f5600;
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
+
+      .context-lane-item strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--context-head);
+      }
+
+      .context-mini-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .context-mini-card {
+        position: relative;
+        padding: 28px 24px;
+        border-color: rgba(112, 38, 63, 0.16);
+      }
+
+      .context-mini-card::before {
+        content: "";
+        display: block;
+        width: 46px;
+        height: 4px;
+        margin-bottom: 18px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--context-wine), var(--context-gold));
+      }
+
+      .context-glossary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .context-glossary-item {
+        padding: 14px 0;
+        border-top: 1px solid rgba(25, 31, 42, 0.08);
+      }
+
+      .context-glossary-item strong {
+        display: block;
+        color: var(--context-head);
+      }
+
+      .context-glossary-item p {
+        margin: 4px 0 0;
+        color: var(--context-text);
+      }
+
+      .context-policy-card,
+      .context-photo-callout {
+        padding: 26px;
+      }
+
+      .context-photo-callout h2 {
+        margin: 0 0 10px;
+        color: var(--context-head);
+      }
+
+      .context-photo-callout__actions {
+        margin-top: 18px;
       }
 
       .context-fastline {
@@ -249,11 +766,84 @@
           grid-template-columns: 1fr;
           gap: 8px;
         }
+
+        .context-toc,
+        .context-summary-grid,
+        .discipline-era-grid,
+        .tournament-lanes,
+        .context-mini-grid,
+        .history-photo-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .discipline-era-grid::before {
+          display: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .context-hero .page-hero__title {
+          font-size: clamp(2.55rem, 14vw, 3.5rem);
+        }
+
+        .context-hero-tagline {
+          font-size: 1.08rem;
+        }
+
+        .context-hero-badges {
+          gap: 6px;
+        }
+
+        .context-toc,
+        .context-summary-grid,
+        .discipline-era-grid,
+        .comparison-grid,
+        .history-photo-grid,
+        .history-photo-compare,
+        .tournament-lanes,
+        .context-mini-grid,
+        .context-glossary-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .context-toc a {
+          min-height: 64px;
+        }
+
+        .context-story-card,
+        .context-era-card,
+        .context-lane,
+        .context-mini-card,
+        .comparison-card,
+        .context-policy-card,
+        .context-photo-callout {
+          padding: 22px 18px;
+          border-radius: 18px;
+        }
+
+        .comparison-panel {
+          padding: 22px 16px;
+          border-radius: 20px;
+        }
+
+        .history-photo-card {
+          padding: 12px;
+          border-radius: 18px;
+        }
+
+        .history-photo-placeholder {
+          min-height: 158px;
+        }
+
+        .history-photo-placeholder--wide {
+          min-height: 220px;
+        }
       }
     </style>    <!-- REVIEW_CONTEXT_LINK_VISUAL_START -->
     <style>
       #context-summary,
       #context-discipline-timeline,
+      #context-comparison,
       #context-tournament-paths,
       #context-touchpoints,
       #context-rules,
@@ -658,7 +1248,7 @@
           <p class="page-hero__eyebrow"><span class="label-ja">補足</span><span class="label-en">Context</span></p>
           <h1 class="page-hero__title">競技ダンスと学生競技ダンスの背景</h1>
           <!-- REVIEW_CONTEXT_HERO_ACCENT_START -->
-          <p class="context-hero-tagline">8種目時代から10種目化へ</p>
+          <p class="context-hero-tagline">8種目時代から10種目化へ。理科大舞研の歩みとともに、学連競技の変化をたどる。</p>
           <div class="context-hero-badges" aria-label="このページの主なテーマ">
             <span class="context-hero-badge">8種目時代</span>
             <span class="context-hero-badge">10種目化</span>
@@ -667,29 +1257,28 @@
           </div>
           <!-- REVIEW_CONTEXT_HERO_ACCENT_END -->
           <p class="page-hero__lead">
-            学生競技ダンスを離れて久しいOBOGに向けて、学連の種目・大会形式・制度がどのように変わってきたかを整理します。長く続いた8種目時代から、近年の10種目化への流れを中心に、理科大舞研の歩みと重ねてたどります。
+            学生競技ダンスを離れて久しいOBOGに向けて、種目・大会形式・制度がどのように変わってきたかを整理します。
           </p>
           <p class="context-hero-note">
             このページは、理科大舞研のHistory本体を補うためのページです。まず大きな流れをつかみ、必要に応じて制度や出典を確かめられる構成にしています。
           </p>
 
           <div class="context-hero-actions">
-            <a class="context-primary-link context-primary-link--ghost" href="../">理科大舞研の歩みに戻る →</a>
-            <a class="context-primary-link context-primary-link--gold" href="#context-discipline-timeline">種目変遷を見る ↓</a>
+            <a class="context-primary-link context-primary-link--gold" href="#context-summary">3分要約を読む</a>
+            <a class="context-primary-link context-primary-link--ghost" href="#context-discipline-timeline">種目変遷を見る</a>
+            <a class="context-primary-link context-primary-link--ghost" href="#context-touchpoints">理科大舞研との関係を見る</a>
           </div>
 
-          <details class="page-toc">
-            <summary>このページの目次を開く</summary>
-            <nav class="page-toc__links" aria-label="このページの目次">
-              <a href="#context-summary">3分要約 ↓</a>
-              <a href="#context-discipline-timeline">競技種目の変遷 ↓</a>
-              <a href="#context-tournament-paths">どの大会で増えたか ↓</a>
-              <a href="#context-touchpoints">理科大舞研との関係 ↓</a>
-              <a href="#context-rules">制度の補足 ↓</a>
-              <a href="#context-glossary">略称・用語 ↓</a>
-              <a href="#context-sources">資料と確認方針 ↓</a>
-            </nav>
-          </details>
+          <nav class="context-toc" aria-label="このページの目次">
+            <a href="#context-summary"><span>3分要約</span><small>まず全体像をつかむ</small></a>
+            <a href="#context-discipline-timeline"><span>競技種目の変遷</span><small>4種目から10種目へ</small></a>
+            <a href="#context-comparison"><span>8種目と10種目</span><small>OBOG世代との違い</small></a>
+            <a href="#context-tournament-paths"><span>どの大会で増えたか</span><small>六大学・東部・全国</small></a>
+            <a href="#context-touchpoints"><span>理科大舞研との関係</span><small>戦歴を読む入口</small></a>
+            <a href="#context-rules"><span>制度の補足</span><small>規約・要領の確認点</small></a>
+            <a href="#context-glossary"><span>略称・用語</span><small>必要なときに確認</small></a>
+            <a href="#context-sources"><span>資料と確認方針</span><small>出典と今後の課題</small></a>
+          </nav>
         </div>
       </section>
       <!-- REVIEW_CONTEXT_HERO_PHOTO_START -->
@@ -723,21 +1312,25 @@
 
           <div class="context-summary-grid">
             <article class="context-story-card">
+              <span class="context-card-icon" aria-hidden="true">01</span>
               <h3>長く続いた8種目時代</h3>
               <p>多くのOBOGにとってなじみ深い学連は、スタンダード4種目、ラテン4種目の8種目体制でした。ヴィニーズワルツとジャイブは、一般競技ダンスの10種目には含まれるものの、学連では長く中心種目ではありませんでした。</p>
             </article>
 
             <article class="context-story-card">
+              <span class="context-card-icon" aria-hidden="true">02</span>
               <h3>2020年代に10種目化へ</h3>
               <p>近年、ヴィニーズワルツとジャイブの導入が進み、東部でも10種目化の流れが見られます。特に2026年春東都は、東部レギュラー戦の10種目化を象徴する変化として整理できます。</p>
             </article>
 
             <article class="context-story-card">
+              <span class="context-card-icon" aria-hidden="true">03</span>
               <h3>導入は大会ごとに違う</h3>
               <p>新種目は、東京六大学戦、東部戦、夏全、招待試合などで同時に導入されたわけではありません。先行導入、オープン種目、エキシビション、正式種目化など、段階を踏んで広がってきました。</p>
             </article>
 
             <article class="context-story-card">
+              <span class="context-card-icon" aria-hidden="true">04</span>
               <h3>理科大舞研史の読み方も変わる</h3>
               <p>戦歴に出てくる夏全、冬全、春東都、春東部、フォーメーション、背番号の意味は、時代によって少しずつ変わっています。背景を知ることで、理科大舞研の歩みをより立体的に読めます。</p>
             </article>
@@ -848,6 +1441,71 @@
               </div>
             </article>
           </div>
+
+          <article class="comparison-panel" id="context-comparison">
+            <h3>8種目時代と10種目化の時代</h3>
+            <p>OBOGが現役時代の競技会と現在の競技会を比べるときは、種目数だけでなく、出場資格、競技区分、服装、シャドー関連の制度、競技会ごとの要領も分けて見る必要があります。</p>
+
+            <div class="comparison-grid" aria-label="8種目時代と10種目化の比較">
+              <article class="comparison-card">
+                <h4>8種目時代</h4>
+                <div class="discipline-badges" aria-label="8種目">
+                  <span class="discipline-badge">W</span>
+                  <span class="discipline-badge">T</span>
+                  <span class="discipline-badge">F</span>
+                  <span class="discipline-badge">Q</span>
+                  <span class="discipline-badge">C</span>
+                  <span class="discipline-badge">S</span>
+                  <span class="discipline-badge">R</span>
+                  <span class="discipline-badge">P</span>
+                </div>
+                <dl>
+                  <div>
+                    <dt>スタンダード種目</dt>
+                    <dd>W・T・F・Qが中心。ヴィニーズワルツは通常の学連戦では目立ちにくい存在でした。</dd>
+                  </div>
+                  <div>
+                    <dt>ラテン種目</dt>
+                    <dd>C・S・R・Pの4種目が、OBOG世代の基本的な感覚として残っています。</dd>
+                  </div>
+                  <div>
+                    <dt>戦歴の読み方</dt>
+                    <dd>当時の大会名や部歴区分、種目構成を確認すると、記録の意味が見えやすくなります。</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="comparison-card">
+                <h4>10種目化の時代</h4>
+                <div class="discipline-badges" aria-label="10種目">
+                  <span class="discipline-badge">W</span>
+                  <span class="discipline-badge">T</span>
+                  <span class="discipline-badge">Vw</span>
+                  <span class="discipline-badge">F</span>
+                  <span class="discipline-badge">Q</span>
+                  <span class="discipline-badge">C</span>
+                  <span class="discipline-badge">S</span>
+                  <span class="discipline-badge">R</span>
+                  <span class="discipline-badge">P</span>
+                  <span class="discipline-badge">J</span>
+                </div>
+                <dl>
+                  <div>
+                    <dt>スタンダード種目</dt>
+                    <dd>Vwを含む5種目化が進み、練習・出場準備の幅が広がっています。</dd>
+                  </div>
+                  <div>
+                    <dt>ラテン種目</dt>
+                    <dd>Jを含む5種目化により、ラテンの見え方や選手育成の前提も変わりつつあります。</dd>
+                  </div>
+                  <div>
+                    <dt>大会ごとの差</dt>
+                    <dd>導入時期や採用ラウンドは大会ごとに異なるため、現行資料と当時資料の照合が大切です。</dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+          </article>
           <!-- REVIEW_CONTEXT_DISCIPLINE_PHOTO_START -->
           <article class="history-photo-block">
             <div class="history-photo-block__head">
@@ -1099,7 +1757,7 @@
             <p>ここから先は、必要な人が確認できる補足です。本文では8種目時代から10種目化への大きな流れを優先し、制度や規程の細部は折りたたみで整理しています。</p>
           </div>
 
-          <details class="context-compact-details" open>
+          <details class="context-compact-details">
             <summary>東部学生競技ダンス連盟 規約・競技会要領</summary>
             <div class="context-compact-details__body">
               <p>東部学連の現行公開資料は、加盟登録、競技会参加資格、服装、競技区分、シャドー制度、推奨選手制度、競技会運営などを確認するための一次資料です。本ページでは理科大舞研史を読むために必要な範囲で要点を整理していますが、規約解釈や最新の運用確認は、必ず<a href="https://tobugakuren.com/%E8%A6%8F%E7%B4%84%E3%83%BB%E7%AB%B6%E6%8A%80%E4%BC%9A%E8%A6%81%E9%A0%98" target="_blank" rel="noopener noreferrer">東部学連の公式公開資料</a>を参照してください。</p>
@@ -1240,7 +1898,7 @@
             <h2>写真・記録をお持ちのOBOGへ</h2>
             <p>この背景資料ページでは、競技会、練習場、フォーメーション、集合写真、背番号が分かる写真など、時代を伝える記録を順次掲載していく予定です。掲載候補の写真や資料をお持ちの方は、FANTASISTA会までお知らせください。</p>
 
-            <div class="history-photo-block" style="margin-top: 18px;">
+            <div class="history-photo-block history-photo-block--compact">
               <figure class="history-photo-card history-photo-card--soft">
                 <div class="history-photo-placeholder history-photo-placeholder--wide" role="img" aria-label="写真募集中">
                   <span class="history-photo-label">写真募集中</span>
@@ -1250,7 +1908,7 @@
               </figure>
             </div>
 
-            <div style="margin-top: 18px;">
+            <div class="context-photo-callout__actions">
               <a class="photo-submit-cta__button" href="../../contact/">写真・記録を提供する →</a>
             </div>
           </article>
@@ -1387,15 +2045,3 @@
     </script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
