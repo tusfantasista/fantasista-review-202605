@@ -287,6 +287,24 @@
         outline-offset: 2px;
       }
 
+      @media (min-width: 861px) and (max-width: 1500px) {
+        .brand__logo {
+          width: min(260px, 22vw);
+        }
+
+        .site-header__inner {
+          gap: 12px;
+        }
+
+        .site-nav {
+          gap: 12px;
+        }
+
+        .site-nav a {
+          font-size: 0.82rem;
+        }
+      }
+
       .site-nav--mobile a {
         min-height: 44px;
         display: flex;
@@ -384,7 +402,8 @@
       }
 
       .context-source-details,
-      .context-followup {
+      .context-followup,
+      .context-compact-details {
         margin-top: 14px;
         border: 1px solid rgba(25, 31, 42, 0.10);
         border-radius: 16px;
@@ -393,7 +412,8 @@
       }
 
       .context-source-details summary,
-      .context-followup summary {
+      .context-followup summary,
+      .context-compact-details summary {
         min-height: 44px;
         padding: 0 14px;
         display: flex;
@@ -405,20 +425,29 @@
       }
 
       .context-source-details summary::-webkit-details-marker,
-      .context-followup summary::-webkit-details-marker {
+      .context-followup summary::-webkit-details-marker,
+      .context-compact-details summary::-webkit-details-marker {
         display: none;
       }
 
       .context-source-details summary::after,
-      .context-followup summary::after {
+      .context-followup summary::after,
+      .context-compact-details summary::after {
         content: "+";
         margin-left: auto;
         color: #8a6a00;
       }
 
       .context-source-details[open] summary::after,
-      .context-followup[open] summary::after {
+      .context-followup[open] summary::after,
+      .context-compact-details[open] summary::after {
         content: "−";
+      }
+
+      .context-source-details__body,
+      .context-followup__body,
+      .context-compact-details__body {
+        padding: 0 18px 18px;
       }
 
       .context-source-links a,
@@ -433,6 +462,42 @@
       .context-source-links a[target="_blank"]::after {
         content: " ↗";
         font-size: 0.85em;
+      }
+
+      .context-rules-note {
+        margin: 10px 0 0;
+        padding: 14px 16px;
+        border-left: 4px solid #fec000;
+        border-radius: 12px;
+        background: #fff8e4;
+        color: #59606b;
+        line-height: 1.8;
+      }
+
+      .context-rule-digest {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .context-rule-digest__item {
+        padding: 16px;
+        border: 1px solid rgba(25, 31, 42, 0.08);
+        border-radius: 14px;
+        background: #fffdfa;
+      }
+
+      .context-rule-digest__item h3 {
+        margin: 0 0 8px;
+        color: var(--context-head);
+        font-size: 1rem;
+      }
+
+      .context-rule-digest__item p {
+        margin: 0;
+        color: var(--context-text);
+        line-height: 1.8;
       }
 
       .photo-submit-cta,
@@ -519,6 +584,7 @@
       @media (max-width: 760px) {
         .context-hero-actions,
         .page-toc__links,
+        .context-rule-digest,
         .photo-submit-cta,
         .return-cta {
           grid-template-columns: 1fr;
@@ -1030,35 +1096,81 @@
           <div class="section-head">
             <p class="section-head__kicker">Supplement</p>
             <h2>制度の補足</h2>
-            <p>ここから先は、必要な人が確認できる補足です。本文では大きな流れを優先し、制度や規程の細部は折りたたみで整理しています。</p>
+            <p>ここから先は、必要な人が確認できる補足です。本文では8種目時代から10種目化への大きな流れを優先し、制度や規程の細部は折りたたみで整理しています。</p>
           </div>
+
+          <details class="context-compact-details" open>
+            <summary>東部学生競技ダンス連盟 規約・競技会要領</summary>
+            <div class="context-compact-details__body">
+              <p>東部学連の現行公開資料は、加盟登録、競技会参加資格、服装、競技区分、シャドー制度、推奨選手制度、競技会運営などを確認するための一次資料です。本ページでは理科大舞研史を読むために必要な範囲で要点を整理していますが、規約解釈や最新の運用確認は、必ず<a href="https://tobugakuren.com/%E8%A6%8F%E7%B4%84%E3%83%BB%E7%AB%B6%E6%8A%80%E4%BC%9A%E8%A6%81%E9%A0%98" target="_blank" rel="noopener noreferrer">東部学連の公式公開資料</a>を参照してください。</p>
+              <p class="context-rules-note">このページは理科大舞研史を読むための背景説明であり、東部学連の公式見解や規約解釈ではありません。制度は年度・大会ごとに改定されうるため、戦歴や写真を読む際は、当時の大会要領と現行公開資料を分けて確認してください。</p>
+
+              <div class="context-rule-digest" aria-label="現行公開資料の要点整理">
+                <article class="context-rule-digest__item">
+                  <h3>総則</h3>
+                  <p>定款では、学生競技ダンス大会と学生ダンス界の向上・発展、アマチュアスポーツとしての確立、加盟員相互の技術向上と親睦が目的として示されています。基本姿勢として、学校を背景にした団体競技、アマチュア性、学生の自主運営、現役中心主義が確認できます。</p>
+                </article>
+                <article class="context-rule-digest__item">
+                  <h3>加盟・登録</h3>
+                  <p>加盟校・加盟員の資格、加盟申請、登録手続き、部歴、新規登録・継続登録・再登録、加盟校内の役員届などが規約で扱われます。現役時代の「部歴」や「登録」の感覚と現在の運用が一致するとは限りません。</p>
+                </article>
+                <article class="context-rule-digest__item">
+                  <h3>競技会</h3>
+                  <p>主催・準主催・後援競技会の区分があり、現行公開規約では前期新人戦、後期新人戦、東部日本学生競技ダンス選手権大会、I部戦・II部戦などが主催競技会として整理されています。東京六大学戦と東都戦は準主催競技会として確認できます。</p>
+                </article>
+                <article class="context-rule-digest__item">
+                  <h3>審査・採点</h3>
+                  <p>競技会要領では、予選から決勝への進行、チェック法、順位法、スケーティングシステム、団体成績の得点化、フォーメーション競技の扱いが説明されています。大会ごとの人数や形式により、得点や順位の見え方が変わる点に注意します。</p>
+                </article>
+                <article class="context-rule-digest__item">
+                  <h3>出場資格</h3>
+                  <p>出場は加盟員登録、部歴、競技区分、学校枠、シャドーカップルの承認状況、アマチュア戦出場規約などに左右されます。全日本学生選抜や全日本学生競技ダンス選手権大会への出場資格も、年度・大会要領の確認が必要です。</p>
+                </article>
+                <article class="context-rule-digest__item">
+                  <h3>服装・マナー</h3>
+                  <p>競技会服装規定、会場管理、競技会マナー、プロ審査員への挨拶行為、放送出演・出版物掲載など、競技会の見え方に関わる項目があります。写真を見る際は、当時の服装規程や大会の性格を切り分けて確認します。</p>
+                </article>
+                <article class="context-rule-digest__item">
+                  <h3>違反・処分</h3>
+                  <p>懲罰規約では、警告、厳重注意、詫び状提出、出場停止、除名などの段階が整理されています。未登録、書類遅延、エントリー関連、服装、競技会進行への影響など、競技外の手続きも戦歴に影響する可能性があります。</p>
+                </article>
+                <article class="context-rule-digest__item">
+                  <h3>その他</h3>
+                  <p>映像・出版物等における権利、企業・団体の援助、有料講習会、合宿、全日本学生競技ダンス連盟との関係なども規約上の確認対象です。サイト掲載や写真公開に関わる話題は、規約本文と現在の運用を分けて見ます。</p>
+                </article>
+              </div>
+            </div>
+          </details>
 
           <details class="context-compact-details">
             <summary>シャドー制度・推奨選手制度</summary>
             <div class="context-compact-details__body">
-              <p>東部学連の公開規約では、2007年11月30日制定のシャドーカップル規約が確認できます。ただし、この日付は確認できる規約の制定日であり、制度の開始年を示すものではありません。</p>
+              <p>現行公開規約では、シャドーカップル規約が独立した項目として置かれ、加盟校内でカップルを組めない場合の救済措置、承認条件、届出、登録大学名・背番号、出場範囲、団体得点への扱いなどが整理されています。公開資料上では2007年11月30日制定の規約として確認できますが、この日付は確認できる規約の制定日であり、制度の実質的な開始年をそのまま示すものではありません。</p>
+              <p>推奨選手制度は、全日本学生選抜などへの出場資格や東部側の推薦枠を読むときに関わる可能性があります。出場可否や扱いは年度・大会ごとの要領に左右されるため、戦歴上の「出場資格」を読むときは、当時の要領と現行公開資料を分けて確認します。</p>
             </div>
           </details>
 
           <details class="context-compact-details">
             <summary>夏全・冬全・新人戦の違い</summary>
             <div class="context-compact-details__body">
-              <p>公益社団法人日本ダンススポーツ連盟（Japan DanceSport Federation、JDSF）掲載の大会案内では、夏全は総合戦、冬全は単科戦として整理されています。新人戦やフォーメーション競技は、戦歴を読むときに意味が変わりやすい項目です。</p>
+              <p>公益社団法人日本ダンススポーツ連盟（Japan DanceSport Federation、JDSF）掲載の大会案内では、夏全は総合戦、冬全は単科戦として整理されています。一方、東部学連の現行公開規約では、前期・後期新人戦、東部日本学生競技ダンス選手権大会、I部戦・II部戦、準主催競技会などの区分を確認できます。</p>
+              <p>新人戦やフォーメーション競技は、部歴区分、規定フィガー、服装、エントリー、採点方法の影響を受けやすい項目です。戦歴の大会名だけで判断せず、その年度の大会要領で「どの種目を、どの区分で、どの条件で踊ったか」を見るのが安全です。</p>
             </div>
           </details>
 
           <details class="context-compact-details">
             <summary>登録・服装・アマチュア性</summary>
             <div class="context-compact-details__body">
-              <p>東部学連の公開規約には、加盟登録、アマチュア性、服装、有料講習会、シャドー届などの細目が載っています。現役時代の感覚と今とでは、運用が変わっている可能性があります。</p>
+              <p>東部学連の現行公開規約には、加盟員資格、登録手続き、加盟員の義務、アマチュア戦出場、競技会服装規定、競技会マナー、各種届出などの細目が掲載されています。登録や提出方法、部歴の扱い、外部競技会への出場可否には、現役時代とは異なる運用が含まれる可能性があります。</p>
+              <p>写真やパンフレットを読むときも、服装や背番号、エントリーの見え方を当時の感覚だけで判断しないようにします。服装規程やアマチュア性の扱いは年度ごとに改定されうるため、ここでは「何を確認すべきか」を示し、詳細な判断は公式資料に委ねます。</p>
             </div>
           </details>
 
           <details class="context-compact-details">
             <summary>全国団体と規程</summary>
             <div class="context-compact-details__body">
-              <p>公益財団法人 日本ボールルームダンス連盟（JBDF）は、ボールルームダンスの競技会、資格、普及活動などを担う団体です。JDSFとJBDFの公開資料は、現在の規程や競技の外部環境を確かめるための入口になります。</p>
-              <p>このページでは全国団体の歴史そのものより、理科大舞研史を読むために必要な範囲に絞って参照しています。</p>
+              <p>東部学連の公開規約上は、全日本学生競技ダンス連盟との関係や、学生競技ダンスが学校を背景とする団体競技として運営される考え方を確認できます。JDSFやJBDFの公開資料は、現在の競技規程やダンス界全体の外部環境を確かめる入口になります。</p>
+              <p>このページは、全国団体や東部学連の公式見解を示すものではありません。理科大舞研史を読むための背景説明として、公開資料を参照しながら要点だけを補足しています。</p>
             </div>
           </details>
         </div>
@@ -1154,7 +1266,7 @@
           </div>
 
           <article class="context-policy-card">
-            <p>東京六大学戦、東部、夏全、招待試合では、種目の導入時期が必ずしも一致しません。本文ではOBOGが変遷をつかみやすいように整理し、資料差や確認課題は下の折りたたみで扱います。</p>
+            <p>東京六大学戦、東部、夏全、招待試合では、種目の導入時期や競技区分、出場資格が必ずしも一致しません。本文ではOBOGが変遷をつかみやすいように整理し、規約本文の転載ではなく、公式公開資料で確認すべき観点を示します。</p>
           </article>
 
           <details class="context-source-details">
@@ -1175,16 +1287,17 @@
                 <li><a href="https://www.jdsf.or.jp/wp/wp-content/uploads/2026/03/DDD118.pdf" target="_blank" rel="noopener noreferrer">全日本学生競技ダンス選手権大会案内</a></li>
                 <li><a href="https://jbdf.or.jp/ballroom/history.html" target="_blank" rel="noopener noreferrer">JBDF ボールルームダンスの歴史</a></li>
                 <li><a href="https://jbdf.or.jp/profile/purpose.html" target="_blank" rel="noopener noreferrer">JBDFの目的</a></li>
-                <li><a href="https://www.toubugakuren.com/" target="_blank" rel="noopener noreferrer">東部学連 公式サイト</a></li>
-                <li><a href="https://www.toubugakuren.com/kiyaku.html" target="_blank" rel="noopener noreferrer">東部学連 規約</a></li>
-                <li><a href="https://www.toubugakuren.com/gamerule.html" target="_blank" rel="noopener noreferrer">東部学連 競技会要領</a></li>
-                <li><a href="https://www.toubugakuren.com/kameikou.html" target="_blank" rel="noopener noreferrer">東部学連 加盟校</a></li>
-                <li><a href="https://www.toubugakuren.com/schedule.html" target="_blank" rel="noopener noreferrer">東部学連 スケジュール</a></li>
+                <li><a href="https://tobugakuren.com/" target="_blank" rel="noopener noreferrer">東部学連 公式サイト</a></li>
+                <li><a href="https://tobugakuren.com/%E8%A6%8F%E7%B4%84%E3%83%BB%E7%AB%B6%E6%8A%80%E4%BC%9A%E8%A6%81%E9%A0%98" target="_blank" rel="noopener noreferrer">東部学連 規約・競技会要領</a></li>
+                <li><a href="https://tobugakuren.com/%E7%AB%B6%E6%8A%80%E4%BC%9A%E8%A6%81%E9%A0%98" target="_blank" rel="noopener noreferrer">東部学連 競技会要領</a></li>
+                <li><a href="https://tobugakuren.com/%E5%8A%A0%E7%9B%9F%E6%A0%A1%E4%B8%80%E8%A6%A7" target="_blank" rel="noopener noreferrer">東部学連 加盟校一覧</a></li>
+                <li><a href="https://tobugakuren.com/%E8%A9%A6%E5%90%88%E4%BA%88%E5%AE%9A%E3%83%BB%E7%B5%90%E6%9E%9C" target="_blank" rel="noopener noreferrer">東部学連 試合予定・結果</a></li>
+                <li><a href="https://drive.google.com/drive/folders/1bV7w4PA6ZhXJtiYDQfnEbQVz6XQQp4P4?usp=sharing" target="_blank" rel="noopener noreferrer">東部学連 連盟ファイル</a></li>
                 <li><a href="https://www.dancenavigation.com/%E5%AD%A6%E7%94%9F%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E6%83%85%E5%A0%B12013/%E5%AD%A6%E7%94%9F%E3%83%80%E3%83%B3%E3%82%B9%E6%AD%B4%E5%8F%B2/" target="_blank" rel="noopener noreferrer">学生競技ダンスの歴史</a></li>
                 <li><a href="https://www.dancenavigation.com/%E5%AD%A6%E7%94%9F%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E6%83%85%E5%A0%B12013/%E5%90%84%E5%A4%A7%E4%BC%9A%E6%A6%82%E8%A6%81/%E6%9D%B1%E4%BA%AC%E5%85%AD%E5%A4%A7%E5%AD%A6%E5%AD%A6%E7%94%9F%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E9%81%B8%E6%89%8B%E6%A8%A9%E5%A4%A7%E4%BC%9A/" target="_blank" rel="noopener noreferrer">東京六大学学生競技ダンス選手権大会</a></li>
                 <li><a href="https://www.dancenavigation.com/%E5%AD%A6%E7%94%9F%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E6%83%85%E5%A0%B12013/%E5%90%84%E5%A4%A7%E4%BC%9A%E6%A6%82%E8%A6%81/%E6%9D%B1%E9%83%A8%E6%97%A5%E6%9C%AC%E5%AD%A6%E7%94%9F%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E9%81%B8%E6%89%8B%E6%A8%A9%E5%A4%A7%E4%BC%9A/" target="_blank" rel="noopener noreferrer">東部日本学生競技ダンス選手権大会</a></li>
               </ul>
-              <p class="context-muted">東京六大学戦の大会番号やパソドブレ正式採用時期には、公開資料どうしで表記差が見られる箇所があります。このページでは年と大会名を優先しています。</p>
+              <p class="context-muted">東京六大学戦の大会番号やパソドブレ正式採用時期には、公開資料どうしで表記差が見られる箇所があります。東部学連の規約・競技会要領も改定される可能性があるため、このページでは年と大会名を優先し、最新の制度確認は公式公開資料へ送る形にしています。</p>
             </div>
           </details>
 
@@ -1213,6 +1326,7 @@
                 <li>パソドブレ正式採用年の一次資料確認</li>
                 <li>招待試合と夏全における5種目化の公開資料確認</li>
                 <li>シャドー制度・推奨選手制度の全国的な初出年</li>
+                <li>当時の大会要領と現行公開資料の制度差の照合</li>
                 <li>八種目戦・新人戦・フォーメーションを含む種目変遷の完全年表</li>
               </ul>
             </div>
