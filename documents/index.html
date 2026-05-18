@@ -17,7 +17,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/pages.css" /><style>
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/enhancements.css" /><style>
       .nav-copy {
         display: block;
         min-width: 0;
@@ -282,20 +283,27 @@
             </p>
           </div>
 
+          <div class="filter-toolbar" data-doc-filter aria-label="資料カテゴリフィルター">
+            <button class="filter-button" type="button" data-filter="all" aria-pressed="true">すべて</button>
+            <button class="filter-button" type="button" data-filter="meeting" aria-pressed="false">総会資料</button>
+            <button class="filter-button" type="button" data-filter="festa" aria-pressed="false">FESTA資料</button>
+            <button class="filter-button" type="button" data-filter="rules" aria-pressed="false">会則・記録</button>
+          </div>
+
           <div class="docs-grid">
-            <article class="docs-card">
+            <article class="docs-card" data-doc-category="meeting">
               <span>General Meeting</span>
               <h3>総会資料</h3>
               <p>年度ごとの総会関連資料を、公開範囲を確認しながら整理していきます。</p>
             </article>
 
-            <article class="docs-card">
+            <article class="docs-card" data-doc-category="festa">
               <span>FESTA Archive</span>
               <h3>過去FESTA関連資料</h3>
               <p>パンフレットや配布資料など、記録性の高い資料を順次整理していきます。</p>
             </article>
 
-            <article class="docs-card">
+            <article class="docs-card" data-doc-category="rules">
               <span>Records</span>
               <h3>会則・活動記録</h3>
               <p>会の運営や歴史をたどる資料として、必要な範囲でご案内していく予定です。</p>
@@ -364,47 +372,9 @@
         <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
       </div>
     </footer>
-
-<!-- MOBILE_NAV_SCRIPT_START -->
-<script>
-(function () {
-  const toggle = document.querySelector('.menu-toggle');
-  const header = document.querySelector('.site-header, .header');
-  const nav = document.getElementById(toggle ? toggle.getAttribute('aria-controls') : 'site-nav');
-
-  if (!header || !toggle || !nav) return;
-
-  function setMenuOpen(open) {
-    header.classList.toggle('is-open', open);
-    document.body.classList.toggle('menu-open', open);
-    toggle.setAttribute('aria-expanded', String(open));
-  }
-
-  toggle.addEventListener('click', function () {
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    setMenuOpen(!isOpen);
-  });
-
-  nav.addEventListener('click', function (event) {
-    const link = event.target.closest('a');
-    if (link) setMenuOpen(false);
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') setMenuOpen(false);
-  });
-
-  window.addEventListener('resize', function () {
-    if (window.matchMedia('(min-width: 861px)').matches) {
-      setMenuOpen(false);
-    }
-  });
-})();
-</script>
-<!-- MOBILE_NAV_SCRIPT_END -->
+    <script src="../assets/js/site.js" defer></script>
   </body>
 </html>
-
 
 
 

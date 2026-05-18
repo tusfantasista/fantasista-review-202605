@@ -1,0 +1,275 @@
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 92px;
+}
+
+.site-nav a.is-section-active,
+.nav a.is-section-active {
+  color: var(--gold, #ffd21c);
+}
+
+.site-nav a.is-section-active {
+  background: rgba(144, 31, 41, 0.1);
+}
+
+.top-button,
+.festa-quick-link {
+  position: fixed;
+  z-index: 80;
+  border: 0;
+  box-shadow: 0 18px 38px rgba(12, 18, 28, 0.2);
+  cursor: pointer;
+}
+
+.top-button {
+  right: 18px;
+  bottom: 18px;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background: #202124;
+  color: #fff;
+  font-weight: 800;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.top-button.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.festa-quick-link {
+  left: 18px;
+  bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(320px, calc(100vw - 96px));
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #901f29 0%, #c99516 100%);
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.filter-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 28px;
+}
+
+.filter-button {
+  border: 1px solid rgba(32, 33, 36, 0.14);
+  border-radius: 999px;
+  padding: 9px 14px;
+  background: #fff;
+  color: #202124;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.filter-button[aria-pressed="true"] {
+  border-color: transparent;
+  background: #901f29;
+  color: #fff;
+}
+
+.is-filter-hidden {
+  display: none !important;
+}
+
+.data-source-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+  gap: 24px;
+}
+
+.data-source-card {
+  padding: 28px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: var(--shadow, 0 20px 48px rgba(12, 18, 28, 0.1));
+}
+
+.data-source-card h3 {
+  margin-top: 0;
+}
+
+.data-chart {
+  display: grid;
+  gap: 12px;
+}
+
+.data-chart__row {
+  display: grid;
+  grid-template-columns: 88px 1fr 52px;
+  align-items: center;
+  gap: 10px;
+}
+
+.data-chart__bar {
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(144, 31, 41, 0.12);
+  overflow: hidden;
+}
+
+.data-chart__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #901f29 0%, #c99516 100%);
+}
+
+.data-table-wrap {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(32, 33, 36, 0.1);
+  text-align: left;
+}
+
+.data-table th {
+  color: #555961;
+  font-size: 0.84rem;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(3, 4, 7, 0.88);
+}
+
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox__dialog {
+  width: min(100%, 980px);
+  color: #fff;
+}
+
+.lightbox__image {
+  display: block;
+  max-width: 100%;
+  max-height: 78vh;
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+.lightbox__caption {
+  margin: 12px 52px 0 0;
+  color: rgba(255, 255, 255, 0.86);
+  line-height: 1.7;
+}
+
+.lightbox__close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.contact-form-card {
+  grid-column: 1 / -1;
+}
+
+.static-contact-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.static-contact-form label {
+  display: grid;
+  gap: 7px;
+  color: #555961;
+  font-weight: 800;
+}
+
+.static-contact-form input,
+.static-contact-form select,
+.static-contact-form textarea {
+  width: 100%;
+  border: 1px solid rgba(32, 33, 36, 0.16);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.static-contact-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-note {
+  margin: 0;
+  color: #6a7079;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 760px) {
+  .festa-quick-link {
+    left: 12px;
+    right: 70px;
+    bottom: 14px;
+    justify-content: center;
+    max-width: none;
+    padding: 11px 12px;
+    font-size: 0.8rem;
+  }
+
+  .top-button {
+    right: 12px;
+    bottom: 14px;
+  }
+
+  .filter-toolbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+
+  .filter-button {
+    white-space: nowrap;
+  }
+
+  .data-source-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .data-source-card {
+    padding: 22px 18px;
+  }
+}

@@ -1,27 +1,55 @@
-﻿# FANTASISTA会サイト レビュー版
+# FANTASISTA 60周年FESTA フォーム運用メモ
 
-東京理科大学舞踏研究部 FANTASISTA会サイトのレビュー用リポジトリです。
+## Netlify Forms
 
-## 注意
+- フォーム名: `festa60-obog-crm-entry`
+- 設置場所: `festa-60th/index.html`
+- 送信後遷移先: `/thanks.html`
+- フォーム回答は、OBOGマスタ情報、連絡先情報、FESTA60周年イベント参加情報の3系統に分けて扱う想定です。
 
-このサイトは正式公開前のレビュー用です。
-検索避けのため、各HTMLに noindex を設定しています。
+## CSV出力後に追加する管理列
 
-## 主な確認対象
+Netlify FormsからCSVを出力した後、管理用スプレッドシート側で以下の列を追加してください。これらは管理者が後から付与する情報であり、フォーム入力項目には含めません。
 
-- トップページ
-- 通常FESTAページ
-- 東京理科大学舞踏研究部 60周年記念FESTA特設ページ
-- History
-- Gallery
-- News
-- Contact
+- `obog_master_id`
+- `match_status`
+- `match_confidence`
+- `master_update_required`
+- `attendance_status`
+- `payment_status`
+- `payment_date`
+- `reception_status`
+- `last_contact_date`
+- `admin_note`
 
-## 60周年記念FESTA
+## `match_status` 候補
 
-名称：東京理科大学舞踏研究部 60周年記念FESTA  
-日付：2027年2月11日（木・祝）  
-時間：未定  
-会場：東京都立産業貿易センター 台東館 6階展示室  
+- `matched`
+- `possible_match`
+- `new_contact`
+- `duplicate_check_needed`
+- `unmatched`
 
-詳細は決定次第、順次公開します。
+## `attendance_status` 候補
+
+- `intent_yes`
+- `considering`
+- `intent_no`
+- `confirmed`
+- `cancelled`
+
+## `payment_status` 候補
+
+- `not_required_yet`
+- `unpaid`
+- `paid`
+- `exempted`
+- `refund_needed`
+
+## OBOGマスタ突合の運用イメージ
+
+1. Netlify Formsから `festa60-obog-crm-entry` のCSVを出力します。
+2. OBOGマスタの氏名、旧姓、ふりがな、メールアドレス、卒部年度または期、当時の役割、所属団体と照合します。
+3. 一致度に応じて `match_status` と `match_confidence` を管理者が付与します。
+4. 連絡先や所属情報に差分があれば `master_update_required` を更新します。
+5. 正式参加登録開始後に `attendance_status`、入金確認後に `payment_status` と `payment_date`、当日は `reception_status` を更新します。

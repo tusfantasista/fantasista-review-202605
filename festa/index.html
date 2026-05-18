@@ -16,6 +16,7 @@
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
     <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/enhancements.css" />
     <style>
       .festa-page .page-hero__lead {
         max-width: 48rem;
@@ -227,43 +228,7 @@
         <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
       </div>
     </footer>
-  <!-- MOBILE_NAV_SCRIPT_START -->
-<script>
-(function () {
-  const toggle = document.querySelector('.menu-toggle');
-  const header = document.querySelector('.site-header, .header');
-  const nav = document.getElementById(toggle ? toggle.getAttribute('aria-controls') : 'site-nav');
-
-  if (!header || !toggle || !nav) return;
-
-  function setMenuOpen(open) {
-    header.classList.toggle('is-open', open);
-    document.body.classList.toggle('menu-open', open);
-    toggle.setAttribute('aria-expanded', String(open));
-  }
-
-  toggle.addEventListener('click', function () {
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    setMenuOpen(!isOpen);
-  });
-
-  nav.addEventListener('click', function (event) {
-    const link = event.target.closest('a');
-    if (link) setMenuOpen(false);
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') setMenuOpen(false);
-  });
-
-  window.addEventListener('resize', function () {
-    if (window.matchMedia('(min-width: 861px)').matches) {
-      setMenuOpen(false);
-    }
-  });
-})();
-</script>
-<!-- MOBILE_NAV_SCRIPT_END -->
+    <script src="../assets/js/site.js" defer></script>
   </body>
 </html>
 

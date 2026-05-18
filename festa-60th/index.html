@@ -1345,13 +1345,174 @@
           gap: 10px;
         }
 
-        .memory-season-card__keywords span,
-        .keyword-chip {
+      .memory-season-card__keywords span,
+      .keyword-chip {
           font-size: 0.8rem;
+        }
+      }
+
+      .crm-entry-section {
+        border-top: 1px solid rgba(255, 210, 28, 0.14);
+        border-bottom: 1px solid rgba(255, 210, 28, 0.14);
+        background:
+          radial-gradient(circle at 12% 0%, rgba(255, 210, 28, 0.12), transparent 28%),
+          radial-gradient(circle at 86% 12%, rgba(255, 210, 28, 0.08), transparent 26%),
+          rgba(7, 7, 7, 0.74);
+      }
+
+      .crm-entry-panel {
+        padding: clamp(24px, 4vw, 40px);
+      }
+
+      .crm-entry-form {
+        display: grid;
+        gap: 26px;
+        margin-top: 26px;
+      }
+
+      .crm-form-block {
+        padding: 22px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.045);
+      }
+
+      .crm-form-block h3 {
+        margin: 0 0 8px;
+        color: #fff3ca;
+        font-size: 1.16rem;
+      }
+
+      .crm-form-block__note {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .crm-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .crm-field,
+      .crm-field--full {
+        display: grid;
+        gap: 8px;
+      }
+
+      .crm-field--full {
+        grid-column: 1 / -1;
+      }
+
+      .crm-entry-form fieldset {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+
+      .crm-field__label {
+        color: #fff3ca;
+        font-size: 0.92rem;
+        font-weight: 800;
+        line-height: 1.5;
+      }
+
+      .crm-required {
+        margin-left: 6px;
+        color: var(--gold);
+        font-size: 0.78rem;
+      }
+
+      .crm-entry-form input,
+      .crm-entry-form select,
+      .crm-entry-form textarea {
+        width: 100%;
+        min-height: 48px;
+        border: 1px solid rgba(255, 210, 28, 0.18);
+        border-radius: 14px;
+        padding: 12px 14px;
+        background: rgba(255, 255, 255, 0.92);
+        color: #171717;
+        font: inherit;
+      }
+
+      .crm-entry-form textarea {
+        min-height: 132px;
+        resize: vertical;
+      }
+
+      .crm-radio-group {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .crm-radio {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-height: 48px;
+        padding: 11px 12px;
+        border: 1px solid rgba(255, 210, 28, 0.16);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.055);
+        color: #f6ebc7;
+        font-weight: 800;
+      }
+
+      .crm-radio input,
+      .crm-consent input {
+        width: auto;
+        min-height: auto;
+        accent-color: #ffd21c;
+      }
+
+      .crm-consent {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 18px;
+        border-radius: 18px;
+        background: rgba(255, 210, 28, 0.08);
+        color: #fff3ca;
+        line-height: 1.75;
+      }
+
+      .crm-form-notes {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding-left: 1.2em;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .crm-form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .crm-form-actions .btn {
+        border: 0;
+        cursor: pointer;
+      }
+
+      @media (max-width: 780px) {
+        .crm-form-grid,
+        .crm-radio-group {
+          grid-template-columns: 1fr;
+        }
+
+        .crm-form-block {
+          padding: 18px;
         }
       }
     </style>
     <!-- REVIEW_FESTA60_MEMORY_STYLE_END -->
+    <link rel="stylesheet" href="../assets/css/enhancements.css" />
   </head>
   <body><div class="page">
       <header class="header">
@@ -1370,6 +1531,10 @@
 
           <nav id="site-nav" class="nav" aria-label="ページ内リンク">
             <a href="#overview"><span class="nav-copy"><span class="nav-ja">開催概要</span><span class="nav-en">Overview</span></span></a>
+            <a href="#concept"><span class="nav-copy"><span class="nav-ja">コンセプト</span><span class="nav-en">Concept</span></span></a>
+            <a href="#venue-plan"><span class="nav-copy"><span class="nav-ja">会場比較</span><span class="nav-en">Venue</span></span></a>
+            <a href="#crm-entry"><span class="nav-copy"><span class="nav-ja">参加意向</span><span class="nav-en">Entry</span></span></a>
+            <a href="#faq"><span class="nav-copy"><span class="nav-ja">FAQ</span><span class="nav-en">FAQ</span></span></a>
             <a href="../"><span class="nav-copy"><span class="nav-ja">本サイトへ</span><span class="nav-en">Home</span></span></a>
             <a href="../festa/index.html"><span class="nav-copy"><span class="nav-ja">通常FESTAページへ</span><span class="nav-en">Regular FESTA</span></span></a>
           </nav>
@@ -1395,6 +1560,7 @@
 
               <div class="cta-row">
                 <a class="btn btn--primary" href="#overview">開催概要を見る</a>
+                <a class="btn btn--primary" href="#crm-entry">参加意向フォームへ</a>
                 <a class="btn btn--ghost" href="#updates">今後のご案内を見る</a>
               </div>
             </div>
@@ -1766,6 +1932,141 @@
           </div>
         </section>
 
+        <section id="concept">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">コンセプト</span><span class="label-en">Concept</span></p>
+              <h2>60年の記録を、次の10年の力へ</h2>
+              <p>以下は編集用の仮文言です。実行委員会で確定した表現に差し替えてください。</p>
+            </div>
+
+            <div class="story-grid">
+              <article class="story-card">
+                <h3>再会</h3>
+                <p>OBOG、現役、先生、来賓が世代を越えて集まり、舞研で過ごした時間を安心して語り合える場をつくります。</p>
+              </article>
+              <article class="story-card">
+                <h3>継承</h3>
+                <p>写真、記録、競技成績、資料を整理し、東京理科大学舞踏研究部の歩みを次の世代へ渡します。</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="venue-plan">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">会場候補・比較</span><span class="label-en">Venue Plan</span></p>
+              <h2>会場比較資料への導線</h2>
+              <p>会場候補・費用・アクセス・収容人数の比較資料は、資料ページで管理できる形にします。現在の会場情報以外は仮置きです。</p>
+            </div>
+
+            <div class="panel">
+              <div class="outline-grid">
+                <div class="outline-item">
+                  <span>有力候補</span>
+                  <strong>東京都立産業貿易センター 台東館 6階展示室</strong>
+                  <p>2027年2月11日（木・祝）開催予定の会場として案内中です。</p>
+                </div>
+                <div class="outline-item">
+                  <span>比較観点</span>
+                  <p>アクセス、フロア面積、控室、音響、飲食可否、費用、搬入導線を比較予定です。</p>
+                </div>
+                <div class="outline-item outline-item--wide">
+                  <span>資料リンク</span>
+                  <p>正式な比較資料PDFやGoogleフォーム等ができ次第、以下のリンク先を差し替えてください。</p>
+                  <p style="margin-top: 12px;"><a class="btn btn--ghost" href="../documents/">資料ページで確認する</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="program">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">当日コンテンツ案</span><span class="label-en">Program Draft</span></p>
+              <h2>当日の企画案</h2>
+              <p>未確定の企画案です。実施可否、順番、出演者、時間配分は後から編集してください。</p>
+            </div>
+
+            <div class="welcome-grid">
+              <article class="welcome-card"><p>60年の歩みを振り返るオープニング映像</p></article>
+              <article class="welcome-card"><p>OBOG・現役によるデモンストレーション</p></article>
+              <article class="welcome-card"><p>世代別テーブル交流・近況共有</p></article>
+              <article class="welcome-card"><p>写真・資料展示コーナー</p></article>
+              <article class="welcome-card"><p>現役支援・活動紹介の時間</p></article>
+              <article class="welcome-card"><p>記念撮影・エンディング</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="audience-guide">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">参加者別案内</span><span class="label-en">Guide</span></p>
+              <h2>OBOG・現役向け案内</h2>
+              <p>参加申込、会費、集合時間、服装などは未確定です。確定後にこのブロックを更新してください。</p>
+            </div>
+
+            <div class="story-grid">
+              <article class="story-card">
+                <h3>OBOG向け</h3>
+                <p>同期・先輩・後輩への声かけ、写真・資料提供、協賛や寄付の相談を歓迎します。参加方法は決定次第ご案内します。</p>
+              </article>
+              <article class="story-card">
+                <h3>現役向け</h3>
+                <p>出演・受付・展示協力など、現役生と相談しながら無理のない形を検討します。授業・試験・競技予定に配慮して調整します。</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="support">
+          <div class="wrap">
+            <div class="panel festa-callout">
+              <div class="festa-callout__copy">
+                <div class="section-head" style="margin-bottom: 0;">
+                  <p class="eyebrow"><span class="label-ja">協賛・寄付・支援</span><span class="label-en">Support</span></p>
+                  <h2>60周年記念事業への支援について</h2>
+                </div>
+                <p>協賛広告、寄付、物品協力、写真・資料提供などの支援方法を準備中です。金額や掲載条件は仮置きのため、確定後に更新してください。</p>
+                <div class="festa-callout__actions">
+                  <a class="btn btn--primary" href="../contact/">支援について問い合わせる</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">よくある質問</span><span class="label-en">FAQ</span></p>
+              <h2>FAQ</h2>
+            </div>
+
+            <div class="panel">
+              <details>
+                <summary>参加申込はいつ始まりますか</summary>
+                <p>未定です。申込方法が決まり次第、このページとアーカイブでお知らせします。</p>
+              </details>
+              <details>
+                <summary>踊らなくても参加できますか</summary>
+                <p>参加できます。交流、展示、記念企画を中心に楽しめる構成を検討しています。</p>
+              </details>
+              <details>
+                <summary>写真や資料はどこへ送ればよいですか</summary>
+                <p>お問い合わせページから事務局へご連絡ください。掲載可否や取り扱いを確認します。</p>
+              </details>
+              <details>
+                <summary>協賛や寄付はできますか</summary>
+                <p>受付方法を準備中です。企業・個人いずれの支援も、詳細が決まり次第ご案内します。</p>
+              </details>
+            </div>
+          </div>
+        </section>
+
         <section id="anniversary">
           <div class="wrap">
             <div class="section-head">
@@ -1842,6 +2143,169 @@
           </div>
         </section>
 
+        <section id="crm-entry" class="crm-entry-section">
+          <div class="wrap">
+            <div class="panel crm-entry-panel">
+              <div class="section-head">
+                <p class="eyebrow"><span class="label-ja">参加意向・名簿確認</span><span class="label-en">OBOG CRM Entry</span></p>
+                <h2>60周年FESTA 参加意向フォーム</h2>
+                <p>
+                  本フォームは、60周年FESTAの参加意向確認およびOBOG名簿情報の確認・更新を目的としています。
+                  正式な参加確定、会費、入金方法については後日あらためてご案内します。
+                </p>
+              </div>
+
+              <form name="festa60-obog-crm-entry" method="POST" data-netlify="true" action="/thanks.html" class="crm-entry-form">
+                <input type="hidden" name="form-name" value="festa60-obog-crm-entry" />
+
+                <section class="crm-form-block" aria-labelledby="crm-master-heading">
+                  <h3 id="crm-master-heading">A. 本人識別・OBOGマスタ照合情報</h3>
+                  <p class="crm-form-block__note">既存OBOGマスタとの突合に使う情報です。分かる範囲でご入力ください。</p>
+
+                  <div class="crm-form-grid">
+                    <label class="crm-field">
+                      <span class="crm-field__label">お名前<span class="crm-required">必須</span></span>
+                      <input type="text" name="full_name" placeholder="例：山田 太郎" autocomplete="name" required />
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">旧姓</span>
+                      <input type="text" name="maiden_name" placeholder="該当する方のみ" />
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">ふりがな</span>
+                      <input type="text" name="furigana" placeholder="例：やまだ たろう" />
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">卒部年度または期</span>
+                      <input type="text" name="graduation_year_or_generation" placeholder="例：2010年度卒 / 第45期 など" />
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">所属区分<span class="crm-required">必須</span></span>
+                      <select name="affiliation" required>
+                        <option value="">選択してください</option>
+                        <option value="obog">OBOG</option>
+                        <option value="active_student">現役</option>
+                        <option value="teacher_related">先生・関係者</option>
+                        <option value="other">その他</option>
+                      </select>
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">当時の役割</span>
+                      <select name="dance_role">
+                        <option value="">未選択</option>
+                        <option value="leader">リーダー</option>
+                        <option value="partner">パートナー</option>
+                        <option value="both">両方</option>
+                        <option value="manager_other">マネージャー・その他</option>
+                      </select>
+                    </label>
+
+                    <label class="crm-field crm-field--full">
+                      <span class="crm-field__label">所属していた大学・団体</span>
+                      <input type="text" name="school_or_group" placeholder="例：東京理科大学 / 理科大舞踏研究部 など" />
+                    </label>
+                  </div>
+                </section>
+
+                <section class="crm-form-block" aria-labelledby="crm-contact-heading">
+                  <h3 id="crm-contact-heading">B. 連絡先情報</h3>
+                  <p class="crm-form-block__note">60周年FESTAの続報、名簿確認、今後のOBOG会連絡に使用します。</p>
+
+                  <div class="crm-form-grid">
+                    <label class="crm-field">
+                      <span class="crm-field__label">メールアドレス<span class="crm-required">必須</span></span>
+                      <input type="email" name="email" placeholder="example@example.com" autocomplete="email" required />
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">電話番号</span>
+                      <input type="tel" name="phone" placeholder="任意" autocomplete="tel" />
+                    </label>
+
+                    <fieldset class="crm-field crm-field--full">
+                      <legend class="crm-field__label">今後の案内を受け取ってよいか<span class="crm-required">必須</span></legend>
+                      <div class="crm-radio-group">
+                        <label class="crm-radio"><input type="radio" name="contact_permission" value="yes" required />はい</label>
+                        <label class="crm-radio"><input type="radio" name="contact_permission" value="no" />いいえ</label>
+                      </div>
+                    </fieldset>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">主な連絡希望手段</span>
+                      <select name="preferred_contact_method">
+                        <option value="">未選択</option>
+                        <option value="email">メール</option>
+                        <option value="line">LINE</option>
+                        <option value="phone">電話</option>
+                        <option value="other">その他</option>
+                      </select>
+                    </label>
+                  </div>
+                </section>
+
+                <section class="crm-form-block" aria-labelledby="crm-event-heading">
+                  <h3 id="crm-event-heading">C. FESTA60周年イベント参加情報</h3>
+                  <p class="crm-form-block__note">正式な参加登録ではなく、現時点での参加意向確認です。</p>
+
+                  <div class="crm-form-grid">
+                    <fieldset class="crm-field crm-field--full">
+                      <legend class="crm-field__label">参加意向<span class="crm-required">必須</span></legend>
+                      <div class="crm-radio-group">
+                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="intent_yes" required />参加予定</label>
+                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="considering" />検討中</label>
+                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="intent_no" />不参加予定</label>
+                      </div>
+                    </fieldset>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">同伴者人数</span>
+                      <input type="number" name="guest_count" min="0" placeholder="0" inputmode="numeric" />
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">ダンスタイムへの参加意向</span>
+                      <select name="dance_time_intent">
+                        <option value="">未選択</option>
+                        <option value="want_to_dance">踊りたい</option>
+                        <option value="watch_mainly">見学中心</option>
+                        <option value="undecided">未定</option>
+                      </select>
+                    </label>
+
+                    <label class="crm-field crm-field--full">
+                      <span class="crm-field__label">その他連絡事項・メッセージ</span>
+                      <textarea name="message" placeholder="連絡事項、近況、事務局へのメッセージなど"></textarea>
+                    </label>
+                  </div>
+                </section>
+
+                <section class="crm-form-block" aria-labelledby="crm-privacy-heading">
+                  <h3 id="crm-privacy-heading">D. 個人情報・同意</h3>
+                  <label class="crm-consent">
+                    <input type="checkbox" name="privacy_consent" value="agree" required />
+                    <span>入力した情報が、60周年FESTAの連絡・運営、OBOG名簿の確認・更新、FANTASISTA OBOG会からの関連連絡に使用されることに同意します。</span>
+                  </label>
+                </section>
+
+                <ul class="crm-form-notes">
+                  <li>ご入力いただいた情報は、60周年FESTAの連絡・運営、OBOG名簿の確認・更新、およびFANTASISTA OBOG会からの関連連絡の目的にのみ使用します。</li>
+                  <li>これは正式な参加確定フォームではなく、現時点での参加意向確認です。</li>
+                  <li>正式な参加登録、会費、入金方法については後日あらためてご案内します。</li>
+                </ul>
+
+                <div class="crm-form-actions">
+                  <button class="btn btn--primary" type="submit">参加意向を送信する</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
         <section id="updates">
           <div class="wrap">
             <div class="section-head">
@@ -1883,51 +2347,9 @@
         </div>
       </footer>
     </div>
-  <!-- MOBILE_NAV_SCRIPT_START -->
-<script>
-(function () {
-  const toggle = document.querySelector('.menu-toggle');
-  const header = document.querySelector('.site-header, .header');
-  const nav = document.getElementById(toggle ? toggle.getAttribute('aria-controls') : 'site-nav');
-
-  if (!header || !toggle || !nav) return;
-
-  function setMenuOpen(open) {
-    header.classList.toggle('is-open', open);
-    document.body.classList.toggle('menu-open', open);
-    toggle.setAttribute('aria-expanded', String(open));
-  }
-
-  toggle.addEventListener('click', function () {
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    setMenuOpen(!isOpen);
-  });
-
-  nav.addEventListener('click', function (event) {
-    const link = event.target.closest('a');
-    if (link) setMenuOpen(false);
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') setMenuOpen(false);
-  });
-
-  window.addEventListener('resize', function () {
-    if (window.matchMedia('(min-width: 861px)').matches) {
-      setMenuOpen(false);
-    }
-  });
-})();
-</script>
-<!-- MOBILE_NAV_SCRIPT_END -->
+    <script src="../assets/js/site.js" defer></script>
   </body>
 </html>
-
-
-
-
-
-
 
 
 

@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/pages.css" />    <!-- REVIEW_CONTACT_PREPUBLISH_STYLE_START -->
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/enhancements.css" />    <!-- REVIEW_CONTACT_PREPUBLISH_STYLE_START -->
     <style>
       .contact-list,
       .contact-example-list {
@@ -125,6 +126,38 @@
             </ul>
             <p class="contact-subnote">返信は原則1〜2週間程度を目安にしています。内容確認に時間を要する場合は、さらにお時間をいただくことがあります。</p>
           </div>
+
+          <div class="contact-card contact-form-card">
+            <p class="panel__eyebrow"><span class="label-ja">参加・問い合わせフォーム</span><span class="label-en">Static Form</span></p>
+            <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z" /><path d="M4 8l8 6 8-6" /></svg></span>
+            <h2>入力内容は端末内だけで使います</h2>
+            <p>このフォームは静的サイト上の案内UIです。送信時はメールソフトを開き、GitHub上に個人情報を保存しません。</p>
+            <form class="static-contact-form" action="mailto:tus.fantasista@gmail.com" method="post" enctype="text/plain">
+              <label>お名前
+                <input type="text" name="name" autocomplete="name" />
+              </label>
+              <label>卒部年度・ご所属
+                <input type="text" name="affiliation" placeholder="例: 1998年卒 / 現役 / 先生 / 来賓" />
+              </label>
+              <label>お問い合わせ種別
+                <select name="topic">
+                  <option>60周年FESTA参加希望</option>
+                  <option>写真・資料提供</option>
+                  <option>協賛・寄付・支援</option>
+                  <option>近況・住所変更</option>
+                  <option>その他</option>
+                </select>
+              </label>
+              <label>内容
+                <textarea name="message" placeholder="差し支えない範囲でご記入ください"></textarea>
+              </label>
+              <p class="form-note">より確実な送信先として、メールアドレスへの直接送信もご利用ください。</p>
+              <div class="contact-actions">
+                <button class="button button--primary" type="submit">メールで送る</button>
+                <a class="button button--ghost" href="mailto:tus.fantasista@gmail.com?subject=%E3%80%9060%E5%91%A8%E5%B9%B4FESTA%E3%80%91%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">60周年FESTAについてメールする</a>
+              </div>
+            </form>
+          </div>
         </div>
       </section>
     </main>
@@ -134,46 +167,9 @@
         <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
       </div>
     </footer>
-  <!-- MOBILE_NAV_SCRIPT_START -->
-<script>
-(function () {
-  const toggle = document.querySelector('.menu-toggle');
-  const header = document.querySelector('.site-header, .header');
-  const nav = document.getElementById(toggle ? toggle.getAttribute('aria-controls') : 'site-nav');
-
-  if (!header || !toggle || !nav) return;
-
-  function setMenuOpen(open) {
-    header.classList.toggle('is-open', open);
-    document.body.classList.toggle('menu-open', open);
-    toggle.setAttribute('aria-expanded', String(open));
-  }
-
-  toggle.addEventListener('click', function () {
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    setMenuOpen(!isOpen);
-  });
-
-  nav.addEventListener('click', function (event) {
-    const link = event.target.closest('a');
-    if (link) setMenuOpen(false);
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') setMenuOpen(false);
-  });
-
-  window.addEventListener('resize', function () {
-    if (window.matchMedia('(min-width: 861px)').matches) {
-      setMenuOpen(false);
-    }
-  });
-})();
-</script>
-<!-- MOBILE_NAV_SCRIPT_END -->
+    <script src="../assets/js/site.js" defer></script>
   </body>
 </html>
-
 
 
 

@@ -16,6 +16,7 @@
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
     <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/enhancements.css" />
       
       </head>
   <body><header class="site-header">
@@ -72,6 +73,13 @@
 
       <section class="page-section">
         <div class="container">
+          <div class="filter-toolbar" data-archive-filter aria-label="お知らせの年度フィルター">
+            <button class="filter-button" type="button" data-filter="all" aria-pressed="true">すべて</button>
+            <button class="filter-button" type="button" data-filter="2026" aria-pressed="false">2026年</button>
+            <button class="filter-button" type="button" data-filter="2025" aria-pressed="false">2025年</button>
+            <button class="filter-button" type="button" data-filter="2023" aria-pressed="false">2023年</button>
+          </div>
+
           <div class="archive-list">
             <article class="archive-item">
               <time datetime="2026-02-07">2026年2月7日</time>
@@ -163,46 +171,9 @@
         <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
       </div>
     </footer>
-  <!-- MOBILE_NAV_SCRIPT_START -->
-<script>
-(function () {
-  const toggle = document.querySelector('.menu-toggle');
-  const header = document.querySelector('.site-header, .header');
-  const nav = document.getElementById(toggle ? toggle.getAttribute('aria-controls') : 'site-nav');
-
-  if (!header || !toggle || !nav) return;
-
-  function setMenuOpen(open) {
-    header.classList.toggle('is-open', open);
-    document.body.classList.toggle('menu-open', open);
-    toggle.setAttribute('aria-expanded', String(open));
-  }
-
-  toggle.addEventListener('click', function () {
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    setMenuOpen(!isOpen);
-  });
-
-  nav.addEventListener('click', function (event) {
-    const link = event.target.closest('a');
-    if (link) setMenuOpen(false);
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') setMenuOpen(false);
-  });
-
-  window.addEventListener('resize', function () {
-    if (window.matchMedia('(min-width: 861px)').matches) {
-      setMenuOpen(false);
-    }
-  });
-})();
-</script>
-<!-- MOBILE_NAV_SCRIPT_END -->
+    <script src="../assets/js/site.js" defer></script>
   </body>
 </html>
-
 
 
 
