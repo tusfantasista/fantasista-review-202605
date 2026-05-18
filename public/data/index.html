@@ -1,0 +1,4292 @@
+﻿<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>数字で見るFANTASISTA｜東京理科大学舞踏研究部 FANTASISTA会</title>
+    <meta
+      name="description"
+      content="1968年から2025年までのFANTASISTA会の人数規模、男女バランス、専攻、学校系統、卒部年度推移を集計データから紹介します。"
+    />
+    
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/enhancements.css" /><style>
+      .nav-copy {
+        display: block;
+        min-width: 0;
+        line-height: 1.2;
+      }
+
+      .nav-ja,
+      .label-ja {
+        display: block;
+        font-weight: 700;
+      }
+
+      .nav-en,
+      .label-en {
+        display: block;
+        font-size: 0.72em;
+        opacity: 0.72;
+        letter-spacing: 0.04em;
+      }
+
+      .site-nav--desktop a {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .site-nav--mobile .nav-copy {
+        text-align: left;
+      }
+
+      .data-hero {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 14% 18%, rgba(254, 192, 0, 0.16), transparent 28%),
+          radial-gradient(circle at 82% 20%, rgba(144, 31, 41, 0.18), transparent 24%),
+          linear-gradient(180deg, #16191f 0%, #21252d 100%);
+      }
+
+      .data-hero .page-hero__title,
+      .data-hero .page-hero__lead,
+      .data-hero .page-hero__eyebrow {
+        color: #ffffff;
+      }
+
+      .data-hero .page-hero__lead {
+        max-width: 56rem;
+      }
+
+      .data-note {
+        margin-top: 16px;
+        color: rgba(255, 255, 255, 0.78);
+        line-height: 1.85;
+      }
+
+      .stats-section {
+        position: relative;
+      }
+
+      .stats-panel {
+        padding: 30px 28px;
+        border-radius: 28px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff8ee 100%);
+        box-shadow: 0 20px 48px rgba(12, 18, 28, 0.10);
+      }
+
+      .stats-panel--white {
+        background: #ffffff;
+      }
+
+      .stats-head {
+        margin-bottom: 20px;
+      }
+
+      .stats-head__kicker {
+        margin: 0 0 10px;
+        color: #8a6a00;
+        font-size: 0.84rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .stats-head h2 {
+        margin: 0 0 12px;
+        color: #191f2a;
+        font-size: clamp(1.72rem, 3vw, 2.6rem);
+        line-height: 1.18;
+      }
+
+      .stats-head p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.9;
+      }
+
+      .stats-intro {
+        display: grid;
+        gap: 14px;
+      }
+
+      .stats-notes {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 8px;
+      }
+
+      .stats-notes li,
+      .stats-footnote {
+        color: #6a7079;
+        line-height: 1.8;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .stat-card {
+        padding: 24px 22px;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.10);
+      }
+
+      .stat-card span {
+        display: block;
+        margin-bottom: 8px;
+        color: #8a6a00;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .stat-card strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #191f2a;
+        font-size: clamp(1.58rem, 3vw, 2.35rem);
+        line-height: 1.15;
+      }
+
+      .stat-card p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.8;
+      }
+
+      .stat-range,
+      .stat-break,
+      .stat-subline {
+        display: block;
+      }
+
+      .stat-subline {
+        margin-top: 4px;
+        font-size: 0.72em;
+        line-height: 1.25;
+      }
+
+      .stats-two-col {
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
+        gap: 24px;
+      }
+
+      .specialty-layout {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr);
+        gap: 24px;
+        align-items: start;
+      }
+
+      .bar-list,
+      .stacked-list,
+      .school-breakdown,
+      .specialty-breakdown,
+      .group-compare {
+        display: grid;
+        gap: 18px;
+      }
+
+      .bar-row__head,
+      .stacked-row__head,
+      .school-row__head,
+      .specialty-row__head,
+      .group-row__head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 8px;
+      }
+
+      .bar-row__head strong,
+      .stacked-row__head strong,
+      .school-row__head strong,
+      .specialty-row__head strong,
+      .group-row__head strong {
+        color: #191f2a;
+        font-size: 1rem;
+      }
+
+      .bar-row__head span,
+      .stacked-row__head span,
+      .school-row__head span,
+      .specialty-row__head span,
+      .group-row__head span {
+        color: #59606b;
+        font-weight: 700;
+      }
+
+      .bar-track,
+      .school-track,
+      .group-track {
+        height: 18px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.08);
+      }
+
+      .bar-fill {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #f3bc00 0%, #fec000 55%, #ffd867 100%);
+      }
+
+      .bar-row__note,
+      .school-note,
+      .group-note {
+        margin: 8px 0 0;
+        color: #6a7079;
+        line-height: 1.75;
+      }
+
+      .balance-summary {
+        margin-bottom: 18px;
+        padding: 18px 18px 16px;
+        border-radius: 18px;
+        background: rgba(25, 31, 42, 0.04);
+      }
+
+      .balance-summary strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #191f2a;
+        font-size: 1.08rem;
+      }
+
+      .balance-summary p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.8;
+      }
+
+      .stacked-track {
+        display: flex;
+        height: 22px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.08);
+        box-shadow: inset 0 0 0 1px rgba(25, 31, 42, 0.06);
+      }
+
+      .stacked-track__male {
+        background: linear-gradient(90deg, #273142 0%, #35445d 100%);
+      }
+
+      .stacked-track__female {
+        background: linear-gradient(90deg, #f7cf5f 0%, #fec000 100%);
+      }
+
+      .stacked-track__standard {
+        background: linear-gradient(90deg, #273142 0%, #35445d 100%);
+      }
+
+      .stacked-track__latin {
+        background: linear-gradient(90deg, #f7cf5f 0%, #fec000 100%);
+      }
+
+      .stacked-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 8px;
+        align-items: center;
+      }
+
+      .stacked-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.04);
+        color: #59606b;
+        font-size: 0.92rem;
+      }
+
+      .stacked-chip::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+      }
+
+      .stacked-chip--male::before,
+      .stacked-chip--standard::before {
+        background: #35445d;
+      }
+
+      .stacked-chip--female::before,
+      .stacked-chip--latin::before {
+        background: #fec000;
+      }
+
+      .donut-card {
+        padding: 24px 22px;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.10);
+      }
+
+      .donut {
+        position: relative;
+        width: min(220px, 62vw);
+        aspect-ratio: 1 / 1;
+        margin: 0 auto 18px;
+        border-radius: 50%;
+        background: conic-gradient(#2f3949 0 156.6deg, #fec000 156.6deg 360deg);
+      }
+
+      .donut::after {
+        content: "";
+        position: absolute;
+        inset: 23%;
+        border-radius: 50%;
+        background: #fffdfa;
+        box-shadow: inset 0 0 0 1px rgba(25, 31, 42, 0.08);
+      }
+
+      .donut__center {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+        text-align: center;
+      }
+
+      .donut__center strong {
+        display: block;
+        color: #191f2a;
+        font-size: 1.5rem;
+      }
+
+      .donut__center span {
+        display: block;
+        color: #6a7079;
+        font-size: 0.9rem;
+      }
+
+      .legend-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        color: #191f2a;
+      }
+
+      .legend-item__label {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+      }
+
+      .legend-item__label::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+      }
+
+      .legend-item--standard .legend-item__label::before {
+        background: #2f3949;
+      }
+
+      .legend-item--latin .legend-item__label::before {
+        background: #fec000;
+      }
+
+      .legend-item span:last-child {
+        color: #59606b;
+        font-weight: 700;
+      }
+
+      .group-row {
+        padding: 18px 18px 16px;
+        border-radius: 20px;
+        background: rgba(25, 31, 42, 0.04);
+      }
+
+      .group-fill--ichibu {
+        background: linear-gradient(90deg, #f3bc00 0%, #fec000 55%, #ffd867 100%);
+      }
+
+      .group-fill--nibu {
+        background: linear-gradient(90deg, #273142 0%, #46556e 100%);
+      }
+
+      .school-subsection {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(25, 31, 42, 0.10);
+      }
+
+      .school-subsection h3 {
+        margin: 0 0 10px;
+        color: #191f2a;
+        font-size: 1.18rem;
+      }
+
+      .school-subsection p {
+        margin: 0 0 16px;
+        color: #59606b;
+        line-height: 1.85;
+      }
+
+      .heatmap-layout,
+      .rolling-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.28fr) minmax(300px, 0.72fr);
+        gap: 24px;
+      }
+
+      .heatmap-scroll,
+      .rolling-strip-scroll {
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+
+      .heatmap-board {
+        display: grid;
+        gap: 12px;
+        min-width: 1020px;
+      }
+
+      .heatmap-row {
+        display: grid;
+        grid-template-columns: 128px minmax(0, 1fr);
+        gap: 12px;
+        align-items: stretch;
+      }
+
+      .heatmap-row__label {
+        display: grid;
+        align-content: center;
+        gap: 4px;
+        padding: 12px 10px;
+        border-radius: 18px;
+        background: rgba(25, 31, 42, 0.04);
+      }
+
+      .heatmap-row__label strong {
+        color: #191f2a;
+        font-size: 0.98rem;
+      }
+
+      .heatmap-row__label span {
+        color: #6a7079;
+        font-size: 0.88rem;
+      }
+
+      .heatmap-row__cells {
+        display: grid;
+        grid-template-columns: repeat(10, minmax(78px, 1fr));
+        gap: 10px;
+      }
+
+      .heatmap-cell {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 88px;
+        padding: 10px 8px;
+        border-radius: 16px;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        background: rgba(254, 192, 0, 0.12);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      }
+
+      .heatmap-cell--dummy {
+        background: rgba(25, 31, 42, 0.035);
+        border-style: dashed;
+      }
+
+      .heatmap-cell--future {
+        background: rgba(25, 31, 42, 0.025);
+        border-style: dashed;
+        opacity: 0.9;
+      }
+
+      .heatmap-cell__year {
+        color: #4f5560;
+        font-size: 0.76rem;
+        line-height: 1.25;
+      }
+
+      .heatmap-cell__count {
+        color: #191f2a;
+        font-size: 1rem;
+        font-weight: 800;
+        line-height: 1.15;
+      }
+
+      .summary-list,
+      .ranking-list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .summary-card,
+      .ranking-card {
+        padding: 18px 18px 16px;
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: 0 18px 44px rgba(12, 18, 28, 0.10);
+      }
+
+      .summary-card strong,
+      .ranking-card strong {
+        display: block;
+        color: #8a6a00;
+        font-size: 0.88rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .summary-card h3,
+      .ranking-card h3 {
+        margin: 8px 0 6px;
+        color: #191f2a;
+        font-size: 1.12rem;
+      }
+
+      .summary-card p,
+      .ranking-card p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.7;
+      }
+
+      .rolling-chart-shell {
+        position: relative;
+        border-radius: 22px;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        background: #ffffff;
+        overflow: hidden;
+      }
+
+      .rolling-chart-svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .rolling-axis-note {
+        margin: 12px 0 0;
+        color: #6a7079;
+        line-height: 1.8;
+      }
+
+      .rolling-strip {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 66px;
+        gap: 8px;
+        min-width: max-content;
+      }
+
+      .rolling-strip__cell {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 70px;
+        padding: 8px 6px;
+        border-radius: 14px;
+        border: 1px solid rgba(25, 31, 42, 0.08);
+        background: rgba(254, 192, 0, 0.10);
+        text-align: center;
+      }
+
+      .rolling-strip__year {
+        color: #4f5560;
+        font-size: 0.72rem;
+      }
+
+      .rolling-strip__count {
+        color: #191f2a;
+        font-size: 0.92rem;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+
+      .summary-copy {
+        text-align: center;
+      }
+
+      .summary-copy p {
+        margin: 0 auto;
+        max-width: 56rem;
+        color: #4d5560;
+        font-size: clamp(1.02rem, 1.6vw, 1.16rem);
+        line-height: 2;
+      }
+
+      @media (max-width: 1120px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .stats-two-col,
+        .specialty-layout,
+        .heatmap-layout,
+        .rolling-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-panel,
+        .stat-card,
+        .donut-card,
+        .summary-card,
+        .ranking-card {
+          padding: 22px 18px;
+        }
+
+        .bar-row__head,
+        .stacked-row__head,
+        .school-row__head,
+        .specialty-row__head,
+        .group-row__head {
+          display: block;
+        }
+
+        .bar-row__head span,
+        .stacked-row__head span,
+        .school-row__head span,
+        .specialty-row__head span,
+        .group-row__head span {
+          display: block;
+          margin-top: 4px;
+        }
+
+        .heatmap-board {
+          min-width: 980px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 120px minmax(0, 1fr);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .nav-en,
+        .label-en {
+          display: none;
+        }
+
+        .data-hero {
+          text-align: center;
+        }
+
+        .data-hero .page-hero__lead,
+        .data-note {
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 60px;
+        }
+      }
+          /* REVIEW_ROLLING_1966_START */
+      .heatmap-cell__flag {
+        display: inline-block;
+        margin-top: 4px;
+        padding: 2px 6px;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.08);
+        color: #5d6470;
+        font-size: 0.62rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .rolling-callouts {
+        display: grid;
+        gap: 10px;
+        margin: 14px 0 0;
+      }
+
+      .rolling-callout {
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(25, 31, 42, 0.04);
+        color: #4f5661;
+        line-height: 1.75;
+      }
+
+      .rolling-callout strong {
+        color: #191f2a;
+      }
+
+      @media (max-width: 720px) {
+        .heatmap-cell__flag {
+          font-size: 0.58rem;
+        }
+      }
+      /* REVIEW_ROLLING_1966_END */
+          /* REVIEW_SCROLL_MOBILE_START */
+      .scroll-hint {
+        margin: 0 0 12px;
+        color: #6a7079;
+        font-size: 0.92rem;
+        line-height: 1.8;
+      }
+
+      .heatmap-scroll,
+      .rolling-chart-scroll,
+      .rolling-strip-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scroll-padding-inline: 12px;
+        touch-action: pan-x;
+        scrollbar-width: thin;
+      }
+
+      .heatmap-scroll::-webkit-scrollbar,
+      .rolling-chart-scroll::-webkit-scrollbar,
+      .rolling-strip-scroll::-webkit-scrollbar {
+        height: 10px;
+      }
+
+      .heatmap-scroll::-webkit-scrollbar-thumb,
+      .rolling-chart-scroll::-webkit-scrollbar-thumb,
+      .rolling-strip-scroll::-webkit-scrollbar-thumb {
+        background: rgba(25, 31, 42, 0.20);
+        border-radius: 999px;
+      }
+
+      .rolling-chart-shell {
+        width: 100%;
+      }
+
+      @media (max-width: 1024px) {
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll {
+          margin-inline: -10px;
+          padding-inline: 10px;
+        }
+
+        .heatmap-board {
+          min-width: 1100px;
+        }
+
+        .rolling-chart-shell {
+          min-width: 980px;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 68px;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .heatmap-board {
+          min-width: 1060px;
+        }
+
+        .rolling-chart-shell {
+          min-width: 920px;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 64px;
+        }
+
+        .scroll-hint {
+          font-size: 0.88rem;
+        }
+      }
+      /* REVIEW_SCROLL_MOBILE_END */      /* REVIEW_MOBILE_COMPACT_START */
+      @media (max-width: 1024px) {
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll {
+          margin-inline: -6px;
+          padding-inline: 6px;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-x: contain;
+          touch-action: pan-x;
+        }
+
+        .heatmap-board {
+          min-width: 720px;
+          gap: 8px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 84px minmax(0, 1fr);
+          gap: 8px;
+        }
+
+        .heatmap-row__label {
+          padding: 9px 7px;
+          border-radius: 14px;
+        }
+
+        .heatmap-row__label strong {
+          font-size: 0.8rem;
+          line-height: 1.2;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.7rem;
+          line-height: 1.25;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(48px, 1fr));
+          gap: 5px;
+        }
+
+        .heatmap-cell {
+          min-height: 58px;
+          padding: 6px 4px;
+          border-radius: 11px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.58rem;
+          line-height: 1.15;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.72rem;
+          line-height: 1.05;
+        }
+
+        .heatmap-cell__flag {
+          margin-top: 3px;
+          padding: 1px 4px;
+          font-size: 0.48rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 560px;
+        }
+
+        .rolling-chart-svg {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+
+        #rollingChartSvg text {
+          font-size: 8px !important;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.84rem;
+          line-height: 1.65;
+        }
+
+        .rolling-callouts {
+          gap: 8px;
+          margin-top: 12px;
+        }
+
+        .rolling-callout {
+          padding: 10px 12px;
+          border-radius: 14px;
+          font-size: 0.86rem;
+          line-height: 1.6;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 44px;
+          gap: 5px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 50px;
+          padding: 5px 3px;
+          border-radius: 10px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.56rem;
+          line-height: 1.1;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.68rem;
+          line-height: 1.05;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .heatmap-board {
+          min-width: 640px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 72px minmax(0, 1fr);
+          gap: 6px;
+        }
+
+        .heatmap-row__label {
+          padding: 8px 6px;
+          border-radius: 12px;
+        }
+
+        .heatmap-row__label strong {
+          font-size: 0.72rem;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.62rem;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(42px, 1fr));
+          gap: 4px;
+        }
+
+        .heatmap-cell {
+          min-height: 52px;
+          padding: 5px 3px;
+          border-radius: 9px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.54rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.66rem;
+        }
+
+        .heatmap-cell__flag {
+          font-size: 0.44rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 500px;
+        }
+
+        #rollingChartSvg text {
+          font-size: 7px !important;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 40px;
+          gap: 4px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 46px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.52rem;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.62rem;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.8rem;
+        }
+      }
+      /* REVIEW_MOBILE_COMPACT_END */
+          /* REVIEW_DEVICE_ADVICE_START */
+      .device-advice-section {
+        display: none;
+      }
+
+      .device-advice {
+        padding: 18px 18px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7e8 100%);
+        box-shadow: 0 14px 34px rgba(12, 18, 28, 0.08);
+      }
+
+      .device-advice strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #191f2a;
+        font-size: 1.02rem;
+      }
+
+      .device-advice p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.8;
+      }
+
+      .device-advice p + p {
+        margin-top: 8px;
+      }
+
+      @media (max-width: 1024px) {
+        .device-advice-section {
+          display: block;
+          padding-top: 28px;
+          padding-bottom: 0;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .device-advice-section {
+          padding-top: 20px;
+        }
+
+        .device-advice {
+          padding: 16px 14px 14px;
+          border-radius: 16px;
+        }
+
+        .device-advice strong {
+          font-size: 0.96rem;
+        }
+
+        .device-advice p {
+          font-size: 0.9rem;
+          line-height: 1.75;
+        }
+      }
+      /* REVIEW_DEVICE_ADVICE_END */
+          /* REVIEW_MOBILE_CARD_DENSITY_START */
+      @media (max-width: 1024px) {
+        .page-section.stats-section,
+        .page-section.page-section--light.stats-section {
+          padding-top: 42px;
+          padding-bottom: 42px;
+        }
+
+        .stats-grid,
+        .stats-two-col,
+        .specialty-layout,
+        .heatmap-layout,
+        .rolling-layout {
+          gap: 14px;
+        }
+
+        .bar-list,
+        .stacked-list,
+        .school-breakdown,
+        .specialty-breakdown,
+        .group-compare,
+        .summary-list,
+        .ranking-list,
+        .rolling-callouts {
+          gap: 12px;
+        }
+
+        .stats-panel {
+          padding: 18px 16px;
+          border-radius: 18px;
+        }
+
+        .stat-card,
+        .donut-card,
+        .summary-card,
+        .ranking-card,
+        .rolling-callout,
+        .device-advice,
+        .group-row,
+        .balance-summary {
+          padding: 14px 12px;
+          border-radius: 16px;
+        }
+
+        .stats-head {
+          margin-bottom: 14px;
+        }
+
+        .stats-head__kicker {
+          margin-bottom: 8px;
+          font-size: 0.76rem;
+        }
+
+        .stats-head h2 {
+          margin-bottom: 10px;
+          font-size: clamp(1.32rem, 2.8vw, 1.9rem);
+        }
+
+        .stats-head p,
+        .stats-footnote,
+        .school-note,
+        .device-advice p,
+        .rolling-callout,
+        .rolling-axis-note,
+        .scroll-hint {
+          font-size: 0.88rem;
+          line-height: 1.68;
+        }
+
+        .stat-card span {
+          margin-bottom: 6px;
+          font-size: 0.72rem;
+        }
+
+        .stat-card strong {
+          font-size: clamp(1.24rem, 2.6vw, 1.8rem);
+          margin-bottom: 4px;
+        }
+
+        .stat-card p,
+        .balance-summary p,
+        .summary-card p,
+        .ranking-card p {
+          font-size: 0.88rem;
+          line-height: 1.65;
+        }
+
+        .school-subsection {
+          margin-top: 18px;
+          padding-top: 18px;
+        }
+
+        .school-subsection h3 {
+          margin-bottom: 8px;
+          font-size: 1.02rem;
+        }
+
+        .school-subsection p {
+          margin-bottom: 12px;
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page-section.stats-section,
+        .page-section.page-section--light.stats-section {
+          padding-top: 34px;
+          padding-bottom: 34px;
+        }
+
+        .stats-grid,
+        .stats-two-col,
+        .specialty-layout,
+        .heatmap-layout,
+        .rolling-layout {
+          gap: 10px;
+        }
+
+        .bar-list,
+        .stacked-list,
+        .school-breakdown,
+        .specialty-breakdown,
+        .group-compare,
+        .summary-list,
+        .ranking-list,
+        .rolling-callouts {
+          gap: 10px;
+        }
+
+        .stats-panel {
+          padding: 14px 12px;
+          border-radius: 14px;
+        }
+
+        .stat-card,
+        .donut-card,
+        .summary-card,
+        .ranking-card,
+        .rolling-callout,
+        .device-advice,
+        .group-row,
+        .balance-summary {
+          padding: 12px 10px;
+          border-radius: 12px;
+        }
+
+        .stats-head {
+          margin-bottom: 12px;
+        }
+
+        .stats-head__kicker {
+          margin-bottom: 6px;
+          font-size: 0.68rem;
+        }
+
+        .stats-head h2 {
+          margin-bottom: 8px;
+          font-size: clamp(1.14rem, 5.2vw, 1.5rem);
+          line-height: 1.22;
+        }
+
+        .stats-head p,
+        .stats-footnote,
+        .school-note,
+        .device-advice p,
+        .rolling-callout,
+        .rolling-axis-note,
+        .scroll-hint {
+          font-size: 0.82rem;
+          line-height: 1.62;
+        }
+
+        .stat-card span {
+          font-size: 0.66rem;
+        }
+
+        .stat-card strong {
+          font-size: 1.16rem;
+          line-height: 1.12;
+        }
+
+        .stat-card p,
+        .balance-summary p,
+        .summary-card p,
+        .ranking-card p {
+          font-size: 0.82rem;
+          line-height: 1.58;
+        }
+
+        .school-subsection {
+          margin-top: 14px;
+          padding-top: 14px;
+        }
+
+        .school-subsection h3 {
+          font-size: 0.96rem;
+        }
+
+        .school-subsection p {
+          font-size: 0.84rem;
+          margin-bottom: 10px;
+        }
+      }
+      /* REVIEW_MOBILE_CARD_DENSITY_END */
+          /* REVIEW_MOBILE_SIMPLIFY_START */
+      .mobile-simplify {
+        display: none;
+      }
+
+      .mobile-simplify-note {
+        margin-bottom: 12px;
+        padding: 14px 14px 12px;
+        border-radius: 16px;
+        background: rgba(25, 31, 42, 0.04);
+      }
+
+      .mobile-simplify-note strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #191f2a;
+        font-size: 0.98rem;
+      }
+
+      .mobile-simplify-note p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.75;
+      }
+
+      .mobile-simplify-table-wrap {
+        overflow-x: auto;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        border-radius: 16px;
+        background: #ffffff;
+      }
+
+      .mobile-simplify-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .mobile-simplify-table caption {
+        padding: 12px 12px 0;
+        color: #191f2a;
+        font-weight: 700;
+        text-align: left;
+      }
+
+      .mobile-simplify-table th,
+      .mobile-simplify-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(25, 31, 42, 0.08);
+        text-align: left;
+        color: #2a2f38;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        vertical-align: top;
+      }
+
+      .mobile-simplify-table thead th {
+        background: rgba(254, 192, 0, 0.10);
+        font-size: 0.82rem;
+      }
+
+      .mobile-simplify-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      @media (max-width: 1024px) {
+        .mobile-simplify {
+          display: block;
+        }
+
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll,
+        .scroll-hint--heatmap,
+        .scroll-hint--rolling,
+        .rolling-axis-note {
+          display: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .mobile-simplify-note {
+          padding: 12px 12px 10px;
+          border-radius: 14px;
+        }
+
+        .mobile-simplify-note strong {
+          font-size: 0.92rem;
+        }
+
+        .mobile-simplify-note p,
+        .mobile-simplify-table th,
+        .mobile-simplify-table td {
+          font-size: 0.84rem;
+          line-height: 1.65;
+        }
+
+        .mobile-simplify-table th,
+        .mobile-simplify-table td {
+          padding: 8px 10px;
+        }
+
+        .mobile-simplify-table thead th {
+          font-size: 0.74rem;
+        }
+      }
+      /* REVIEW_MOBILE_SIMPLIFY_END */
+    </style>
+  <style id="mobile-horizontal-scroll-fix">
+  /* Mobile horizontal scroll support for wide tables/charts */
+  .mobile-x-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .mobile-x-scroll > table,
+  .mobile-x-scroll > svg,
+  .mobile-x-scroll > canvas,
+  .mobile-x-scroll > div {
+    max-width: none !important;
+  }
+
+  .mobile-scroll-hint {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-x-scroll {
+      border-radius: 8px;
+      padding-bottom: 8px;
+    }
+
+    .mobile-scroll-hint {
+      display: block;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #666;
+      margin: 4px 0 8px;
+    }
+
+    /* Tables such as 4-year rolling and heatmaps */
+    .mobile-x-scroll table {
+      width: max-content !important;
+      min-width: 760px;
+      white-space: nowrap;
+    }
+
+    /* SVG/canvas/chart-based heatmaps or rolling charts */
+    .mobile-x-scroll svg,
+    .mobile-x-scroll canvas,
+    .mobile-x-scroll .plotly-graph-div,
+    .mobile-x-scroll .chart,
+    .mobile-x-scroll .heatmap,
+    .mobile-x-scroll .rolling,
+    .mobile-x-scroll [class*="heatmap"],
+    .mobile-x-scroll [class*="rolling"],
+    .mobile-x-scroll [id*="heatmap"],
+    .mobile-x-scroll [id*="rolling"] {
+      min-width: 760px;
+      max-width: none !important;
+    }
+  }
+      /* REVIEW_SCROLL_MOBILE_START */
+      .scroll-hint {
+        margin: 0 0 12px;
+        color: #6a7079;
+        font-size: 0.92rem;
+        line-height: 1.8;
+      }
+
+      .heatmap-scroll,
+      .rolling-chart-scroll,
+      .rolling-strip-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scroll-padding-inline: 12px;
+        touch-action: pan-x;
+        scrollbar-width: thin;
+      }
+
+      .heatmap-scroll::-webkit-scrollbar,
+      .rolling-chart-scroll::-webkit-scrollbar,
+      .rolling-strip-scroll::-webkit-scrollbar {
+        height: 10px;
+      }
+
+      .heatmap-scroll::-webkit-scrollbar-thumb,
+      .rolling-chart-scroll::-webkit-scrollbar-thumb,
+      .rolling-strip-scroll::-webkit-scrollbar-thumb {
+        background: rgba(25, 31, 42, 0.20);
+        border-radius: 999px;
+      }
+
+      .rolling-chart-shell {
+        width: 100%;
+      }
+
+      @media (max-width: 1024px) {
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll {
+          margin-inline: -10px;
+          padding-inline: 10px;
+        }
+
+        .heatmap-board {
+          min-width: 1100px;
+        }
+
+        .rolling-chart-shell {
+          min-width: 980px;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 68px;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .heatmap-board {
+          min-width: 1060px;
+        }
+
+        .rolling-chart-shell {
+          min-width: 920px;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 64px;
+        }
+
+        .scroll-hint {
+          font-size: 0.88rem;
+        }
+      }
+      /* REVIEW_SCROLL_MOBILE_END */      /* REVIEW_MOBILE_COMPACT_START */
+      @media (max-width: 1024px) {
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll {
+          margin-inline: -6px;
+          padding-inline: 6px;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-x: contain;
+          touch-action: pan-x;
+        }
+
+        .heatmap-board {
+          min-width: 720px;
+          gap: 8px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 84px minmax(0, 1fr);
+          gap: 8px;
+        }
+
+        .heatmap-row__label {
+          padding: 9px 7px;
+          border-radius: 14px;
+        }
+
+        .heatmap-row__label strong {
+          font-size: 0.8rem;
+          line-height: 1.2;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.7rem;
+          line-height: 1.25;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(48px, 1fr));
+          gap: 5px;
+        }
+
+        .heatmap-cell {
+          min-height: 58px;
+          padding: 6px 4px;
+          border-radius: 11px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.58rem;
+          line-height: 1.15;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.72rem;
+          line-height: 1.05;
+        }
+
+        .heatmap-cell__flag {
+          margin-top: 3px;
+          padding: 1px 4px;
+          font-size: 0.48rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 560px;
+        }
+
+        .rolling-chart-svg {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+
+        #rollingChartSvg text {
+          font-size: 8px !important;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.84rem;
+          line-height: 1.65;
+        }
+
+        .rolling-callouts {
+          gap: 8px;
+          margin-top: 12px;
+        }
+
+        .rolling-callout {
+          padding: 10px 12px;
+          border-radius: 14px;
+          font-size: 0.86rem;
+          line-height: 1.6;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 44px;
+          gap: 5px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 50px;
+          padding: 5px 3px;
+          border-radius: 10px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.56rem;
+          line-height: 1.1;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.68rem;
+          line-height: 1.05;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .heatmap-board {
+          min-width: 640px;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 72px minmax(0, 1fr);
+          gap: 6px;
+        }
+
+        .heatmap-row__label {
+          padding: 8px 6px;
+          border-radius: 12px;
+        }
+
+        .heatmap-row__label strong {
+          font-size: 0.72rem;
+        }
+
+        .heatmap-row__label span {
+          font-size: 0.62rem;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(42px, 1fr));
+          gap: 4px;
+        }
+
+        .heatmap-cell {
+          min-height: 52px;
+          padding: 5px 3px;
+          border-radius: 9px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.54rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.66rem;
+        }
+
+        .heatmap-cell__flag {
+          font-size: 0.44rem;
+        }
+
+        .rolling-chart-shell {
+          min-width: 500px;
+        }
+
+        #rollingChartSvg text {
+          font-size: 7px !important;
+        }
+
+        .rolling-strip {
+          grid-auto-columns: 40px;
+          gap: 4px;
+        }
+
+        .rolling-strip__cell {
+          min-height: 46px;
+        }
+
+        .rolling-strip__year {
+          font-size: 0.52rem;
+        }
+
+        .rolling-strip__count {
+          font-size: 0.62rem;
+        }
+
+        .rolling-axis-note,
+        .scroll-hint,
+        .stats-footnote {
+          font-size: 0.8rem;
+        }
+      }
+      /* REVIEW_MOBILE_COMPACT_END */
+          /* REVIEW_DEVICE_ADVICE_START */
+      .device-advice-section {
+        display: none;
+      }
+
+      .device-advice {
+        padding: 18px 18px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7e8 100%);
+        box-shadow: 0 14px 34px rgba(12, 18, 28, 0.08);
+      }
+
+      .device-advice strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #191f2a;
+        font-size: 1.02rem;
+      }
+
+      .device-advice p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.8;
+      }
+
+      .device-advice p + p {
+        margin-top: 8px;
+      }
+
+      @media (max-width: 1024px) {
+        .device-advice-section {
+          display: block;
+          padding-top: 28px;
+          padding-bottom: 0;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .device-advice-section {
+          padding-top: 20px;
+        }
+
+        .device-advice {
+          padding: 16px 14px 14px;
+          border-radius: 16px;
+        }
+
+        .device-advice strong {
+          font-size: 0.96rem;
+        }
+
+        .device-advice p {
+          font-size: 0.9rem;
+          line-height: 1.75;
+        }
+      }
+      /* REVIEW_DEVICE_ADVICE_END */
+          /* REVIEW_MOBILE_CARD_DENSITY_START */
+      @media (max-width: 1024px) {
+        .page-section.stats-section,
+        .page-section.page-section--light.stats-section {
+          padding-top: 42px;
+          padding-bottom: 42px;
+        }
+
+        .stats-grid,
+        .stats-two-col,
+        .specialty-layout,
+        .heatmap-layout,
+        .rolling-layout {
+          gap: 14px;
+        }
+
+        .bar-list,
+        .stacked-list,
+        .school-breakdown,
+        .specialty-breakdown,
+        .group-compare,
+        .summary-list,
+        .ranking-list,
+        .rolling-callouts {
+          gap: 12px;
+        }
+
+        .stats-panel {
+          padding: 18px 16px;
+          border-radius: 18px;
+        }
+
+        .stat-card,
+        .donut-card,
+        .summary-card,
+        .ranking-card,
+        .rolling-callout,
+        .device-advice,
+        .group-row,
+        .balance-summary {
+          padding: 14px 12px;
+          border-radius: 16px;
+        }
+
+        .stats-head {
+          margin-bottom: 14px;
+        }
+
+        .stats-head__kicker {
+          margin-bottom: 8px;
+          font-size: 0.76rem;
+        }
+
+        .stats-head h2 {
+          margin-bottom: 10px;
+          font-size: clamp(1.32rem, 2.8vw, 1.9rem);
+        }
+
+        .stats-head p,
+        .stats-footnote,
+        .school-note,
+        .device-advice p,
+        .rolling-callout,
+        .rolling-axis-note,
+        .scroll-hint {
+          font-size: 0.88rem;
+          line-height: 1.68;
+        }
+
+        .stat-card span {
+          margin-bottom: 6px;
+          font-size: 0.72rem;
+        }
+
+        .stat-card strong {
+          font-size: clamp(1.24rem, 2.6vw, 1.8rem);
+          margin-bottom: 4px;
+        }
+
+        .stat-card p,
+        .balance-summary p,
+        .summary-card p,
+        .ranking-card p {
+          font-size: 0.88rem;
+          line-height: 1.65;
+        }
+
+        .school-subsection {
+          margin-top: 18px;
+          padding-top: 18px;
+        }
+
+        .school-subsection h3 {
+          margin-bottom: 8px;
+          font-size: 1.02rem;
+        }
+
+        .school-subsection p {
+          margin-bottom: 12px;
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page-section.stats-section,
+        .page-section.page-section--light.stats-section {
+          padding-top: 34px;
+          padding-bottom: 34px;
+        }
+
+        .stats-grid,
+        .stats-two-col,
+        .specialty-layout,
+        .heatmap-layout,
+        .rolling-layout {
+          gap: 10px;
+        }
+
+        .bar-list,
+        .stacked-list,
+        .school-breakdown,
+        .specialty-breakdown,
+        .group-compare,
+        .summary-list,
+        .ranking-list,
+        .rolling-callouts {
+          gap: 10px;
+        }
+
+        .stats-panel {
+          padding: 14px 12px;
+          border-radius: 14px;
+        }
+
+        .stat-card,
+        .donut-card,
+        .summary-card,
+        .ranking-card,
+        .rolling-callout,
+        .device-advice,
+        .group-row,
+        .balance-summary {
+          padding: 12px 10px;
+          border-radius: 12px;
+        }
+
+        .stats-head {
+          margin-bottom: 12px;
+        }
+
+        .stats-head__kicker {
+          margin-bottom: 6px;
+          font-size: 0.68rem;
+        }
+
+        .stats-head h2 {
+          margin-bottom: 8px;
+          font-size: clamp(1.14rem, 5.2vw, 1.5rem);
+          line-height: 1.22;
+        }
+
+        .stats-head p,
+        .stats-footnote,
+        .school-note,
+        .device-advice p,
+        .rolling-callout,
+        .rolling-axis-note,
+        .scroll-hint {
+          font-size: 0.82rem;
+          line-height: 1.62;
+        }
+
+        .stat-card span {
+          font-size: 0.66rem;
+        }
+
+        .stat-card strong {
+          font-size: 1.16rem;
+          line-height: 1.12;
+        }
+
+        .stat-card p,
+        .balance-summary p,
+        .summary-card p,
+        .ranking-card p {
+          font-size: 0.82rem;
+          line-height: 1.58;
+        }
+
+        .school-subsection {
+          margin-top: 14px;
+          padding-top: 14px;
+        }
+
+        .school-subsection h3 {
+          font-size: 0.96rem;
+        }
+
+        .school-subsection p {
+          font-size: 0.84rem;
+          margin-bottom: 10px;
+        }
+      }
+      /* REVIEW_MOBILE_CARD_DENSITY_END */
+          /* REVIEW_MOBILE_SIMPLIFY_START */
+      .mobile-simplify {
+        display: none;
+      }
+
+      .mobile-simplify-note {
+        margin-bottom: 12px;
+        padding: 14px 14px 12px;
+        border-radius: 16px;
+        background: rgba(25, 31, 42, 0.04);
+      }
+
+      .mobile-simplify-note strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #191f2a;
+        font-size: 0.98rem;
+      }
+
+      .mobile-simplify-note p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.75;
+      }
+
+      .mobile-simplify-table-wrap {
+        overflow-x: auto;
+        border: 1px solid rgba(25, 31, 42, 0.10);
+        border-radius: 16px;
+        background: #ffffff;
+      }
+
+      .mobile-simplify-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .mobile-simplify-table caption {
+        padding: 12px 12px 0;
+        color: #191f2a;
+        font-weight: 700;
+        text-align: left;
+      }
+
+      .mobile-simplify-table th,
+      .mobile-simplify-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(25, 31, 42, 0.08);
+        text-align: left;
+        color: #2a2f38;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        vertical-align: top;
+      }
+
+      .mobile-simplify-table thead th {
+        background: rgba(254, 192, 0, 0.10);
+        font-size: 0.82rem;
+      }
+
+      .mobile-simplify-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      @media (max-width: 1024px) {
+        .mobile-simplify {
+          display: block;
+        }
+
+        .heatmap-scroll,
+        .rolling-chart-scroll,
+        .rolling-strip-scroll,
+        .scroll-hint--heatmap,
+        .scroll-hint--rolling,
+        .rolling-axis-note {
+          display: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .mobile-simplify-note {
+          padding: 12px 12px 10px;
+          border-radius: 14px;
+        }
+
+        .mobile-simplify-note strong {
+          font-size: 0.92rem;
+        }
+
+        .mobile-simplify-note p,
+        .mobile-simplify-table th,
+        .mobile-simplify-table td {
+          font-size: 0.84rem;
+          line-height: 1.65;
+        }
+
+        .mobile-simplify-table th,
+        .mobile-simplify-table td {
+          padding: 8px 10px;
+        }
+
+        .mobile-simplify-table thead th {
+          font-size: 0.74rem;
+        }
+      }
+      /* REVIEW_MOBILE_SIMPLIFY_END */
+    </style>    <!-- REVIEW_DATA_BALANCE_RESPONSIVE_START -->
+    <style>
+      .stats-section > .container {
+        max-width: min(1180px, calc(100vw - clamp(24px, 4vw, 64px)));
+        margin-inline: auto;
+      }
+
+      .stats-section svg,
+      .stats-section canvas {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .stats-grid,
+      .stats-two-col,
+      .specialty-layout,
+      .heatmap-layout,
+      .rolling-layout,
+      .summary-list,
+      .ranking-list,
+      .bar-list,
+      .stacked-list,
+      .school-breakdown,
+      .specialty-breakdown,
+      .group-compare {
+        min-width: 0;
+      }
+
+      .stats-two-col > *,
+      .specialty-layout > *,
+      .heatmap-layout > *,
+      .rolling-layout > * {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      .device-advice-section,
+      .mobile-simplify,
+      .scroll-hint {
+        display: none !important;
+      }
+
+      .heatmap-layout,
+      .rolling-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+        gap: clamp(18px, 2vw, 26px);
+        align-items: start;
+      }
+
+      .heatmap-layout .stats-panel,
+      .rolling-layout .stats-panel {
+        padding: clamp(20px, 2vw, 26px);
+      }
+
+      .summary-list,
+      .ranking-list {
+        gap: 10px;
+      }
+
+      .summary-card,
+      .ranking-card {
+        padding: 14px 14px 12px;
+        border-radius: 18px;
+      }
+
+      .summary-card strong,
+      .ranking-card strong {
+        font-size: 0.78rem;
+      }
+
+      .summary-card h3 {
+        margin: 6px 0 2px;
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+
+      .summary-card p {
+        font-size: 0.84rem;
+        line-height: 1.55;
+      }
+
+      .ranking-card {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 6px 10px;
+      }
+
+      .ranking-card strong {
+        margin: 0;
+      }
+
+      .ranking-card h3 {
+        margin: 0;
+        font-size: 0.92rem;
+        line-height: 1.35;
+      }
+
+      .ranking-card p {
+        margin: 0;
+        color: #191f2a;
+        font-size: 1.02rem;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .rolling-callouts {
+        gap: 8px;
+      }
+
+      .rolling-callout {
+        padding: 10px 12px;
+        border-radius: 14px;
+      }
+
+      .heatmap-scroll,
+      .rolling-chart-scroll,
+      .rolling-strip-scroll {
+        display: block !important;
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      .heatmap-scroll {
+        overflow: visible !important;
+      }
+
+      .rolling-chart-scroll {
+        overflow: visible !important;
+      }
+
+      .rolling-strip-scroll {
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .heatmap-board,
+      .rolling-strip {
+        min-width: 0 !important;
+        max-width: 100%;
+      }
+
+      .heatmap-row {
+        grid-template-columns: 118px minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .heatmap-row__cells {
+        grid-template-columns: repeat(10, minmax(44px, 1fr));
+        gap: 8px;
+      }
+
+      .heatmap-cell {
+        min-height: 76px;
+        padding: 8px 6px;
+        border-radius: 14px;
+      }
+
+      .heatmap-cell__year {
+        font-size: 0.7rem;
+      }
+
+      .heatmap-cell__count {
+        font-size: 0.9rem;
+      }
+
+      .rolling-chart-shell {
+        min-width: 0 !important;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      .rolling-chart-svg {
+        display: block;
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100%;
+      }
+
+      @media (max-width: 1100px) {
+        .heatmap-layout,
+        .rolling-layout {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+
+        .summary-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+        }
+
+        .ranking-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+        }
+
+        .heatmap-board {
+          min-width: 0 !important;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 108px minmax(0, 1fr);
+          gap: 10px;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(10, minmax(0, 1fr));
+          gap: 6px;
+        }
+
+        .heatmap-cell {
+          min-height: 70px;
+        }
+
+        .rolling-strip-scroll {
+          overflow: visible !important;
+        }
+
+        .rolling-strip {
+          grid-auto-flow: row !important;
+          grid-auto-columns: auto !important;
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          gap: 8px;
+          min-width: 0 !important;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+        }
+
+        .stats-panel {
+          padding: 18px 16px;
+          border-radius: 18px;
+        }
+
+        .summary-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .ranking-list {
+          grid-template-columns: 1fr;
+        }
+
+        .heatmap-row {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+
+        .heatmap-row__label {
+          padding: 10px 12px;
+          border-radius: 14px;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 6px;
+        }
+
+        .heatmap-cell {
+          min-height: 64px;
+          padding: 8px 6px;
+          border-radius: 12px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.68rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.84rem;
+        }
+
+        .rolling-strip-scroll {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .page-section.stats-section,
+        .page-section.page-section--light.stats-section {
+          padding-top: 34px;
+          padding-bottom: 34px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .stats-panel {
+          padding: 14px 12px;
+          border-radius: 14px;
+        }
+
+        .stat-card,
+        .donut-card,
+        .summary-card,
+        .ranking-card,
+        .rolling-callout,
+        .group-row,
+        .balance-summary {
+          padding: 12px 10px;
+          border-radius: 12px;
+        }
+
+        .stats-head {
+          margin-bottom: 12px;
+        }
+
+        .stats-head h2 {
+          font-size: clamp(1.14rem, 5.2vw, 1.48rem);
+          line-height: 1.22;
+        }
+
+        .stats-head p,
+        .stats-footnote,
+        .school-note,
+        .rolling-callout {
+          font-size: 0.82rem;
+          line-height: 1.62;
+        }
+
+        .summary-list {
+          grid-template-columns: 1fr;
+        }
+
+        .summary-card h3 {
+          font-size: 0.94rem;
+        }
+
+        .summary-card p {
+          font-size: 0.8rem;
+        }
+
+        .ranking-card {
+          grid-template-columns: auto 1fr auto;
+          gap: 4px 8px;
+        }
+
+        .ranking-card h3 {
+          font-size: 0.86rem;
+        }
+
+        .ranking-card p {
+          font-size: 0.92rem;
+        }
+
+        .heatmap-row__cells {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 5px;
+        }
+
+        .heatmap-cell {
+          min-height: 58px;
+          padding: 7px 5px;
+        }
+
+        .heatmap-cell__year {
+          font-size: 0.62rem;
+        }
+
+        .heatmap-cell__count {
+          font-size: 0.78rem;
+        }
+      }
+    </style>
+    <!-- REVIEW_DATA_BALANCE_RESPONSIVE_END -->
+      <!-- REVIEW_DATA_LINK_VISUAL_START -->
+    <style>
+      #data-overview,
+      #data-decade,
+      #data-gender-specialty,
+      #data-lineages,
+      #data-timeline,
+      #data-rolling,
+      #data-peak,
+      [id^="context-"] {
+        scroll-margin-top: 96px;
+      }
+
+      a {
+        cursor: pointer;
+      }
+
+      .stacked-chip,
+      .stats-head__kicker,
+      .stat-card span,
+      .viewing-note__label {
+        cursor: default;
+      }
+
+      .site-nav a[aria-current="page"] {
+        color: #191f2a;
+        background: rgba(254, 192, 0, 0.18);
+        border-radius: 999px;
+      }
+
+      .site-nav a:hover,
+      .site-nav a:focus-visible {
+        background: rgba(254, 192, 0, 0.16);
+        outline: 3px solid rgba(254, 192, 0, 0.35);
+        outline-offset: 2px;
+      }
+
+      .site-nav--mobile a {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+
+      .page-toc {
+        margin-top: 12px;
+        border: 1px solid rgba(138, 106, 0, 0.22);
+        border-radius: 18px;
+        background: #ffffff;
+        box-shadow: 0 14px 34px rgba(12, 18, 28, 0.06);
+      }
+
+      .page-toc summary {
+        min-height: 46px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        color: #191f2a;
+        font-weight: 800;
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .page-toc summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .page-toc summary::after {
+        content: "+";
+        margin-left: auto;
+        color: #8a6a00;
+        font-size: 1.05rem;
+      }
+
+      .page-toc[open] summary::after {
+        content: "−";
+      }
+
+      .page-toc__links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 0 16px 16px;
+      }
+
+      .page-toc__links a {
+        min-height: 42px;
+        padding: 10px 12px;
+        border: 1px solid rgba(138, 106, 0, 0.22);
+        border-radius: 12px;
+        background: #fffaf0;
+        color: #2b2418;
+        font-weight: 800;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .page-toc__links a:hover,
+      .page-toc__links a:focus-visible {
+        background: #fec000;
+        color: #191f2a;
+      }
+
+      .viewing-note {
+        padding: 18px 20px;
+        border-radius: 18px;
+        background: rgba(25, 31, 42, 0.04);
+        border: 1px solid rgba(25, 31, 42, 0.08);
+        color: #59606b;
+      }
+
+      .viewing-note__label {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #6f5600;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .viewing-note h3 {
+        margin: 0 0 8px;
+        color: #191f2a;
+      }
+
+      .viewing-note p {
+        margin: 0;
+        line-height: 1.75;
+      }
+
+      .viewing-note p + p {
+        margin-top: 8px;
+      }
+
+      .data-cta-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .data-cta-card {
+        display: grid;
+        gap: 10px;
+        padding: 22px;
+        border-radius: 22px;
+        background: linear-gradient(180deg, #fffdfa 0%, #fff6df 100%);
+        border: 1px solid rgba(138, 106, 0, 0.22);
+        color: #2b2418;
+        text-decoration: none;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+      }
+
+      .data-cta-card__eyebrow {
+        color: #6f5600;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .data-cta-card strong {
+        color: #191f2a;
+        font-size: 1.05rem;
+      }
+
+      .data-cta-card span {
+        color: #59606b;
+        line-height: 1.75;
+      }
+
+      .data-cta-card em {
+        color: #5f4700;
+        font-style: normal;
+        font-weight: 800;
+        text-decoration: underline;
+        text-decoration-thickness: 1.5px;
+        text-underline-offset: 4px;
+      }
+
+      .data-cta-card:hover,
+      .data-cta-card:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.14);
+      }
+
+      .stats-footnote a,
+      .school-note a,
+      .scroll-hint a,
+      .viewing-note a {
+        color: #5f4700;
+        text-decoration: underline;
+        text-decoration-thickness: 1.5px;
+        text-underline-offset: 4px;
+      }
+
+      .page-toc summary:focus-visible,
+      .page-toc__links a:focus-visible,
+      .data-cta-card:focus-visible,
+      .site-nav a:focus-visible {
+        outline: 3px solid rgba(254, 192, 0, 0.45);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 860px) {
+        .data-cta-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .page-toc__links {
+          grid-template-columns: 1fr;
+        }
+
+        .page-toc__links a {
+          min-height: 44px;
+        }
+      }
+    </style>
+    <!-- REVIEW_DATA_LINK_VISUAL_END -->    <!-- REVIEW_DATA_OVERVIEW_REFRAME_STYLE_START -->
+    <style>
+      .overview-highlight-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .overview-lead-card {
+        padding: 28px 26px;
+        border-radius: 28px;
+        background: linear-gradient(180deg, #191f2a 0%, #262c36 100%);
+        box-shadow: 0 20px 48px rgba(12, 18, 28, 0.16);
+        color: #ffffff;
+      }
+
+      .overview-lead-card__eyebrow {
+        display: block;
+        margin-bottom: 10px;
+        color: #f3d78d;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .overview-lead-card__number {
+        display: block;
+        color: #ffffff;
+        font-family: "Oswald", sans-serif;
+        font-size: clamp(3rem, 6vw, 5.8rem);
+        line-height: 1;
+        letter-spacing: 0.02em;
+      }
+
+      .overview-lead-card p {
+        margin: 14px 0 0;
+        color: rgba(255, 255, 255, 0.84);
+        line-height: 1.85;
+      }
+
+      .overview-insight-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .overview-insight-card {
+        padding: 22px 20px;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 16px 34px rgba(12, 18, 28, 0.08);
+      }
+
+      .overview-insight-card__eyebrow {
+        display: block;
+        margin-bottom: 10px;
+        color: #8a6a00;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .overview-insight-card strong {
+        display: block;
+        color: #191f2a;
+        font-size: clamp(1.9rem, 3.2vw, 3rem);
+        line-height: 1.08;
+      }
+
+      .overview-insight-card__sub {
+        display: block;
+        margin-top: 8px;
+        color: #5f6671;
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.55;
+      }
+
+      .overview-insight-card p {
+        margin: 12px 0 0;
+        color: #59606b;
+        line-height: 1.78;
+      }
+
+      .overview-pair {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 4px;
+      }
+
+      .overview-pair__item {
+        padding: 14px 12px;
+        border-radius: 18px;
+        background: #f8fafc;
+      }
+
+      .overview-pair__label {
+        display: block;
+        margin-bottom: 6px;
+        color: #6f5600;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .overview-pair__value {
+        display: block;
+        color: #191f2a;
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+        line-height: 1.05;
+      }
+
+      .overview-mini-bars {
+        display: grid;
+        gap: 12px;
+        margin-top: 6px;
+      }
+
+      .overview-mini-bar {
+        display: grid;
+        gap: 6px;
+      }
+
+      .overview-mini-bar__head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .overview-mini-bar__head b {
+        color: #191f2a;
+        font-size: 0.92rem;
+      }
+
+      .overview-mini-bar__head span {
+        color: #5f6671;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .overview-mini-bar__track {
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(25, 31, 42, 0.08);
+        overflow: hidden;
+      }
+
+      .overview-mini-bar__fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #fec000 0%, #c89200 100%);
+      }
+
+      .overview-collection-note {
+        margin-top: 20px;
+        padding: 18px 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(138, 106, 0, 0.16);
+        background: linear-gradient(180deg, #fffdfa 0%, #fff7ea 100%);
+      }
+
+      .overview-collection-note__label {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #6f5600;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .overview-collection-note p {
+        margin: 0;
+        color: #59606b;
+        line-height: 1.82;
+      }
+
+      .overview-collection-note p + p {
+        margin-top: 8px;
+      }
+
+      @media (max-width: 1024px) {
+        .overview-highlight-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .overview-insight-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .overview-pair {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+    </style>
+    <!-- REVIEW_DATA_OVERVIEW_REFRAME_STYLE_END -->
+</head>
+  <body><header class="site-header">
+      <div class="container site-header__inner">
+        <a class="brand" href="../" aria-label="FANTASISTA ホームへ戻る">
+          <img class="brand__logo" src="../assets/img/logo-wordmark-dark.png" alt="東京理科大学舞踏研究部 FANTASISTA" />
+        </a>
+
+        <nav class="site-nav site-nav--desktop" aria-label="主要メニュー">
+          <a href="../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
+          <a href="../about/"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
+          <a href="../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
+          <a href="../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+          <a href="../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
+          <a href="../history/"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
+          <a href="./" aria-current="page"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
+          <a href="../gallery/"><span class="nav-copy"><span class="nav-ja">写真・ギャラリー</span><span class="nav-en">Gallery</span></span></a>
+          <a href="../contact/"><span class="nav-copy"><span class="nav-ja">お問い合わせ</span><span class="nav-en">Contact</span></span></a>
+        </nav>
+
+        <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+          <span class="sr-only">メニューを開閉</span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+          <span class="menu-toggle-line" aria-hidden="true"></span>
+        </button>
+
+        <nav id="site-nav" class="site-nav site-nav--mobile" aria-label="モバイルメニュー">
+          <a href="../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
+          <a href="../about/"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
+          <a href="../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
+          <a href="../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+          <a href="../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
+          <a href="../history/"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
+          <a href="./" aria-current="page"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
+          <a href="../gallery/"><span class="nav-copy"><span class="nav-ja">写真・ギャラリー</span><span class="nav-en">Gallery</span></span></a>
+          <a href="../contact/"><span class="nav-copy"><span class="nav-ja">お問い合わせ</span><span class="nav-en">Contact</span></span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero data-hero">
+        <div class="page-hero__grid" aria-hidden="true"></div>
+        <img class="page-hero__seal" src="../assets/img/university-seal.png" alt="" aria-hidden="true" />
+        <div class="container page-hero__inner">
+          <p class="page-hero__eyebrow"><span class="label-ja">データで見るFANTASISTA</span><span class="label-en">FANTASISTA in Numbers</span></p>
+          <h1 class="page-hero__title">数字で見るFANTASISTA</h1>
+                    <p class="page-hero__lead">
+            登録者数だけでなく、世代の厚み、人数の山、男女・専攻・所属系統のバランスから、
+            FANTASISTA会の広がりを数字で読み解きます。
+          </p>
+                    <p class="data-note">
+            集計対象の違いは、ページ冒頭の「集計対象について」にまとめています。
+          </p>
+        </div>
+      </section>
+
+            <section class="page-section stats-section" id="data-overview">
+        <div class="container">
+          <div class="stats-panel stats-panel--white">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">全体像</span><span class="label-en">Overview</span></p>
+              <h2>FANTASISTAの広がりを、数字で見る</h2>
+              <p>登録者数だけでなく、世代の厚み、人数の山、男女・所属系統のバランスから、FANTASISTA会の60年を読み解きます。</p>
+            </div>
+
+            <div class="overview-highlight-layout">
+              <article class="overview-lead-card">
+                <span class="overview-lead-card__eyebrow">名簿登録者総数</span>
+                <strong class="overview-lead-card__number">562名</strong>
+                <p>賛助会員を含む登録総数です。</p>
+                <p>卒部年度別の集計は、卒部年度が確認できる560名を対象にしています。</p>
+              </article>
+
+              <div class="overview-insight-grid">
+                <article class="overview-insight-card">
+                  <span class="overview-insight-card__eyebrow">最多の年代</span>
+                  <strong>2000年代</strong>
+                  <span class="overview-insight-card__sub">133名 / 23.8%</span>
+                  <p>通常の年代区切りでは、2000年代卒が最も人数の厚い年代です。</p>
+                </article>
+
+                <article class="overview-insight-card">
+                  <span class="overview-insight-card__eyebrow">最も厚かった4年間</span>
+                  <strong>68名</strong>
+                  <span class="overview-insight-card__sub">2002〜2005年卒<br />2003〜2006年卒</span>
+                  <p>大学4年間をひとまとまりで見ると、2000年代前半に最大の世代の重なりが見えます。</p>
+                </article>
+
+                <article class="overview-insight-card">
+                  <span class="overview-insight-card__eyebrow">男女構成</span>
+                  <div class="overview-pair" aria-label="男女構成">
+                    <div class="overview-pair__item">
+                      <b class="overview-pair__label">男</b>
+                      <strong class="overview-pair__value">277名</strong>
+                    </div>
+                    <div class="overview-pair__item">
+                      <b class="overview-pair__label">女</b>
+                      <strong class="overview-pair__value">285名</strong>
+                    </div>
+                  </div>
+                  <p>名簿登録者全体562名ベースで、男女がほぼ同数です。</p>
+                </article>
+
+                <article class="overview-insight-card">
+                  <span class="overview-insight-card__eyebrow">2つの舞研系統</span>
+                  <div class="overview-mini-bars" aria-label="2つの舞研系統">
+                    <div class="overview-mini-bar">
+                      <div class="overview-mini-bar__head">
+                        <b>Ⅰ部舞研系</b>
+                        <span>372名 / 66.4%</span>
+                      </div>
+                      <div class="overview-mini-bar__track"><span class="overview-mini-bar__fill" style="width: 66.4%;"></span></div>
+                    </div>
+
+                    <div class="overview-mini-bar">
+                      <div class="overview-mini-bar__head">
+                        <b>Ⅱ部舞研系</b>
+                        <span>188名 / 33.6%</span>
+                      </div>
+                      <div class="overview-mini-bar__track"><span class="overview-mini-bar__fill" style="width: 33.6%;"></span></div>
+                    </div>
+                  </div>
+                  <p>当時の所属母体による2つの流れです。</p>
+                </article>
+              </div>
+            </div>
+
+            <aside class="overview-collection-note" aria-label="集計対象について">
+              <span class="overview-collection-note__label">集計対象について</span>
+              <p>このページでは、名簿登録者総数562名のうち、卒部年度が確認できる560名を年代別・年表・4年ローリングの集計対象としています。専攻別集計は、専攻登録がある306名を対象にしています。卒部年度が確認できる記録は1968年卒から2025年卒までです。</p>
+            </aside>
+
+            <ul class="stats-notes" style="margin-top: 16px;">
+              <li>※表示している数値は、個人が特定されないよう集計済みデータのみを使用しています。</li>
+              <li>※2020年代の人数は、2025年までの途中集計です。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section page-section--light stats-section" id="data-sample-source">
+        <div class="container">
+          <div class="stats-panel stats-panel--white">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">外部データ化のサンプル</span><span class="label-en">JSON Sample</span></p>
+              <h2>JSONを読み込んで表とグラフを表示する形</h2>
+              <p>
+                将来的にFESTA参加者数、会費・寄付、現役支援、競技成績、年度別イベントを
+                <code>assets/data/site-metrics.json</code> のような静的JSONで管理できます。
+                GitHub Pagesだけで動き、個人情報を保存せずに集計済みデータだけを掲載できます。
+              </p>
+            </div>
+
+            <div data-sample-data aria-live="polite">
+              <p class="form-note">サンプルデータを読み込んでいます。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section stats-section">
+        <div class="container stats-two-col">
+          <div class="stats-panel">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">年代別構成</span><span class="label-en">Members by Decade</span></p>
+              <h2>年代別に見るFANTASISTAの広がり</h2>
+              <p>通常の年代区切りで見ると、2000年代卒が最多であり、FANTASISTAの大きな山が見えてきます。</p>
+            </div>
+
+            <div class="bar-list" aria-label="年代別メンバー数">
+              <div class="bar-row">
+                <div class="bar-row__head">
+                  <strong>1960年代</strong>
+                  <span>7名 / 1.3%</span>
+                </div>
+                <div class="bar-track"><span class="bar-fill" style="width: 5.3%;"></span></div>
+              </div>
+
+              <div class="bar-row">
+                <div class="bar-row__head">
+                  <strong>1970年代</strong>
+                  <span>93名 / 16.6%</span>
+                </div>
+                <div class="bar-track"><span class="bar-fill" style="width: 69.9%;"></span></div>
+              </div>
+
+              <div class="bar-row">
+                <div class="bar-row__head">
+                  <strong>1980年代</strong>
+                  <span>114名 / 20.4%</span>
+                </div>
+                <div class="bar-track"><span class="bar-fill" style="width: 85.7%;"></span></div>
+              </div>
+
+              <div class="bar-row">
+                <div class="bar-row__head">
+                  <strong>1990年代</strong>
+                  <span>81名 / 14.5%</span>
+                </div>
+                <div class="bar-track"><span class="bar-fill" style="width: 60.9%;"></span></div>
+              </div>
+
+              <div class="bar-row">
+                <div class="bar-row__head">
+                  <strong>2000年代</strong>
+                  <span>133名 / 23.8%</span>
+                </div>
+                <div class="bar-track"><span class="bar-fill" style="width: 100%;"></span></div>
+              </div>
+
+              <div class="bar-row">
+                <div class="bar-row__head">
+                  <strong>2010年代</strong>
+                  <span>90名 / 16.1%</span>
+                </div>
+                <div class="bar-track"><span class="bar-fill" style="width: 67.7%;"></span></div>
+              </div>
+
+              <div class="bar-row">
+                <div class="bar-row__head">
+                  <strong>2020年代</strong>
+                  <span>42名 / 7.5%</span>
+                </div>
+                <div class="bar-track"><span class="bar-fill" style="width: 31.6%;"></span></div>
+                <p class="bar-row__note">※ 2020年代は2025年までの途中集計です。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-panel stats-panel--white">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">男女構成</span><span class="label-en">Gender Balance</span></p>
+              <h2>時代ごとの男女バランス</h2>
+              <p>名簿登録者全体では、男女はほぼ同数です。年代別の男女構成は、卒部年度が確認できるデータをもとに整理しています。</p>
+            </div>
+
+            <div class="balance-summary">
+              <strong>名簿登録者全体では 男277名 / 女285名</strong>
+              <p>以下の年代別グラフは、卒部年度が確認できる560名を対象にした集計です。</p>
+            </div>
+
+            <div class="stacked-list" aria-label="年代別男女構成">
+              <div class="stacked-row">
+                <div class="stacked-row__head">
+                  <strong>1960年代</strong>
+                  <span>男7名 / 女0名</span>
+                </div>
+                <div class="stacked-track">
+                  <span class="stacked-track__male" style="width: 100%;"></span>
+                  <span class="stacked-track__female" style="width: 0%;"></span>
+                </div>
+                <div class="stacked-meta">
+                  <span class="stacked-chip stacked-chip--male">男 100.0%</span>
+                  <span class="stacked-chip stacked-chip--female">女 0.0%</span>
+                </div>
+              </div>
+
+              <div class="stacked-row">
+                <div class="stacked-row__head">
+                  <strong>1970年代</strong>
+                  <span>男43名 / 女50名</span>
+                </div>
+                <div class="stacked-track">
+                  <span class="stacked-track__male" style="width: 46.2%;"></span>
+                  <span class="stacked-track__female" style="width: 53.8%;"></span>
+                </div>
+                <div class="stacked-meta">
+                  <span class="stacked-chip stacked-chip--male">男 46.2%</span>
+                  <span class="stacked-chip stacked-chip--female">女 53.8%</span>
+                </div>
+              </div>
+
+              <div class="stacked-row">
+                <div class="stacked-row__head">
+                  <strong>1980年代</strong>
+                  <span>男48名 / 女66名</span>
+                </div>
+                <div class="stacked-track">
+                  <span class="stacked-track__male" style="width: 42.1%;"></span>
+                  <span class="stacked-track__female" style="width: 57.9%;"></span>
+                </div>
+                <div class="stacked-meta">
+                  <span class="stacked-chip stacked-chip--male">男 42.1%</span>
+                  <span class="stacked-chip stacked-chip--female">女 57.9%</span>
+                </div>
+              </div>
+
+              <div class="stacked-row">
+                <div class="stacked-row__head">
+                  <strong>1990年代</strong>
+                  <span>男33名 / 女48名</span>
+                </div>
+                <div class="stacked-track">
+                  <span class="stacked-track__male" style="width: 40.7%;"></span>
+                  <span class="stacked-track__female" style="width: 59.3%;"></span>
+                </div>
+                <div class="stacked-meta">
+                  <span class="stacked-chip stacked-chip--male">男 40.7%</span>
+                  <span class="stacked-chip stacked-chip--female">女 59.3%</span>
+                </div>
+              </div>
+
+              <div class="stacked-row">
+                <div class="stacked-row__head">
+                  <strong>2000年代</strong>
+                  <span>男68名 / 女65名</span>
+                </div>
+                <div class="stacked-track">
+                  <span class="stacked-track__male" style="width: 51.1%;"></span>
+                  <span class="stacked-track__female" style="width: 48.9%;"></span>
+                </div>
+                <div class="stacked-meta">
+                  <span class="stacked-chip stacked-chip--male">男 51.1%</span>
+                  <span class="stacked-chip stacked-chip--female">女 48.9%</span>
+                </div>
+              </div>
+
+              <div class="stacked-row">
+                <div class="stacked-row__head">
+                  <strong>2010年代</strong>
+                  <span>男53名 / 女37名</span>
+                </div>
+                <div class="stacked-track">
+                  <span class="stacked-track__male" style="width: 58.9%;"></span>
+                  <span class="stacked-track__female" style="width: 41.1%;"></span>
+                </div>
+                <div class="stacked-meta">
+                  <span class="stacked-chip stacked-chip--male">男 58.9%</span>
+                  <span class="stacked-chip stacked-chip--female">女 41.1%</span>
+                </div>
+              </div>
+
+              <div class="stacked-row">
+                <div class="stacked-row__head">
+                  <strong>2020年代</strong>
+                  <span>男23名 / 女19名</span>
+                </div>
+                <div class="stacked-track">
+                  <span class="stacked-track__male" style="width: 54.8%;"></span>
+                  <span class="stacked-track__female" style="width: 45.2%;"></span>
+                </div>
+                <div class="stacked-meta">
+                  <span class="stacked-chip stacked-chip--male">男 54.8%</span>
+                  <span class="stacked-chip stacked-chip--female">女 45.2%</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="stats-footnote">※ 年代別男女構成は、卒部年度が確認できる560名を対象にしています。</p>
+          </div>
+        </div>
+      </section>
+
+                  <section class="page-section page-section--light stats-section" id="data-gender-specialty">
+        <div class="container">
+          <div class="stats-panel">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">専攻構成</span><span class="label-en">Specialty</span></p>
+              <h2>専攻登録がある306名の内訳</h2>
+              <p>専攻登録がある306名では、スタンダード133名、ラテン173名です。未登録256名はこの比較に含めていません。</p>
+            </div>
+
+            <div class="specialty-layout">
+              <div class="donut-card">
+                <div class="donut" aria-hidden="true">
+                  <div class="donut__center">
+                    <div>
+                      <strong>306名</strong>
+                      <span>専攻登録あり</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="legend-list" aria-label="スタンダード・ラテン比率">
+                  <div class="legend-item legend-item--standard">
+                    <span class="legend-item__label">スタンダード</span>
+                    <span>133名 / 43.5%</span>
+                  </div>
+                  <div class="legend-item legend-item--latin">
+                    <span class="legend-item__label">ラテン</span>
+                    <span>173名 / 56.5%</span>
+                  </div>
+                </div>
+
+                <p class="specialty-note" style="margin-top:14px;">未登録256名はこの比較に含めていません。</p>
+              </div>
+
+              <div>
+                <div class="stats-head" style="margin-bottom:16px;">
+                  <p class="stats-head__kicker"><span class="label-ja">年代別内訳</span><span class="label-en">By Decade</span></p>
+                  <h2 style="font-size:1.3rem; margin-bottom:8px;">年代別の専攻内訳</h2>
+                  <p>専攻登録がある年代のみを対象にし、スタンダード、ラテンの順に表示しています。</p>
+                </div>
+
+                <div class="specialty-breakdown" aria-label="年代別の専攻内訳">
+                  <div class="specialty-row">
+                    <div class="specialty-row__head">
+                      <strong>1980年代</strong>
+                      <span>スタンダード1名 / ラテン4名</span>
+                    </div>
+                    <div class="stacked-track">
+                      <span class="stacked-track__standard" style="width: 20%;"></span>
+                      <span class="stacked-track__latin" style="width: 80%;"></span>
+                    </div>
+                  </div>
+
+                  <div class="specialty-row">
+                    <div class="specialty-row__head">
+                      <strong>1990年代</strong>
+                      <span>スタンダード14名 / ラテン22名</span>
+                    </div>
+                    <div class="stacked-track">
+                      <span class="stacked-track__standard" style="width: 38.9%;"></span>
+                      <span class="stacked-track__latin" style="width: 61.1%;"></span>
+                    </div>
+                  </div>
+
+                  <div class="specialty-row">
+                    <div class="specialty-row__head">
+                      <strong>2000年代</strong>
+                      <span>スタンダード59名 / ラテン74名</span>
+                    </div>
+                    <div class="stacked-track">
+                      <span class="stacked-track__standard" style="width: 44.4%;"></span>
+                      <span class="stacked-track__latin" style="width: 55.6%;"></span>
+                    </div>
+                  </div>
+
+                  <div class="specialty-row">
+                    <div class="specialty-row__head">
+                      <strong>2010年代</strong>
+                      <span>スタンダード38名 / ラテン52名</span>
+                    </div>
+                    <div class="stacked-track">
+                      <span class="stacked-track__standard" style="width: 42.2%;"></span>
+                      <span class="stacked-track__latin" style="width: 57.8%;"></span>
+                    </div>
+                  </div>
+
+                  <div class="specialty-row">
+                    <div class="specialty-row__head">
+                      <strong>2020年代</strong>
+                      <span>スタンダード21名 / ラテン21名</span>
+                    </div>
+                    <div class="stacked-track">
+                      <span class="stacked-track__standard" style="width: 50%;"></span>
+                      <span class="stacked-track__latin" style="width: 50%;"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="stacked-meta" style="margin-top:16px;">
+                  <span class="stacked-chip stacked-chip--standard">スタンダード 133名</span>
+                  <span class="stacked-chip stacked-chip--latin">ラテン 173名</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section stats-section">
+        <div class="container">
+          <div class="stats-panel stats-panel--white">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">舞研系統</span><span class="label-en">Dance Club Lineages</span></p>
+              <h2>2つの舞研系統で見るFANTASISTA</h2>
+              <p>FANTASISTAの歴史を学校名だけで見るのではなく、当時の所属母体であるⅠ部舞研系・Ⅱ部舞研系という2つの流れで見ると、より実態に近い姿が見えてきます。</p>
+            </div>
+
+            <div class="group-compare" aria-label="Ⅰ部舞研系とⅡ部舞研系の比較">
+              <div class="group-row">
+                <div class="group-row__head">
+                  <strong>Ⅰ部舞研系</strong>
+                  <span>372名 / 66.4%</span>
+                </div>
+                <div class="group-track"><span class="bar-fill group-fill--ichibu" style="width: 66.4%;"></span></div>
+                <p class="group-note">理科大Ⅰ部、成徳系、学習院、板橋看護、厚生年金看護、慈恵看護専門学校、その他を含む流れです。</p>
+              </div>
+
+              <div class="group-row">
+                <div class="group-row__head">
+                  <strong>Ⅱ部舞研系</strong>
+                  <span>188名 / 33.6%</span>
+                </div>
+                <div class="group-track"><span class="bar-fill group-fill--nibu" style="width: 33.6%;"></span></div>
+                <p class="group-note">理科大Ⅱ部と女子栄養系を軸にした、もうひとつの大切な流れです。</p>
+              </div>
+            </div>
+
+            <p class="school-note">
+              ※この2系統分類は、卒部年度が確認できる560名を対象にしています。<br />
+              ※理科大Ⅱ部と女子栄養系はⅡ部舞研系、それ以外はⅠ部舞研系として集計しています。<br />
+              ※名簿登録者数562名との差分は、賛助会員・顧問2名をこの集計の対象外としているためです。
+            </p>
+
+            <div class="school-subsection">
+              <h3>2つの系統を支えた学校別内訳</h3>
+              <p>理科大Ⅰ部・Ⅱ部を軸に、成徳系、女子栄養系、学習院、各看護学校など、複数の学校からメンバーが集まり、FANTASISTAの歴史をつくってきました。</p>
+
+              <div class="school-breakdown" aria-label="学校別内訳">
+                <div class="school-row">
+                  <div class="school-row__head">
+                    <strong>理科大Ⅰ部</strong>
+                    <span>222名 / 39.6%</span>
+                  </div>
+                  <div class="school-track"><span class="bar-fill" style="width: 100%;"></span></div>
+                </div>
+
+                <div class="school-row">
+                  <div class="school-row__head">
+                    <strong>理科大Ⅱ部</strong>
+                    <span>168名 / 30.0%</span>
+                  </div>
+                  <div class="school-track"><span class="bar-fill" style="width: 75.7%;"></span></div>
+                </div>
+
+                <div class="school-row">
+                  <div class="school-row__head">
+                    <strong>成徳系</strong>
+                    <span>106名 / 18.9%</span>
+                  </div>
+                  <div class="school-track"><span class="bar-fill" style="width: 47.7%;"></span></div>
+                </div>
+
+                <div class="school-row">
+                  <div class="school-row__head">
+                    <strong>女子栄養系</strong>
+                    <span>20名 / 3.6%</span>
+                  </div>
+                  <div class="school-track"><span class="bar-fill" style="width: 9.0%;"></span></div>
+                </div>
+
+                <div class="school-row">
+                  <div class="school-row__head">
+                    <strong>学習院</strong>
+                    <span>17名 / 3.0%</span>
+                  </div>
+                  <div class="school-track"><span class="bar-fill" style="width: 7.7%;"></span></div>
+                </div>
+
+                <div class="school-row">
+                  <div class="school-row__head">
+                    <strong>板橋看護</strong>
+                    <span>12名 / 2.1%</span>
+                  </div>
+                  <div class="school-track"><span class="bar-fill" style="width: 5.4%;"></span></div>
+                </div>
+
+                <div class="school-row">
+                  <div class="school-row__head">
+                    <strong>厚生年金看護</strong>
+                    <span>8名 / 1.4%</span>
+                  </div>
+                  <div class="school-track"><span class="bar-fill" style="width: 3.6%;"></span></div>
+                </div>
+
+                <div class="school-row">
+                  <div class="school-row__head">
+                    <strong>慈恵看護専門学校</strong>
+                    <span>4名 / 0.7%</span>
+                  </div>
+                  <div class="school-track"><span class="bar-fill" style="width: 1.8%;"></span></div>
+                </div>
+
+                <div class="school-row">
+                  <div class="school-row__head">
+                    <strong>その他</strong>
+                    <span>3名 / 0.5%</span>
+                  </div>
+                  <div class="school-track"><span class="bar-fill" style="width: 1.4%;"></span></div>
+                </div>
+              </div>
+
+              <p class="school-note">
+                ※学校分類は、卒部年度が確認できる560名を対象にしています。<br />
+                ※出身校名の表記ゆれを整理し、理工系・基礎工系は理科大Ⅰ部として集計しています。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+
+      <!-- REVIEW_DEVICE_ADVICE_START -->
+      <section class="page-section stats-section device-advice-section" aria-label="閲覧案内">
+        <div class="container">
+          <aside class="viewing-note" aria-label="表示について">
+            <span class="viewing-note__label">表示について</span>
+            <h3>スマートフォン・タブレットで見づらい場合</h3>
+            <p>年表・ヒートマップ・4年ローリングは、PCの方が見やすくなっています。スマホでは簡易表示も用意しています。</p>
+            <p>横向き表示や横スクロールでも見づらい場合は、同じページをPCブラウザでご覧ください。</p>
+          </aside>
+        </div>
+      </section>
+      <!-- REVIEW_DEVICE_ADVICE_END -->
+      
+<section class="page-section page-section--light stats-section">
+        <div class="container heatmap-layout">
+          <div class="stats-panel">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">年表</span><span class="label-en">Timeline</span></p>
+              <h2>年代別に見るFANTASISTA年表</h2>
+              <p>1960年代、1970年代、1980年代のように通常の年代区切りで卒部年度を並べることで、FANTASISTAの広がりを時代の流れとして見ることができます。</p>
+            </div>
+
+            <!-- REVIEW_HEATMAP_SIMPLE_START -->
+            <div class="mobile-simplify mobile-simplify--heatmap" aria-label="年代別年表の簡易表示">
+              <div class="mobile-simplify-note" role="note">
+                <strong>スマートフォン・タブレットでは簡易表示です。</strong>
+                <p>年代別ヒートマップの詳細はPCの方が見やすいため、ここでは年代ごとの要点を表でまとめています。</p>
+              </div>
+
+              <div class="mobile-simplify-table-wrap">
+                <table class="mobile-simplify-table">
+                  <caption>年代別年表の簡易表</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">年代</th>
+                      <th scope="col">人数</th>
+                      <th scope="col">ピーク年度</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>1960年代</td><td>7名</td><td>1969年 5名</td></tr>
+                    <tr><td>1970年代</td><td>93名</td><td>1975年 15名</td></tr>
+                    <tr><td>1980年代</td><td>114名</td><td>1987年 17名</td></tr>
+                    <tr><td>1990年代</td><td>81名</td><td>1990年 14名</td></tr>
+                    <tr><td>2000年代</td><td>133名</td><td>2003年 20名</td></tr>
+                    <tr><td>2010年代</td><td>90名</td><td>2018年 13名</td></tr>
+                    <tr><td>2020年代</td><td>42名</td><td>2021年 17名</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- REVIEW_HEATMAP_SIMPLE_END -->
+            <p class="scroll-hint scroll-hint--heatmap">スマートフォン・タブレットでは横にスクロールして年表全体をご覧いただけます。</p>
+            <div class="heatmap-scroll" aria-label="年代別ヒートマップ">
+              <div class="heatmap-board" id="decadeHeatmapBoard"></div>
+            </div>
+
+            <p class="stats-footnote">
+              ※卒部年度が確認できる560名を対象にしています。<br />
+              ※1960〜1967年は表示を整えるための0名セルです。<br />
+              ※2026〜2029年は未集計のため、人数には含めていません。<br />
+              ※2020年代は、2020〜2025年までの集計です。
+            </p>
+          </div>
+
+          <div class="stats-panel stats-panel--white">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">年代別の広がり</span><span class="label-en">Decade Summary</span></p>
+              <h2>年代別の広がり</h2>
+              <p>総数、ピーク年度、前半5年・後半5年を見ると、各年代の広がり方の違いが見えてきます。</p>
+            </div>
+
+            <div class="summary-list">
+              <article class="summary-card">
+                <strong>1960年代</strong>
+                <h3>7名 / ピーク 1969年 5名</h3>
+                <p>前半 1960〜1964年 0名 / 後半 1965〜1969年 7名</p>
+              </article>
+
+              <article class="summary-card">
+                <strong>1970年代</strong>
+                <h3>93名 / ピーク 1975年 15名</h3>
+                <p>前半 1970〜1974年 43名 / 後半 1975〜1979年 50名</p>
+              </article>
+
+              <article class="summary-card">
+                <strong>1980年代</strong>
+                <h3>114名 / ピーク 1987年 17名</h3>
+                <p>前半 1980〜1984年 50名 / 後半 1985〜1989年 64名</p>
+              </article>
+
+              <article class="summary-card">
+                <strong>1990年代</strong>
+                <h3>81名 / ピーク 1990年 14名</h3>
+                <p>前半 1990〜1994年 42名 / 後半 1995〜1999年 39名</p>
+              </article>
+
+              <article class="summary-card">
+                <strong>2000年代</strong>
+                <h3>133名 / ピーク 2003年 20名</h3>
+                <p>前半 2000〜2004年 69名 / 後半 2005〜2009年 64名</p>
+              </article>
+
+              <article class="summary-card">
+                <strong>2010年代</strong>
+                <h3>90名 / ピーク 2018年 13名</h3>
+                <p>前半 2010〜2014年 40名 / 後半 2015〜2019年 50名</p>
+              </article>
+
+              <article class="summary-card">
+                <strong>2020年代</strong>
+                <h3>42名 / ピーク 2021年 17名</h3>
+                <p>前半 2020〜2024年 33名 / 後半 2025年のみ 9名、2026〜2029年は未集計</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+            <section class="page-section stats-section">
+        <div class="container rolling-layout">
+          <div class="stats-panel">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">4年ローリング</span><span class="label-en">Rolling 4-Year View</span></p>
+              <h2>4年間の厚みで見るFANTASISTA</h2>
+              <p>大学生活の4年間をひとつのまとまりとして見ると、同じ時期に活動していた可能性のある世代の厚みが見えてきます。1966年の創部を起点に、卒部年度を4年分ずつ合計し、FANTASISTAの盛り上がりの推移を可視化しました。</p>
+            </div>
+
+            <!-- REVIEW_ROLLING_SIMPLE_START -->
+            <div class="mobile-simplify mobile-simplify--rolling" aria-label="4年ローリングの簡易表示">
+              <div class="mobile-simplify-note" role="note">
+                <strong>スマートフォン・タブレットでは簡易表示です。</strong>
+                <p>4年ローリング推移の詳細グラフはPCの方が見やすいため、ここでは代表的な期間を表でまとめています。</p>
+              </div>
+
+              <div class="mobile-simplify-table-wrap">
+                <table class="mobile-simplify-table">
+                  <caption>4年ローリングの代表値</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">開始年</th>
+                      <th scope="col">対象卒部年度</th>
+                      <th scope="col">合計</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>1966</td><td>1966〜1969年卒</td><td>7名</td></tr>
+                    <tr><td>1967</td><td>1967〜1970年卒</td><td>14名</td></tr>
+                    <tr><td>1968</td><td>1968〜1971年卒</td><td>28名</td></tr>
+                    <tr><td>2001</td><td>2001〜2004年卒</td><td>62名</td></tr>
+                    <tr><td>2002</td><td>2002〜2005年卒</td><td>68名</td></tr>
+                    <tr><td>2003</td><td>2003〜2006年卒</td><td>68名</td></tr>
+                    <tr><td>2022</td><td>2022〜2025年卒</td><td>20名</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- REVIEW_ROLLING_SIMPLE_END -->
+            <p class="scroll-hint scroll-hint--rolling">スマートフォン・タブレットでは横にスクロールして、4年ローリング推移全体をご覧いただけます。</p>
+            <div class="rolling-chart-scroll" aria-label="4年ローリング推移の横スクロール領域">
+              <div class="rolling-chart-shell" aria-label="4年ローリング合計の推移グラフ">
+              <svg id="rollingChartSvg" class="rolling-chart-svg" viewBox="0 0 1180 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="4年ローリング合計の推移"></svg>
+            </div>
+
+            <p class="rolling-axis-note">横軸: 4年窓の開始年。各点は「開始年〜開始年+3年卒」の4年間合計を表します。</p>
+
+            <div class="rolling-callouts" aria-label="4年ローリングの注釈">
+              <div class="rolling-callout"><strong>1965年:</strong> 組織化の準備</div>
+              <div class="rolling-callout"><strong>1966年:</strong> 創部</div>
+              <div class="rolling-callout"><strong>2002〜2003年:</strong> 最大の山 68名</div>
+            </div>
+
+            <div class="stats-head" style="margin-top:22px; margin-bottom:12px;">
+              <p class="stats-head__kicker"><span class="label-ja">ヒートストリップ</span><span class="label-en">Rolling Heat Strip</span></p>
+              <h2 style="font-size:1.24rem; margin-bottom:8px;">4年ローリングの帯状表示</h2>
+              <p>4年分の厚みを、横長のヒートストリップとして補助的に並べています。</p>
+            </div>
+
+            <div class="rolling-strip-scroll" aria-label="4年ローリングヒートストリップ">
+              <div class="rolling-strip" id="rollingHeatStrip"></div>
+            </div>
+
+            <p class="stats-footnote">
+              ※4年ローリング合計は、卒部年度から大学4年間の在籍期間を簡易的に推定したものです。<br />
+              ※1966年創部の流れに合わせ、4年ローリング推移は1966年を起点に表示しています。<br />
+              ※1966年・1967年は、創部初期の形成期として、1966年卒・1967年卒を0名として計算しています。<br />
+              ※卒部年度が確認できる560名を対象にしています。<br />
+              ※2023以降は、2026年卒以降が未集計のため、この推移グラフには含めていません。
+            </p>
+          </div>
+
+          <div class="stats-panel stats-panel--white">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">最も厚かった4年間</span><span class="label-en">Peak Windows</span></p>
+              <h2 id="data-peak">最も厚かった4年間</h2>
+              <p>4年分の合計で見ると、2002〜2006年卒を中心に大きな山が見えてきます。</p>
+            </div>
+
+            <div class="ranking-list">
+              <article class="ranking-card">
+                <strong>1位</strong>
+                <h3>2002 / 2002〜2005年卒</h3>
+                <p>68名</p>
+              </article>
+
+              <article class="ranking-card">
+                <strong>1位</strong>
+                <h3>2003 / 2003〜2006年卒</h3>
+                <p>68名</p>
+              </article>
+
+              <article class="ranking-card">
+                <strong>3位</strong>
+                <h3>2001 / 2001〜2004年卒</h3>
+                <p>62名</p>
+              </article>
+
+              <article class="ranking-card">
+                <strong>4位</strong>
+                <h3>2004 / 2004〜2007年卒</h3>
+                <p>60名</p>
+              </article>
+
+              <article class="ranking-card">
+                <strong>5位</strong>
+                <h3>2005 / 2005〜2008年卒</h3>
+                <p>56名</p>
+              </article>
+
+              <article class="ranking-card">
+                <strong>6位</strong>
+                <h3>1984 / 1984〜1987年卒</h3>
+                <p>54名</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+<section class="page-section page-section--light stats-section">
+        <div class="container">
+          <div class="stats-panel summary-copy">
+            <p>数字の向こう側にあるのは、ひとりひとりのダンスとつながりの記憶。FANTASISTA会は、これからも世代を超えた交流の場であり続けます。</p>
+          </div>
+        </div>
+      </section>
+          <!-- REVIEW_DATA_NEXT_START -->
+      <section class="page-section stats-section" id="data-next-reading">
+        <div class="container">
+          <div class="stats-panel stats-panel--white">
+            <div class="stats-head">
+              <p class="stats-head__kicker"><span class="label-ja">次に読む</span><span class="label-en">Next</span></p>
+              <h2>次に読む</h2>
+              <p>数字で全体像を見たあとは、年表・戦歴・写真の記録もあわせてご覧ください。</p>
+            </div>
+
+            <div class="data-cta-grid">
+              <a class="data-cta-card" href="../history/">
+                <span class="data-cta-card__eyebrow">History</span>
+                <strong>理科大舞研の歩み</strong>
+                <span>年表、戦歴、共同加盟校、背番号の流れを読み直せます。</span>
+                <em>Historyを見る →</em>
+              </a>
+
+              <a class="data-cta-card" href="../history/context/">
+                <span class="data-cta-card__eyebrow">Context</span>
+                <strong>競技ダンス背景資料</strong>
+                <span>8種目時代から10種目化までの変遷や、学連制度の背景を確認できます。</span>
+                <em>背景資料を見る →</em>
+              </a>
+
+              <a class="data-cta-card" href="../gallery/">
+                <span class="data-cta-card__eyebrow">Gallery</span>
+                <strong>写真・ギャラリー</strong>
+                <span>数字では見えない競技会、練習風景、集合写真の記録につながります。</span>
+                <em>写真を見る →</em>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- REVIEW_DATA_NEXT_END -->
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
+      </div>
+    </footer>
+
+    <script>
+      const FANTASISTA_DATA = {
+        yearCounts: [
+          { year: 1960, count: 0, state: "dummy" },
+          { year: 1961, count: 0, state: "dummy" },
+          { year: 1962, count: 0, state: "dummy" },
+          { year: 1963, count: 0, state: "dummy" },
+          { year: 1964, count: 0, state: "dummy" },
+          { year: 1965, count: 0, state: "dummy" },
+          { year: 1966, count: 0, state: "dummy" },
+          { year: 1967, count: 0, state: "dummy" },
+          { year: 1968, count: 2, state: "actual" },
+          { year: 1969, count: 5, state: "actual" },
+
+          { year: 1970, count: 7, state: "actual" },
+          { year: 1971, count: 14, state: "actual" },
+          { year: 1972, count: 11, state: "actual" },
+          { year: 1973, count: 7, state: "actual" },
+          { year: 1974, count: 4, state: "actual" },
+          { year: 1975, count: 15, state: "actual" },
+          { year: 1976, count: 14, state: "actual" },
+          { year: 1977, count: 6, state: "actual" },
+          { year: 1978, count: 6, state: "actual" },
+          { year: 1979, count: 9, state: "actual" },
+
+          { year: 1980, count: 13, state: "actual" },
+          { year: 1981, count: 9, state: "actual" },
+          { year: 1982, count: 8, state: "actual" },
+          { year: 1983, count: 10, state: "actual" },
+          { year: 1984, count: 10, state: "actual" },
+          { year: 1985, count: 13, state: "actual" },
+          { year: 1986, count: 14, state: "actual" },
+          { year: 1987, count: 17, state: "actual" },
+          { year: 1988, count: 8, state: "actual" },
+          { year: 1989, count: 12, state: "actual" },
+
+          { year: 1990, count: 14, state: "actual" },
+          { year: 1991, count: 10, state: "actual" },
+          { year: 1992, count: 10, state: "actual" },
+          { year: 1993, count: 4, state: "actual" },
+          { year: 1994, count: 4, state: "actual" },
+          { year: 1995, count: 5, state: "actual" },
+          { year: 1996, count: 11, state: "actual" },
+          { year: 1997, count: 3, state: "actual" },
+          { year: 1998, count: 10, state: "actual" },
+          { year: 1999, count: 10, state: "actual" },
+
+          { year: 2000, count: 7, state: "actual" },
+          { year: 2001, count: 12, state: "actual" },
+          { year: 2002, count: 14, state: "actual" },
+          { year: 2003, count: 20, state: "actual" },
+          { year: 2004, count: 16, state: "actual" },
+          { year: 2005, count: 18, state: "actual" },
+          { year: 2006, count: 14, state: "actual" },
+          { year: 2007, count: 12, state: "actual" },
+          { year: 2008, count: 12, state: "actual" },
+          { year: 2009, count: 8, state: "actual" },
+
+          { year: 2010, count: 7, state: "actual" },
+          { year: 2011, count: 7, state: "actual" },
+          { year: 2012, count: 6, state: "actual" },
+          { year: 2013, count: 10, state: "actual" },
+          { year: 2014, count: 10, state: "actual" },
+          { year: 2015, count: 8, state: "actual" },
+          { year: 2016, count: 9, state: "actual" },
+          { year: 2017, count: 12, state: "actual" },
+          { year: 2018, count: 13, state: "actual" },
+          { year: 2019, count: 8, state: "actual" },
+
+          { year: 2020, count: 5, state: "actual" },
+          { year: 2021, count: 17, state: "actual" },
+          { year: 2022, count: 6, state: "actual" },
+          { year: 2023, count: 2, state: "actual" },
+          { year: 2024, count: 3, state: "actual" },
+          { year: 2025, count: 9, state: "actual" },
+          { year: 2026, count: null, state: "future" },
+          { year: 2027, count: null, state: "future" },
+          { year: 2028, count: null, state: "future" },
+          { year: 2029, count: null, state: "future" }
+        ],
+        decadeSummary: [
+          { label: "1960年代", start: 1960, total: 7, share: "1.3%", peakYear: 1969, peakCount: 5, firstHalf: "0名", secondHalf: "7名" },
+          { label: "1970年代", start: 1970, total: 93, share: "16.6%", peakYear: 1975, peakCount: 15, firstHalf: "43名", secondHalf: "50名" },
+          { label: "1980年代", start: 1980, total: 114, share: "20.4%", peakYear: 1987, peakCount: 17, firstHalf: "50名", secondHalf: "64名" },
+          { label: "1990年代", start: 1990, total: 81, share: "14.5%", peakYear: 1990, peakCount: 14, firstHalf: "42名", secondHalf: "39名" },
+          { label: "2000年代", start: 2000, total: 133, share: "23.8%", peakYear: 2003, peakCount: 20, firstHalf: "69名", secondHalf: "64名" },
+          { label: "2010年代", start: 2010, total: 90, share: "16.1%", peakYear: 2018, peakCount: 13, firstHalf: "40名", secondHalf: "50名" },
+          { label: "2020年代", start: 2020, total: 42, share: "7.5%", peakYear: 2021, peakCount: 17, firstHalf: "33名", secondHalf: "2025年のみ9名" }
+        ],
+                rollingFourYearCounts: [
+          { start: 1966, end: 1969, total: 7 },
+          { start: 1967, end: 1970, total: 14 },
+          { start: 1968, end: 1971, total: 28 },
+          { start: 1969, end: 1972, total: 37 },
+          { start: 1970, end: 1973, total: 39 },
+          { start: 1971, end: 1974, total: 36 },
+          { start: 1972, end: 1975, total: 37 },
+          { start: 1973, end: 1976, total: 40 },
+          { start: 1974, end: 1977, total: 39 },
+          { start: 1975, end: 1978, total: 41 },
+          { start: 1976, end: 1979, total: 35 },
+          { start: 1977, end: 1980, total: 34 },
+          { start: 1978, end: 1981, total: 37 },
+          { start: 1979, end: 1982, total: 39 },
+          { start: 1980, end: 1983, total: 40 },
+          { start: 1981, end: 1984, total: 37 },
+          { start: 1982, end: 1985, total: 41 },
+          { start: 1983, end: 1986, total: 47 },
+          { start: 1984, end: 1987, total: 54 },
+          { start: 1985, end: 1988, total: 52 },
+          { start: 1986, end: 1989, total: 51 },
+          { start: 1987, end: 1990, total: 51 },
+          { start: 1988, end: 1991, total: 44 },
+          { start: 1989, end: 1992, total: 46 },
+          { start: 1990, end: 1993, total: 38 },
+          { start: 1991, end: 1994, total: 28 },
+          { start: 1992, end: 1995, total: 23 },
+          { start: 1993, end: 1996, total: 24 },
+          { start: 1994, end: 1997, total: 23 },
+          { start: 1995, end: 1998, total: 29 },
+          { start: 1996, end: 1999, total: 34 },
+          { start: 1997, end: 2000, total: 30 },
+          { start: 1998, end: 2001, total: 39 },
+          { start: 1999, end: 2002, total: 43 },
+          { start: 2000, end: 2003, total: 53 },
+          { start: 2001, end: 2004, total: 62 },
+          { start: 2002, end: 2005, total: 68 },
+          { start: 2003, end: 2006, total: 68 },
+          { start: 2004, end: 2007, total: 60 },
+          { start: 2005, end: 2008, total: 56 },
+          { start: 2006, end: 2009, total: 46 },
+          { start: 2007, end: 2010, total: 39 },
+          { start: 2008, end: 2011, total: 34 },
+          { start: 2009, end: 2012, total: 28 },
+          { start: 2010, end: 2013, total: 30 },
+          { start: 2011, end: 2014, total: 33 },
+          { start: 2012, end: 2015, total: 34 },
+          { start: 2013, end: 2016, total: 37 },
+          { start: 2014, end: 2017, total: 39 },
+          { start: 2015, end: 2018, total: 42 },
+          { start: 2016, end: 2019, total: 42 },
+          { start: 2017, end: 2020, total: 38 },
+          { start: 2018, end: 2021, total: 43 },
+          { start: 2019, end: 2022, total: 36 },
+          { start: 2020, end: 2023, total: 30 },
+          { start: 2021, end: 2024, total: 28 },
+          { start: 2022, end: 2025, total: 20 }
+        ]
+      };
+
+      (function () {
+        const toggle = document.querySelector(".menu-toggle");
+        const header = document.querySelector(".site-header, .header");
+        const nav = document.getElementById(toggle ? toggle.getAttribute("aria-controls") : "site-nav");
+
+        if (header && toggle && nav) {
+          function setMenuOpen(open) {
+            header.classList.toggle("is-open", open);
+            document.body.classList.toggle("menu-open", open);
+            toggle.setAttribute("aria-expanded", String(open));
+          }
+
+          toggle.addEventListener("click", function () {
+            const isOpen = toggle.getAttribute("aria-expanded") === "true";
+            setMenuOpen(!isOpen);
+          });
+
+          nav.addEventListener("click", function (event) {
+            const link = event.target.closest("a");
+            if (link) {
+              setMenuOpen(false);
+            }
+          });
+
+          document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+              setMenuOpen(false);
+            }
+          });
+
+          window.addEventListener("resize", function () {
+            if (window.matchMedia("(min-width: 861px)").matches) {
+              setMenuOpen(false);
+            }
+          });
+        }
+
+        renderDecadeHeatmap();
+        renderRollingChart();
+        renderRollingStrip();
+      })();
+
+      function createSvgNode(tag, attrs) {
+        const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+        Object.keys(attrs).forEach(function (key) {
+          node.setAttribute(key, attrs[key]);
+        });
+        return node;
+      }
+
+            function renderDecadeHeatmap() {
+        const board = document.getElementById("decadeHeatmapBoard");
+        if (!board) return;
+
+        const maxValue = 20;
+        const yearMap = {};
+        FANTASISTA_DATA.yearCounts.forEach(function (item) {
+          yearMap[item.year] = item;
+        });
+
+        FANTASISTA_DATA.decadeSummary.forEach(function (decade) {
+          const row = document.createElement("div");
+          row.className = "heatmap-row";
+          row.setAttribute("aria-label", decade.label + " " + decade.total + "名");
+
+          const label = document.createElement("div");
+          label.className = "heatmap-row__label";
+          label.innerHTML =
+            "<strong>" + decade.label + "</strong>" +
+            "<span>" + decade.total + "名 / " + decade.share + "</span>";
+
+          const cells = document.createElement("div");
+          cells.className = "heatmap-row__cells";
+
+          for (let year = decade.start; year <= decade.start + 9; year++) {
+            const entry = yearMap[year];
+            const cell = document.createElement("div");
+            cell.className = "heatmap-cell";
+
+            const yearLabel = document.createElement("div");
+            yearLabel.className = "heatmap-cell__year";
+            yearLabel.textContent = String(year);
+
+            const countLabel = document.createElement("div");
+            countLabel.className = "heatmap-cell__count";
+
+            if (!entry || entry.state === "future") {
+              cell.classList.add("heatmap-cell--future");
+              countLabel.textContent = "—";
+              cell.title = year + "年: 未集計";
+              cell.setAttribute("aria-label", year + "年 未集計");
+            } else if (entry.state === "dummy") {
+              cell.classList.add("heatmap-cell--dummy");
+              countLabel.textContent = "0名";
+              cell.title = year + "年: 0名（表示整列用）";
+              cell.setAttribute("aria-label", year + "年 0名 表示整列用");
+            } else {
+              const value = entry.count;
+              const ratio = value / maxValue;
+              const alpha = (0.16 + ratio * 0.66).toFixed(3);
+              cell.style.background = "linear-gradient(180deg, rgba(254, 192, 0, " + alpha + "), rgba(188, 136, 0, " + (0.14 + ratio * 0.32).toFixed(3) + "))";
+              countLabel.textContent = value + "名";
+              cell.title = year + "年: " + value + "名";
+              cell.setAttribute("aria-label", year + "年 " + value + "名");
+            }
+
+            cell.appendChild(yearLabel);
+            cell.appendChild(countLabel);
+
+            if (year === 1965) {
+              const flag = document.createElement("div");
+              flag.className = "heatmap-cell__flag";
+              flag.textContent = "準備";
+              cell.appendChild(flag);
+            }
+
+            if (year === 1966) {
+              const flag = document.createElement("div");
+              flag.className = "heatmap-cell__flag";
+              flag.textContent = "創部";
+              cell.appendChild(flag);
+            }
+
+            cells.appendChild(cell);
+          }
+
+          row.appendChild(label);
+          row.appendChild(cells);
+          board.appendChild(row);
+        });
+      }
+
+            function renderRollingChart() {
+        const svg = document.getElementById("rollingChartSvg");
+        if (!svg) return;
+
+        const data = FANTASISTA_DATA.rollingFourYearCounts;
+        const width = 1180;
+        const height = 340;
+        const margin = { top: 28, right: 30, bottom: 48, left: 48 };
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+        const maxValue = 68;
+
+        function xForIndex(index) {
+          return margin.left + (chartWidth * index / (data.length - 1));
+        }
+
+        function yForValue(value) {
+          return margin.top + chartHeight - ((value / maxValue) * chartHeight);
+        }
+
+        svg.innerHTML = "";
+
+        const bg = createSvgNode("rect", {
+          x: 0,
+          y: 0,
+          width: width,
+          height: height,
+          fill: "#ffffff"
+        });
+        svg.appendChild(bg);
+
+        const bands = [
+          { label: "1960年代", from: 1966, to: 1969 },
+          { label: "1970年代", from: 1970, to: 1979 },
+          { label: "1980年代", from: 1980, to: 1989 },
+          { label: "1990年代", from: 1990, to: 1999 },
+          { label: "2000年代", from: 2000, to: 2009 },
+          { label: "2010年代", from: 2010, to: 2019 },
+          { label: "2020年代", from: 2020, to: 2022 }
+        ];
+
+        bands.forEach(function (band, bandIndex) {
+          const startIndex = data.findIndex(function (item) { return item.start === band.from; });
+          const endIndex = data.findIndex(function (item) { return item.start === band.to; });
+          if (startIndex < 0 || endIndex < 0) return;
+
+          const halfStep = (chartWidth / (data.length - 1)) / 2;
+          const x1 = xForIndex(startIndex) - (startIndex === 0 ? 0 : halfStep);
+          const x2 = xForIndex(endIndex) + halfStep;
+
+          const rect = createSvgNode("rect", {
+            x: x1,
+            y: margin.top,
+            width: x2 - x1,
+            height: chartHeight,
+            fill: bandIndex % 2 === 0 ? "rgba(254, 192, 0, 0.06)" : "rgba(25, 31, 42, 0.035)"
+          });
+          svg.appendChild(rect);
+
+          const label = createSvgNode("text", {
+            x: (x1 + x2) / 2,
+            y: height - 12,
+            "text-anchor": "middle",
+            fill: "#7a818b",
+            "font-size": "11"
+          });
+          label.textContent = band.label;
+          svg.appendChild(label);
+        });
+
+        [0, 20, 40, 60, 68].forEach(function (value) {
+          const y = yForValue(value);
+          const line = createSvgNode("line", {
+            x1: margin.left,
+            y1: y,
+            x2: width - margin.right,
+            y2: y,
+            stroke: "rgba(25,31,42,0.10)",
+            "stroke-width": 1
+          });
+          svg.appendChild(line);
+
+          const text = createSvgNode("text", {
+            x: margin.left - 10,
+            y: y + 4,
+            "text-anchor": "end",
+            fill: "#6a7079",
+            "font-size": "11"
+          });
+          text.textContent = String(value);
+          svg.appendChild(text);
+        });
+
+        const points = data.map(function (item, index) {
+          return {
+            x: xForIndex(index),
+            y: yForValue(item.total),
+            start: item.start,
+            end: item.end,
+            total: item.total
+          };
+        });
+
+        const areaPath = [
+          "M " + points[0].x + " " + (margin.top + chartHeight)
+        ];
+
+        points.forEach(function (point) {
+          areaPath.push("L " + point.x + " " + point.y);
+        });
+
+        areaPath.push("L " + points[points.length - 1].x + " " + (margin.top + chartHeight));
+        areaPath.push("Z");
+
+        const area = createSvgNode("path", {
+          d: areaPath.join(" "),
+          fill: "rgba(254, 192, 0, 0.18)"
+        });
+        svg.appendChild(area);
+
+        const linePath = ["M " + points[0].x + " " + points[0].y];
+        points.slice(1).forEach(function (point) {
+          linePath.push("L " + point.x + " " + point.y);
+        });
+
+        const line = createSvgNode("path", {
+          d: linePath.join(" "),
+          fill: "none",
+          stroke: "#8a6a00",
+          "stroke-width": 3,
+          "stroke-linejoin": "round",
+          "stroke-linecap": "round"
+        });
+        svg.appendChild(line);
+
+        points.forEach(function (point) {
+          const circle = createSvgNode("circle", {
+            cx: point.x,
+            cy: point.y,
+            r: point.total >= 60 ? 4 : 2.5,
+            fill: point.total >= 68 ? "#7b1f29" : "#fec000",
+            stroke: "#ffffff",
+            "stroke-width": 1.5
+          });
+
+          const title = createSvgNode("title", {});
+          title.textContent = point.start + " / " + point.start + "〜" + point.end + "年卒 / " + point.total + "名";
+          circle.appendChild(title);
+          svg.appendChild(circle);
+        });
+
+        [1966, 1970, 1980, 1990, 2000, 2010, 2020, 2022].forEach(function (tickYear) {
+          const index = data.findIndex(function (item) { return item.start === tickYear; });
+          if (index < 0) return;
+
+          const x = xForIndex(index);
+          const tick = createSvgNode("line", {
+            x1: x,
+            y1: margin.top + chartHeight,
+            x2: x,
+            y2: margin.top + chartHeight + 6,
+            stroke: "#6a7079",
+            "stroke-width": 1
+          });
+          svg.appendChild(tick);
+
+          const text = createSvgNode("text", {
+            x: x,
+            y: margin.top + chartHeight + 20,
+            "text-anchor": "middle",
+            fill: "#6a7079",
+            "font-size": "11"
+          });
+          text.textContent = String(tickYear);
+          svg.appendChild(text);
+        });
+
+        const foundingNote = createSvgNode("text", {
+          x: xForIndex(0) + 8,
+          y: yForValue(14) - 8,
+          fill: "#5f6671",
+          "font-size": "11",
+          "font-weight": "700"
+        });
+        foundingNote.textContent = "1966 創部";
+        svg.appendChild(foundingNote);
+
+        const maxPoint = points.find(function (point) { return point.start === 2002; });
+        if (maxPoint) {
+          const note = createSvgNode("text", {
+            x: maxPoint.x + 14,
+            y: maxPoint.y - 14,
+            fill: "#7b1f29",
+            "font-size": "12",
+            "font-weight": "700"
+          });
+          note.textContent = "2002〜2003 最大 68名";
+          svg.appendChild(note);
+        }
+      }
+
+      function renderRollingStrip() {
+        const strip = document.getElementById("rollingHeatStrip");
+        if (!strip) return;
+
+        const maxValue = 68;
+
+        FANTASISTA_DATA.rollingFourYearCounts.forEach(function (item) {
+          const cell = document.createElement("div");
+          cell.className = "rolling-strip__cell";
+          const ratio = item.total / maxValue;
+          const alpha = (0.14 + ratio * 0.68).toFixed(3);
+          cell.style.background = "linear-gradient(180deg, rgba(254, 192, 0, " + alpha + "), rgba(188, 136, 0, " + (0.12 + ratio * 0.28).toFixed(3) + "))";
+          cell.title = item.start + " / " + item.start + "〜" + item.end + "年卒 / " + item.total + "名";
+          cell.setAttribute("aria-label", item.start + "開始 4年ローリング " + item.total + "名");
+
+          const year = document.createElement("div");
+          year.className = "rolling-strip__year";
+          year.textContent = String(item.start);
+
+          const count = document.createElement("div");
+          count.className = "rolling-strip__count";
+          count.textContent = item.total + "名";
+
+          cell.appendChild(year);
+          cell.appendChild(count);
+          strip.appendChild(cell);
+        });
+      }
+    </script>
+    <script src="../assets/js/site.js" defer></script>
+  </body>
+</html>
+
+
+
+
+
+
+

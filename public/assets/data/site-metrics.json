@@ -1,0 +1,20 @@
+{
+  "festaAttendance": [
+    { "year": 2023, "participants": 82 },
+    { "year": 2024, "participants": 118 },
+    { "year": 2025, "participants": 146 },
+    { "year": 2026, "participants": 180 }
+  ],
+  "supportResults": [
+    { "year": 2024, "label": "現役支援", "amount": 120000 },
+    { "year": 2025, "label": "現役支援", "amount": 180000 },
+    { "year": 2026, "label": "周年準備支援", "amount": 250000 }
+  ],
+  "annualEvents": [
+    { "year": 2023, "name": "FANTASISTA FESTA 2023", "category": "FESTA", "status": "実施済み" },
+    { "year": 2024, "name": "FANTASISTA FESTA 2024", "category": "FESTA", "status": "実施済み" },
+    { "year": 2025, "name": "FANTASISTA FESTA 2025", "category": "FESTA", "status": "実施済み" },
+    { "year": 2026, "name": "60周年FESTA準備会", "category": "周年準備", "status": "準備中" },
+    { "year": 2027, "name": "東京理科大学舞踏研究部 60周年記念FESTA", "category": "60周年", "status": "予定" }
+  ]
+}
