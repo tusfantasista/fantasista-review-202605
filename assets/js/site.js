@@ -56,7 +56,9 @@
     document.addEventListener("click", function (event) {
       const link = event.target.closest('a[href^="#"]');
       if (!link) return;
-      const target = document.querySelector(link.getAttribute("href"));
+      const hash = link.getAttribute("href");
+      if (!hash || hash === "#") return;
+      const target = document.querySelector(hash);
       if (!target) return;
       event.preventDefault();
       target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -198,6 +200,162 @@
       });
   }
 
+  function initMailtoForms() {
+    const forms = Array.from(document.querySelectorAll("[data-mailto-form]"));
+    if (!forms.length) return;
+
+    const fieldLabels = {
+      inquiry_type: "問い合わせ種別",
+      full_name: "氏名",
+      maiden_name: "旧姓・現姓",
+      furigana: "ふりがな",
+      graduation_year: "卒部年度",
+      graduation_year_or_generation: "卒部年度または期",
+      generation: "期",
+      school_lineage: "所属校・系統",
+      school_name: "所属校・団体名",
+      school_or_group: "所属していた大学・団体",
+      specialty: "専攻",
+      affiliation: "所属区分",
+      dance_role: "当時の役割",
+      email: "メールアドレス",
+      phone: "電話番号",
+      contact_permission: "事務局からの連絡可否",
+      festa60_info_permission: "60周年FESTA案内の受信可否",
+      preferred_contact_method: "主な連絡希望手段",
+      attendance_intent: "参加意向",
+      companion_status: "同伴者の有無",
+      guest_count: "同伴者人数",
+      dance_time_intent: "ダンスタイム参加意向",
+      photo_permission: "写真掲載・撮影に関する確認",
+      volunteer_interest: "手伝い可否",
+      sponsorship_interest: "協賛・寄付への関心",
+      message: "本文・連絡事項",
+      privacy_consent: "個人情報の取り扱いへの同意",
+    };
+
+    const hiddenFields = new Set(["form-name"]);
+
+    function getFieldValue(form, name) {
+      const fields = Array.from(form.elements).filter((field) => field.name === name);
+      if (!fields.length) return "";
+
+      if (fields[0].type === "radio") {
+        const selected = fields.find((field) => field.checked);
+        return selected ? getChoiceText(selected) : "";
+      }
+
+      if (fields[0].type === "checkbox") {
+        const selected = fields.filter((field) => field.checked).map(getChoiceText);
+        return selected.join("、");
+      }
+
+      const field = fields[0];
+      if (field.tagName === "SELECT") {
+        const option = field.options[field.selectedIndex];
+        return option && option.value ? option.textContent.trim() : "";
+      }
+
+      return field.value ? field.value.trim() : "";
+    }
+
+    function getChoiceText(field) {
+      const label = field.closest("label");
+      return label ? label.textContent.trim() : field.value;
+    }
+
+    function getOrderedNames(form) {
+      const names = [];
+      Array.from(form.elements).forEach((field) => {
+        if (!field.name || hiddenFields.has(field.name) || names.includes(field.name)) return;
+        names.push(field.name);
+      });
+      return names;
+    }
+
+    function buildBody(form) {
+      const names = getOrderedNames(form);
+      const lines = [
+        "FANTASISTA会 事務局 御中",
+        "",
+        "以下の内容で連絡します。",
+        "このメール本文はFANTASISTA会サイト上で生成されたものです。個人情報はGitHub Pages上には保存されません。",
+        "",
+        "---- 入力内容 ----",
+      ];
+
+      names.forEach((name) => {
+        const value = getFieldValue(form, name);
+        if (!value) return;
+        lines.push((fieldLabels[name] || name) + ": " + value);
+      });
+
+      lines.push("", "---- 管理メモ ----");
+      lines.push("CSV/CRM移行時は、上記のname属性に対応する項目として取り込んでください。");
+      return lines.join("\n");
+    }
+
+    function ensurePreview(form) {
+      let preview = form.querySelector(".mailto-preview");
+      if (preview) return preview;
+
+      preview = document.createElement("div");
+      preview.className = "mailto-preview";
+      preview.setAttribute("role", "status");
+      preview.setAttribute("aria-live", "polite");
+      preview.hidden = true;
+      preview.innerHTML =
+        '<h3>送信内容の確認</h3><p>内容を確認し、メールソフトを開いて送信してください。開けない場合は本文をコピーして通常のメールに貼り付けられます。</p><textarea class="mailto-preview__body" readonly aria-label="生成されたメール本文"></textarea><div class="mailto-preview__actions"><a class="button button--primary mailto-preview__open" href="#">メールソフトを開く</a><button class="button button--ghost mailto-preview__copy" type="button">本文をコピーする</button></div><p class="mailto-preview__status" aria-live="polite"></p>';
+      form.appendChild(preview);
+      return preview;
+    }
+
+    forms.forEach((form) => {
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        const recipient = form.dataset.mailtoRecipient || "tus.fantasista@gmail.com";
+        const subjectPrefix = form.dataset.mailtoSubjectPrefix || "【FANTASISTA会】問い合わせ";
+        const name = getFieldValue(form, "full_name");
+        const subject = name ? subjectPrefix + " " + name : subjectPrefix;
+        const body = buildBody(form);
+        const href = "mailto:" + recipient + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+        const preview = ensurePreview(form);
+        const textarea = preview.querySelector(".mailto-preview__body");
+        const openLink = preview.querySelector(".mailto-preview__open");
+        const copyButton = preview.querySelector(".mailto-preview__copy");
+        const status = preview.querySelector(".mailto-preview__status");
+
+        textarea.value = body;
+        openLink.href = href;
+        preview.hidden = false;
+        status.textContent = "";
+        preview.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        openLink.focus();
+
+        copyButton.onclick = function () {
+          const copy = navigator.clipboard
+            ? navigator.clipboard.writeText(body)
+            : Promise.reject(new Error("clipboard unavailable"));
+          copy
+            .then(() => {
+              status.textContent = "本文をコピーしました。";
+            })
+            .catch(() => {
+              textarea.focus();
+              textarea.select();
+              document.execCommand("copy");
+              status.textContent = "本文を選択しました。コピーしてメールに貼り付けてください。";
+            });
+        };
+      });
+    });
+  }
+
   initMobileMenu();
   initTopButton();
   initSmoothScroll();
@@ -206,4 +364,5 @@
   initLightbox();
   initFestaQuickLink();
   initSampleData();
+  initMailtoForms();
 })();

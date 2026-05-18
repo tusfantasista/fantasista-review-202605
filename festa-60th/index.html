@@ -8,6 +8,29 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="東京理科大学舞踏研究部 60周年記念FESTA" />
     <meta property="og:description" content="踊った日々も、悔しかった日も、すべてを連れて集まろう。東京理科大学舞踏研究部の創部60周年を祝う、世代を超えた記念FESTAです。" />
+    <meta property="og:url" content="https://tusfantasista.github.io/fantasista-review-202605/festa-60th/" />
+    <link rel="canonical" href="https://tusfantasista.github.io/fantasista-review-202605/festa-60th/" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "東京理科大学舞踏研究部 創部60周年記念FESTA",
+        "description": "東京理科大学舞踏研究部の創部60周年を記念し、OBOG、現役生、先生、関係者が世代を超えて集う記念イベントです。",
+        "startDate": "2027-02-11",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": {
+          "@type": "Place",
+          "name": "台東館（予定）",
+          "address": "東京都台東区"
+        },
+        "organizer": {
+          "@type": "Organization",
+          "name": "東京理科大学舞踏研究部 FANTASISTA会",
+          "url": "https://tusfantasista.github.io/fantasista-review-202605/"
+        }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -2155,7 +2178,7 @@
                 </p>
               </div>
 
-              <form name="festa60-obog-crm-entry" method="POST" data-netlify="true" action="/thanks.html" class="crm-entry-form">
+              <form name="festa60-obog-crm-entry" method="POST" data-netlify="true" action="/thanks.html" class="crm-entry-form" data-mailto-form="festa60-obog-crm-entry" data-mailto-recipient="tus.fantasista@gmail.com" data-mailto-subject-prefix="【60周年FESTA参加意向】">
                 <input type="hidden" name="form-name" value="festa60-obog-crm-entry" />
 
                 <section class="crm-form-block" aria-labelledby="crm-master-heading">
@@ -2180,7 +2203,7 @@
 
                     <label class="crm-field">
                       <span class="crm-field__label">卒部年度または期</span>
-                      <input type="text" name="graduation_year_or_generation" placeholder="例：2010年度卒 / 第45期 など" />
+                      <input type="text" name="graduation_year" placeholder="例：2010年度卒 / 第45期 など" />
                     </label>
 
                     <label class="crm-field">
@@ -2208,6 +2231,17 @@
                     <label class="crm-field crm-field--full">
                       <span class="crm-field__label">所属していた大学・団体</span>
                       <input type="text" name="school_or_group" placeholder="例：東京理科大学 / 理科大舞踏研究部 など" />
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">専攻</span>
+                      <select name="specialty">
+                        <option value="">未回答</option>
+                        <option value="standard">スタンダード</option>
+                        <option value="latin">ラテン</option>
+                        <option value="both">両方</option>
+                        <option value="other">その他</option>
+                      </select>
                     </label>
                   </div>
                 </section>
@@ -2256,11 +2290,21 @@
                     <fieldset class="crm-field crm-field--full">
                       <legend class="crm-field__label">参加意向<span class="crm-required">必須</span></legend>
                       <div class="crm-radio-group">
-                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="intent_yes" required />参加予定</label>
+                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="intent_yes" required />参加したい</label>
                         <label class="crm-radio"><input type="radio" name="attendance_intent" value="considering" />検討中</label>
-                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="intent_no" />不参加予定</label>
+                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="intent_no_info" />不参加だが案内希望</label>
                       </div>
                     </fieldset>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">同伴者の有無</span>
+                      <select name="companion_status">
+                        <option value="">未選択</option>
+                        <option value="none">なし</option>
+                        <option value="with_companion">あり</option>
+                        <option value="undecided">未定</option>
+                      </select>
+                    </label>
 
                     <label class="crm-field">
                       <span class="crm-field__label">同伴者人数</span>
@@ -2276,6 +2320,44 @@
                         <option value="undecided">未定</option>
                       </select>
                     </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">写真掲載・撮影に関する確認</span>
+                      <select name="photo_permission">
+                        <option value="">未選択</option>
+                        <option value="ok">記録・広報用撮影に同意</option>
+                        <option value="consult_required">掲載前に相談希望</option>
+                        <option value="no_publication">公開掲載は不可</option>
+                      </select>
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">手伝い可否</span>
+                      <select name="volunteer_interest">
+                        <option value="">未選択</option>
+                        <option value="yes">手伝える</option>
+                        <option value="maybe">内容次第で検討</option>
+                        <option value="no">今回は難しい</option>
+                      </select>
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">協賛・寄付への関心</span>
+                      <select name="sponsorship_interest">
+                        <option value="">未選択</option>
+                        <option value="yes">関心あり</option>
+                        <option value="maybe">資料を見て検討したい</option>
+                        <option value="no">現時点ではなし</option>
+                      </select>
+                    </label>
+
+                    <fieldset class="crm-field crm-field--full">
+                      <legend class="crm-field__label">60周年FESTA案内の受信可否<span class="crm-required">必須</span></legend>
+                      <div class="crm-radio-group">
+                        <label class="crm-radio"><input type="radio" name="festa60_info_permission" value="yes" required />受け取る</label>
+                        <label class="crm-radio"><input type="radio" name="festa60_info_permission" value="no" />受け取らない</label>
+                      </div>
+                    </fieldset>
 
                     <label class="crm-field crm-field--full">
                       <span class="crm-field__label">その他連絡事項・メッセージ</span>
@@ -2299,7 +2381,7 @@
                 </ul>
 
                 <div class="crm-form-actions">
-                  <button class="btn btn--primary" type="submit">参加意向を送信する</button>
+                  <button class="btn btn--primary" type="submit">参加意向を確認する</button>
                 </div>
               </form>
             </div>
@@ -2350,8 +2432,6 @@
     <script src="../assets/js/site.js" defer></script>
   </body>
 </html>
-
-
 
 
 

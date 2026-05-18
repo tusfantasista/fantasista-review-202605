@@ -1,5 +1,13 @@
 # FANTASISTA 60周年FESTA フォーム運用メモ
 
+## 現在の静的フォーム運用
+
+- GitHub Pages公開時は、`assets/js/site.js` の `data-mailto-form` 処理で入力内容からメール件名・本文を生成します。
+- 入力内容はブラウザ上でメール本文に変換するだけで、GitHubリポジトリや公開サイト内には保存しません。
+- メールソフトが開けない場合に備え、確認欄から本文をコピーできるようにしています。
+- 将来Netlify Forms、Google Forms、Supabase、Airtable、CRM APIへ移行する場合は、HTMLの `name` 属性を取り込み項目として使い、送信処理だけを差し替えます。
+- 管理項目（`obog_master_id`、`payment_status` など）はユーザー入力フォームには出さず、CSV出力後またはCRM側で付与します。
+
 ## Netlify Forms
 
 - フォーム名: `festa60-obog-crm-entry`

@@ -210,11 +210,45 @@ html {
   margin-top: 18px;
 }
 
-.static-contact-form label {
+.static-contact-form label,
+.static-contact-form fieldset {
   display: grid;
   gap: 7px;
   color: #555961;
   font-weight: 800;
+}
+
+.static-contact-form fieldset {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.static-contact-form legend {
+  margin-bottom: 7px;
+  color: #555961;
+  font-weight: 800;
+}
+
+.static-contact-form .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.static-contact-form .form-field--full {
+  grid-column: 1 / -1;
+}
+
+.form-required {
+  display: inline-flex;
+  margin-left: 6px;
+  border-radius: 999px;
+  background: rgba(156, 30, 30, 0.1);
+  color: #9c1e1e;
+  padding: 2px 7px;
+  font-size: 0.72rem;
+  line-height: 1.2;
 }
 
 .static-contact-form input,
@@ -237,6 +271,96 @@ html {
   color: #6a7079;
   font-size: 0.9rem;
   line-height: 1.7;
+}
+
+.form-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.form-choice {
+  display: inline-flex !important;
+  grid-template-columns: none !important;
+  align-items: center;
+  gap: 8px !important;
+  min-height: 44px;
+  border: 1px solid rgba(32, 33, 36, 0.12);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.76);
+  font-weight: 700 !important;
+}
+
+.form-choice input {
+  width: auto;
+  min-width: 18px;
+}
+
+.mailto-preview {
+  margin-top: 10px;
+  border: 1px solid rgba(161, 119, 20, 0.22);
+  border-radius: 16px;
+  background: #fffaf0;
+  padding: 18px;
+}
+
+.mailto-preview h3 {
+  margin: 0 0 8px;
+  color: #26211a;
+}
+
+.mailto-preview p {
+  margin: 0 0 12px;
+  color: #5f5547;
+  line-height: 1.7;
+}
+
+.mailto-preview__body {
+  width: 100%;
+  min-height: 220px;
+  border: 1px solid rgba(32, 33, 36, 0.16);
+  border-radius: 12px;
+  padding: 12px;
+  font: inherit;
+  white-space: pre-wrap;
+}
+
+.mailto-preview__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.mailto-preview__actions .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(32, 33, 36, 0.18);
+  padding: 10px 16px;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mailto-preview__actions .button--primary {
+  border-color: #1f1a12;
+  background: #1f1a12;
+  color: #fff8dc;
+}
+
+.mailto-preview__actions .button--ghost {
+  background: #fff;
+  color: #1f1a12;
+}
+
+.mailto-preview__status {
+  margin-top: 10px !important;
+  font-weight: 700;
 }
 
 @media (max-width: 760px) {
@@ -271,5 +395,14 @@ html {
 
   .data-source-card {
     padding: 22px 18px;
+  }
+
+  .static-contact-form .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-choice-row {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 }
