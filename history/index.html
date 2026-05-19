@@ -1548,77 +1548,102 @@
 
         .history-digital-stat {
           min-width: 0;
-          min-height: 158px;
-          padding: clamp(18px, 2vw, 26px);
+          min-height: 164px;
+          padding: clamp(20px, 1.8vw, 24px);
           border-radius: 28px;
           background: linear-gradient(180deg, #fffdfa 0%, #fff8ee 100%);
         }
 
-        .history-digital-stat__label {
+        .history-digital-stat > span.history-digital-stat__label {
           display: block;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           color: #8a6a00;
-          font-size: 0.76rem;
+          font-size: clamp(1rem, 1.1vw, 1.08rem);
           font-weight: 800;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
+          letter-spacing: 0.02em;
         }
 
-        .history-digital-stat__number {
+        .history-digital-stat .history-digital-stat__number {
           display: inline-flex;
           align-items: baseline;
-          gap: 0.08em;
+          flex-wrap: nowrap;
+          gap: 0.12em;
           white-space: nowrap;
           color: #111827;
           font-family: "Oswald", "Noto Sans JP", sans-serif;
-          font-size: clamp(2.8rem, 4.6vw, 4.25rem);
+          font-size: clamp(2rem, 2.6vw, 2.5rem);
           font-weight: 700;
-          line-height: 0.95;
+          line-height: 1.05;
           letter-spacing: 0.005em;
         }
 
-        .history-digital-stat__number--range {
-          font-size: clamp(2.25rem, 3.4vw, 3.25rem);
+        .history-digital-stat .history-digital-stat__number--range {
+          font-size: clamp(1.75rem, 2.2vw, 2.1rem);
           letter-spacing: -0.01em;
         }
 
-        .history-digital-stat__number--minor {
-          font-size: clamp(1.25rem, 2vw, 1.55rem);
+        .history-digital-stat .history-digital-stat__number--minor {
+          font-size: clamp(2rem, 2.6vw, 2.5rem);
           letter-spacing: 0;
         }
 
-        .history-digital-stat__unit {
-          font-size: 0.48em;
+        .history-digital-stat .history-digital-stat__unit {
+          font-size: 0.72em;
           font-family: "Noto Sans JP", sans-serif;
           font-weight: 800;
           line-height: 1;
         }
 
-        .history-digital-stat__sub {
-          display: block;
-          margin-top: 10px;
+        .history-digital-stat .history-digital-stat__separator {
           color: #8a6a00;
-          font-size: clamp(1.08rem, 1.9vw, 1.45rem);
+          font-size: 0.78em;
+          line-height: 1;
+        }
+
+        .history-digital-stat .history-digital-stat__sub {
+          display: block;
+          margin-top: 8px;
+          color: #8a6a00;
+          font-size: clamp(1rem, 1.2vw, 1.08rem);
           font-weight: 800;
           line-height: 1.45;
         }
 
-        .history-digital-stat__text {
-          margin-top: 12px !important;
+        .history-digital-stat .history-digital-stat__sub--range {
+          max-width: 18rem;
+          font-size: clamp(1.75rem, 2.2vw, 2.1rem);
+          letter-spacing: -0.01em;
+        }
+
+        .history-digital-stat .history-digital-stat__text {
+          margin-top: 10px !important;
           color: #4b5563;
-          line-height: 1.7;
-          font-size: 0.94rem;
+          line-height: 1.6;
+          font-size: clamp(1.125rem, 1.3vw, 1.2rem);
         }
 
         .history-digital-stat strong {
           margin-bottom: 0;
-          font-size: inherit;
-          line-height: inherit;
         }
 
-        .history-digital-stat__value {
+        .history-digital-stat .history-digital-stat__value {
           display: inline-block;
           white-space: nowrap;
+        }
+
+        @media (max-width: 640px) {
+          .history-digital-stat {
+            min-height: 0;
+          }
+
+          .history-digital-stat .history-digital-stat__number,
+          .history-digital-stat .history-digital-stat__number--minor {
+            font-size: clamp(1.9rem, 7vw, 2.25rem);
+          }
+
+          .history-digital-stat .history-digital-stat__sub--range {
+            font-size: clamp(1.38rem, 6vw, 1.62rem);
+          }
         }
 
         .history-hero-milestones {
@@ -1830,15 +1855,14 @@
 
               <article class="history-digital-stat">
                 <span class="history-digital-stat__label">最多年度</span>
-                <strong class="history-digital-stat__number">2003<span class="history-digital-stat__unit">年</span></strong>
-                <span class="history-digital-stat__sub"><span class="history-digital-stat__number history-digital-stat__number--minor"><span class="history-digital-stat__value" data-count-to="20">20</span><span class="history-digital-stat__unit">名</span></span></span>
+                <strong class="history-digital-stat__number">2003<span class="history-digital-stat__unit">年</span><span class="history-digital-stat__separator">/</span><span class="history-digital-stat__number history-digital-stat__number--minor"><span class="history-digital-stat__value" data-count-to="20">20</span><span class="history-digital-stat__unit">名</span></span></strong>
                 <p class="history-digital-stat__text">卒部生名簿に残る人数が最も多い年度です。</p>
               </article>
 
               <article class="history-digital-stat">
                 <span class="history-digital-stat__label">最も厚かった4年間</span>
                 <strong class="history-digital-stat__number"><span class="history-digital-stat__value" data-count-to="68">68</span><span class="history-digital-stat__unit">名</span></strong>
-                <span class="history-digital-stat__sub">2002-2005年卒 / 2003-2006年卒</span>
+                <span class="history-digital-stat__sub history-digital-stat__sub--range">2002-2005年卒 / 2003-2006年卒</span>
                 <p class="history-digital-stat__text">4年間で見た世代の厚みが最も大きい時期です。</p>
               </article>
             </div>
@@ -2663,10 +2687,6 @@
 <!-- REVIEW_HISTORY_MOTION_SCRIPT_END -->
 </body>
 </html>
-
-
-
-
 
 
 
