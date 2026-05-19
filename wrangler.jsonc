@@ -10,7 +10,7 @@
     {
       "binding": "DB",
       "database_name": "fantasista-review-202605-preview",
-      "database_id": "00000000-0000-0000-0000-000000000001"
+      "database_id": "a6613799-82cf-4af8-9224-5231ab788c62"
     }
   ],
   "env": {
@@ -22,7 +22,7 @@
         {
           "binding": "DB",
           "database_name": "fantasista-review-202605-preview",
-          "database_id": "00000000-0000-0000-0000-000000000001"
+          "database_id": "a6613799-82cf-4af8-9224-5231ab788c62"
         }
       ]
     },
@@ -34,7 +34,7 @@
         {
           "binding": "DB",
           "database_name": "fantasista-review-202605-production",
-          "database_id": "00000000-0000-0000-0000-000000000003"
+          "database_id": "66492b51-c11b-4b67-8f25-228c5618927f"
         }
       ]
     }
