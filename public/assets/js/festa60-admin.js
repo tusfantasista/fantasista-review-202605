@@ -68,7 +68,7 @@
 
   function renderApplications(rows) {
     if (!rows.length) {
-      body.innerHTML = '<tr><td colspan="9">申込はまだありません。</td></tr>';
+      body.innerHTML = '<tr><td colspan="10">申込はまだありません。</td></tr>';
       return;
     }
     body.innerHTML = rows
@@ -77,7 +77,8 @@
           <td>${escapeHtml(row.application_code)}</td>
           <td>${escapeHtml(row.full_name)}<br><span class="crm-small">${escapeHtml(row.email)}</span></td>
           <td>${escapeHtml(row.graduation_year || "")}</td>
-          <td>${escapeHtml(row.ticket_type)}</td>
+          <td>${escapeHtml(ticketLabel(row.ticket_type))}</td>
+          <td>${escapeHtml(periodLabel(row.fee_period))}<br><span class="crm-small">${escapeHtml(receptionLabel(row.reception_attendance))}</span></td>
           <td>${escapeHtml(row.match_status)}<br><span class="crm-small">${escapeHtml(row.member_code || "")}</span></td>
           <td>${escapeHtml(row.latest_payment_status || row.payment_status)}</td>
           <td>${escapeHtml(row.attendance_status)}</td>
@@ -107,5 +108,36 @@
   function formatYen(value) {
     const amount = Number(value || 0);
     return amount ? `${amount.toLocaleString("ja-JP")}円` : "-";
+  }
+
+  function ticketLabel(value) {
+    const labels = {
+      obog: "一般OBOG",
+      young_obog: "OBOG 6〜10年目",
+      obog_6_10: "OBOG 6〜10年目",
+      obog_5_under: "OBOG 5年目以下",
+      obog_staff: "OBOG役員・当日手伝い",
+      current_student: "現役部員",
+      donation_only: "プレミアム参加枠",
+      premium: "プレミアム参加枠",
+    };
+    return labels[value] || value || "";
+  }
+
+  function periodLabel(value) {
+    const labels = {
+      early: "早期入金",
+      year_end: "年内入金",
+      regular: "通常",
+    };
+    return labels[value] || "";
+  }
+
+  function receptionLabel(value) {
+    const labels = {
+      attending: "懇親会参加",
+      without_reception: "懇親会なし",
+    };
+    return labels[value] || "";
   }
 })();

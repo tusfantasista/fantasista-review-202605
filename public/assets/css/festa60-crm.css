@@ -171,6 +171,16 @@ body.festa60-crm {
   font-weight: 900;
 }
 
+.crm-fee-preview {
+  margin: 0;
+  border: 1px solid rgba(198, 154, 24, 0.35);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #6f5600;
+  background: #fff8e4;
+  font-weight: 900;
+}
+
 .crm-check {
   display: flex;
   gap: 10px;

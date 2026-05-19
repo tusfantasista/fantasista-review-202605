@@ -2,7 +2,17 @@ import { badRequest, getClientMeta, json, methodNotAllowed, readJson, serverErro
 import { applicationCode } from "./_lib/ids.js";
 import { isProduction, publicBaseUrl, requireDb } from "./_lib/env.js";
 import { verifyTurnstile } from "./_lib/turnstile.js";
-import { createPayment, insertApplication, ticketAmount, YOUNG_OBOG_GRADUATION_YEAR_FROM } from "./_lib/db.js";
+import {
+  FEE_PERIODS,
+  OBOG_5_UNDER_GRADUATION_YEAR_FROM,
+  OBOG_6_10_GRADUATION_YEAR_FROM,
+  OBOG_6_10_GRADUATION_YEAR_TO,
+  RECEPTION_ATTENDANCE,
+  createPayment,
+  insertApplication,
+  normalizeTicketType,
+  ticketAmount,
+} from "./_lib/db.js";
 import { createCheckoutSession } from "./_lib/stripe.js";
 
 export async function onRequestPost({ request, env }) {
@@ -17,8 +27,9 @@ export async function onRequestPost({ request, env }) {
     if (!turnstile.ok) return badRequest("Turnstile verification failed.", turnstile.result || turnstile.message);
 
     const db = requireDb(env);
-    const companionCount = Array.isArray(payload.companions) ? payload.companions.length : 0;
-    const amountTotal = ticketAmount(payload.ticket_type || "obog", companionCount);
+    payload.ticket_type = normalizeTicketType(payload.ticket_type);
+    const companions = Array.isArray(payload.companions) ? payload.companions : [];
+    const amountTotal = ticketAmount(payload.ticket_type || "obog", companions, payload.fee_period, payload.reception_attendance);
     const stripeKeyPrefix = isProduction(env) ? "sk_live_" : "sk_test_";
     if (amountTotal > 0 && payload.pay_now !== false && !String(env.STRIPE_SECRET_KEY || "").startsWith(stripeKeyPrefix)) {
       return badRequest(`Stripe secret is not configured for this environment. Set ${stripeKeyPrefix}... or submit with pay_now=false.`);
@@ -73,8 +84,15 @@ function validateApplication(payload) {
   for (const field of ["full_name", "email", "ticket_type"]) {
     if (!payload[field] || String(payload[field]).trim() === "") errors[field] = "required";
   }
+  payload.ticket_type = normalizeTicketType(payload.ticket_type);
   if (payload.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
     errors.email = "invalid";
+  }
+  if (!FEE_PERIODS.includes(payload.fee_period)) {
+    errors.fee_period = "required";
+  }
+  if (!RECEPTION_ATTENDANCE.includes(payload.reception_attendance)) {
+    errors.reception_attendance = "required";
   }
   if (!payload.privacy_consent) {
     errors.privacy_consent = "required";
@@ -82,23 +100,34 @@ function validateApplication(payload) {
   if (payload.companions && !Array.isArray(payload.companions)) {
     errors.companions = "must_be_array";
   } else if (Array.isArray(payload.companions)) {
+    const requestedCompanionCount = Number(payload.companion_count || 0);
+    if (requestedCompanionCount !== payload.companions.length) {
+      errors.companion_count = "must_match_companions_length";
+    }
     payload.companions.forEach((companion, index) => {
       const key = `companions.${index}`;
       if (!companion.full_name || String(companion.full_name).trim() === "") errors[`${key}.full_name`] = "required";
       if (!companion.relationship || String(companion.relationship).trim() === "") errors[`${key}.relationship`] = "required";
-      if (!companion.attendee_type || String(companion.attendee_type).trim() === "") errors[`${key}.attendee_type`] = "required";
+      if (!["adult", "child"].includes(companion.attendee_type)) errors[`${key}.attendee_type`] = "invalid";
       if (companion.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(companion.email)) {
         errors[`${key}.email`] = "invalid";
       }
     });
+  } else if (Number(payload.companion_count || 0) > 0) {
+    errors.companions = "required";
   }
 
-  if (["obog", "young_obog"].includes(payload.ticket_type)) {
+  if (["obog", "obog_6_10", "obog_5_under", "obog_staff"].includes(payload.ticket_type)) {
     const graduationYear = Number(payload.graduation_year);
     if (!Number.isInteger(graduationYear)) {
       errors.graduation_year = "required";
-    } else if (payload.ticket_type === "young_obog" && graduationYear < YOUNG_OBOG_GRADUATION_YEAR_FROM) {
-      errors.ticket_type = `young_obog_requires_graduation_year_${YOUNG_OBOG_GRADUATION_YEAR_FROM}_or_later`;
+    } else if (
+      payload.ticket_type === "obog_6_10" &&
+      (graduationYear < OBOG_6_10_GRADUATION_YEAR_FROM || graduationYear > OBOG_6_10_GRADUATION_YEAR_TO)
+    ) {
+      errors.ticket_type = `obog_6_10_requires_graduation_year_${OBOG_6_10_GRADUATION_YEAR_FROM}_${OBOG_6_10_GRADUATION_YEAR_TO}`;
+    } else if (payload.ticket_type === "obog_5_under" && graduationYear < OBOG_5_UNDER_GRADUATION_YEAR_FROM) {
+      errors.ticket_type = `obog_5_under_requires_graduation_year_${OBOG_5_UNDER_GRADUATION_YEAR_FROM}_or_later`;
     }
   }
   return { ok: Object.keys(errors).length === 0, errors };

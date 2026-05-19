@@ -44,7 +44,7 @@
             <div class="crm-field">
               <label for="graduation_year">卒部年度 <span class="crm-required">OBOGは必須</span></label>
               <input id="graduation_year" name="graduation_year" inputmode="numeric" placeholder="例: 1996" />
-              <p class="crm-help">若手OBOGは卒部10年以内、現時点では2017年度以降の卒部生として扱います。</p>
+              <p class="crm-help">会費区分の確認に使います。OBOG 6〜10年目は2016〜2020年度卒、OBOG 5年目以下は2021〜2025年度卒を想定しています。</p>
             </div>
             <div></div>
           </div>
@@ -59,14 +59,34 @@
 
           <div class="crm-two">
             <div class="crm-field">
-              <label for="ticket_type">チケット種別 <span class="crm-required">必須</span></label>
+              <label for="ticket_type">会費区分 <span class="crm-required">必須</span></label>
               <select id="ticket_type" name="ticket_type" required>
-                <option value="obog">OBOG</option>
-                <option value="young_obog">若手OBOG（卒部10年以内 / 2017年度以降）</option>
-                <option value="current_student">現役生</option>
-                <option value="donation_only">寄付のみ</option>
+                <option value="obog">一般OBOG</option>
+                <option value="obog_6_10">OBOG 6〜10年目（2016〜2020年度卒）</option>
+                <option value="obog_5_under">OBOG 5年目以下（2021〜2025年度卒）</option>
+                <option value="obog_staff">OBOG役員・当日手伝い</option>
+                <option value="current_student">現役部員</option>
+                <option value="premium">プレミアム参加枠</option>
               </select>
-              <p class="crm-help">若手OBOGの定義は参加費に影響するため、卒部年度で確認します。</p>
+              <p class="crm-help">現役部員は本体無料、懇親会参加時のみ4,000円です。</p>
+            </div>
+            <div class="crm-field">
+              <label for="fee_period">入金時期 <span class="crm-required">必須</span></label>
+              <select id="fee_period" name="fee_period" required>
+                <option value="early">早期入金 〜9月末</option>
+                <option value="year_end">年内入金 〜12月中旬</option>
+                <option value="regular">通常 1月以降</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="reception_attendance">懇親会 <span class="crm-required">必須</span></label>
+              <select id="reception_attendance" name="reception_attendance" required>
+                <option value="attending">参加する</option>
+                <option value="without_reception">参加しない（各区分から2,000円引き）</option>
+              </select>
             </div>
             <div class="crm-field">
               <label for="companion_count">同伴者人数 <span class="crm-required">必須</span></label>
@@ -75,6 +95,7 @@
           </div>
 
           <div id="companions" class="crm-stack"></div>
+          <p id="fee-preview" class="crm-fee-preview" aria-live="polite"></p>
 
           <div class="crm-field">
             <label for="message">連絡事項 <span class="crm-optional">任意</span></label>

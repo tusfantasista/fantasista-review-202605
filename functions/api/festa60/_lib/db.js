@@ -1,18 +1,56 @@
 import { newId, nowIso } from "./ids.js";
 
-export const TICKET_PRICES = {
-  obog: 12000,
-  young_obog: 8000,
-  current_student: 0,
-  companion: 12000,
-  donation_only: 0,
+export const FEE_PERIODS = ["early", "year_end", "regular"];
+export const RECEPTION_ATTENDANCE = ["attending", "without_reception"];
+
+export const OBOG_6_10_GRADUATION_YEAR_FROM = 2016;
+export const OBOG_6_10_GRADUATION_YEAR_TO = 2020;
+export const OBOG_5_UNDER_GRADUATION_YEAR_FROM = 2021;
+
+const BASE_FEES = {
+  obog: { early: 13000, year_end: 14000, regular: 15000 },
+  obog_6_10: { early: 11000, year_end: 12000, regular: 12000 },
+  obog_5_under: { early: 9000, year_end: 10000, regular: 10000 },
+  current_student: { early: 4000, year_end: 4000, regular: 4000 },
+  premium: { early: 30000, year_end: 30000, regular: 30000 },
 };
 
-export const YOUNG_OBOG_GRADUATION_YEAR_FROM = 2017;
+const COMPANION_FEES = {
+  adult: { attending: 8000, without_reception: 6000 },
+  child: { attending: 3000, without_reception: 1000 },
+};
 
-export function ticketAmount(ticketType, companionCount = 0) {
-  const base = TICKET_PRICES[ticketType] ?? TICKET_PRICES.obog;
-  return base + companionCount * TICKET_PRICES.companion;
+export function ticketAmount(ticketType, companions = 0, feePeriod = "regular", receptionAttendance = "attending") {
+  const normalizedTicket = normalizeTicketType(ticketType);
+  const normalizedPeriod = FEE_PERIODS.includes(feePeriod) ? feePeriod : "regular";
+  const normalizedReception = RECEPTION_ATTENDANCE.includes(receptionAttendance) ? receptionAttendance : "attending";
+  const companionRows = Array.isArray(companions) ? companions : Array.from({ length: Number(companions || 0) }, () => ({ attendee_type: "adult" }));
+
+  let base = BASE_FEES[normalizedTicket]?.[normalizedPeriod] ?? BASE_FEES.obog[normalizedPeriod];
+  if (normalizedTicket === "obog_staff") {
+    base = Math.round((BASE_FEES.obog[normalizedPeriod] - noReceptionDiscount(normalizedReception)) * 0.5);
+  } else if (normalizedTicket === "current_student") {
+    base = normalizedReception === "attending" ? BASE_FEES.current_student[normalizedPeriod] : 0;
+  } else if (normalizedTicket !== "premium") {
+    base = Math.max(0, base - noReceptionDiscount(normalizedReception));
+  }
+
+  const companionTotal = companionRows.reduce((sum, companion) => {
+    const type = companion.attendee_type === "child" ? "child" : "adult";
+    return sum + COMPANION_FEES[type][normalizedReception];
+  }, 0);
+
+  return base + companionTotal;
+}
+
+export function normalizeTicketType(ticketType) {
+  if (ticketType === "young_obog") return "obog_6_10";
+  if (ticketType === "donation_only") return "premium";
+  return ticketType || "obog";
+}
+
+function noReceptionDiscount(receptionAttendance) {
+  return receptionAttendance === "without_reception" ? 2000 : 0;
 }
 
 export async function findMemberMatch(db, payload) {
@@ -50,11 +88,11 @@ export async function insertApplication(db, payload, requestMeta = {}) {
   await db
     .prepare(
       `INSERT INTO applications (
-        id, application_code, member_id, match_status, match_confidence, ticket_type,
+        id, application_code, member_id, match_status, match_confidence, ticket_type, fee_period, reception_attendance,
         attendance_status, payment_status, full_name, full_name_kana, maiden_name,
         email, phone, graduation_year, generation, school_lineage, dance_role,
         postal_code, address, companion_count, message, source, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       id,
@@ -62,9 +100,11 @@ export async function insertApplication(db, payload, requestMeta = {}) {
       match.member?.id || null,
       match.status,
       match.confidence,
-      payload.ticket_type,
+      normalizeTicketType(payload.ticket_type),
+      payload.fee_period || "regular",
+      payload.reception_attendance || "attending",
       "pending",
-      ticketAmount(payload.ticket_type, companions.length) > 0 ? "unpaid" : "not_required",
+      ticketAmount(payload.ticket_type, companions, payload.fee_period, payload.reception_attendance) > 0 ? "unpaid" : "not_required",
       payload.full_name,
       payload.full_name_kana || null,
       payload.maiden_name || null,
@@ -134,7 +174,7 @@ export async function insertApplication(db, payload, requestMeta = {}) {
     action: "application.created",
     target_type: "application",
     target_id: id,
-    details_json: JSON.stringify({ match_status: match.status, ticket_type: payload.ticket_type }),
+    details_json: JSON.stringify({ match_status: match.status, ticket_type: normalizeTicketType(payload.ticket_type), fee_period: payload.fee_period, reception_attendance: payload.reception_attendance }),
     ...requestMeta,
   });
 
@@ -144,7 +184,7 @@ export async function insertApplication(db, payload, requestMeta = {}) {
     member_id: match.member?.id || null,
     match_status: match.status,
     match_confidence: match.confidence,
-    amount_total: ticketAmount(payload.ticket_type, companions.length),
+    amount_total: ticketAmount(payload.ticket_type, companions, payload.fee_period, payload.reception_attendance),
   };
 }
 
@@ -224,7 +264,7 @@ export async function listApplications(db) {
     .prepare(
       `SELECT
         a.id, a.application_code, a.full_name, a.full_name_kana, a.email,
-        a.graduation_year, a.ticket_type, a.companion_count, a.match_status,
+        a.graduation_year, a.ticket_type, a.fee_period, a.reception_attendance, a.companion_count, a.match_status,
         a.match_confidence, a.payment_status, a.attendance_status, a.created_at,
         m.member_code, m.full_name AS matched_member_name,
         p.stripe_checkout_session_id, p.status AS latest_payment_status, p.amount_total
@@ -237,7 +277,7 @@ export async function listApplications(db) {
     .all();
   return (result.results || []).map((row) => ({
     ...row,
-    amount_total: row.amount_total ?? ticketAmount(row.ticket_type, row.companion_count),
+    amount_total: row.amount_total ?? ticketAmount(row.ticket_type, row.companion_count, row.fee_period, row.reception_attendance),
   }));
 }
 

@@ -58,9 +58,11 @@ export async function verifyStripeSignature(payload, signatureHeader, webhookSec
 function ticketLabel(ticketType) {
   const labels = {
     obog: "60周年記念FESTA 参加費",
-    young_obog: "60周年記念FESTA 若手OBOG参加費",
-    current_student: "60周年記念FESTA 現役生",
-    donation_only: "60周年記念FESTA 寄付",
+    obog_6_10: "60周年記念FESTA OBOG 6〜10年目参加費",
+    obog_5_under: "60周年記念FESTA OBOG 5年目以下参加費",
+    obog_staff: "60周年記念FESTA OBOG役員・当日手伝い参加費",
+    current_student: "60周年記念FESTA 現役部員参加費",
+    premium: "60周年記念FESTA プレミアム参加枠",
   };
   return labels[ticketType] || labels.obog;
 }

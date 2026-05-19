@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS applications (
   match_status TEXT NOT NULL DEFAULT 'unmatched',
   match_confidence REAL NOT NULL DEFAULT 0,
   ticket_type TEXT NOT NULL,
+  fee_period TEXT,
+  reception_attendance TEXT,
   attendance_status TEXT NOT NULL DEFAULT 'pending',
   payment_status TEXT NOT NULL DEFAULT 'unpaid',
   full_name TEXT NOT NULL,

@@ -4,8 +4,24 @@
   const companionCount = document.getElementById("companion_count");
   const companions = document.getElementById("companions");
   const ticketType = document.getElementById("ticket_type");
+  const feePeriod = document.getElementById("fee_period");
+  const receptionAttendance = document.getElementById("reception_attendance");
+  const feePreview = document.getElementById("fee-preview");
   let turnstileToken = "";
-  const youngObogGraduationYearFrom = 2017;
+  const obogSixTenFrom = 2016;
+  const obogSixTenTo = 2020;
+  const obogFiveUnderFrom = 2021;
+  const baseFees = {
+    obog: { early: 13000, year_end: 14000, regular: 15000 },
+    obog_6_10: { early: 11000, year_end: 12000, regular: 12000 },
+    obog_5_under: { early: 9000, year_end: 10000, regular: 10000 },
+    current_student: { early: 4000, year_end: 4000, regular: 4000 },
+    premium: { early: 30000, year_end: 30000, regular: 30000 },
+  };
+  const companionFees = {
+    adult: { attending: 8000, without_reception: 6000 },
+    child: { attending: 3000, without_reception: 1000 },
+  };
 
   if (!form) return;
 
@@ -31,8 +47,12 @@
 
   companionCount.addEventListener("input", renderCompanions);
   ticketType.addEventListener("change", updateGraduationRequirement);
+  ticketType.addEventListener("change", updateFeePreview);
+  feePeriod.addEventListener("change", updateFeePreview);
+  receptionAttendance.addEventListener("change", updateFeePreview);
   renderCompanions();
   updateGraduationRequirement();
+  updateFeePreview();
 
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -98,11 +118,8 @@
             <label for="companion_${index}_attendee_type">同伴者属性 <span class="crm-required">必須</span></label>
             <select id="companion_${index}_attendee_type" name="companion_${index}_attendee_type" required>
               <option value="">選択してください</option>
-              <option value="family">家族</option>
-              <option value="obog">OBOG</option>
-              <option value="current_student">現役生</option>
-              <option value="guest">一般同伴者</option>
-              <option value="child">子ども</option>
+              <option value="adult">同伴者（大人）</option>
+              <option value="child">同伴者（子供）</option>
             </select>
           </div>
           <div class="crm-field">
@@ -117,6 +134,8 @@
       `;
       companions.appendChild(card);
     }
+    companions.querySelectorAll("select").forEach((select) => select.addEventListener("change", updateFeePreview));
+    updateFeePreview();
   }
 
   function formPayload(data) {
@@ -148,18 +167,28 @@
 
   function updateGraduationRequirement() {
     const graduationYear = document.getElementById("graduation_year");
-    const requiresYear = ["obog", "young_obog"].includes(ticketType.value);
+    const requiresYear = ["obog", "obog_6_10", "obog_5_under", "obog_staff"].includes(ticketType.value);
     graduationYear.required = requiresYear;
+  }
+
+  function updateFeePreview() {
+    const data = new FormData(form);
+    const payload = formPayload(data);
+    const amount = calculateAmount(payload);
+    feePreview.textContent = `概算会費: ${amount.toLocaleString("ja-JP")}円`;
   }
 
   function validatePayload(payload) {
     const errors = [];
     const graduationYear = Number(payload.graduation_year || 0);
-    if (["obog", "young_obog"].includes(payload.ticket_type) && !graduationYear) {
-      errors.push("OBOG・若手OBOGは卒部年度を入力してください。");
+    if (["obog", "obog_6_10", "obog_5_under", "obog_staff"].includes(payload.ticket_type) && !graduationYear) {
+      errors.push("OBOGは卒部年度を入力してください。");
     }
-    if (payload.ticket_type === "young_obog" && graduationYear < youngObogGraduationYearFrom) {
-      errors.push(`若手OBOGは卒部10年以内（${youngObogGraduationYearFrom}年度以降）として扱います。チケット種別または卒部年度を確認してください。`);
+    if (payload.ticket_type === "obog_6_10" && (graduationYear < obogSixTenFrom || graduationYear > obogSixTenTo)) {
+      errors.push(`OBOG 6〜10年目は${obogSixTenFrom}〜${obogSixTenTo}年度卒を想定しています。会費区分または卒部年度を確認してください。`);
+    }
+    if (payload.ticket_type === "obog_5_under" && graduationYear < obogFiveUnderFrom) {
+      errors.push(`OBOG 5年目以下は${obogFiveUnderFrom}年度以降の卒部生を想定しています。会費区分または卒部年度を確認してください。`);
     }
     payload.companions.forEach((companion, index) => {
       if (!companion.full_name || !companion.relationship || !companion.attendee_type) {
@@ -170,6 +199,28 @@
       }
     });
     return errors;
+  }
+
+  function calculateAmount(payload) {
+    const period = payload.fee_period || "regular";
+    const reception = payload.reception_attendance || "attending";
+    let base = baseFees[payload.ticket_type]?.[period] ?? baseFees.obog[period];
+    if (payload.ticket_type === "obog_staff") {
+      base = Math.round((baseFees.obog[period] - noReceptionDiscount(reception)) * 0.5);
+    } else if (payload.ticket_type === "current_student") {
+      base = reception === "attending" ? baseFees.current_student[period] : 0;
+    } else if (payload.ticket_type !== "premium") {
+      base = Math.max(0, base - noReceptionDiscount(reception));
+    }
+
+    return payload.companions.reduce((sum, companion) => {
+      const type = companion.attendee_type === "child" ? "child" : "adult";
+      return sum + companionFees[type][reception];
+    }, base);
+  }
+
+  function noReceptionDiscount(reception) {
+    return reception === "without_reception" ? 2000 : 0;
   }
 
   function setMessage(text, kind) {
