@@ -235,7 +235,10 @@ export async function listApplications(db) {
        LIMIT 500`,
     )
     .all();
-  return result.results || [];
+  return (result.results || []).map((row) => ({
+    ...row,
+    amount_total: row.amount_total ?? ticketAmount(row.ticket_type, row.companion_count),
+  }));
 }
 
 export async function audit(db, item) {
