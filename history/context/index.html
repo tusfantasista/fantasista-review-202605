@@ -223,8 +223,6 @@
 
       .context-summary-grid,
       .discipline-era-grid,
-      .history-photo-grid,
-      .history-photo-compare,
       .tournament-lanes,
       .context-mini-grid,
       .context-glossary-grid,
@@ -241,9 +239,7 @@
       .context-era-card,
       .context-lane,
       .context-mini-card,
-      .history-photo-card,
       .context-policy-card,
-      .context-photo-callout,
       .comparison-card,
       .comparison-note {
         border: 1px solid var(--context-line);
@@ -297,7 +293,7 @@
       .context-mini-card p,
       .comparison-card p,
       .context-policy-card p,
-      .context-photo-callout p {
+      .comparison-note p {
         margin: 0;
         color: var(--context-text);
         line-height: 1.85;
@@ -307,6 +303,54 @@
         margin: 22px 0 0;
         color: #707784;
         line-height: 1.8;
+      }
+
+      .context-policy-card h3 {
+        margin: 0 0 12px;
+        color: var(--context-head);
+        font-size: clamp(1.35rem, 2vw, 1.85rem);
+        line-height: 1.45;
+      }
+
+      .regular-match-table-wrap {
+        margin-top: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(25, 31, 42, 0.1);
+        border-radius: 18px;
+        background: #ffffff;
+      }
+
+      .regular-match-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .regular-match-table th,
+      .regular-match-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(25, 31, 42, 0.08);
+        color: var(--context-text);
+        line-height: 1.65;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .regular-match-table th {
+        color: #8a6a00;
+        font-size: 0.88rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        background: #fff8e6;
+      }
+
+      .regular-match-table td:first-child {
+        color: var(--context-head);
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .regular-match-table tr:last-child td {
+        border-bottom: 0;
       }
 
       .discipline-era-grid {
@@ -476,109 +520,6 @@
         line-height: 1.75;
       }
 
-      .history-photo-block {
-        margin-top: 34px;
-      }
-
-      .history-photo-block--compact {
-        margin-top: 18px;
-      }
-
-      .history-photo-block__head {
-        margin-bottom: 16px;
-      }
-
-      .history-photo-block__head h2,
-      .history-photo-block__head h3 {
-        margin: 0 0 8px;
-        color: var(--context-head);
-      }
-
-      .history-photo-block__head p {
-        margin: 0;
-        color: var(--context-text);
-        line-height: 1.8;
-      }
-
-      .history-photo-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .history-photo-compare {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .history-photo-card {
-        margin: 0;
-        padding: 16px;
-      }
-
-      .history-photo-card--soft {
-        background: linear-gradient(180deg, #ffffff 0%, #fff9ec 100%);
-      }
-
-      .history-photo-placeholder {
-        position: relative;
-        display: grid;
-        place-items: center;
-        min-height: 180px;
-        border: 1.5px dashed rgba(112, 38, 63, 0.28);
-        border-radius: 18px;
-        background:
-          linear-gradient(135deg, rgba(46, 69, 113, 0.08) 0%, rgba(254, 192, 0, 0.08) 100%),
-          #fffdfa;
-        overflow: hidden;
-      }
-
-      .history-photo-placeholder--wide {
-        min-height: clamp(220px, 30vw, 340px);
-      }
-
-      .history-photo-placeholder::before {
-        content: "";
-        width: 54px;
-        height: 38px;
-        border: 3px solid rgba(112, 38, 63, 0.44);
-        border-radius: 10px;
-        box-shadow: inset 0 0 0 9px rgba(112, 38, 63, 0.06);
-      }
-
-      .history-photo-placeholder::after {
-        content: "";
-        position: absolute;
-        width: 16px;
-        height: 16px;
-        border: 3px solid rgba(112, 38, 63, 0.44);
-        border-radius: 50%;
-      }
-
-      .history-photo-label {
-        position: absolute;
-        left: 16px;
-        bottom: 14px;
-        display: inline-flex;
-        align-items: center;
-        min-height: 32px;
-        padding: 0 12px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.92);
-        color: var(--context-wine);
-        font-weight: 800;
-        box-shadow: 0 10px 24px rgba(12, 18, 28, 0.08);
-      }
-
-      .history-photo-caption {
-        margin-top: 12px;
-        color: var(--context-head);
-        font-weight: 800;
-      }
-
-      .history-photo-note {
-        margin: 4px 0 0;
-        color: var(--context-text);
-        line-height: 1.7;
-      }
-
       .tournament-lanes {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         align-items: start;
@@ -651,17 +592,8 @@
       }
 
       .context-policy-card,
-      .context-photo-callout {
+      .comparison-note {
         padding: 26px;
-      }
-
-      .context-photo-callout h2 {
-        margin: 0 0 10px;
-        color: var(--context-head);
-      }
-
-      .context-photo-callout__actions {
-        margin-top: 18px;
       }
 
       .context-fastline {
@@ -772,8 +704,7 @@
         .context-summary-grid,
         .discipline-era-grid,
         .tournament-lanes,
-        .context-mini-grid,
-        .history-photo-grid {
+        .context-mini-grid {
           grid-template-columns: 1fr 1fr;
         }
 
@@ -799,8 +730,6 @@
         .context-summary-grid,
         .discipline-era-grid,
         .comparison-grid,
-        .history-photo-grid,
-        .history-photo-compare,
         .tournament-lanes,
         .context-mini-grid,
         .context-glossary-grid {
@@ -816,8 +745,7 @@
         .context-lane,
         .context-mini-card,
         .comparison-card,
-        .context-policy-card,
-        .context-photo-callout {
+        .context-policy-card {
           padding: 22px 18px;
           border-radius: 18px;
         }
@@ -827,17 +755,45 @@
           border-radius: 20px;
         }
 
-        .history-photo-card {
-          padding: 12px;
-          border-radius: 18px;
+        .regular-match-table-wrap {
+          border-radius: 16px;
         }
 
-        .history-photo-placeholder {
-          min-height: 158px;
+        .regular-match-table,
+        .regular-match-table tbody,
+        .regular-match-table tr,
+        .regular-match-table td {
+          display: block;
+          width: 100%;
         }
 
-        .history-photo-placeholder--wide {
-          min-height: 220px;
+        .regular-match-table thead {
+          display: none;
+        }
+
+        .regular-match-table tr {
+          padding: 14px 0;
+          border-bottom: 1px solid rgba(25, 31, 42, 0.08);
+        }
+
+        .regular-match-table tr:last-child {
+          border-bottom: 0;
+        }
+
+        .regular-match-table td {
+          padding: 6px 16px;
+          border-bottom: 0;
+          white-space: normal;
+        }
+
+        .regular-match-table td::before {
+          content: attr(data-label);
+          display: block;
+          margin-bottom: 2px;
+          color: #8a6a00;
+          font-size: 0.75rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
         }
       }
     </style>    <!-- REVIEW_CONTEXT_LINK_VISUAL_START -->
@@ -860,7 +816,6 @@
       .context-hero-badge,
       .context-source-chip,
       .context-era-tag,
-      .history-photo-label,
       .context-glossary-item strong {
         cursor: default;
       }
@@ -1091,7 +1046,6 @@
         line-height: 1.8;
       }
 
-      .photo-submit-cta,
       .return-cta {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
@@ -1104,15 +1058,10 @@
         box-shadow: 0 18px 44px rgba(12, 18, 28, 0.08);
       }
 
-      .photo-submit-cta {
-        background: linear-gradient(180deg, #fff8e4 0%, #fffdf7 100%);
-      }
-
       .return-cta {
         background: linear-gradient(180deg, #fffdfa 0%, #fff6e6 100%);
       }
 
-      .photo-submit-cta__eyebrow,
       .return-cta__eyebrow {
         display: inline-block;
         margin-bottom: 8px;
@@ -1123,20 +1072,17 @@
         text-transform: uppercase;
       }
 
-      .photo-submit-cta h3,
       .return-cta h3 {
         margin: 0 0 8px;
         color: var(--context-head);
       }
 
-      .photo-submit-cta p,
       .return-cta p {
         margin: 0;
         color: var(--context-text);
         line-height: 1.8;
       }
 
-      .photo-submit-cta__button,
       .return-cta__button {
         display: inline-flex;
         align-items: center;
@@ -1152,8 +1098,6 @@
         white-space: nowrap;
       }
 
-      .photo-submit-cta__button:hover,
-      .photo-submit-cta__button:focus-visible,
       .return-cta__button:hover,
       .return-cta__button:focus-visible {
         transform: translateY(-1px);
@@ -1163,7 +1107,6 @@
       .context-primary-link:focus-visible,
       .page-toc summary:focus-visible,
       .page-toc__links a:focus-visible,
-      .photo-submit-cta__button:focus-visible,
       .return-cta__button:focus-visible,
       .context-source-details summary:focus-visible,
       .context-followup summary:focus-visible,
@@ -1176,7 +1119,6 @@
         .context-hero-actions,
         .page-toc__links,
         .context-rule-digest,
-        .photo-submit-cta,
         .return-cta {
           grid-template-columns: 1fr;
         }
@@ -1187,7 +1129,6 @@
         }
 
         .context-primary-link,
-        .photo-submit-cta__button,
         .return-cta__button {
           width: 100%;
         }
@@ -1282,27 +1223,6 @@
           </nav>
         </div>
       </section>
-      <!-- REVIEW_CONTEXT_HERO_PHOTO_START -->
-      <section class="page-section" id="context-photo-intro">
-        <div class="container">
-          <article class="history-photo-block">
-            <div class="history-photo-block__head">
-              <h2>記録写真でたどる学生競技ダンスの変遷</h2>
-              <p>当時の競技会、練習場、部室、フォーメーション、集合写真などを掲載できるよう、写真枠を用意しています。写真は準備ができ次第、順次追加します。</p>
-            </div>
-
-            <figure class="history-photo-card history-photo-card--soft">
-              <!-- ここに画像を追加可能 -->
-              <div class="history-photo-placeholder history-photo-placeholder--wide" role="img" aria-label="写真準備中">
-                <span class="history-photo-label">写真準備中</span>
-              </div>
-              <figcaption class="history-photo-caption">競技会・集合写真・練習風景などを掲載予定</figcaption>
-              <p class="history-photo-note">歴史アルバムのように、時代の空気が伝わる写真を順次加えていきます。</p>
-            </figure>
-          </article>
-        </div>
-      </section>
-      <!-- REVIEW_CONTEXT_HERO_PHOTO_END -->
 <section class="page-section page-section--light" id="context-summary">
         <div class="container">
           <div class="section-head">
@@ -1315,19 +1235,19 @@
             <article class="context-story-card">
               <span class="context-card-icon" aria-hidden="true">01</span>
               <h3>長く続いた8種目時代</h3>
-              <p>多くのOBOGにとってなじみ深い学連は、スタンダード4種目、ラテン4種目の8種目体制でした。ヴィニーズワルツとジャイブは、一般競技ダンスの10種目には含まれるものの、学連では長く中心種目ではありませんでした。</p>
+              <p>多くのOBOGにとってなじみ深い学連は、スタンダード4種目、ラテン4種目の8種目体制でした。2024年6月1日現在の東部日本学生競技ダンス連盟規約でも、東部日本学生競技ダンス選手権大会の種目は8種目として記載されています。</p>
             </article>
 
             <article class="context-story-card">
               <span class="context-card-icon" aria-hidden="true">02</span>
               <h3>2020年代に10種目化へ</h3>
-              <p>近年、ヴィニーズワルツとジャイブの導入が進み、東部でも10種目化の流れが見られます。特に2026年春東都は、東部レギュラー戦の10種目化を象徴する変化として整理できます。</p>
+              <p>2024年夏の全日本戦では、準決勝以降からヴィニーズワルツとジャイブが試験的に採用されました。その後、2026年に正式に10種目化し、従来の8種目にVwとJが加わりました。</p>
             </article>
 
             <article class="context-story-card">
               <span class="context-card-icon" aria-hidden="true">03</span>
               <h3>導入は大会ごとに違う</h3>
-              <p>新種目は、東京六大学戦、東部戦、夏全、招待試合などで同時に導入されたわけではありません。先行導入、オープン種目、エキシビション、正式種目化など、段階を踏んで広がってきました。</p>
+              <p>新種目は、東京六大学戦、東部戦、夏全、招待試合などで同時に導入されたわけではありません。このページでは、2024年規約上の8種目記載、2024年夏の試験導入、2026年の正式10種目化を分けて整理します。</p>
             </article>
 
             <article class="context-story-card">
@@ -1346,7 +1266,7 @@
           <div class="section-head">
             <p class="section-head__kicker">Discipline Timeline</p>
             <h2>競技種目の変遷</h2>
-            <p>学連の競技種目は、現在の10種目が最初から揃っていたわけではありません。ここでは、OBOGが自分の現役時代と比較しやすいように、種目数の変化を大きな時代区分で整理します。</p>
+            <p>学連の競技種目は、現在の10種目が最初から揃っていたわけではありません。ここでは、OBOGが自分の現役時代と比較しやすいように、8種目時代から10種目時代への変化を整理します。</p>
           </div>
 
           <div class="discipline-era-grid">
@@ -1414,10 +1334,28 @@
             </article>
 
             <article class="context-era-card context-era-card--future">
-              <span class="context-era-card__years">2020年代</span>
+              <span class="context-era-card__years">2024年6月1日現在</span>
+              <strong class="context-era-card__count">8種目</strong>
+              <h3>規約上は8種目として記載</h3>
+              <p>東部日本学生競技ダンス連盟規約では、東部日本学生競技ダンス選手権大会の種目として、ワルツ、タンゴ、スローフォックストロット、クイックステップ、チャチャチャ、サンバ、ルンバ、パソドブレの8種目が記載されています。</p>
+              <div class="context-era-system">
+                <span>W</span>
+                <span>T</span>
+                <span>F</span>
+                <span>Q</span>
+                <span>C</span>
+                <span>S</span>
+                <span>R</span>
+                <span>P</span>
+              </div>
+              <span class="context-era-tag">東部学連規約で確認</span>
+            </article>
+
+            <article class="context-era-card context-era-card--future">
+              <span class="context-era-card__years">2024年夏</span>
               <strong class="context-era-card__count">10種目</strong>
-              <h3>ヴィニーズワルツとジャイブの導入</h3>
-              <p>2020年代に入り、ヴィニーズワルツとジャイブの導入が進み、10種目化の流れが見られるようになりました。大会によって導入時期やラウンドは異なります。</p>
+              <h3>全日本戦で試験的に採用</h3>
+              <p>2024年夏の全日本戦では、準決勝以降からヴィニーズワルツとジャイブが試験的に採用・導入されました。8種目から10種目へ移る過程を示す重要な運用変更です。</p>
               <div class="context-era-system">
                 <span>W</span>
                 <span>T</span>
@@ -1435,8 +1373,8 @@
             <article class="context-era-card context-era-card--future">
               <span class="context-era-card__years">2026年</span>
               <strong class="context-era-card__count">10種目</strong>
-              <h3>東部レギュラー戦の10種目化</h3>
-              <p>東京理科大学が属する東部日本学生競技ダンス連盟（以下、東部学連）のレギュラー戦では、2026年春東都に10種目化を象徴する変化が見られます。現在の現役世代は、OBOG世代とは異なる競技環境の中で競技しています。</p>
+              <h3>正式に10種目化</h3>
+              <p>2026年に正式に10種目化し、従来の8種目にヴィニーズワルツとジャイブが加わりました。現在の現役世代は、OBOG世代とは異なる競技環境の中で競技しています。</p>
               <div class="context-era-system">
                 <span>10種目時代へ</span>
               </div>
@@ -1445,7 +1383,7 @@
 
           <article class="comparison-panel" id="context-comparison">
             <h3>8種目時代と10種目化の時代</h3>
-            <p>OBOGが現役時代の競技会と現在の競技会を比べるときは、種目数だけでなく、出場資格、競技区分、服装、シャドー関連の制度、競技会ごとの要領も分けて見る必要があります。</p>
+            <p>長く学生競技ダンスの主要戦は、スタンダード4種目・ラテン4種目の8種目を中心に運用されてきました。2024年夏の試験導入を経て、2026年にはヴィニーズワルツとジャイブを含む10種目化が正式な流れになりました。</p>
 
             <div class="comparison-grid" aria-label="8種目時代と10種目化の比較">
               <article class="comparison-card">
@@ -1501,41 +1439,12 @@
                   </div>
                   <div>
                     <dt>大会ごとの差</dt>
-                    <dd>導入時期や採用ラウンドは大会ごとに異なるため、現行資料と当時資料の照合が大切です。</dd>
+                    <dd>2024年夏の全日本戦では準決勝以降から試験的に採用され、2026年に正式に10種目化しました。</dd>
                   </div>
                 </dl>
               </article>
             </div>
           </article>
-          <!-- REVIEW_CONTEXT_DISCIPLINE_PHOTO_START -->
-          <article class="history-photo-block">
-            <div class="history-photo-block__head">
-              <h3>8種目時代と10種目化の比較</h3>
-              <p>将来的には、OBOG世代の競技会写真と現役世代の写真を並べ、競技環境の変化を視覚的にも伝えます。</p>
-            </div>
-
-            <div class="history-photo-compare">
-              <figure class="history-photo-card">
-                <!-- ここに画像を追加可能 -->
-                <div class="history-photo-placeholder" role="img" aria-label="8種目時代の写真準備中">
-                  <span class="history-photo-label">写真準備中</span>
-                </div>
-                <figcaption class="history-photo-caption">8種目時代</figcaption>
-                <p class="history-photo-note">8種目時代の写真を掲載予定</p>
-              </figure>
-
-              <figure class="history-photo-card">
-                <!-- ここに画像を追加可能 -->
-                <div class="history-photo-placeholder" role="img" aria-label="10種目化の時代の写真準備中">
-                  <span class="history-photo-label">写真準備中</span>
-                </div>
-                <figcaption class="history-photo-caption">10種目化の時代</figcaption>
-                <p class="history-photo-note">10種目化以降の写真を掲載予定</p>
-              </figure>
-            </div>
-          </article>
-          <!-- REVIEW_CONTEXT_DISCIPLINE_PHOTO_END -->
-
         </div>
       </section>
 <section class="page-section page-section--light" id="context-tournament-paths">
@@ -1543,42 +1452,8 @@
           <div class="section-head">
             <p class="section-head__kicker">Tournament Paths</p>
             <h2>どの大会で増えたか</h2>
-            <p>新種目は、すべての大会で一斉に導入されたわけではありません。東京六大学戦での先行導入、東部での正式採用、夏全や招待試合での段階的導入など、大会ごとに広がり方が異なります。</p>
+            <p>新種目は、すべての大会で一斉に導入されたわけではありません。2024年規約上の8種目記載、2024年夏の全日本戦での試験導入、2026年の正式10種目化を分けて見ると、制度変更の流れがつかみやすくなります。</p>
           </div>
-          <!-- REVIEW_CONTEXT_TOURNAMENT_PHOTO_START -->
-          <article class="history-photo-block">
-            <div class="history-photo-grid">
-              <figure class="history-photo-card">
-                <!-- ここに画像を追加可能 -->
-                <div class="history-photo-placeholder" role="img" aria-label="東京六大学戦の資料写真準備中">
-                  <span class="history-photo-label">資料写真準備中</span>
-                </div>
-                <figcaption class="history-photo-caption">東京六大学戦</figcaption>
-                <p class="history-photo-note">学生競技ダンスにおける先行導入例の写真を掲載予定</p>
-              </figure>
-
-              <figure class="history-photo-card">
-                <!-- ここに画像を追加可能 -->
-                <div class="history-photo-placeholder" role="img" aria-label="東部・東都の資料写真準備中">
-                  <span class="history-photo-label">資料写真準備中</span>
-                </div>
-                <figcaption class="history-photo-caption">東部・東都</figcaption>
-                <p class="history-photo-note">東部・東都の競技環境を伝える写真を掲載予定</p>
-              </figure>
-
-              <figure class="history-photo-card">
-                <!-- ここに画像を追加可能 -->
-                <div class="history-photo-placeholder" role="img" aria-label="夏全・冬全の資料写真準備中">
-                  <span class="history-photo-label">資料写真準備中</span>
-                </div>
-                <figcaption class="history-photo-caption">夏全・冬全</figcaption>
-                <p class="history-photo-note">全国大会の雰囲気が伝わる写真を掲載予定</p>
-              </figure>
-            </div>
-          </article>
-          <!-- REVIEW_CONTEXT_TOURNAMENT_PHOTO_END -->
-
-
           <div class="tournament-lanes">
             <article class="context-lane">
               <h3>東京六大学戦での先行導入</h3>
@@ -1636,7 +1511,7 @@
 
             <article class="context-lane">
               <h3>東部・東都での反映</h3>
-              <p class="context-lane__lead">理科大舞研の戦歴と直接つながるのは、東部学連の大会群です。東京六大学戦より少し遅れて反映された種目もあります。</p>
+              <p class="context-lane__lead">理科大舞研の戦歴と直接つながるのは、東部日本学生競技ダンス連盟の大会群です。規約上の競技会区分と、現場で使われる呼称を分けて読む必要があります。</p>
 
               <div class="context-lane-item">
                 <span class="context-lane-item__year">1985 東部日本Ⅰ部戦</span>
@@ -1653,16 +1528,23 @@
               </div>
 
               <div class="context-lane-item">
-                <span class="context-lane-item__year">2026 春東都</span>
-                <strong>Vw・Jを含む10種目化を象徴</strong>
-                <p>東部レギュラー戦の変化を実感しやすい節目です。</p>
-                <span class="context-source-chip">東部公開資料 + OB視察</span>
+                <span class="context-lane-item__year">2024年6月1日現在</span>
+                <strong>東部日本学生競技ダンス選手権大会は8種目記載</strong>
+                <p>東部学連規約では、W・T・F・Q、C・S・R・Pの8種目として確認できます。</p>
+                <span class="context-source-chip">東部学連規約</span>
+              </div>
+
+              <div class="context-lane-item">
+                <span class="context-lane-item__year">2026年</span>
+                <strong>正式に10種目化</strong>
+                <p>従来の8種目に、ヴィニーズワルツとジャイブが加わります。</p>
+                <span class="context-source-chip">追加確認情報</span>
               </div>
             </article>
 
             <article class="context-lane">
-              <h3>夏全・招待試合での段階的導入</h3>
-              <p class="context-lane__lead">全日本学生競技ダンス連盟（以下、全日本学連）系の大会や招待試合では、5種目化・10種目化が段階的に進みました。大会によって導入ラウンドも異なります。</p>
+              <h3>夏全・全国戦での段階的導入</h3>
+              <p class="context-lane__lead">全日本学生競技ダンス連盟（以下、全日本学連）系の大会では、2024年夏に準決勝以降でヴィニーズワルツとジャイブが試験的に採用されました。</p>
 
               <div class="context-lane-item">
                 <span class="context-lane-item__year">2020年代前半</span>
@@ -1673,21 +1555,80 @@
 
               <div class="context-lane-item">
                 <span class="context-lane-item__year">2024 夏全</span>
-                <strong>準決勝以降で5種目化</strong>
-                <p>段階的な導入として読めます。</p>
-                <span class="context-source-chip">JDSF掲載資料 + OB回想</span>
+                <strong>準決勝以降でVw・Jを試験導入</strong>
+                <p>8種目運用から10種目化へ移る途中段階として読めます。</p>
+                <span class="context-source-chip">追加確認情報</span>
               </div>
 
               <div class="context-lane-item">
                 <span class="context-lane-item__year">2020年代後半</span>
-                <strong>10種目前提の競技環境へ移行中</strong>
-                <p>現役世代の標準は変わりつつあります。</p>
+                <strong>10種目前提の競技環境へ</strong>
+                <p>2026年の正式10種目化により、現役世代の標準はOBOG世代と変わっています。</p>
                 <span class="context-source-chip">公開資料 + 観察</span>
               </div>
             </article>
           </div>
 
-          <p class="context-card-note">大会ごとに導入時期が異なるため、このページでは「学連全体への一斉導入年」ではなく、「確認できる大会単位の変化」として整理しています。</p>
+          <article class="context-policy-card" id="context-regular-matches">
+            <span class="context-source-chip">現場呼称</span>
+            <h3>理科大にとってのレギュラー戦</h3>
+            <p>本サイトでは、東京理科大学が東都校であることを前提に、春東部、秋東部、春東都、秋東都、夏全、冬全の6大会をレギュラー戦として扱います。これは規約上に明文化された厳密な分類というより、東部日本学生競技ダンス連盟所属校の現場で、年間の主軸となる重要大会群を指す実務上・文化上の呼称です。</p>
+
+            <div class="regular-match-table-wrap">
+              <table class="regular-match-table">
+                <thead>
+                  <tr>
+                    <th>通称</th>
+                    <th>正式名称</th>
+                    <th>位置づけ</th>
+                    <th>理科大・東都校にとっての意味</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="通称">春東部</td>
+                    <td data-label="正式名称">東部日本学生競技ダンス選手権大会</td>
+                    <td data-label="位置づけ">東部学連の主要大会</td>
+                    <td data-label="意味">前期の大きな団体戦</td>
+                  </tr>
+                  <tr>
+                    <td data-label="通称">秋東部</td>
+                    <td data-label="正式名称">東部日本学生競技ダンス選手権大会Ⅰ部戦</td>
+                    <td data-label="位置づけ">東部学連の主要大会</td>
+                    <td data-label="意味">秋の東部最高峰の団体戦</td>
+                  </tr>
+                  <tr>
+                    <td data-label="通称">春東都</td>
+                    <td data-label="正式名称">東都大学学生競技ダンス選手権大会</td>
+                    <td data-label="位置づけ">東部学連の準主催競技会</td>
+                    <td data-label="意味">東都校にとって重要なリーグ系大会</td>
+                  </tr>
+                  <tr>
+                    <td data-label="通称">秋東都</td>
+                    <td data-label="正式名称">東都大学学生競技ダンス選手権大会</td>
+                    <td data-label="位置づけ">東部学連の準主催競技会</td>
+                    <td data-label="意味">東都校にとって秋の重要大会</td>
+                  </tr>
+                  <tr>
+                    <td data-label="通称">夏全</td>
+                    <td data-label="正式名称">全日本学生競技ダンス選抜選手権大会</td>
+                    <td data-label="位置づけ">全国大会</td>
+                    <td data-label="意味">選抜された学校・選手が出場する夏の全国戦</td>
+                  </tr>
+                  <tr>
+                    <td data-label="通称">冬全</td>
+                    <td data-label="正式名称">全日本学生競技ダンス選手権大会</td>
+                    <td data-label="位置づけ">全国大会</td>
+                    <td data-label="意味">年間の集大成となる全国戦</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="context-card-note">なお、これは東京理科大学のような東都校における整理です。東京大学、慶應義塾大学、早稲田大学、立教大学、明治大学、法政大学のような六大学校では、春東都・秋東都ではなく、春六・秋六がレギュラー戦として扱われます。</p>
+          </article>
+
+          <p class="context-card-note">大会ごとに導入時期が異なるため、このページでは「学連全体への一斉導入年」ではなく、「2024年規約上の8種目記載」「2024年夏の試験導入」「2026年の正式10種目化」という時系列で整理しています。</p>
         </div>
       </section>
 
@@ -1715,38 +1656,6 @@
               <p>共同加盟校や背番号は、単なる制度ではなく、理科大舞研がどの枠組みの中で競技してきたかを示す記憶でもあります。</p>
             </article>
           </div>
-          <!-- REVIEW_CONTEXT_TOUCHPOINT_PHOTO_START -->
-          <article class="history-photo-block">
-            <div class="history-photo-grid">
-              <figure class="history-photo-card">
-                <!-- ここに画像を追加可能 -->
-                <div class="history-photo-placeholder" role="img" aria-label="1996年冬全サンバ関連写真掲載予定">
-                  <span class="history-photo-label">写真準備中</span>
-                </div>
-                <figcaption class="history-photo-caption">1996年</figcaption>
-                <p class="history-photo-note">1996年冬全サンバ関連写真 掲載予定</p>
-              </figure>
-
-              <figure class="history-photo-card">
-                <!-- ここに画像を追加可能 -->
-                <div class="history-photo-placeholder" role="img" aria-label="フォーメーション写真掲載予定">
-                  <span class="history-photo-label">写真準備中</span>
-                </div>
-                <figcaption class="history-photo-caption">フォーメーション</figcaption>
-                <p class="history-photo-note">フォーメーション写真 掲載予定</p>
-              </figure>
-
-              <figure class="history-photo-card">
-                <!-- ここに画像を追加可能 -->
-                <div class="history-photo-placeholder" role="img" aria-label="背番号と集合写真掲載予定">
-                  <span class="history-photo-label">写真準備中</span>
-                </div>
-                <figcaption class="history-photo-caption">背番号・集合写真</figcaption>
-                <p class="history-photo-note">背番号・集合写真 掲載予定</p>
-              </figure>
-            </div>
-          </article>
-          <!-- REVIEW_CONTEXT_TOUCHPOINT_PHOTO_END -->
         </div>
       </section>
 
@@ -1758,70 +1667,75 @@
             <p>ここから先は、必要な人が確認できる補足です。本文では8種目時代から10種目化への大きな流れを優先し、制度や規程の細部は折りたたみで整理しています。</p>
           </div>
 
+          <article class="context-policy-card">
+            <h3>規約で確認できる前提</h3>
+            <p>2024年6月1日現在の東部日本学生競技ダンス連盟規約では、学校を背景とする団体競技、アマチュア性、学生自主運営、現役中心主義が基本4原則として示されています。また、東部日本学生競技ダンス選手権大会、同Ⅰ部戦・Ⅱ部戦、前期新人戦、後期新人戦は主催競技会、東京六大学競技ダンス選手権大会と東都大学学生競技ダンス選手権大会は準主催競技会として確認できます。</p>
+          </article>
+
           <details class="context-compact-details">
-            <summary>東部学生競技ダンス連盟 規約・競技会要領</summary>
+            <summary>東部日本学生競技ダンス連盟 規約・競技会要領</summary>
             <div class="context-compact-details__body">
-              <p>東部学連の現行公開資料は、加盟登録、競技会参加資格、服装、競技区分、シャドー制度、推奨選手制度、競技会運営などを確認するための一次資料です。本ページでは理科大舞研史を読むために必要な範囲で要点を整理していますが、規約解釈や最新の運用確認は、必ず<a href="https://tobugakuren.com/%E8%A6%8F%E7%B4%84%E3%83%BB%E7%AB%B6%E6%8A%80%E4%BC%9A%E8%A6%81%E9%A0%98" target="_blank" rel="noopener noreferrer">東部学連の公式公開資料</a>を参照してください。</p>
-              <p class="context-rules-note">このページは理科大舞研史を読むための背景説明であり、東部学連の公式見解や規約解釈ではありません。制度は年度・大会ごとに改定されうるため、戦歴や写真を読む際は、当時の大会要領と現行公開資料を分けて確認してください。</p>
+              <p>東部日本学生競技ダンス連盟の2024年6月1日現在の定款・規約は、学生競技ダンスの大会体系を確認するための一次資料です。本ページでは理科大舞研史を読むために必要な範囲で要点を整理していますが、規約解釈や最新の運用確認は、必ず<a href="https://tobugakuren.com/%E8%A6%8F%E7%B4%84%E3%83%BB%E7%AB%B6%E6%8A%80%E4%BC%9A%E8%A6%81%E9%A0%98" target="_blank" rel="noopener noreferrer">東部学連の公式公開資料</a>を参照してください。</p>
+              <p class="context-rules-note">このページは理科大舞研史を読むための背景説明であり、東部学連の公式見解や規約解釈ではありません。制度は年度・大会ごとに改定されうるため、戦歴や資料を読む際は、当時の大会要領と現行公開資料を分けて確認してください。</p>
 
               <div class="context-rule-digest" aria-label="現行公開資料の要点整理">
                 <article class="context-rule-digest__item">
-                  <h3>総則</h3>
-                  <p>定款では、学生競技ダンス大会と学生ダンス界の向上・発展、アマチュアスポーツとしての確立、加盟員相互の技術向上と親睦が目的として示されています。基本姿勢として、学校を背景にした団体競技、アマチュア性、学生の自主運営、現役中心主義が確認できます。</p>
+                  <h3>基本4原則</h3>
+                  <p>規約では、学校を背景とする団体競技、アマチュア性、学生自主運営、現役中心主義が基本4原則として示されています。学連戦を個人競技だけでなく、学校単位の団体史として読むための土台です。</p>
                 </article>
                 <article class="context-rule-digest__item">
-                  <h3>加盟・登録</h3>
-                  <p>加盟校・加盟員の資格、加盟申請、登録手続き、部歴、新規登録・継続登録・再登録、加盟校内の役員届などが規約で扱われます。現役時代の「部歴」や「登録」の感覚と現在の運用が一致するとは限りません。</p>
+                  <h3>規約上の主催競技会</h3>
+                  <p>2024年6月1日現在の規約では、東部日本学生競技ダンス前期新人戦、東部日本学生競技ダンス後期新人戦、東部日本学生競技ダンス選手権大会、東部日本学生競技ダンス選手権大会Ⅰ部戦、同Ⅱ部戦が主催競技会として記載されています。</p>
                 </article>
                 <article class="context-rule-digest__item">
-                  <h3>競技会</h3>
-                  <p>主催・準主催・後援競技会の区分があり、現行公開規約では前期新人戦、後期新人戦、東部日本学生競技ダンス選手権大会、I部戦・II部戦などが主催競技会として整理されています。東京六大学戦と東都戦は準主催競技会として確認できます。</p>
+                  <h3>規約上の準主催競技会</h3>
+                  <p>東京六大学競技ダンス選手権大会と東都大学学生競技ダンス選手権大会は、規約上は準主催競技会として確認できます。したがって、本ページでは東都大会を主催競技会とは書かず、準主催競技会として扱います。</p>
+                </article>
+                <article class="context-rule-digest__item">
+                  <h3>2024年規約上の8種目</h3>
+                  <p>東部日本学生競技ダンス選手権大会の種目は、ワルツ、タンゴ、スローフォックストロット、クイックステップ、チャチャチャ、サンバ、ルンバ、パソドブレの8種目として記載されています。</p>
+                </article>
+                <article class="context-rule-digest__item">
+                  <h3>登録・部歴の見方</h3>
+                  <p>登録や部歴の扱いは戦歴を読むうえで関係しますが、このページでは詳細な手続きには踏み込みません。OBOG向けには、年度や大会要領によって出場条件が変わりうる点だけ押さえれば十分です。</p>
                 </article>
                 <article class="context-rule-digest__item">
                   <h3>審査・採点</h3>
-                  <p>競技会要領では、予選から決勝への進行、チェック法、順位法、スケーティングシステム、団体成績の得点化、フォーメーション競技の扱いが説明されています。大会ごとの人数や形式により、得点や順位の見え方が変わる点に注意します。</p>
-                </article>
-                <article class="context-rule-digest__item">
-                  <h3>出場資格</h3>
-                  <p>出場は加盟員登録、部歴、競技区分、学校枠、シャドーカップルの承認状況、アマチュア戦出場規約などに左右されます。全日本学生選抜や全日本学生競技ダンス選手権大会への出場資格も、年度・大会要領の確認が必要です。</p>
+                  <p>競技会要領では、予選から決勝への進行、順位の出し方、団体成績の得点化、フォーメーション競技の扱いなどが説明されています。大会ごとの人数や形式により、得点や順位の見え方が変わります。</p>
                 </article>
                 <article class="context-rule-digest__item">
                   <h3>服装・マナー</h3>
-                  <p>競技会服装規定、会場管理、競技会マナー、プロ審査員への挨拶行為、放送出演・出版物掲載など、競技会の見え方に関わる項目があります。写真を見る際は、当時の服装規程や大会の性格を切り分けて確認します。</p>
+                  <p>競技会服装規定や会場マナーは、パンフレットや記録資料を読むときの背景になります。当時の感覚だけで判断せず、年度ごとの規程や大会の性格と分けて見ることが大切です。</p>
                 </article>
                 <article class="context-rule-digest__item">
-                  <h3>違反・処分</h3>
-                  <p>懲罰規約では、警告、厳重注意、詫び状提出、出場停止、除名などの段階が整理されています。未登録、書類遅延、エントリー関連、服装、競技会進行への影響など、競技外の手続きも戦歴に影響する可能性があります。</p>
-                </article>
-                <article class="context-rule-digest__item">
-                  <h3>その他</h3>
-                  <p>映像・出版物等における権利、企業・団体の援助、有料講習会、合宿、全日本学生競技ダンス連盟との関係なども規約上の確認対象です。サイト掲載や写真公開に関わる話題は、規約本文と現在の運用を分けて見ます。</p>
+                  <h3>現場呼称との切り分け</h3>
+                  <p>「レギュラー戦」は規約上の明文化された分類というより、年間の主軸となる重要大会群を指す実務上・文化上の呼称として扱います。規約上の主催・準主催区分とは分けて説明します。</p>
                 </article>
               </div>
             </div>
           </details>
 
           <details class="context-compact-details">
-            <summary>シャドー制度・推奨選手制度</summary>
+            <summary>8種目時代から10種目時代へ</summary>
             <div class="context-compact-details__body">
-              <p>現行公開規約では、シャドーカップル規約が独立した項目として置かれ、加盟校内でカップルを組めない場合の救済措置、承認条件、届出、登録大学名・背番号、出場範囲、団体得点への扱いなどが整理されています。公開資料上では2007年11月30日制定の規約として確認できますが、この日付は確認できる規約の制定日であり、制度の実質的な開始年をそのまま示すものではありません。</p>
-              <p>推奨選手制度は、全日本学生選抜などへの出場資格や東部側の推薦枠を読むときに関わる可能性があります。出場可否や扱いは年度・大会ごとの要領に左右されるため、戦歴上の「出場資格」を読むときは、当時の要領と現行公開資料を分けて確認します。</p>
+              <p>長く学生競技ダンスの主要戦は、スタンダード4種目・ラテン4種目の8種目を中心に運用されてきました。2024年6月1日現在の東部学連規約にも、東部日本学生競技ダンス選手権大会の種目として、ワルツ、タンゴ、スローフォックストロット、クイックステップ、チャチャチャ、サンバ、ルンバ、パソドブレの8種目が記載されています。</p>
+              <p>その後、2024年夏の全日本戦では準決勝以降からヴィニーズワルツとジャイブが試験的に採用され、2026年には正式に10種目化しました。これは、学生競技ダンスが国際的な10ダンスの枠組みに近づいた大きな制度変更です。</p>
             </div>
           </details>
 
           <details class="context-compact-details">
             <summary>夏全・冬全・新人戦の違い</summary>
             <div class="context-compact-details__body">
-              <p>公益社団法人日本ダンススポーツ連盟（Japan DanceSport Federation、JDSF）掲載の大会案内では、夏全は総合戦、冬全は単科戦として整理されています。一方、東部学連の現行公開規約では、前期・後期新人戦、東部日本学生競技ダンス選手権大会、I部戦・II部戦、準主催競技会などの区分を確認できます。</p>
-              <p>新人戦やフォーメーション競技は、部歴区分、規定フィガー、服装、エントリー、採点方法の影響を受けやすい項目です。戦歴の大会名だけで判断せず、その年度の大会要領で「どの種目を、どの区分で、どの条件で踊ったか」を見るのが安全です。</p>
+              <p>夏全は全日本学生競技ダンス選抜選手権大会、冬全は全日本学生競技ダンス選手権大会を指します。一方、東部学連の2024年規約では、前期・後期新人戦、東部日本学生競技ダンス選手権大会、Ⅰ部戦・Ⅱ部戦、準主催競技会などの区分を確認できます。</p>
+              <p>新人戦やフォーメーション競技は、部歴区分、服装、エントリー、採点方法の影響を受けやすい項目です。戦歴の大会名だけで判断せず、その年度の大会要領で「どの種目を、どの区分で、どの条件で踊ったか」を見るのが安全です。</p>
             </div>
           </details>
 
           <details class="context-compact-details">
             <summary>登録・服装・アマチュア性</summary>
             <div class="context-compact-details__body">
-              <p>東部学連の現行公開規約には、加盟員資格、登録手続き、加盟員の義務、アマチュア戦出場、競技会服装規定、競技会マナー、各種届出などの細目が掲載されています。登録や提出方法、部歴の扱い、外部競技会への出場可否には、現役時代とは異なる運用が含まれる可能性があります。</p>
-              <p>写真やパンフレットを読むときも、服装や背番号、エントリーの見え方を当時の感覚だけで判断しないようにします。服装規程やアマチュア性の扱いは年度ごとに改定されうるため、ここでは「何を確認すべきか」を示し、詳細な判断は公式資料に委ねます。</p>
+              <p>東部学連の公開規約には、加盟員資格、登録、アマチュア戦出場、競技会服装規定、競技会マナーなどの細目が掲載されています。このページでは制度の詳細説明には踏み込まず、戦歴や記録資料を読むときに年度ごとの大会要領を確認する必要がある、という範囲に留めます。</p>
+              <p>服装や背番号、エントリーの見え方は、当時の規程や大会の性格によって変わります。OBOG向けの歴史ページとしては、現在の運用を過去にそのまま当てはめないことが大切です。</p>
             </div>
           </details>
 
@@ -1869,12 +1783,22 @@
 
                 <div class="context-glossary-item">
                   <strong>夏全</strong>
-                  <p>全日本学生競技ダンス選手権大会、夏の全国大会。</p>
+                  <p>全日本学生競技ダンス選抜選手権大会。選抜された学校・選手が出場する夏の全国戦。</p>
                 </div>
 
                 <div class="context-glossary-item">
                   <strong>冬全</strong>
-                  <p>冬の全日本学生競技ダンスの全国大会。</p>
+                  <p>全日本学生競技ダンス選手権大会。年間の集大成となる全国戦。</p>
+                </div>
+
+                <div class="context-glossary-item">
+                  <strong>春東部 / 秋東部</strong>
+                  <p>春東部は東部日本学生競技ダンス選手権大会、秋東部は東部日本学生競技ダンス選手権大会Ⅰ部戦を指す通称。</p>
+                </div>
+
+                <div class="context-glossary-item">
+                  <strong>春東都 / 秋東都</strong>
+                  <p>東都大学学生競技ダンス選手権大会を指す通称。理科大のような東都校にとって重要な大会。</p>
                 </div>
 
                 <div class="context-glossary-item">
@@ -1891,31 +1815,6 @@
           </details>
         </div>
       </section>
-                        <!-- REVIEW_CONTEXT_CONTRIBUTE_START -->
-      <section class="page-section" id="context-photo-contribute">
-        <div class="container">
-          <article class="context-photo-callout">
-            <span class="photo-submit-cta__eyebrow">Photo Archive</span>
-            <h2>写真・記録をお持ちのOBOGへ</h2>
-            <p>この背景資料ページでは、競技会、練習場、フォーメーション、集合写真、背番号が分かる写真など、時代を伝える記録を順次掲載していく予定です。掲載候補の写真や資料をお持ちの方は、FANTASISTA会までお知らせください。</p>
-
-            <div class="history-photo-block history-photo-block--compact">
-              <figure class="history-photo-card history-photo-card--soft">
-                <div class="history-photo-placeholder history-photo-placeholder--wide" role="img" aria-label="写真募集中">
-                  <span class="history-photo-label">写真募集中</span>
-                </div>
-                <figcaption class="history-photo-caption">当時の写真を掲載予定</figcaption>
-                <p class="history-photo-note">競技会、練習風景、フォーメーション、集合写真などを歓迎します。</p>
-              </figure>
-            </div>
-
-            <div class="context-photo-callout__actions">
-              <a class="photo-submit-cta__button" href="../../contact/">写真・記録を提供する →</a>
-            </div>
-          </article>
-        </div>
-      </section>
-      <!-- REVIEW_CONTEXT_CONTRIBUTE_END -->
 <section class="page-section page-section--light" id="context-sources">
         <div class="container">
           <div class="section-head">
@@ -1925,7 +1824,7 @@
           </div>
 
           <article class="context-policy-card">
-            <p>東京六大学戦、東部、夏全、招待試合では、種目の導入時期や競技区分、出場資格が必ずしも一致しません。本文ではOBOGが変遷をつかみやすいように整理し、規約本文の転載ではなく、公式公開資料で確認すべき観点を示します。</p>
+            <p>本ページは、2024年6月1日現在の東部日本学生競技ダンス連盟規約と、その後の大会運用上の変更、ならびに東京理科大学が東都校であることを前提としたOBOG向けの整理です。「レギュラー戦」は、規約上の明文化された分類というより、現場で年間の主軸となる重要大会群を指す呼称として扱っています。</p>
           </article>
 
           <details class="context-source-details">
@@ -1948,6 +1847,7 @@
                 <li><a href="https://jbdf.or.jp/profile/purpose.html" target="_blank" rel="noopener noreferrer">JBDFの目的</a></li>
                 <li><a href="https://tobugakuren.com/" target="_blank" rel="noopener noreferrer">東部学連 公式サイト</a></li>
                 <li><a href="https://tobugakuren.com/%E8%A6%8F%E7%B4%84%E3%83%BB%E7%AB%B6%E6%8A%80%E4%BC%9A%E8%A6%81%E9%A0%98" target="_blank" rel="noopener noreferrer">東部学連 規約・競技会要領</a></li>
+                <li>東部日本学生競技ダンス連盟定款・規約（2024年6月1日現在、添付PDF）</li>
                 <li><a href="https://tobugakuren.com/%E7%AB%B6%E6%8A%80%E4%BC%9A%E8%A6%81%E9%A0%98" target="_blank" rel="noopener noreferrer">東部学連 競技会要領</a></li>
                 <li><a href="https://tobugakuren.com/%E5%8A%A0%E7%9B%9F%E6%A0%A1%E4%B8%80%E8%A6%A7" target="_blank" rel="noopener noreferrer">東部学連 加盟校一覧</a></li>
                 <li><a href="https://tobugakuren.com/%E8%A9%A6%E5%90%88%E4%BA%88%E5%AE%9A%E3%83%BB%E7%B5%90%E6%9E%9C" target="_blank" rel="noopener noreferrer">東部学連 試合予定・結果</a></li>
@@ -1956,7 +1856,7 @@
                 <li><a href="https://www.dancenavigation.com/%E5%AD%A6%E7%94%9F%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E6%83%85%E5%A0%B12013/%E5%90%84%E5%A4%A7%E4%BC%9A%E6%A6%82%E8%A6%81/%E6%9D%B1%E4%BA%AC%E5%85%AD%E5%A4%A7%E5%AD%A6%E5%AD%A6%E7%94%9F%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E9%81%B8%E6%89%8B%E6%A8%A9%E5%A4%A7%E4%BC%9A/" target="_blank" rel="noopener noreferrer">東京六大学学生競技ダンス選手権大会</a></li>
                 <li><a href="https://www.dancenavigation.com/%E5%AD%A6%E7%94%9F%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E6%83%85%E5%A0%B12013/%E5%90%84%E5%A4%A7%E4%BC%9A%E6%A6%82%E8%A6%81/%E6%9D%B1%E9%83%A8%E6%97%A5%E6%9C%AC%E5%AD%A6%E7%94%9F%E7%AB%B6%E6%8A%80%E3%83%80%E3%83%B3%E3%82%B9%E9%81%B8%E6%89%8B%E6%A8%A9%E5%A4%A7%E4%BC%9A/" target="_blank" rel="noopener noreferrer">東部日本学生競技ダンス選手権大会</a></li>
               </ul>
-              <p class="context-muted">東京六大学戦の大会番号やパソドブレ正式採用時期には、公開資料どうしで表記差が見られる箇所があります。東部学連の規約・競技会要領も改定される可能性があるため、このページでは年と大会名を優先し、最新の制度確認は公式公開資料へ送る形にしています。</p>
+              <p class="context-muted">東京六大学戦の大会番号やパソドブレ正式採用時期には、公開資料どうしで表記差が見られる箇所があります。東部日本学生競技ダンス連盟の規約・競技会要領も改定される可能性があるため、このページでは年と大会名を優先し、最新の制度確認は公式公開資料へ送る形にしています。</p>
             </div>
           </details>
 
@@ -1983,8 +1883,7 @@
               <ul>
                 <li>東京六大学戦における大会番号の表記差の照合</li>
                 <li>パソドブレ正式採用年の一次資料確認</li>
-                <li>招待試合と夏全における5種目化の公開資料確認</li>
-                <li>シャドー制度・推奨選手制度の全国的な初出年</li>
+                <li>2024年夏の全日本戦における試験導入ラウンドの公開資料確認</li>
                 <li>当時の大会要領と現行公開資料の制度差の照合</li>
                 <li>八種目戦・新人戦・フォーメーションを含む種目変遷の完全年表</li>
               </ul>
