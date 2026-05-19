@@ -31,7 +31,7 @@
               <tr>
                 <th>受付番号</th>
                 <th>氏名</th>
-                <th>期/年度</th>
+                <th>卒部年度</th>
                 <th>チケット</th>
                 <th>名簿照合</th>
                 <th>決済</th>
@@ -49,12 +49,12 @@
 
       <section class="crm-section">
         <h2>名簿CSV取込</h2>
-        <p class="crm-small">本番名簿CSVはコミットしません。PreviewではダミーCSVで検証してください。列名は日本語または <code>full_name,email,generation,graduation_year</code> 形式に対応します。</p>
+        <p class="crm-small">本番名簿CSVはコミットしません。PreviewではダミーCSVで検証してください。列名は日本語または <code>full_name,email,graduation_year</code> 形式に対応します。</p>
         <div class="crm-field">
           <label for="csv-input">CSV</label>
-          <textarea id="csv-input" class="crm-import-box" spellcheck="false">氏名,ふりがな,メールアドレス,卒部年度,期,所属校,役割
-山田 太郎,やまだ たろう,taro.yamada@example.test,1988,22期,東京理科大学,リーダー
-佐藤 花子,さとう はなこ,hanako.sato@example.test,1996,30期,東京理科大学,パートナー</textarea>
+          <textarea id="csv-input" class="crm-import-box" spellcheck="false">氏名,ふりがな,メールアドレス,卒部年度,所属校,役割
+山田 太郎,やまだ たろう,taro.yamada@example.test,1988,東京理科大学,リーダー
+佐藤 花子,さとう はなこ,hanako.sato@example.test,1996,東京理科大学,パートナー</textarea>
         </div>
         <button id="import-csv" class="crm-button" type="button">CSVをテスト取込</button>
       </section>

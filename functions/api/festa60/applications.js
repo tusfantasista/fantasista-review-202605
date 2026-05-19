@@ -1,8 +1,8 @@
 import { badRequest, getClientMeta, json, methodNotAllowed, readJson, serverError } from "./_lib/http.js";
 import { applicationCode } from "./_lib/ids.js";
-import { publicBaseUrl, requireDb } from "./_lib/env.js";
+import { isProduction, publicBaseUrl, requireDb } from "./_lib/env.js";
 import { verifyTurnstile } from "./_lib/turnstile.js";
-import { createPayment, insertApplication } from "./_lib/db.js";
+import { createPayment, insertApplication, ticketAmount, YOUNG_OBOG_GRADUATION_YEAR_FROM } from "./_lib/db.js";
 import { createCheckoutSession } from "./_lib/stripe.js";
 
 export async function onRequestPost({ request, env }) {
@@ -17,6 +17,13 @@ export async function onRequestPost({ request, env }) {
     if (!turnstile.ok) return badRequest("Turnstile verification failed.", turnstile.result || turnstile.message);
 
     const db = requireDb(env);
+    const companionCount = Array.isArray(payload.companions) ? payload.companions.length : 0;
+    const amountTotal = ticketAmount(payload.ticket_type || "obog", companionCount);
+    const stripeKeyPrefix = isProduction(env) ? "sk_live_" : "sk_test_";
+    if (amountTotal > 0 && payload.pay_now !== false && !String(env.STRIPE_SECRET_KEY || "").startsWith(stripeKeyPrefix)) {
+      return badRequest(`Stripe secret is not configured for this environment. Set ${stripeKeyPrefix}... or submit with pay_now=false.`);
+    }
+
     const application = await insertApplication(
       db,
       {
@@ -74,6 +81,25 @@ function validateApplication(payload) {
   }
   if (payload.companions && !Array.isArray(payload.companions)) {
     errors.companions = "must_be_array";
+  } else if (Array.isArray(payload.companions)) {
+    payload.companions.forEach((companion, index) => {
+      const key = `companions.${index}`;
+      if (!companion.full_name || String(companion.full_name).trim() === "") errors[`${key}.full_name`] = "required";
+      if (!companion.relationship || String(companion.relationship).trim() === "") errors[`${key}.relationship`] = "required";
+      if (!companion.attendee_type || String(companion.attendee_type).trim() === "") errors[`${key}.attendee_type`] = "required";
+      if (companion.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(companion.email)) {
+        errors[`${key}.email`] = "invalid";
+      }
+    });
+  }
+
+  if (["obog", "young_obog"].includes(payload.ticket_type)) {
+    const graduationYear = Number(payload.graduation_year);
+    if (!Number.isInteger(graduationYear)) {
+      errors.graduation_year = "required";
+    } else if (payload.ticket_type === "young_obog" && graduationYear < YOUNG_OBOG_GRADUATION_YEAR_FROM) {
+      errors.ticket_type = `young_obog_requires_graduation_year_${YOUNG_OBOG_GRADUATION_YEAR_FROM}_or_later`;
+    }
   }
   return { ok: Object.keys(errors).length === 0, errors };
 }

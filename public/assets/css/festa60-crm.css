@@ -100,6 +100,36 @@ body.festa60-crm {
   font-weight: 800;
 }
 
+.crm-required,
+.crm-optional {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.45em;
+  margin-left: 6px;
+  border-radius: 999px;
+  padding: 0 8px;
+  font-size: 0.74rem;
+  font-weight: 900;
+  vertical-align: 0.08em;
+}
+
+.crm-required {
+  color: #6f5600;
+  background: #fff1bc;
+}
+
+.crm-optional {
+  color: var(--crm-muted);
+  background: #eef1f5;
+}
+
+.crm-help {
+  margin: 0;
+  color: var(--crm-muted);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
 .crm-field input,
 .crm-field select,
 .crm-field textarea,
@@ -123,6 +153,22 @@ body.festa60-crm {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+}
+
+.crm-companion {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  border: 1px solid var(--crm-line);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fffdf8;
+}
+
+.crm-companion legend {
+  padding: 0 6px;
+  color: #6f5600;
+  font-weight: 900;
 }
 
 .crm-check {

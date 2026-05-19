@@ -3,7 +3,9 @@
   const message = document.getElementById("form-message");
   const companionCount = document.getElementById("companion_count");
   const companions = document.getElementById("companions");
+  const ticketType = document.getElementById("ticket_type");
   let turnstileToken = "";
+  const youngObogGraduationYearFrom = 2017;
 
   if (!form) return;
 
@@ -28,7 +30,9 @@
     .catch(() => {});
 
   companionCount.addEventListener("input", renderCompanions);
+  ticketType.addEventListener("change", updateGraduationRequirement);
   renderCompanions();
+  updateGraduationRequirement();
 
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -38,6 +42,10 @@
 
     try {
       const payload = formPayload(new FormData(form));
+      const clientErrors = validatePayload(payload);
+      if (clientErrors.length) {
+        throw new Error(clientErrors.join("\n"));
+      }
       payload.turnstile_token = turnstileToken;
       payload.pay_now = true;
 
@@ -71,19 +79,43 @@
     const count = Math.max(0, Math.min(5, Number(companionCount.value || 0)));
     companions.innerHTML = "";
     for (let index = 0; index < count; index += 1) {
-      const row = document.createElement("div");
-      row.className = "crm-two";
-      row.innerHTML = `
-        <div class="crm-field">
-          <label for="companion_${index}_name">同伴者${index + 1} 氏名</label>
-          <input id="companion_${index}_name" name="companion_${index}_name" />
+      const card = document.createElement("fieldset");
+      card.className = "crm-companion";
+      card.innerHTML = `
+        <legend>同伴者${index + 1}</legend>
+        <div class="crm-two">
+          <div class="crm-field">
+            <label for="companion_${index}_name">氏名 <span class="crm-required">必須</span></label>
+            <input id="companion_${index}_name" name="companion_${index}_name" required />
+          </div>
+          <div class="crm-field">
+            <label for="companion_${index}_relationship">続柄・関係 <span class="crm-required">必須</span></label>
+            <input id="companion_${index}_relationship" name="companion_${index}_relationship" placeholder="例: 配偶者、子、友人、OBOG" required />
+          </div>
+        </div>
+        <div class="crm-two">
+          <div class="crm-field">
+            <label for="companion_${index}_attendee_type">同伴者属性 <span class="crm-required">必須</span></label>
+            <select id="companion_${index}_attendee_type" name="companion_${index}_attendee_type" required>
+              <option value="">選択してください</option>
+              <option value="family">家族</option>
+              <option value="obog">OBOG</option>
+              <option value="current_student">現役生</option>
+              <option value="guest">一般同伴者</option>
+              <option value="child">子ども</option>
+            </select>
+          </div>
+          <div class="crm-field">
+            <label for="companion_${index}_email">メールアドレス <span class="crm-optional">任意</span></label>
+            <input id="companion_${index}_email" name="companion_${index}_email" type="email" autocomplete="email" />
+          </div>
         </div>
         <div class="crm-field">
-          <label for="companion_${index}_relationship">続柄</label>
-          <input id="companion_${index}_relationship" name="companion_${index}_relationship" />
+          <label for="companion_${index}_note">補足 <span class="crm-optional">任意</span></label>
+          <input id="companion_${index}_note" name="companion_${index}_note" placeholder="年齢区分、配慮事項など" />
         </div>
       `;
-      companions.appendChild(row);
+      companions.appendChild(card);
     }
   }
 
@@ -100,11 +132,44 @@
       payload.companions.push({
         full_name: fullName,
         relationship: payload[`companion_${index}_relationship`] || "",
+        attendee_type: payload[`companion_${index}_attendee_type`] || "",
+        email: payload[`companion_${index}_email`] || "",
+        note: payload[`companion_${index}_note`] || "",
       });
       delete payload[`companion_${index}_name`];
       delete payload[`companion_${index}_relationship`];
+      delete payload[`companion_${index}_attendee_type`];
+      delete payload[`companion_${index}_email`];
+      delete payload[`companion_${index}_note`];
     }
+    delete payload.generation;
     return payload;
+  }
+
+  function updateGraduationRequirement() {
+    const graduationYear = document.getElementById("graduation_year");
+    const requiresYear = ["obog", "young_obog"].includes(ticketType.value);
+    graduationYear.required = requiresYear;
+  }
+
+  function validatePayload(payload) {
+    const errors = [];
+    const graduationYear = Number(payload.graduation_year || 0);
+    if (["obog", "young_obog"].includes(payload.ticket_type) && !graduationYear) {
+      errors.push("OBOG・若手OBOGは卒部年度を入力してください。");
+    }
+    if (payload.ticket_type === "young_obog" && graduationYear < youngObogGraduationYearFrom) {
+      errors.push(`若手OBOGは卒部10年以内（${youngObogGraduationYearFrom}年度以降）として扱います。チケット種別または卒部年度を確認してください。`);
+    }
+    payload.companions.forEach((companion, index) => {
+      if (!companion.full_name || !companion.relationship || !companion.attendee_type) {
+        errors.push(`同伴者${index + 1}の氏名、続柄・関係、同伴者属性を入力してください。`);
+      }
+      if (companion.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(companion.email)) {
+        errors.push(`同伴者${index + 1}のメールアドレスを確認してください。`);
+      }
+    });
+    return errors;
   }
 
   function setMessage(text, kind) {

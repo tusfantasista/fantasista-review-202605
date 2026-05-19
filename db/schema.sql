@@ -83,6 +83,9 @@ CREATE TABLE IF NOT EXISTS companions (
   application_id TEXT NOT NULL,
   full_name TEXT NOT NULL,
   relationship TEXT,
+  attendee_type TEXT,
+  email TEXT,
+  note TEXT,
   ticket_type TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY (application_id) REFERENCES applications(id)

@@ -76,7 +76,7 @@
         (row) => `<tr>
           <td>${escapeHtml(row.application_code)}</td>
           <td>${escapeHtml(row.full_name)}<br><span class="crm-small">${escapeHtml(row.email)}</span></td>
-          <td>${escapeHtml(row.generation || "")}<br><span class="crm-small">${escapeHtml(row.graduation_year || "")}</span></td>
+          <td>${escapeHtml(row.graduation_year || "")}</td>
           <td>${escapeHtml(row.ticket_type)}</td>
           <td>${escapeHtml(row.match_status)}<br><span class="crm-small">${escapeHtml(row.member_code || "")}</span></td>
           <td>${escapeHtml(row.latest_payment_status || row.payment_status)}</td>

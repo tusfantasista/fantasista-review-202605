@@ -8,6 +8,8 @@ export const TICKET_PRICES = {
   donation_only: 0,
 };
 
+export const YOUNG_OBOG_GRADUATION_YEAR_FROM = 2017;
+
 export function ticketAmount(ticketType, companionCount = 0) {
   const base = TICKET_PRICES[ticketType] ?? TICKET_PRICES.obog;
   return base + companionCount * TICKET_PRICES.companion;
@@ -85,10 +87,21 @@ export async function insertApplication(db, payload, requestMeta = {}) {
   for (const companion of companions) {
     await db
       .prepare(
-        `INSERT INTO companions (id, application_id, full_name, relationship, ticket_type, created_at)
-         VALUES (?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO companions (
+          id, application_id, full_name, relationship, attendee_type, email, note, ticket_type, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
-      .bind(newId("cmp"), id, companion.full_name, companion.relationship || null, "companion", now)
+      .bind(
+        newId("cmp"),
+        id,
+        companion.full_name,
+        companion.relationship || null,
+        companion.attendee_type || null,
+        companion.email || null,
+        companion.note || null,
+        "companion",
+        now,
+      )
       .run();
   }
 
@@ -210,7 +223,7 @@ export async function listApplications(db) {
   const result = await db
     .prepare(
       `SELECT
-        a.id, a.application_code, a.full_name, a.full_name_kana, a.email, a.generation,
+        a.id, a.application_code, a.full_name, a.full_name_kana, a.email,
         a.graduation_year, a.ticket_type, a.companion_count, a.match_status,
         a.match_confidence, a.payment_status, a.attendance_status, a.created_at,
         m.member_code, m.full_name AS matched_member_name,

@@ -20,33 +20,34 @@
           <h2>申込内容</h2>
           <div class="crm-two">
             <div class="crm-field">
-              <label for="full_name">氏名</label>
+              <label for="full_name">氏名 <span class="crm-required">必須</span></label>
               <input id="full_name" name="full_name" autocomplete="name" required />
             </div>
             <div class="crm-field">
-              <label for="full_name_kana">ふりがな</label>
+              <label for="full_name_kana">ふりがな <span class="crm-optional">任意</span></label>
               <input id="full_name_kana" name="full_name_kana" />
             </div>
           </div>
 
           <div class="crm-two">
             <div class="crm-field">
-              <label for="maiden_name">旧姓</label>
+              <label for="maiden_name">旧姓 <span class="crm-optional">任意</span></label>
               <input id="maiden_name" name="maiden_name" />
             </div>
             <div class="crm-field">
-              <label for="generation">期</label>
-              <input id="generation" name="generation" placeholder="例: 30期" />
+              <label for="email">メールアドレス <span class="crm-required">必須</span></label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
             </div>
           </div>
 
           <div class="crm-two">
             <div class="crm-field">
-              <label for="graduation_year">卒部年度</label>
+              <label for="graduation_year">卒部年度 <span class="crm-required">OBOGは必須</span></label>
               <input id="graduation_year" name="graduation_year" inputmode="numeric" placeholder="例: 1996" />
+              <p class="crm-help">若手OBOGは卒部10年以内、現時点では2017年度以降の卒部生として扱います。</p>
             </div>
             <div class="crm-field">
-              <label for="dance_role">当時の役割</label>
+              <label for="dance_role">当時の役割 <span class="crm-optional">任意</span></label>
               <select id="dance_role" name="dance_role">
                 <option value="">未選択</option>
                 <option>リーダー</option>
@@ -58,27 +59,25 @@
 
           <div class="crm-two">
             <div class="crm-field">
-              <label for="email">メールアドレス</label>
-              <input id="email" name="email" type="email" autocomplete="email" required />
-            </div>
-            <div class="crm-field">
-              <label for="phone">電話番号</label>
+              <label for="phone">電話番号 <span class="crm-optional">任意</span></label>
               <input id="phone" name="phone" autocomplete="tel" />
             </div>
+            <div></div>
           </div>
 
           <div class="crm-two">
             <div class="crm-field">
-              <label for="ticket_type">チケット種別</label>
+              <label for="ticket_type">チケット種別 <span class="crm-required">必須</span></label>
               <select id="ticket_type" name="ticket_type" required>
                 <option value="obog">OBOG</option>
-                <option value="young_obog">若手OBOG</option>
+                <option value="young_obog">若手OBOG（卒部10年以内 / 2017年度以降）</option>
                 <option value="current_student">現役生</option>
                 <option value="donation_only">寄付のみ</option>
               </select>
+              <p class="crm-help">若手OBOGの定義は参加費に影響するため、卒部年度で確認します。</p>
             </div>
             <div class="crm-field">
-              <label for="companion_count">同伴者人数</label>
+              <label for="companion_count">同伴者人数 <span class="crm-required">必須</span></label>
               <input id="companion_count" name="companion_count" type="number" min="0" max="5" value="0" />
             </div>
           </div>
@@ -86,7 +85,7 @@
           <div id="companions" class="crm-stack"></div>
 
           <div class="crm-field">
-            <label for="message">連絡事項</label>
+            <label for="message">連絡事項 <span class="crm-optional">任意</span></label>
             <textarea id="message" name="message"></textarea>
           </div>
 
