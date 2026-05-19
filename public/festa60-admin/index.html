@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>60周年記念FESTA CRM管理</title>
+    <link rel="stylesheet" href="../assets/css/festa60-crm.css" />
+  </head>
+  <body class="festa60-crm">
+    <main class="crm-shell">
+      <section class="crm-hero">
+        <span class="crm-kicker">FESTA 60 CRM</span>
+        <h1>申込・決済・名簿照合</h1>
+        <p>Cloudflare Access配下で使うstaging管理画面です。Access未設定のローカル/Preview検証では、Cloudflare Secretの <code>ADMIN_API_TOKEN</code> と同じ値を入力します。</p>
+      </section>
+
+      <section class="crm-section">
+        <div class="crm-admin-bar">
+          <div class="crm-field">
+            <label for="admin-token">管理トークン</label>
+            <input id="admin-token" class="crm-token" type="password" autocomplete="off" />
+          </div>
+          <button id="load-applications" class="crm-button" type="button">申込一覧を読み込む</button>
+          <button id="export-csv" class="crm-button crm-button--ghost" type="button">CSVエクスポート</button>
+        </div>
+        <p id="admin-message" class="crm-message" hidden></p>
+        <div class="crm-table-wrap">
+          <table class="crm-table">
+            <thead>
+              <tr>
+                <th>受付番号</th>
+                <th>氏名</th>
+                <th>期/年度</th>
+                <th>チケット</th>
+                <th>名簿照合</th>
+                <th>決済</th>
+                <th>参加</th>
+                <th>金額</th>
+                <th>申込日時</th>
+              </tr>
+            </thead>
+            <tbody id="applications-body">
+              <tr><td colspan="9">未読み込み</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="crm-section">
+        <h2>名簿CSV取込</h2>
+        <p class="crm-small">本番名簿CSVはコミットしません。PreviewではダミーCSVで検証してください。列名は日本語または <code>full_name,email,generation,graduation_year</code> 形式に対応します。</p>
+        <div class="crm-field">
+          <label for="csv-input">CSV</label>
+          <textarea id="csv-input" class="crm-import-box" spellcheck="false">氏名,ふりがな,メールアドレス,卒部年度,期,所属校,役割
+山田 太郎,やまだ たろう,taro.yamada@example.test,1988,22期,東京理科大学,リーダー
+佐藤 花子,さとう はなこ,hanako.sato@example.test,1996,30期,東京理科大学,パートナー</textarea>
+        </div>
+        <button id="import-csv" class="crm-button" type="button">CSVをテスト取込</button>
+      </section>
+    </main>
+    <script src="../assets/js/festa60-admin.js" defer></script>
+  </body>
+</html>

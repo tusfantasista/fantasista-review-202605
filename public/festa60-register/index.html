@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>60周年記念FESTA 参加申込テスト</title>
+    <link rel="stylesheet" href="../assets/css/festa60-crm.css" />
+  </head>
+  <body class="festa60-crm">
+    <main class="crm-shell">
+      <section class="crm-hero">
+        <span class="crm-kicker">FESTA 60 Staging</span>
+        <h1>60周年記念FESTA 参加申込</h1>
+        <p>この画面はCloudflare Pages Previewでの検証用です。個人情報・本番Stripeキー・本番名簿は使わず、staging用D1とStripeテストモードで動作確認します。</p>
+      </section>
+
+      <div class="crm-grid">
+        <form id="festa60-form" class="crm-card crm-stack">
+          <h2>申込内容</h2>
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="full_name">氏名</label>
+              <input id="full_name" name="full_name" autocomplete="name" required />
+            </div>
+            <div class="crm-field">
+              <label for="full_name_kana">ふりがな</label>
+              <input id="full_name_kana" name="full_name_kana" />
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="maiden_name">旧姓</label>
+              <input id="maiden_name" name="maiden_name" />
+            </div>
+            <div class="crm-field">
+              <label for="generation">期</label>
+              <input id="generation" name="generation" placeholder="例: 30期" />
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="graduation_year">卒部年度</label>
+              <input id="graduation_year" name="graduation_year" inputmode="numeric" placeholder="例: 1996" />
+            </div>
+            <div class="crm-field">
+              <label for="dance_role">当時の役割</label>
+              <select id="dance_role" name="dance_role">
+                <option value="">未選択</option>
+                <option>リーダー</option>
+                <option>パートナー</option>
+                <option>マネージャー・スタッフ</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="email">メールアドレス</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="crm-field">
+              <label for="phone">電話番号</label>
+              <input id="phone" name="phone" autocomplete="tel" />
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="ticket_type">チケット種別</label>
+              <select id="ticket_type" name="ticket_type" required>
+                <option value="obog">OBOG</option>
+                <option value="young_obog">若手OBOG</option>
+                <option value="current_student">現役生</option>
+                <option value="donation_only">寄付のみ</option>
+              </select>
+            </div>
+            <div class="crm-field">
+              <label for="companion_count">同伴者人数</label>
+              <input id="companion_count" name="companion_count" type="number" min="0" max="5" value="0" />
+            </div>
+          </div>
+
+          <div id="companions" class="crm-stack"></div>
+
+          <div class="crm-field">
+            <label for="message">連絡事項</label>
+            <textarea id="message" name="message"></textarea>
+          </div>
+
+          <label class="crm-check">
+            <input type="checkbox" name="privacy_consent" required />
+            <span>個人情報を60周年記念FESTAの申込管理、名簿照合、連絡、決済確認に利用することに同意します。</span>
+          </label>
+          <label class="crm-check">
+            <input type="checkbox" name="contact_consent" checked />
+            <span>事務局からメール等で連絡を受け取ることに同意します。</span>
+          </label>
+          <label class="crm-check">
+            <input type="checkbox" name="photo_consent" />
+            <span>当日の撮影・記録に関する案内を確認しました。</span>
+          </label>
+
+          <div id="turnstile-slot"></div>
+          <button class="crm-button" type="submit">申込してテスト決済へ進む</button>
+          <p id="form-message" class="crm-message" hidden></p>
+        </form>
+
+        <aside class="crm-card crm-stack">
+          <h2>staging検証メモ</h2>
+          <p class="crm-small">このページは本番導線には出さず、Cloudflare Pages PreviewとAccessで非公開にする想定です。</p>
+          <ul class="crm-small">
+            <li>D1 binding: <code>DB</code></li>
+            <li>Preview Stripe: <code>sk_test_...</code> のみ許可</li>
+            <li>Production Stripe: <code>sk_live_...</code> のみ許可</li>
+            <li>Turnstile secret未設定時はローカル検証用にskip</li>
+          </ul>
+        </aside>
+      </div>
+    </main>
+    <script src="../assets/js/festa60-register.js" defer></script>
+  </body>
+</html>

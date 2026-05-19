@@ -1,63 +1,154 @@
-# FANTASISTA 60周年FESTA フォーム運用メモ
+# FANTASISTA Review 202605
 
-## 現在の静的フォーム運用
+静的HTML/CSS/Vanilla JSを `public/` から配信する構成です。Cloudflare Pages / Workers Static Assets の公開対象は `public/` のみです。
 
-- GitHub Pages公開時は、`assets/js/site.js` の `data-mailto-form` 処理で入力内容からメール件名・本文を生成します。
-- 入力内容はブラウザ上でメール本文に変換するだけで、GitHubリポジトリや公開サイト内には保存しません。
-- メールソフトが開けない場合に備え、確認欄から本文をコピーできるようにしています。
-- 将来Netlify Forms、Google Forms、Supabase、Airtable、CRM APIへ移行する場合は、HTMLの `name` 属性を取り込み項目として使い、送信処理だけを差し替えます。
-- 管理項目（`obog_master_id`、`payment_status` など）はユーザー入力フォームには出さず、CSV出力後またはCRM側で付与します。
+## 60周年記念FESTA staging CRM
 
-## Netlify Forms
+このブランチでは、60周年記念FESTAの参加申込・CRM検証用に Cloudflare Pages Functions + D1 + Stripe Checkout のstaging実装を追加しています。
 
-- フォーム名: `festa60-obog-crm-entry`
-- 設置場所: `festa-60th/index.html`
-- 送信後遷移先: `/thanks.html`
-- フォーム回答は、OBOGマスタ情報、連絡先情報、FESTA60周年イベント参加情報の3系統に分けて扱う想定です。
+重要な運用ルール:
 
-## CSV出力後に追加する管理列
+- `main` へ直接pushしない
+- 本番サイトへ直接デプロイしない
+- 本番名簿CSV、`.env`、Stripe秘密鍵、Webhook Secretをコミットしない
+- 本番D1とpreview/staging D1を共用しない
+- 本番StripeキーとテストStripeキーを共用しない
 
-Netlify FormsからCSVを出力した後、管理用スプレッドシート側で以下の列を追加してください。これらは管理者が後から付与する情報であり、フォーム入力項目には含めません。
+想定フロー:
 
-- `obog_master_id`
-- `match_status`
-- `match_confidence`
-- `master_update_required`
-- `attendance_status`
-- `payment_status`
-- `payment_date`
-- `reception_status`
-- `last_contact_date`
-- `admin_note`
+1. `feature/festa60-staging-crm` で実装する
+2. `staging` ブランチ向けにPRを作る
+3. Cloudflare Pages Preview Deploymentで確認する
+4. Preview環境はCloudflare Accessなどで非公開にする
+5. 動作確認後に本番切替用の環境変数・D1・Stripeキーを別途設定する
 
-## `match_status` 候補
+## 追加された画面
 
-- `matched`
-- `possible_match`
-- `new_contact`
-- `duplicate_check_needed`
-- `unmatched`
+- 参加申込フォーム: `/festa60-register/`
+- 管理画面: `/festa60-admin/`
 
-## `attendance_status` 候補
+管理画面はCloudflare Access配下での利用を前提にしています。ローカル/PreviewでAccessを使わない場合は、Cloudflare Secret `ADMIN_API_TOKEN` と同じ値を画面に入力してAPIへ送ります。
 
-- `intent_yes`
-- `considering`
-- `intent_no`
-- `confirmed`
-- `cancelled`
+## Pages Functions API
 
-## `payment_status` 候補
+- `POST /api/festa60/applications`
+  - 参加申込をD1へ保存
+  - Turnstile Secret設定時は検証
+  - 有料チケットの場合はStripe Checkout Sessionを作成
+  - Stripe metadataに `application_id`, `member_id`, `ticket_type` を設定
+- `POST /api/festa60/stripe/webhook`
+  - Stripe Webhook署名を検証
+  - `checkout.session.completed` で `payments` と `applications` を更新
+- `GET /api/festa60/admin/applications`
+  - 申込一覧、決済状況、名簿照合状況を返す
+- `GET /api/festa60/admin/export`
+  - 申込一覧をCSVで出力
+- `POST /api/festa60/admin/import`
+  - OBOG名簿CSVをD1 `members` へ取込
 
-- `not_required_yet`
-- `unpaid`
-- `paid`
-- `exempted`
-- `refund_needed`
+## D1
 
-## OBOGマスタ突合の運用イメージ
+Schema:
 
-1. Netlify Formsから `festa60-obog-crm-entry` のCSVを出力します。
-2. OBOGマスタの氏名、旧姓、ふりがな、メールアドレス、卒部年度または期、当時の役割、所属団体と照合します。
-3. 一致度に応じて `match_status` と `match_confidence` を管理者が付与します。
-4. 連絡先や所属情報に差分があれば `master_update_required` を更新します。
-5. 正式参加登録開始後に `attendance_status`、入金確認後に `payment_status` と `payment_date`、当日は `reception_status` を更新します。
+```bash
+db/schema.sql
+```
+
+Preview seed:
+
+```bash
+db/seed-preview.sql
+```
+
+作成するテーブル:
+
+- `members`
+- `applications`
+- `payments`
+- `companions`
+- `consents`
+- `attendance`
+- `import_batches`
+- `audit_logs`
+
+DB作成例:
+
+```bash
+npx wrangler d1 create fantasista-review-202605-staging
+npx wrangler d1 execute fantasista-review-202605-staging --file db/schema.sql --remote
+npx wrangler d1 execute fantasista-review-202605-staging --file db/seed-preview.sql --remote
+```
+
+本番DBは別名で作成してください。
+
+```bash
+npx wrangler d1 create fantasista-review-202605-production
+npx wrangler d1 execute fantasista-review-202605-production --file db/schema.sql --remote
+```
+
+`wrangler.jsonc` の `database_id` はゼロ埋めのプレースホルダーです。CloudflareでD1を作成した後、preview/staging/productionそれぞれの実IDへ置き換えてください。
+
+## 環境変数とSecrets
+
+Preview / staging:
+
+```bash
+npx wrangler pages secret put STRIPE_SECRET_KEY
+npx wrangler pages secret put STRIPE_WEBHOOK_SECRET
+npx wrangler pages secret put TURNSTILE_SECRET_KEY
+npx wrangler pages secret put ADMIN_API_TOKEN
+```
+
+Preview / stagingでは `STRIPE_SECRET_KEY` が `sk_test_` で始まらない場合、Checkout作成を拒否します。
+
+Production:
+
+```bash
+npx wrangler pages secret put STRIPE_SECRET_KEY
+npx wrangler pages secret put STRIPE_WEBHOOK_SECRET
+npx wrangler pages secret put TURNSTILE_SECRET_KEY
+npx wrangler pages secret put ADMIN_API_TOKEN
+```
+
+Productionでは `STRIPE_SECRET_KEY` が `sk_live_` で始まらない場合、Checkout作成を拒否します。
+
+公開してよい変数:
+
+- `ENVIRONMENT`
+- `PUBLIC_BASE_URL`
+- `TURNSTILE_SITE_KEY`
+
+Secretsにする変数:
+
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `TURNSTILE_SECRET_KEY`
+- `ADMIN_API_TOKEN`
+
+## Stripeテスト
+
+1. Stripe Dashboardでテストモードを有効にする
+2. `STRIPE_SECRET_KEY` に `sk_test_...` を設定
+3. Webhook endpointをPreview URLの `/api/festa60/stripe/webhook` に向ける
+4. `checkout.session.completed` を購読する
+5. Webhook signing secretを `STRIPE_WEBHOOK_SECRET` に設定する
+6. `/festa60-register/` からテスト申込を送る
+7. StripeテストカードでCheckoutを完了する
+8. 管理画面で `payment_status = paid` と `attendance_status = confirmed` を確認する
+
+## 本番切替
+
+本番切替時に行うこと:
+
+1. production D1を作成し、`db/schema.sql` を適用する
+2. 本番名簿CSVを管理画面から取り込む
+3. productionのD1 bindingがstagingと別DBを向いていることを確認する
+4. productionの `STRIPE_SECRET_KEY` に `sk_live_...` を設定する
+5. productionのWebhook endpointと `STRIPE_WEBHOOK_SECRET` を設定する
+6. Turnstile production site/secret keyを設定する
+7. Cloudflare Accessまたは同等の認証で管理画面を保護する
+8. Previewで最終確認後、stagingからmainへレビュー付きで反映する
+
+## 旧フォーム運用メモ
+
+以前は静的フォームでメール本文を生成する運用でした。今後はCRM APIへ移行する想定です。管理項目（`member_id`、`payment_status`、`match_status` など）はユーザー入力フォームには出さず、D1側で管理します。
