@@ -267,7 +267,19 @@ export async function listApplications(db) {
         a.graduation_year, a.ticket_type, a.fee_period, a.reception_attendance, a.companion_count, a.match_status,
         a.match_confidence, a.payment_status, a.attendance_status, a.created_at,
         m.member_code, m.full_name AS matched_member_name,
-        p.stripe_checkout_session_id, p.status AS latest_payment_status, p.amount_total
+        p.stripe_checkout_session_id, p.status AS latest_payment_status, p.amount_total,
+        (
+          SELECT COALESCE(SUM(
+            CASE
+              WHEN c.attendee_type = 'child' THEN
+                CASE WHEN a.reception_attendance = 'without_reception' THEN 1000 ELSE 3000 END
+              ELSE
+                CASE WHEN a.reception_attendance = 'without_reception' THEN 6000 ELSE 8000 END
+            END
+          ), 0)
+          FROM companions c
+          WHERE c.application_id = a.id
+        ) AS companion_fee_total
        FROM applications a
        LEFT JOIN members m ON m.id = a.member_id
        LEFT JOIN payments p ON p.application_id = a.id
@@ -277,8 +289,15 @@ export async function listApplications(db) {
     .all();
   return (result.results || []).map((row) => ({
     ...row,
-    amount_total: row.amount_total ?? ticketAmount(row.ticket_type, row.companion_count, row.fee_period, row.reception_attendance),
+    amount_total: row.amount_total ?? expectedApplicationAmount(row),
   }));
+}
+
+function expectedApplicationAmount(row) {
+  if (row.companion_fee_total > 0 || row.companion_count === 0) {
+    return ticketAmount(row.ticket_type, [], row.fee_period, row.reception_attendance) + Number(row.companion_fee_total || 0);
+  }
+  return ticketAmount(row.ticket_type, row.companion_count, row.fee_period, row.reception_attendance);
 }
 
 export async function audit(db, item) {
