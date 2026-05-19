@@ -86,7 +86,7 @@ npx wrangler d1 create fantasista-review-202605-production
 npx wrangler d1 execute fantasista-review-202605-production --file db/schema.sql --remote
 ```
 
-`wrangler.jsonc` の `database_id` はゼロ埋めのプレースホルダーです。CloudflareでD1を作成した後、preview/staging/productionそれぞれの実IDへ置き換えてください。
+`wrangler.jsonc` の `database_id` はゼロ埋めのプレースホルダーです。CloudflareでD1を作成した後、preview/productionそれぞれの実IDへ置き換えてください。Cloudflare Pagesの設定ファイルで使えるnamed environmentは `preview` と `production` のみなので、`staging` ブランチの検証はPages Preview環境として扱います。
 
 ## 環境変数とSecrets
 
