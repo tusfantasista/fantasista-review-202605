@@ -1571,7 +1571,7 @@
           white-space: nowrap;
           color: #111827;
           font-family: "Oswald", "Noto Sans JP", sans-serif;
-          font-size: clamp(2rem, 2.6vw, 2.5rem);
+          font-size: clamp(1.9rem, 2.35vw, 2.25rem);
           font-weight: 700;
           line-height: 1.05;
           letter-spacing: 0.005em;
@@ -1583,21 +1583,32 @@
         }
 
         .history-digital-stat .history-digital-stat__number--minor {
-          font-size: clamp(2rem, 2.6vw, 2.5rem);
+          font-size: clamp(1.9rem, 2.35vw, 2.25rem);
           letter-spacing: 0;
         }
 
-        .history-digital-stat .history-digital-stat__unit {
-          font-size: 0.72em;
+        .history-digital-stat span.history-digital-stat__unit {
+          display: inline;
+          margin: 0;
+          color: inherit;
+          font-size: 0.66em;
           font-family: "Noto Sans JP", sans-serif;
           font-weight: 800;
           line-height: 1;
+          letter-spacing: 0;
+          text-transform: none;
         }
 
-        .history-digital-stat .history-digital-stat__separator {
+        .history-digital-stat span.history-digital-stat__separator {
+          display: inline;
+          margin: 0;
           color: #8a6a00;
           font-size: 0.78em;
+          font-family: "Noto Sans JP", sans-serif;
+          font-weight: 800;
           line-height: 1;
+          letter-spacing: 0;
+          text-transform: none;
         }
 
         .history-digital-stat .history-digital-stat__sub {
@@ -1611,7 +1622,7 @@
 
         .history-digital-stat .history-digital-stat__sub--range {
           max-width: 18rem;
-          font-size: clamp(1.75rem, 2.2vw, 2.1rem);
+          font-size: clamp(1.5rem, 1.8vw, 1.75rem);
           letter-spacing: -0.01em;
         }
 
@@ -1626,8 +1637,16 @@
           margin-bottom: 0;
         }
 
-        .history-digital-stat .history-digital-stat__value {
-          display: inline-block;
+        .history-digital-stat span.history-digital-stat__value {
+          display: inline;
+          margin: 0;
+          color: inherit;
+          font-size: inherit;
+          font-family: inherit;
+          font-weight: inherit;
+          letter-spacing: inherit;
+          line-height: inherit;
+          text-transform: none;
           white-space: nowrap;
         }
 
@@ -1638,11 +1657,11 @@
 
           .history-digital-stat .history-digital-stat__number,
           .history-digital-stat .history-digital-stat__number--minor {
-            font-size: clamp(1.9rem, 7vw, 2.25rem);
+            font-size: clamp(1.8rem, 7vw, 2.1rem);
           }
 
           .history-digital-stat .history-digital-stat__sub--range {
-            font-size: clamp(1.38rem, 6vw, 1.62rem);
+            font-size: clamp(1.25rem, 5vw, 1.45rem);
           }
         }
 
@@ -2687,8 +2706,6 @@
 <!-- REVIEW_HISTORY_MOTION_SCRIPT_END -->
 </body>
 </html>
-
-
 
 
 
