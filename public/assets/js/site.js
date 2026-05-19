@@ -170,36 +170,6 @@
     document.body.appendChild(link);
   }
 
-  function initSampleData() {
-    const target = document.querySelector("[data-sample-data]");
-    if (!target || !window.fetch) return;
-
-    fetch("../assets/data/site-metrics.json")
-      .then((response) => response.json())
-      .then((data) => {
-        const festa = data.festaAttendance || [];
-        const max = Math.max.apply(null, festa.map((item) => item.participants));
-        const chart = festa.map((item) => {
-          const width = Math.round((item.participants / max) * 100);
-          return '<div class="data-chart__row"><strong>' + item.year + '</strong><div class="data-chart__bar"><span style="width:' + width + '%"></span></div><span>' + item.participants + '名</span></div>';
-        }).join("");
-
-        const rows = (data.annualEvents || []).map((item) => {
-          return "<tr><td>" + item.year + "</td><td>" + item.name + "</td><td>" + item.category + "</td><td>" + item.status + "</td></tr>";
-        }).join("");
-
-        target.innerHTML =
-          '<div class="data-source-panel"><article class="data-source-card"><h3>FESTA参加者数の推移</h3><div class="data-chart">' +
-          chart +
-          '</div></article><article class="data-source-card"><h3>年度別イベント一覧</h3><div class="data-table-wrap"><table class="data-table"><thead><tr><th>年度</th><th>名称</th><th>カテゴリ</th><th>状態</th></tr></thead><tbody>' +
-          rows +
-          "</tbody></table></div></article></div>";
-      })
-      .catch(() => {
-        target.innerHTML = '<p class="form-note">サンプルデータを読み込めませんでした。ローカルで確認する場合はHTTPサーバー経由で開いてください。</p>';
-      });
-  }
-
   function initMailtoForms() {
     const forms = Array.from(document.querySelectorAll("[data-mailto-form]"));
     if (!forms.length) return;
@@ -363,6 +333,5 @@
   initFilters();
   initLightbox();
   initFestaQuickLink();
-  initSampleData();
   initMailtoForms();
 })();

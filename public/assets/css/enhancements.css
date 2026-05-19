@@ -87,71 +87,6 @@ html {
   display: none !important;
 }
 
-.data-source-panel {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
-  gap: 24px;
-}
-
-.data-source-card {
-  padding: 28px;
-  border-radius: 24px;
-  background: #fff;
-  box-shadow: var(--shadow, 0 20px 48px rgba(12, 18, 28, 0.1));
-}
-
-.data-source-card h3 {
-  margin-top: 0;
-}
-
-.data-chart {
-  display: grid;
-  gap: 12px;
-}
-
-.data-chart__row {
-  display: grid;
-  grid-template-columns: 88px 1fr 52px;
-  align-items: center;
-  gap: 10px;
-}
-
-.data-chart__bar {
-  height: 14px;
-  border-radius: 999px;
-  background: rgba(144, 31, 41, 0.12);
-  overflow: hidden;
-}
-
-.data-chart__bar span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #901f29 0%, #c99516 100%);
-}
-
-.data-table-wrap {
-  overflow-x: auto;
-}
-
-.data-table {
-  width: 100%;
-  min-width: 520px;
-  border-collapse: collapse;
-}
-
-.data-table th,
-.data-table td {
-  padding: 12px 10px;
-  border-bottom: 1px solid rgba(32, 33, 36, 0.1);
-  text-align: left;
-}
-
-.data-table th {
-  color: #555961;
-  font-size: 0.84rem;
-}
-
 .lightbox {
   position: fixed;
   inset: 0;
@@ -387,14 +322,6 @@ html {
 
   .filter-button {
     white-space: nowrap;
-  }
-
-  .data-source-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .data-source-card {
-    padding: 22px 18px;
   }
 
   .static-contact-form .form-grid {
