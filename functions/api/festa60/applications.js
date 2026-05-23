@@ -1,6 +1,6 @@
 import { badRequest, getClientMeta, json, methodNotAllowed, readJson, serverError } from "./_lib/http.js";
 import { applicationCode } from "./_lib/ids.js";
-import { isProduction, publicBaseUrl, requireDb } from "./_lib/env.js";
+import { publicBaseUrl, requireDb } from "./_lib/env.js";
 import { verifyTurnstile } from "./_lib/turnstile.js";
 import {
   FEE_PERIODS,
@@ -30,9 +30,8 @@ export async function onRequestPost({ request, env }) {
     payload.ticket_type = normalizeTicketType(payload.ticket_type);
     const companions = Array.isArray(payload.companions) ? payload.companions : [];
     const amountTotal = ticketAmount(payload.ticket_type || "obog", companions, payload.fee_period, payload.reception_attendance);
-    const stripeKeyPrefix = isProduction(env) ? "sk_live_" : "sk_test_";
-    if (amountTotal > 0 && payload.pay_now !== false && !String(env.STRIPE_SECRET_KEY || "").startsWith(stripeKeyPrefix)) {
-      return badRequest(`Stripe secret is not configured for this environment. Set ${stripeKeyPrefix}... or submit with pay_now=false.`);
+    if (amountTotal > 0 && payload.pay_now !== false && !String(env.STRIPE_SECRET_KEY || "").startsWith("sk_test_")) {
+      return badRequest("Stripe test secret is not configured. Set sk_test_... or submit with pay_now=false.");
     }
 
     const application = await insertApplication(

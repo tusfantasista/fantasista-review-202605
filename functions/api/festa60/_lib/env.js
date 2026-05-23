@@ -17,12 +17,8 @@ export function requireStripeSecret(env) {
   const key = env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("STRIPE_SECRET_KEY is not configured.");
 
-  if (isProduction(env) && !key.startsWith("sk_live_")) {
-    throw new Error("Production environment must use a Stripe live secret key.");
-  }
-
-  if (!isProduction(env) && !key.startsWith("sk_test_")) {
-    throw new Error("Preview/staging environment must use a Stripe test secret key.");
+  if (!key.startsWith("sk_test_")) {
+    throw new Error("Festa 60 staging must use a Stripe test secret key.");
   }
 
   return key;

@@ -12,7 +12,7 @@
 - 本番サイトへ直接デプロイしない
 - 本番名簿CSV、`.env`、Stripe秘密鍵、Webhook Secretをコミットしない
 - 本番D1とpreview/staging D1を共用しない
-- 本番StripeキーとテストStripeキーを共用しない
+- staging検収ではStripeテストキーのみを使い、本番Stripeキーは使わない
 
 想定フロー:
 
@@ -125,19 +125,15 @@ npx wrangler pages secret put TURNSTILE_SECRET_KEY
 npx wrangler pages secret put ADMIN_API_TOKEN
 ```
 
-Preview / stagingでは `STRIPE_SECRET_KEY` が `sk_test_` で始まらない場合、Checkout作成を拒否します。
+Preview / stagingでは `STRIPE_SECRET_KEY` が `sk_test_` で始まらない場合、Checkout作成を拒否します。このfeatureブランチではStripe本番キーを受け付けません。
 Webhook secretも `STRIPE_WEBHOOK_SECRET` 環境変数から読みます。検収メモ上は `whsec_test_...` として管理し、コードには書きません。
 
 Production:
 
 ```bash
-npx wrangler pages secret put STRIPE_SECRET_KEY
-npx wrangler pages secret put STRIPE_WEBHOOK_SECRET
-npx wrangler pages secret put TURNSTILE_SECRET_KEY
-npx wrangler pages secret put ADMIN_API_TOKEN
+# このfeatureブランチではproduction運用しません。
+# 本番化時は別PRでproduction D1とStripe本番キーの設計に切り替えてください。
 ```
-
-Productionでは `STRIPE_SECRET_KEY` が `sk_live_` で始まらない場合、Checkout作成を拒否します。
 
 公開してよい変数:
 
@@ -184,11 +180,10 @@ Secretsにする変数:
 1. production D1を作成し、`db/schema.sql` を適用する
 2. 本番名簿CSVを管理画面から取り込む
 3. productionのD1 bindingがstagingと別DBを向いていることを確認する
-4. productionの `STRIPE_SECRET_KEY` に `sk_live_...` を設定する
-5. productionのWebhook endpointと `STRIPE_WEBHOOK_SECRET` を設定する
-6. Turnstile production site/secret keyを設定する
-7. Cloudflare Accessまたは同等の認証で管理画面を保護する
-8. Previewで最終確認後、stagingからmainへレビュー付きで反映する
+4. productionのStripe本番キー、Webhook endpoint、`STRIPE_WEBHOOK_SECRET` を別PRで設定する
+5. Turnstile production site/secret keyを設定する
+6. Cloudflare Accessまたは同等の認証で管理画面を保護する
+7. Previewで最終確認後、stagingからmainへレビュー付きで反映する
 
 ## 旧フォーム運用メモ
 
