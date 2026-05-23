@@ -20,27 +20,97 @@ const COMPANION_FEES = {
   child: { attending: 3000, without_reception: 1000 },
 };
 
-export function ticketAmount(ticketType, companions = 0, feePeriod = "regular", receptionAttendance = "attending") {
-  const normalizedTicket = normalizeTicketType(ticketType);
-  const normalizedPeriod = FEE_PERIODS.includes(feePeriod) ? feePeriod : "regular";
-  const normalizedReception = RECEPTION_ATTENDANCE.includes(receptionAttendance) ? receptionAttendance : "attending";
-  const companionRows = Array.isArray(companions) ? companions : Array.from({ length: Number(companions || 0) }, () => ({ attendee_type: "adult" }));
+const TICKET_LABELS = {
+  obog: "60周年記念FESTA 一般OBOG参加費",
+  obog_6_10: "60周年記念FESTA OBOG 6〜10年目参加費",
+  obog_5_under: "60周年記念FESTA OBOG 5年目以下参加費",
+  obog_staff: "60周年記念FESTA OBOG役員・当日手伝い参加費",
+  current_student: "60周年記念FESTA 現役部員参加費",
+  premium: "60周年記念FESTA プレミアム参加枠",
+};
 
-  let base = BASE_FEES[normalizedTicket]?.[normalizedPeriod] ?? BASE_FEES.obog[normalizedPeriod];
-  if (normalizedTicket === "obog_staff") {
-    base = Math.round((BASE_FEES.obog[normalizedPeriod] - noReceptionDiscount(normalizedReception)) * 0.5);
-  } else if (normalizedTicket === "current_student") {
-    base = normalizedReception === "attending" ? BASE_FEES.current_student[normalizedPeriod] : 0;
-  } else if (normalizedTicket !== "premium") {
-    base = Math.max(0, base - noReceptionDiscount(normalizedReception));
+export function ticketAmount(ticketType, companions = 0, feePeriod = "regular", receptionAttendance = "attending") {
+  const companionRows = Array.isArray(companions)
+    ? companions
+    : Array.from({ length: Number(companions || 0) }, () => ({ attendee_type: "adult" }));
+  return lineItemsTotal(buildPaymentLineItems({ ticket_type: ticketType, fee_period: feePeriod, reception_attendance: receptionAttendance }, companionRows));
+}
+
+export function buildPaymentLineItems(payload, companions = []) {
+  const normalizedTicket = normalizeTicketType(payload.ticket_type);
+  const normalizedPeriod = FEE_PERIODS.includes(payload.fee_period) ? payload.fee_period : "regular";
+  const normalizedReception = RECEPTION_ATTENDANCE.includes(payload.reception_attendance) ? payload.reception_attendance : "attending";
+  const items = [];
+  const ticketAmountJpy = ticketLineAmount(normalizedTicket, normalizedPeriod, normalizedReception);
+
+  if (ticketAmountJpy > 0) {
+    items.push({
+      item_type: "ticket",
+      label: TICKET_LABELS[normalizedTicket] || TICKET_LABELS.obog,
+      quantity: 1,
+      unit_amount_jpy: ticketAmountJpy,
+      amount_jpy: ticketAmountJpy,
+      metadata: { ticket_type: normalizedTicket, fee_period: normalizedPeriod, reception_attendance: normalizedReception },
+    });
   }
 
-  const companionTotal = companionRows.reduce((sum, companion) => {
+  companions.forEach((companion, index) => {
     const type = companion.attendee_type === "child" ? "child" : "adult";
-    return sum + COMPANION_FEES[type][normalizedReception];
-  }, 0);
+    const amount = COMPANION_FEES[type][normalizedReception];
+    if (amount <= 0) return;
+    items.push({
+      item_type: "companion",
+      label: `同伴者${index + 1} ${type === "child" ? "子供" : "大人"}`,
+      quantity: 1,
+      unit_amount_jpy: amount,
+      amount_jpy: amount,
+      metadata: { attendee_type: type, relationship: companion.relationship || "" },
+    });
+  });
 
-  return base + companionTotal;
+  const donation = amountOrZero(payload.donation_amount_jpy);
+  if (donation > 0) {
+    items.push({
+      item_type: "donation",
+      label: "60周年記念FESTA 寄付",
+      quantity: 1,
+      unit_amount_jpy: donation,
+      amount_jpy: donation,
+      metadata: {},
+    });
+  }
+
+  const sponsorship = amountOrZero(payload.sponsorship_amount_jpy);
+  if (sponsorship > 0) {
+    items.push({
+      item_type: "sponsorship",
+      label: "60周年記念FESTA 協賛",
+      quantity: 1,
+      unit_amount_jpy: sponsorship,
+      amount_jpy: sponsorship,
+      metadata: {},
+    });
+  }
+
+  return items;
+}
+
+export function lineItemsTotal(items) {
+  return items.reduce((sum, item) => sum + Number(item.amount_jpy || 0), 0);
+}
+
+function ticketLineAmount(ticketType, feePeriod, receptionAttendance) {
+  let base = BASE_FEES[ticketType]?.[feePeriod] ?? BASE_FEES.obog[feePeriod];
+  if (ticketType === "obog_staff") {
+    return Math.round((BASE_FEES.obog[feePeriod] - noReceptionDiscount(receptionAttendance)) * 0.5);
+  }
+  if (ticketType === "current_student") {
+    return receptionAttendance === "attending" ? BASE_FEES.current_student[feePeriod] : 0;
+  }
+  if (ticketType !== "premium") {
+    base = Math.max(0, base - noReceptionDiscount(receptionAttendance));
+  }
+  return base;
 }
 
 export function normalizeTicketType(ticketType) {
@@ -53,6 +123,11 @@ function noReceptionDiscount(receptionAttendance) {
   return receptionAttendance === "without_reception" ? 2000 : 0;
 }
 
+function amountOrZero(value) {
+  const amount = Number(value || 0);
+  return Number.isFinite(amount) && amount > 0 ? Math.round(amount) : 0;
+}
+
 export async function findMemberMatch(db, payload) {
   const email = (payload.email || "").trim().toLowerCase();
   if (email) {
@@ -60,7 +135,7 @@ export async function findMemberMatch(db, payload) {
       .prepare("SELECT * FROM members WHERE lower(email) = ? LIMIT 1")
       .bind(email)
       .first();
-    if (byEmail) return { member: byEmail, status: "matched", confidence: 0.98 };
+    if (byEmail) return { member: byEmail, status: "exact_match", confidence: 0.98 };
   }
 
   const fullName = (payload.full_name || "").trim();
@@ -75,7 +150,7 @@ export async function findMemberMatch(db, payload) {
     if (byName) return { member: byName, status: "possible_match", confidence: 0.72 };
   }
 
-  return { member: null, status: "unmatched", confidence: 0 };
+  return { member: null, status: "new_record", confidence: 0 };
 }
 
 export async function insertApplication(db, payload, requestMeta = {}) {
@@ -83,16 +158,18 @@ export async function insertApplication(db, payload, requestMeta = {}) {
   const id = newId("app");
   const applicationCode = payload.application_code || `F60-${Date.now().toString(36).toUpperCase()}`;
   const companions = Array.isArray(payload.companions) ? payload.companions.filter((item) => item.full_name) : [];
+  const lineItems = buildPaymentLineItems(payload, companions);
+  const totalAmountJpy = lineItemsTotal(lineItems);
   const now = nowIso();
 
   await db
     .prepare(
       `INSERT INTO applications (
-        id, application_code, member_id, match_status, match_confidence, ticket_type, fee_period, reception_attendance,
-        attendance_status, payment_status, full_name, full_name_kana, maiden_name,
+        id, application_code, member_id, match_status, match_confidence, status, ticket_type, fee_period, reception_attendance,
+        attendance_status, payment_status, total_amount_jpy, full_name, full_name_kana, maiden_name,
         email, phone, graduation_year, generation, school_lineage, dance_role,
         postal_code, address, companion_count, message, source, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       id,
@@ -100,11 +177,13 @@ export async function insertApplication(db, payload, requestMeta = {}) {
       match.member?.id || null,
       match.status,
       match.confidence,
+      totalAmountJpy > 0 ? "payment_pending" : "confirmed",
       normalizeTicketType(payload.ticket_type),
       payload.fee_period || "regular",
       payload.reception_attendance || "attending",
-      "pending",
-      ticketAmount(payload.ticket_type, companions, payload.fee_period, payload.reception_attendance) > 0 ? "unpaid" : "not_required",
+      totalAmountJpy > 0 ? "pending" : "confirmed",
+      totalAmountJpy > 0 ? "unpaid" : "not_required",
+      totalAmountJpy,
       payload.full_name,
       payload.full_name_kana || null,
       payload.maiden_name || null,
@@ -123,6 +202,27 @@ export async function insertApplication(db, payload, requestMeta = {}) {
       now,
     )
     .run();
+
+  for (const item of lineItems) {
+    await db
+      .prepare(
+        `INSERT INTO payment_line_items (
+          id, application_id, item_type, label, quantity, unit_amount_jpy, amount_jpy, metadata_json, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      )
+      .bind(
+        newId("pli"),
+        id,
+        item.item_type,
+        item.label,
+        item.quantity || 1,
+        item.unit_amount_jpy || 0,
+        item.amount_jpy || 0,
+        JSON.stringify(item.metadata || {}),
+        now,
+      )
+      .run();
+  }
 
   for (const companion of companions) {
     await db
@@ -184,7 +284,9 @@ export async function insertApplication(db, payload, requestMeta = {}) {
     member_id: match.member?.id || null,
     match_status: match.status,
     match_confidence: match.confidence,
-    amount_total: ticketAmount(payload.ticket_type, companions, payload.fee_period, payload.reception_attendance),
+    amount_total: totalAmountJpy,
+    total_amount_jpy: totalAmountJpy,
+    line_items: lineItems,
   };
 }
 
@@ -214,10 +316,42 @@ export async function createPayment(db, application, session, metadata) {
       now,
     )
     .run();
+
+  await db
+    .prepare("UPDATE payment_line_items SET payment_id = ? WHERE application_id = ?")
+    .bind(paymentId, application.id)
+    .run();
+
   return paymentId;
 }
 
-export async function markCheckoutCompleted(db, session) {
+export async function recordStripeEvent(db, event, payloadJson) {
+  const now = nowIso();
+  const result = await db
+    .prepare(
+      `INSERT OR IGNORE INTO stripe_events (id, event_type, status, payload_json, created_at)
+       VALUES (?, ?, ?, ?, ?)`,
+    )
+    .bind(event.id, event.type, "processing", payloadJson, now)
+    .run();
+  return (result.meta?.changes || 0) > 0;
+}
+
+export async function markStripeEventProcessed(db, eventId) {
+  await db
+    .prepare("UPDATE stripe_events SET status = ?, processed_at = ? WHERE id = ?")
+    .bind("processed", nowIso(), eventId)
+    .run();
+}
+
+export async function markStripeEventFailed(db, eventId, error) {
+  await db
+    .prepare("UPDATE stripe_events SET status = ?, payload_json = COALESCE(payload_json, '') || ? WHERE id = ?")
+    .bind("failed", `\n/* processing_error: ${String(error?.message || error).slice(0, 500)} */`, eventId)
+    .run();
+}
+
+export async function markCheckoutCompleted(db, session, stripeEventId) {
   const now = nowIso();
   const applicationId = session.metadata?.application_id;
   const memberId = session.metadata?.member_id || null;
@@ -227,7 +361,7 @@ export async function markCheckoutCompleted(db, session) {
     .prepare(
       `UPDATE payments
        SET status = ?, stripe_payment_intent_id = ?, stripe_customer_id = ?, amount_total = ?,
-           currency = ?, paid_at = CASE WHEN ? = 'paid' THEN ? ELSE paid_at END, updated_at = ?
+           currency = ?, stripe_event_id = ?, paid_at = CASE WHEN ? = 'paid' THEN ? ELSE paid_at END, updated_at = ?
        WHERE stripe_checkout_session_id = ?`,
     )
     .bind(
@@ -236,6 +370,7 @@ export async function markCheckoutCompleted(db, session) {
       session.customer || null,
       session.amount_total || 0,
       session.currency || "jpy",
+      stripeEventId || null,
       status,
       now,
       now,
@@ -245,8 +380,8 @@ export async function markCheckoutCompleted(db, session) {
 
   if (applicationId) {
     await db
-      .prepare("UPDATE applications SET payment_status = ?, attendance_status = ?, member_id = COALESCE(member_id, ?), updated_at = ? WHERE id = ?")
-      .bind(status, status === "paid" ? "confirmed" : "pending", memberId, now, applicationId)
+      .prepare("UPDATE applications SET payment_status = ?, status = ?, attendance_status = ?, member_id = COALESCE(member_id, ?), updated_at = ? WHERE id = ?")
+      .bind(status, status === "paid" ? "confirmed" : "payment_pending", status === "paid" ? "confirmed" : "pending", memberId, now, applicationId)
       .run();
   }
 
@@ -259,13 +394,42 @@ export async function markCheckoutCompleted(db, session) {
   });
 }
 
+export async function markCheckoutExpired(db, session, stripeEventId) {
+  const now = nowIso();
+  const applicationId = session.metadata?.application_id;
+
+  await db
+    .prepare(
+      `UPDATE payments
+       SET status = ?, stripe_event_id = ?, updated_at = ?
+       WHERE stripe_checkout_session_id = ?`,
+    )
+    .bind("expired", stripeEventId || null, now, session.id)
+    .run();
+
+  if (applicationId) {
+    await db
+      .prepare("UPDATE applications SET payment_status = ?, status = ?, attendance_status = ?, updated_at = ? WHERE id = ?")
+      .bind("expired", "payment_pending", "pending", now, applicationId)
+      .run();
+  }
+
+  await audit(db, {
+    actor: "stripe",
+    action: "payment.checkout_expired",
+    target_type: "application",
+    target_id: applicationId || session.id,
+    details_json: JSON.stringify({ checkout_session_id: session.id, payment_status: "expired" }),
+  });
+}
+
 export async function listApplications(db) {
   const result = await db
     .prepare(
       `SELECT
         a.id, a.application_code, a.full_name, a.full_name_kana, a.email,
         a.graduation_year, a.ticket_type, a.fee_period, a.reception_attendance, a.companion_count, a.match_status,
-        a.match_confidence, a.payment_status, a.attendance_status, a.created_at,
+        a.match_confidence, a.status, a.payment_status, a.attendance_status, a.total_amount_jpy, a.created_at,
         m.member_code, m.full_name AS matched_member_name,
         p.stripe_checkout_session_id, p.status AS latest_payment_status, p.amount_total,
         (
@@ -289,7 +453,7 @@ export async function listApplications(db) {
     .all();
   return (result.results || []).map((row) => ({
     ...row,
-    amount_total: row.amount_total ?? expectedApplicationAmount(row),
+    amount_total: row.amount_total ?? row.total_amount_jpy ?? expectedApplicationAmount(row),
   }));
 }
 

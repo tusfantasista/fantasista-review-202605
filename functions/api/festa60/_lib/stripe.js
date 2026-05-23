@@ -17,10 +17,21 @@ export async function createCheckoutSession({ env, application, request, baseUrl
   params.set("metadata[application_id]", metadata.application_id);
   params.set("metadata[member_id]", metadata.member_id);
   params.set("metadata[ticket_type]", metadata.ticket_type);
-  params.set("line_items[0][quantity]", "1");
-  params.set("line_items[0][price_data][currency]", "jpy");
-  params.set("line_items[0][price_data][product_data][name]", ticketLabel(application.ticket_type));
-  params.set("line_items[0][price_data][unit_amount]", String(application.amount_total));
+
+  const lineItems = (application.line_items || [])
+    .filter((item) => Number(item.amount_jpy || 0) > 0)
+    .slice(0, 20);
+
+  if (!lineItems.length) {
+    throw new Error("Stripe Checkout requires at least one positive payment line item.");
+  }
+
+  lineItems.forEach((item, index) => {
+    params.set(`line_items[${index}][quantity]`, String(item.quantity || 1));
+    params.set(`line_items[${index}][price_data][currency]`, "jpy");
+    params.set(`line_items[${index}][price_data][product_data][name]`, item.label || ticketLabel(application.ticket_type));
+    params.set(`line_items[${index}][price_data][unit_amount]`, String(item.unit_amount_jpy || item.amount_jpy));
+  });
 
   const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",

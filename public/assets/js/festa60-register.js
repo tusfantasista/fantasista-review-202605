@@ -50,6 +50,11 @@
   ticketType.addEventListener("change", updateFeePreview);
   feePeriod.addEventListener("change", updateFeePreview);
   receptionAttendance.addEventListener("change", updateFeePreview);
+  form.addEventListener("input", function (event) {
+    if (["donation_amount_jpy", "sponsorship_amount_jpy"].includes(event.target.name)) {
+      updateFeePreview();
+    }
+  });
   renderCompanions();
   updateGraduationRequirement();
   updateFeePreview();
@@ -143,6 +148,8 @@
     payload.privacy_consent = data.has("privacy_consent");
     payload.contact_consent = data.has("contact_consent");
     payload.photo_consent = data.has("photo_consent");
+    payload.donation_amount_jpy = normalizeAmount(payload.donation_amount_jpy);
+    payload.sponsorship_amount_jpy = normalizeAmount(payload.sponsorship_amount_jpy);
     const count = Number(payload.companion_count || 0);
     payload.companions = [];
     for (let index = 0; index < count; index += 1) {
@@ -198,6 +205,12 @@
         errors.push(`同伴者${index + 1}のメールアドレスを確認してください。`);
       }
     });
+    if (payload.donation_amount_jpy < 0) {
+      errors.push("寄付金額を確認してください。");
+    }
+    if (payload.sponsorship_amount_jpy < 0) {
+      errors.push("協賛金額を確認してください。");
+    }
     return errors;
   }
 
@@ -213,14 +226,20 @@
       base = Math.max(0, base - noReceptionDiscount(reception));
     }
 
-    return payload.companions.reduce((sum, companion) => {
+    const companionTotal = payload.companions.reduce((sum, companion) => {
       const type = companion.attendee_type === "child" ? "child" : "adult";
       return sum + companionFees[type][reception];
     }, base);
+    return companionTotal + normalizeAmount(payload.donation_amount_jpy) + normalizeAmount(payload.sponsorship_amount_jpy);
   }
 
   function noReceptionDiscount(reception) {
     return reception === "without_reception" ? 2000 : 0;
+  }
+
+  function normalizeAmount(value) {
+    const amount = Number(value || 0);
+    return Number.isFinite(amount) && amount > 0 ? Math.round(amount) : 0;
   }
 
   function setMessage(text, kind) {

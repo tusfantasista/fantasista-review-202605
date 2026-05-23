@@ -96,6 +96,12 @@ function validateApplication(payload) {
   if (!payload.privacy_consent) {
     errors.privacy_consent = "required";
   }
+  for (const amountField of ["donation_amount_jpy", "sponsorship_amount_jpy"]) {
+    const amount = Number(payload[amountField] || 0);
+    if (!Number.isFinite(amount) || amount < 0 || !Number.isInteger(amount)) {
+      errors[amountField] = "invalid";
+    }
+  }
   if (payload.companions && !Array.isArray(payload.companions)) {
     errors.companions = "must_be_array";
   } else if (Array.isArray(payload.companions)) {

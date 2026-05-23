@@ -29,6 +29,21 @@
 
 管理画面はCloudflare Access配下での利用を前提にしています。ローカル/PreviewでAccessを使わない場合は、Cloudflare Secret `ADMIN_API_TOKEN` と同じ値を画面に入力してAPIへ送ります。staging検収中の画面上部には `TEST環境` バナーを常時表示します。
 
+## Access保護
+
+stagingのフォームと管理画面はCloudflare Accessで非公開にします。未認証のcurlで `/apply` と `/admin` が HTTP 200 になってはいけません。このブランチではPages Functions middlewareでもAccessヘッダーの有無を確認し、未認証の場合は401を返します。
+
+Access対象:
+
+- `/apply`
+- `/admin`
+- `/festa60-register/`
+- `/festa60-admin/`
+- `/api/festa60/applications`
+- `/api/festa60/admin/*`
+
+Stripe webhookだけはAccessで塞がないでください。`/api/stripe/webhook` と `/api/festa60/stripe/webhook` はStripe署名検証で保護します。署名なしPOSTはHTTP 400になるべきです。
+
 ## 申込フォームの入力方針
 
 - `期` は申込フォームと管理画面の表示項目には出しません。名簿CSVの互換性のためDB列は残します。
@@ -51,6 +66,10 @@
 - `POST /api/festa60/stripe/webhook`
   - Stripe Webhook署名を検証
   - `checkout.session.completed` で `payments` と `applications` を更新
+  - `checkout.session.expired` で未決済扱いへ更新
+  - `stripe_events` へイベントIDを保存し、同一イベントの二重処理を防止
+- `POST /api/stripe/webhook`
+  - Stripe側に設定しやすい短縮alias。処理内容は `/api/festa60/stripe/webhook` と同じ
 - `GET /api/festa60/admin/applications`
   - 申込一覧、決済状況、名簿照合状況を返す
 - `GET /api/festa60/admin/export`
@@ -83,11 +102,13 @@ db/seeds/dummy-members-staging.csv
 - `members`
 - `applications`
 - `payments`
+- `payment_line_items`
 - `companions`
 - `consents`
 - `attendance`
 - `import_batches`
 - `audit_logs`
+- `stripe_events`
 
 staging検収用D1は `festa60_staging` のみを使います。このfeatureブランチの `wrangler.jsonc` はPreview/Production named environmentを含めて `festa60_staging` に向けています。本番DBはこのブランチでは使いません。
 
@@ -153,6 +174,7 @@ Secretsにする変数:
 1. Stripe Dashboardでテストモードを有効にする
 2. `STRIPE_SECRET_KEY` に `sk_test_...` を設定
 3. Webhook endpointをPreview URLの `/api/festa60/stripe/webhook` に向ける
+   - aliasとして `/api/stripe/webhook` も利用可能
 4. `checkout.session.completed` を購読する
 5. Webhook signing secretを `STRIPE_WEBHOOK_SECRET` に設定する
 6. `/festa60-register/` からテスト申込を送る
@@ -166,12 +188,16 @@ Secretsにする変数:
 3. `npx wrangler d1 execute festa60_staging --file db/migrations/0000_create_festa60_tables.sql --remote` を実行する
 4. `npx wrangler pages deploy public --project-name fantasista-review-202605-staging --branch feature/festa60-staging-crm --commit-dirty=true` でPreview Deploymentする
 5. Cloudflare AccessでPreview URLを非公開にする
+   - `/apply` と `/admin` は未認証curlでHTTP 200にならないこと
+   - `/api/stripe/webhook` はAccess対象外にし、署名なしPOSTでHTTP 400になること
 6. `STRIPE_SECRET_KEY=sk_test_...` と `STRIPE_WEBHOOK_SECRET=whsec_test_...` をPages Preview secretに設定する
 7. `/festa60-register/` で `TEST環境` バナーが見えることを確認する
 8. 有料申込でStripe Checkoutへ遷移し、テストカードで決済する
 9. Stripe webhookで `checkout.session.completed` を受け、管理画面で `paid` になることを確認する
-10. 管理画面で申込一覧、決済状況、名簿照合、CSVエクスポート、ダミーCSV取込を確認する
-11. `git grep` で `.env`、秘密鍵、本物CSV、個人情報がGitに入っていないことを確認する
+10. Stripe Checkoutのcancel URLで戻った申込が未決済のまま管理できることを確認する
+11. 同伴者費、寄付、協賛が `payment_line_items` に保存されることを確認する
+12. 管理画面で申込一覧、決済状況、名簿照合、CSVエクスポート、ダミーCSV取込を確認する
+13. `git grep` で `.env`、秘密鍵、本物CSV、個人情報がGitに入っていないことを確認する
 
 ## 本番切替
 
