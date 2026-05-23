@@ -33,8 +33,8 @@ function hasAccessIdentity(request) {
 }
 
 function hasBypassToken(request, env) {
-  const expected = env.ACCESS_BYPASS_TOKEN;
-  const actual = request.headers.get("x-access-bypass-token");
+  const expected = env.ACCESS_BYPASS_TOKEN || env.ADMIN_API_TOKEN;
+  const actual = request.headers.get("x-access-bypass-token") || request.headers.get("x-admin-token");
   return Boolean(expected && actual && constantTimeEqual(actual, expected));
 }
 

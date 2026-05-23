@@ -32,6 +32,7 @@
 ## Access保護
 
 stagingのフォームと管理画面はCloudflare Accessで非公開にします。未認証のcurlで `/apply` と `/admin` が HTTP 200 になってはいけません。このブランチではPages Functions middlewareでもAccessヘッダーの有無を確認し、未認証の場合は401を返します。
+CLI検収だけはPreview Secretの `ACCESS_BYPASS_TOKEN`、未設定時は `ADMIN_API_TOKEN` を `x-access-bypass-token` または `x-admin-token` で送ることで通せます。この値もGitには入れません。
 
 Access対象:
 
