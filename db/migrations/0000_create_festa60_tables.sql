@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS applications (
   id TEXT PRIMARY KEY,
   application_code TEXT UNIQUE NOT NULL,
   member_id TEXT,
-  match_status TEXT NOT NULL DEFAULT 'unmatched',
+  match_status TEXT NOT NULL DEFAULT 'new_record',
   match_confidence REAL NOT NULL DEFAULT 0,
   status TEXT NOT NULL DEFAULT 'pending',
   ticket_type TEXT NOT NULL,

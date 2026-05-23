@@ -8,10 +8,11 @@ import {
   OBOG_6_10_GRADUATION_YEAR_FROM,
   OBOG_6_10_GRADUATION_YEAR_TO,
   RECEPTION_ATTENDANCE,
+  buildPaymentLineItems,
   createPayment,
   insertApplication,
+  lineItemsTotal,
   normalizeTicketType,
-  ticketAmount,
 } from "./_lib/db.js";
 import { createCheckoutSession } from "./_lib/stripe.js";
 
@@ -29,7 +30,7 @@ export async function onRequestPost({ request, env }) {
     const db = requireDb(env);
     payload.ticket_type = normalizeTicketType(payload.ticket_type);
     const companions = Array.isArray(payload.companions) ? payload.companions : [];
-    const amountTotal = ticketAmount(payload.ticket_type || "obog", companions, payload.fee_period, payload.reception_attendance);
+    const amountTotal = lineItemsTotal(buildPaymentLineItems(payload, companions));
     if (amountTotal > 0 && payload.pay_now !== false && !String(env.STRIPE_SECRET_KEY || "").startsWith("sk_test_")) {
       return badRequest("Stripe test secret is not configured. Set sk_test_... or submit with pay_now=false.");
     }
