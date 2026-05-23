@@ -11,12 +11,18 @@ Thumbs.db
 backup/
 _backup*/
 *.log
+.wrangler/
+.dev.vars
+.env
+.env.*
 
 # unpublished / private working materials
 private/
 drafts/
 memo/
 notes/
+*.csv
+!db/seeds/*.csv
 
 # git / OS
 .git/

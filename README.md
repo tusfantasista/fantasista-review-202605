@@ -27,7 +27,7 @@
 - 参加申込フォーム: `/festa60-register/`
 - 管理画面: `/festa60-admin/`
 
-管理画面はCloudflare Access配下での利用を前提にしています。ローカル/PreviewでAccessを使わない場合は、Cloudflare Secret `ADMIN_API_TOKEN` と同じ値を画面に入力してAPIへ送ります。
+管理画面はCloudflare Access配下での利用を前提にしています。ローカル/PreviewでAccessを使わない場合は、Cloudflare Secret `ADMIN_API_TOKEN` と同じ値を画面に入力してAPIへ送ります。staging検収中の画面上部には `TEST環境` バナーを常時表示します。
 
 ## 申込フォームの入力方針
 
@@ -60,16 +60,22 @@
 
 ## D1
 
-Schema:
+Fresh migration:
+
+```bash
+db/migrations/0000_create_festa60_tables.sql
+```
+
+Schema reference:
 
 ```bash
 db/schema.sql
 ```
 
-Preview seed:
+Dummy seed CSV:
 
 ```bash
-db/seed-preview.sql
+db/seeds/dummy-members-staging.csv
 ```
 
 作成するテーブル:
@@ -83,22 +89,30 @@ db/seed-preview.sql
 - `import_batches`
 - `audit_logs`
 
-DB作成例:
+staging検収用D1は `festa60_staging` のみを使います。このfeatureブランチの `wrangler.jsonc` はPreview/Production named environmentを含めて `festa60_staging` に向けています。本番DBはこのブランチでは使いません。
+
+DB作成・migration例:
 
 ```bash
-npx wrangler d1 create fantasista-review-202605-staging
-npx wrangler d1 execute fantasista-review-202605-staging --file db/schema.sql --remote
-npx wrangler d1 execute fantasista-review-202605-staging --file db/seed-preview.sql --remote
+npx wrangler d1 create festa60_staging
+npx wrangler d1 execute festa60_staging --file db/migrations/0000_create_festa60_tables.sql --remote
 ```
 
-本番DBは別名で作成してください。
+ダミー名簿CSVは管理画面またはAPIから取り込みます。本物の名簿CSVはGitに入れません。
 
 ```bash
-npx wrangler d1 create fantasista-review-202605-production
-npx wrangler d1 execute fantasista-review-202605-production --file db/schema.sql --remote
+curl -X POST "$PREVIEW_URL/api/festa60/admin/import" \
+  -H "content-type: application/json" \
+  -H "x-admin-token: $ADMIN_API_TOKEN" \
+  --data-binary @- <<'JSON'
+{
+  "file_name": "dummy-members-staging.csv",
+  "csv": "氏名,ふりがな,メールアドレス,卒部年度,所属校\nテスト 一郎,てすと いちろう,staging.member1@example.test,2022,東京理科大学"
+}
+JSON
 ```
 
-`wrangler.jsonc` の `database_id` はゼロ埋めのプレースホルダーです。CloudflareでD1を作成した後、preview/productionそれぞれの実IDへ置き換えてください。Cloudflare Pagesの設定ファイルで使えるnamed environmentは `preview` と `production` のみなので、`staging` ブランチの検証はPages Preview環境として扱います。
+Cloudflare Pagesの設定ファイルで使えるnamed environmentは `preview` と `production` のみなので、`feature/festa60-staging-crm` や `staging` ブランチの検証はPages Preview環境として扱います。
 
 ## 環境変数とSecrets
 
@@ -112,6 +126,7 @@ npx wrangler pages secret put ADMIN_API_TOKEN
 ```
 
 Preview / stagingでは `STRIPE_SECRET_KEY` が `sk_test_` で始まらない場合、Checkout作成を拒否します。
+Webhook secretも `STRIPE_WEBHOOK_SECRET` 環境変数から読みます。検収メモ上は `whsec_test_...` として管理し、コードには書きません。
 
 Production:
 
@@ -147,6 +162,20 @@ Secretsにする変数:
 6. `/festa60-register/` からテスト申込を送る
 7. StripeテストカードでCheckoutを完了する
 8. 管理画面で `payment_status = paid` と `attendance_status = confirmed` を確認する
+
+## staging検収手順
+
+1. `git branch --show-current` が `main` ではないことを確認する
+2. `wrangler.jsonc` のD1 bindingが `festa60_staging` を向いていることを確認する
+3. `npx wrangler d1 execute festa60_staging --file db/migrations/0000_create_festa60_tables.sql --remote` を実行する
+4. `npx wrangler pages deploy public --project-name fantasista-review-202605-staging --branch feature/festa60-staging-crm --commit-dirty=true` でPreview Deploymentする
+5. Cloudflare AccessでPreview URLを非公開にする
+6. `STRIPE_SECRET_KEY=sk_test_...` と `STRIPE_WEBHOOK_SECRET=whsec_test_...` をPages Preview secretに設定する
+7. `/festa60-register/` で `TEST環境` バナーが見えることを確認する
+8. 有料申込でStripe Checkoutへ遷移し、テストカードで決済する
+9. Stripe webhookで `checkout.session.completed` を受け、管理画面で `paid` になることを確認する
+10. 管理画面で申込一覧、決済状況、名簿照合、CSVエクスポート、ダミーCSV取込を確認する
+11. `git grep` で `.env`、秘密鍵、本物CSV、個人情報がGitに入っていないことを確認する
 
 ## 本番切替
 

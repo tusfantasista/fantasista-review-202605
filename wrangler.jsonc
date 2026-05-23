@@ -9,8 +9,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "fantasista-review-202605-preview",
-      "database_id": "a6613799-82cf-4af8-9224-5231ab788c62"
+      "database_name": "festa60_staging",
+      "database_id": "b7b6640d-a39f-49fc-b8e1-f4d286129911"
     }
   ],
   "env": {
@@ -21,8 +21,8 @@
       "d1_databases": [
         {
           "binding": "DB",
-          "database_name": "fantasista-review-202605-preview",
-          "database_id": "a6613799-82cf-4af8-9224-5231ab788c62"
+          "database_name": "festa60_staging",
+          "database_id": "b7b6640d-a39f-49fc-b8e1-f4d286129911"
         }
       ]
     },
@@ -33,8 +33,8 @@
       "d1_databases": [
         {
           "binding": "DB",
-          "database_name": "fantasista-review-202605-production",
-          "database_id": "66492b51-c11b-4b67-8f25-228c5618927f"
+          "database_name": "festa60_staging",
+          "database_id": "b7b6640d-a39f-49fc-b8e1-f4d286129911"
         }
       ]
     }

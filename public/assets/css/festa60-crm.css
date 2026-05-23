@@ -23,6 +23,18 @@ body.festa60-crm {
   line-height: 1.7;
 }
 
+.crm-test-banner {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 10px 16px;
+  color: #fff;
+  background: #b42318;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
 .crm-shell {
   width: min(1120px, calc(100vw - 40px));
   margin: 0 auto;
