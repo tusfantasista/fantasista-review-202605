@@ -7,7 +7,9 @@ export async function onRequestGet({ env }) {
     environment: environmentName(env),
     is_production: isProduction(env),
     turnstile_site_key: env.TURNSTILE_SITE_KEY || "",
-    stripe_mode: isProduction(env) ? "live" : "test",
+    payment_mode: "bank_transfer",
+    payment_provider: "manual",
+    stripe_mode: "disabled",
   });
 }
 

@@ -1,6 +1,5 @@
 import { badRequest, getClientMeta, json, methodNotAllowed, readJson, serverError } from "./_lib/http.js";
-import { applicationCode } from "./_lib/ids.js";
-import { publicBaseUrl, requireDb } from "./_lib/env.js";
+import { requireDb } from "./_lib/env.js";
 import { verifyTurnstile } from "./_lib/turnstile.js";
 import {
   FEE_PERIODS,
@@ -8,13 +7,10 @@ import {
   OBOG_6_10_GRADUATION_YEAR_FROM,
   OBOG_6_10_GRADUATION_YEAR_TO,
   RECEPTION_ATTENDANCE,
-  buildPaymentLineItems,
-  createPayment,
   insertApplication,
-  lineItemsTotal,
   normalizeTicketType,
 } from "./_lib/db.js";
-import { createCheckoutSession } from "./_lib/stripe.js";
+import { bankTransferGuide, maybeSendEmail, renderApplicationReceiptEmail } from "./_lib/email.js";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -29,45 +25,34 @@ export async function onRequestPost({ request, env }) {
 
     const db = requireDb(env);
     payload.ticket_type = normalizeTicketType(payload.ticket_type);
-    const companions = Array.isArray(payload.companions) ? payload.companions : [];
-    const amountTotal = lineItemsTotal(buildPaymentLineItems(payload, companions));
-    if (amountTotal > 0 && payload.pay_now !== false && !String(env.STRIPE_SECRET_KEY || "").startsWith("sk_test_")) {
-      return badRequest("Stripe test secret is not configured. Set sk_test_... or submit with pay_now=false.");
-    }
-
     const application = await insertApplication(
       db,
       {
         ...payload,
-        application_code: applicationCode(),
         ticket_type: payload.ticket_type || "obog",
       },
       getClientMeta(request),
     );
-
-    let checkout = null;
-    if (application.amount_total > 0 && payload.pay_now !== false) {
-      const checkoutResult = await createCheckoutSession({
-        env,
-        request,
-        application: {
-          ...application,
-          email: payload.email,
-          ticket_type: payload.ticket_type || "obog",
-        },
-        baseUrl: publicBaseUrl(env, request),
-      });
-      await createPayment(db, { ...application, ticket_type: payload.ticket_type || "obog" }, checkoutResult.session, checkoutResult.metadata);
-      checkout = {
-        id: checkoutResult.session.id,
-        url: checkoutResult.session.url,
-      };
-    }
+    const applicationForMail = {
+      ...application,
+      full_name: payload.full_name,
+      email: payload.email,
+      quantity: application.quantity,
+    };
+    const receiptEmail = renderApplicationReceiptEmail(applicationForMail, env);
+    const emailDelivery = await maybeSendEmail(env, receiptEmail);
 
     return json({
       ok: true,
       application,
-      checkout,
+      payment: bankTransferGuide(applicationForMail, env),
+      receipt_email: {
+        sent: emailDelivery.sent,
+        skipped: emailDelivery.skipped,
+        reason: emailDelivery.reason || null,
+        subject: receiptEmail.subject,
+        body: emailDelivery.sent ? undefined : receiptEmail.body,
+      },
       turnstile_skipped: Boolean(turnstile.skipped),
     });
   } catch (error) {
@@ -102,6 +87,9 @@ function validateApplication(payload) {
     if (!Number.isFinite(amount) || amount < 0 || !Number.isInteger(amount)) {
       errors[amountField] = "invalid";
     }
+  }
+  if (payload.expected_transfer_name && String(payload.expected_transfer_name).length > 120) {
+    errors.expected_transfer_name = "too_long";
   }
   if (payload.companions && !Array.isArray(payload.companions)) {
     errors.companions = "must_be_array";

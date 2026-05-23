@@ -22,6 +22,12 @@ CREATE INDEX IF NOT EXISTS idx_members_email ON members (email);
 CREATE INDEX IF NOT EXISTS idx_members_name ON members (full_name, full_name_kana);
 CREATE INDEX IF NOT EXISTS idx_members_generation ON members (generation, graduation_year);
 
+CREATE TABLE IF NOT EXISTS application_sequences (
+  name TEXT PRIMARY KEY,
+  last_value INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS applications (
   id TEXT PRIMARY KEY,
   application_code TEXT UNIQUE NOT NULL,
@@ -34,7 +40,11 @@ CREATE TABLE IF NOT EXISTS applications (
   reception_attendance TEXT,
   attendance_status TEXT NOT NULL DEFAULT 'pending',
   payment_status TEXT NOT NULL DEFAULT 'unpaid',
+  payment_method TEXT NOT NULL DEFAULT 'bank_transfer',
+  payment_provider TEXT NOT NULL DEFAULT 'manual',
+  external_payment_id TEXT,
   total_amount_jpy INTEGER NOT NULL DEFAULT 0,
+  quantity INTEGER NOT NULL DEFAULT 1,
   full_name TEXT NOT NULL,
   full_name_kana TEXT,
   maiden_name TEXT,
@@ -47,9 +57,14 @@ CREATE TABLE IF NOT EXISTS applications (
   postal_code TEXT,
   address TEXT,
   companion_count INTEGER NOT NULL DEFAULT 0,
+  expected_transfer_name TEXT,
+  actual_transfer_name TEXT,
   message TEXT,
   admin_note TEXT,
   source TEXT NOT NULL DEFAULT 'public_form',
+  paid_at TEXT,
+  cancelled_at TEXT,
+  refunded_at TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY (member_id) REFERENCES members(id)
@@ -58,6 +73,7 @@ CREATE TABLE IF NOT EXISTS applications (
 CREATE INDEX IF NOT EXISTS idx_applications_member_id ON applications (member_id);
 CREATE INDEX IF NOT EXISTS idx_applications_email ON applications (email);
 CREATE INDEX IF NOT EXISTS idx_applications_payment_status ON applications (payment_status);
+CREATE INDEX IF NOT EXISTS idx_applications_payment_method ON applications (payment_method, payment_provider);
 CREATE INDEX IF NOT EXISTS idx_applications_attendance_status ON applications (attendance_status);
 
 CREATE TABLE IF NOT EXISTS payments (
@@ -70,11 +86,17 @@ CREATE TABLE IF NOT EXISTS payments (
   amount_total INTEGER NOT NULL DEFAULT 0,
   currency TEXT NOT NULL DEFAULT 'jpy',
   status TEXT NOT NULL DEFAULT 'created',
+  payment_method TEXT NOT NULL DEFAULT 'bank_transfer',
+  payment_provider TEXT NOT NULL DEFAULT 'manual',
+  external_payment_id TEXT,
+  actual_transfer_name TEXT,
   ticket_type TEXT NOT NULL,
   stripe_event_id TEXT,
   metadata_json TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   paid_at TEXT,
+  cancelled_at TEXT,
+  refunded_at TEXT,
   updated_at TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY (application_id) REFERENCES applications(id),
   FOREIGN KEY (member_id) REFERENCES members(id)
@@ -82,6 +104,7 @@ CREATE TABLE IF NOT EXISTS payments (
 
 CREATE INDEX IF NOT EXISTS idx_payments_application_id ON payments (application_id);
 CREATE INDEX IF NOT EXISTS idx_payments_status ON payments (status);
+CREATE INDEX IF NOT EXISTS idx_payments_method_provider ON payments (payment_method, payment_provider);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_payments_stripe_event_id ON payments (stripe_event_id) WHERE stripe_event_id IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS payment_line_items (

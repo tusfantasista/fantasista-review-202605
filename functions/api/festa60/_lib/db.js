@@ -2,6 +2,9 @@ import { newId, nowIso } from "./ids.js";
 
 export const FEE_PERIODS = ["early", "year_end", "regular"];
 export const RECEPTION_ATTENDANCE = ["attending", "without_reception"];
+export const PAYMENT_METHODS = ["bank_transfer", "card", "convenience_store", "paypay"];
+export const PAYMENT_PROVIDERS = ["manual", "stripe", "payjp", "komoju"];
+export const PAYMENT_STATUSES = ["unpaid", "pending", "paid", "cancelled", "refunded"];
 
 export const OBOG_6_10_GRADUATION_YEAR_FROM = 2016;
 export const OBOG_6_10_GRADUATION_YEAR_TO = 2020;
@@ -156,20 +159,25 @@ export async function findMemberMatch(db, payload) {
 export async function insertApplication(db, payload, requestMeta = {}) {
   const match = await findMemberMatch(db, payload);
   const id = newId("app");
-  const applicationCode = payload.application_code || `F60-${Date.now().toString(36).toUpperCase()}`;
+  const applicationCode = payload.application_code || (await nextApplicationCode(db));
   const companions = Array.isArray(payload.companions) ? payload.companions.filter((item) => item.full_name) : [];
   const lineItems = buildPaymentLineItems(payload, companions);
   const totalAmountJpy = lineItemsTotal(lineItems);
+  const quantity = 1 + companions.length;
+  const paymentStatus = totalAmountJpy > 0 ? "unpaid" : "paid";
+  const paidAt = paymentStatus === "paid" ? nowIso() : null;
   const now = nowIso();
 
   await db
     .prepare(
       `INSERT INTO applications (
         id, application_code, member_id, match_status, match_confidence, status, ticket_type, fee_period, reception_attendance,
-        attendance_status, payment_status, total_amount_jpy, full_name, full_name_kana, maiden_name,
+        attendance_status, payment_status, payment_method, payment_provider, external_payment_id, total_amount_jpy, quantity,
+        full_name, full_name_kana, maiden_name,
         email, phone, graduation_year, generation, school_lineage, dance_role,
-        postal_code, address, companion_count, message, source, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        postal_code, address, companion_count, expected_transfer_name, actual_transfer_name, message, source,
+        paid_at, cancelled_at, refunded_at, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       id,
@@ -177,13 +185,17 @@ export async function insertApplication(db, payload, requestMeta = {}) {
       match.member?.id || null,
       match.status,
       match.confidence,
-      totalAmountJpy > 0 ? "payment_pending" : "confirmed",
+      totalAmountJpy > 0 ? "pending" : "confirmed",
       normalizeTicketType(payload.ticket_type),
       payload.fee_period || "regular",
       payload.reception_attendance || "attending",
       totalAmountJpy > 0 ? "pending" : "confirmed",
-      totalAmountJpy > 0 ? "unpaid" : "not_required",
+      paymentStatus,
+      "bank_transfer",
+      "manual",
+      payload.external_payment_id || null,
       totalAmountJpy,
+      quantity,
       payload.full_name,
       payload.full_name_kana || null,
       payload.maiden_name || null,
@@ -196,8 +208,13 @@ export async function insertApplication(db, payload, requestMeta = {}) {
       payload.postal_code || null,
       payload.address || null,
       companions.length,
+      payload.expected_transfer_name || null,
+      payload.actual_transfer_name || null,
       payload.message || null,
       payload.source || "public_form",
+      paidAt,
+      null,
+      null,
       now,
       now,
     )
@@ -278,16 +295,89 @@ export async function insertApplication(db, payload, requestMeta = {}) {
     ...requestMeta,
   });
 
+  const paymentId = await createManualPayment(db, {
+    id,
+    member_id: match.member?.id || null,
+    amount_total: totalAmountJpy,
+    payment_status: paymentStatus,
+    ticket_type: normalizeTicketType(payload.ticket_type),
+    paid_at: paidAt,
+  });
+
   return {
     id,
     application_code: applicationCode,
+    applicationId: applicationCode,
     member_id: match.member?.id || null,
     match_status: match.status,
     match_confidence: match.confidence,
+    quantity,
     amount_total: totalAmountJpy,
     total_amount_jpy: totalAmountJpy,
+    amount: totalAmountJpy,
+    payment_method: "bank_transfer",
+    payment_provider: "manual",
+    payment_status: paymentStatus,
+    paymentMethod: "bank_transfer",
+    paymentProvider: "manual",
+    paymentStatus,
+    expected_transfer_name: payload.expected_transfer_name || null,
+    expectedTransferName: payload.expected_transfer_name || null,
+    paid_at: paidAt,
+    payment_id: paymentId,
     line_items: lineItems,
   };
+}
+
+export async function nextApplicationCode(db) {
+  await db
+    .prepare("INSERT OR IGNORE INTO application_sequences (name, last_value, updated_at) VALUES (?, ?, ?)")
+    .bind("festa60", 0, nowIso())
+    .run();
+
+  const row = await db
+    .prepare("UPDATE application_sequences SET last_value = last_value + 1, updated_at = ? WHERE name = ? RETURNING last_value")
+    .bind(nowIso(), "festa60")
+    .first();
+
+  if (!row?.last_value) throw new Error("Failed to issue Festa 60 application number.");
+  return `FESTA-${String(row.last_value).padStart(6, "0")}`;
+}
+
+export async function createManualPayment(db, application) {
+  const now = nowIso();
+  const paymentId = newId("pay");
+  await db
+    .prepare(
+      `INSERT INTO payments (
+        id, application_id, member_id, amount_total, currency, status, payment_method, payment_provider,
+        external_payment_id, ticket_type, metadata_json, created_at, paid_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    )
+    .bind(
+      paymentId,
+      application.id,
+      application.member_id || null,
+      application.amount_total || 0,
+      "jpy",
+      application.payment_status || "unpaid",
+      "bank_transfer",
+      "manual",
+      null,
+      application.ticket_type,
+      JSON.stringify({ application_id: application.id, method: "bank_transfer", provider: "manual" }),
+      now,
+      application.paid_at || null,
+      now,
+    )
+    .run();
+
+  await db
+    .prepare("UPDATE payment_line_items SET payment_id = ? WHERE application_id = ?")
+    .bind(paymentId, application.id)
+    .run();
+
+  return paymentId;
 }
 
 export async function createPayment(db, application, session, metadata) {
@@ -355,7 +445,7 @@ export async function markCheckoutCompleted(db, session, stripeEventId) {
   const now = nowIso();
   const applicationId = session.metadata?.application_id;
   const memberId = session.metadata?.member_id || null;
-  const status = session.payment_status === "paid" ? "paid" : "processing";
+  const status = session.payment_status === "paid" ? "paid" : "pending";
 
   await db
     .prepare(
@@ -404,13 +494,13 @@ export async function markCheckoutExpired(db, session, stripeEventId) {
        SET status = ?, stripe_event_id = ?, updated_at = ?
        WHERE stripe_checkout_session_id = ?`,
     )
-    .bind("expired", stripeEventId || null, now, session.id)
+    .bind("cancelled", stripeEventId || null, now, session.id)
     .run();
 
   if (applicationId) {
     await db
       .prepare("UPDATE applications SET payment_status = ?, status = ?, attendance_status = ?, updated_at = ? WHERE id = ?")
-      .bind("expired", "payment_pending", "pending", now, applicationId)
+      .bind("cancelled", "cancelled", "pending", now, applicationId)
       .run();
   }
 
@@ -419,19 +509,113 @@ export async function markCheckoutExpired(db, session, stripeEventId) {
     action: "payment.checkout_expired",
     target_type: "application",
     target_id: applicationId || session.id,
-    details_json: JSON.stringify({ checkout_session_id: session.id, payment_status: "expired" }),
+    details_json: JSON.stringify({ checkout_session_id: session.id, payment_status: "cancelled" }),
   });
+}
+
+export async function getApplicationById(db, applicationId) {
+  return db
+    .prepare(
+      `SELECT
+        a.id, a.application_code, a.member_id, a.full_name, a.email, a.phone,
+        a.quantity, a.companion_count, a.ticket_type, a.fee_period, a.reception_attendance,
+        a.payment_status, a.payment_method, a.payment_provider, a.external_payment_id,
+        a.expected_transfer_name, a.actual_transfer_name, a.admin_note, a.total_amount_jpy,
+        a.status, a.attendance_status, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at
+       FROM applications a
+       WHERE a.id = ? OR a.application_code = ?
+       LIMIT 1`,
+    )
+    .bind(applicationId, applicationId)
+    .first();
+}
+
+export async function updateApplicationPaymentStatus(db, applicationId, update, requestMeta = {}) {
+  const nextStatus = normalizePaymentStatus(update.payment_status || update.paymentStatus);
+  const now = nowIso();
+  const current = await getApplicationById(db, applicationId);
+  if (!current) return null;
+
+  const paidAt = nextStatus === "paid" ? now : current.paid_at || null;
+  const cancelledAt = nextStatus === "cancelled" ? now : current.cancelled_at || null;
+  const refundedAt = nextStatus === "refunded" ? now : current.refunded_at || null;
+  const applicationStatus = applicationStatusForPayment(nextStatus);
+  const attendanceStatus = nextStatus === "paid" ? "confirmed" : current.attendance_status || "pending";
+  const actualTransferName = update.actual_transfer_name || update.actualTransferName || current.actual_transfer_name || null;
+  const externalPaymentId = update.external_payment_id || update.externalPaymentId || current.external_payment_id || null;
+  const adminNote = update.admin_note || update.adminNote || current.admin_note || null;
+
+  await db
+    .prepare(
+      `UPDATE applications
+       SET payment_status = ?, status = ?, attendance_status = ?, actual_transfer_name = ?,
+           external_payment_id = ?, admin_note = ?, paid_at = ?, cancelled_at = ?, refunded_at = ?, updated_at = ?
+       WHERE id = ?`,
+    )
+    .bind(
+      nextStatus,
+      applicationStatus,
+      attendanceStatus,
+      actualTransferName,
+      externalPaymentId,
+      adminNote,
+      paidAt,
+      cancelledAt,
+      refundedAt,
+      now,
+      current.id,
+    )
+    .run();
+
+  await db
+    .prepare(
+      `UPDATE payments
+       SET status = ?, actual_transfer_name = ?, external_payment_id = ?, paid_at = ?, cancelled_at = ?, refunded_at = ?, updated_at = ?
+       WHERE application_id = ? AND payment_provider = 'manual'`,
+    )
+    .bind(nextStatus, actualTransferName, externalPaymentId, paidAt, cancelledAt, refundedAt, now, current.id)
+    .run();
+
+  await audit(db, {
+    actor: update.actor || "admin",
+    action: `payment.${nextStatus}`,
+    target_type: "application",
+    target_id: current.id,
+    details_json: JSON.stringify({
+      application_code: current.application_code,
+      payment_status: nextStatus,
+      external_payment_id: externalPaymentId ? "set" : "empty",
+    }),
+    ...requestMeta,
+  });
+
+  return getApplicationById(db, current.id);
+}
+
+function normalizePaymentStatus(status) {
+  if (!PAYMENT_STATUSES.includes(status)) throw new Error("Invalid payment status.");
+  return status;
+}
+
+function applicationStatusForPayment(paymentStatus) {
+  if (paymentStatus === "paid") return "confirmed";
+  if (paymentStatus === "cancelled") return "cancelled";
+  if (paymentStatus === "refunded") return "refunded";
+  return "pending";
 }
 
 export async function listApplications(db) {
   const result = await db
     .prepare(
       `SELECT
-        a.id, a.application_code, a.full_name, a.full_name_kana, a.email,
+        a.id, a.application_code, a.full_name, a.full_name_kana, a.email, a.phone,
         a.graduation_year, a.ticket_type, a.fee_period, a.reception_attendance, a.companion_count, a.match_status,
-        a.match_confidence, a.status, a.payment_status, a.attendance_status, a.total_amount_jpy, a.created_at,
+        a.quantity, a.expected_transfer_name, a.actual_transfer_name,
+        a.match_confidence, a.status, a.payment_status, a.payment_method, a.payment_provider, a.external_payment_id,
+        a.admin_note, a.attendance_status, a.total_amount_jpy, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at,
         m.member_code, m.full_name AS matched_member_name,
         p.stripe_checkout_session_id, p.status AS latest_payment_status, p.amount_total,
+        p.payment_method AS latest_payment_method, p.payment_provider AS latest_payment_provider,
         (
           SELECT COALESCE(SUM(
             CASE
@@ -446,13 +630,30 @@ export async function listApplications(db) {
         ) AS companion_fee_total
        FROM applications a
        LEFT JOIN members m ON m.id = a.member_id
-       LEFT JOIN payments p ON p.application_id = a.id
+       LEFT JOIN payments p ON p.id = (
+        SELECT id FROM payments
+        WHERE application_id = a.id
+        ORDER BY created_at DESC
+        LIMIT 1
+       )
        ORDER BY a.created_at DESC
        LIMIT 500`,
     )
     .all();
   return (result.results || []).map((row) => ({
     ...row,
+    applicationId: row.application_code,
+    name: row.full_name,
+    quantity: row.quantity || 1 + Number(row.companion_count || 0),
+    amount: row.total_amount_jpy ?? row.amount_total ?? expectedApplicationAmount(row),
+    paymentMethod: row.payment_method || row.latest_payment_method || "bank_transfer",
+    paymentProvider: row.payment_provider || row.latest_payment_provider || "manual",
+    paymentStatus: row.payment_status,
+    externalPaymentId: row.external_payment_id || "",
+    expectedTransferName: row.expected_transfer_name || "",
+    actualTransferName: row.actual_transfer_name || "",
+    adminNote: row.admin_note || "",
+    paidAt: row.paid_at || "",
     amount_total: row.amount_total ?? row.total_amount_jpy ?? expectedApplicationAmount(row),
   }));
 }

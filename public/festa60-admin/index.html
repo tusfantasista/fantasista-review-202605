@@ -12,7 +12,7 @@
     <main class="crm-shell">
       <section class="crm-hero">
         <span class="crm-kicker">FESTA 60 CRM</span>
-        <h1>申込・決済・名簿照合</h1>
+        <h1>申込・入金・名簿照合</h1>
         <p>Cloudflare Access配下で使うstaging管理画面です。Access未設定のローカル/Preview検証では、Cloudflare Secretの <code>ADMIN_API_TOKEN</code> と同じ値を入力します。</p>
       </section>
 
@@ -22,24 +22,47 @@
             <label for="admin-token">管理トークン</label>
             <input id="admin-token" class="crm-token" type="password" autocomplete="off" />
           </div>
+          <div class="crm-field">
+            <label for="payment-filter">支払ステータス</label>
+            <select id="payment-filter">
+              <option value="">すべて</option>
+              <option value="unpaid">未入金のみ</option>
+              <option value="paid">入金済みのみ</option>
+              <option value="cancelled">キャンセルのみ</option>
+              <option value="refunded">返金済みのみ</option>
+            </select>
+          </div>
           <button id="load-applications" class="crm-button" type="button">申込一覧を読み込む</button>
           <button id="export-csv" class="crm-button crm-button--ghost" type="button">CSVエクスポート</button>
         </div>
         <p id="admin-message" class="crm-message" hidden></p>
+        <div id="email-draft" class="crm-email-draft" hidden>
+          <h3>参加確定メール</h3>
+          <p class="crm-small">入金済みにした申込のメール本文です。メール送信プロバイダ未設定時は、この本文を使って手動送信できます。</p>
+          <div class="crm-field">
+            <label for="email-subject">件名</label>
+            <input id="email-subject" readonly />
+          </div>
+          <div class="crm-field">
+            <label for="email-body">本文</label>
+            <textarea id="email-body" readonly></textarea>
+          </div>
+          <a id="email-mailto" class="crm-button crm-button--ghost" href="#">メール作成</a>
+        </div>
         <div class="crm-table-wrap">
           <table class="crm-table">
             <thead>
               <tr>
                 <th>受付番号</th>
-                <th>氏名</th>
-                <th>卒部年度</th>
-                <th>会費区分</th>
-                <th>入金/懇親会</th>
-                <th>名簿照合</th>
-                <th>決済</th>
-                <th>参加</th>
+                <th>氏名・連絡先</th>
+                <th>人数</th>
                 <th>金額</th>
-                <th>申込日時</th>
+                <th>振込名義</th>
+                <th>支払方法</th>
+                <th>支払ステータス</th>
+                <th>名簿照合</th>
+                <th>日時</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody id="applications-body">

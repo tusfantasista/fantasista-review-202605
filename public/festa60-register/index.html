@@ -13,12 +13,20 @@
       <section class="crm-hero">
         <span class="crm-kicker">FESTA 60 Staging</span>
         <h1>60周年記念FESTA 参加申込</h1>
-        <p>この画面はCloudflare Pages Previewでの検証用です。個人情報・本番Stripeキー・本番名簿は使わず、staging用D1とStripeテストモードで動作確認します。</p>
+        <p>この画面はCloudflare Pages Previewでの検証用です。現時点ではオンライン決済を使わず、銀行振込のみで申込受付と入金管理を行います。</p>
       </section>
 
       <div class="crm-grid">
         <form id="festa60-form" class="crm-card crm-stack">
           <h2>申込内容</h2>
+          <div class="crm-notice">
+            <h3>お支払い方法</h3>
+            <p>お支払い方法は、現在銀行振込のみとなります。</p>
+            <p>お申し込み後、受付番号とお振込先をメールにてご案内します。入金確認をもって、参加確定とさせていただきます。</p>
+            <p>お振込みの際は、確認のため、振込名義に受付番号とお名前をご入力ください。</p>
+            <p class="crm-example">例：FESTA-000123 ナカツタカフミ</p>
+            <p>振込手数料は参加者様のご負担となります。お申し込み日から7日以内にご入金が確認できない場合、お申し込みをキャンセル扱いとさせていただく場合があります。</p>
+          </div>
           <div class="crm-two">
             <div class="crm-field">
               <label for="full_name">氏名 <span class="crm-required">必須</span></label>
@@ -97,6 +105,12 @@
 
           <div id="companions" class="crm-stack"></div>
 
+          <div class="crm-field">
+            <label for="expected_transfer_name">振込名義予定 <span class="crm-optional">任意</span></label>
+            <input id="expected_transfer_name" name="expected_transfer_name" maxlength="120" placeholder="例: FESTA-000123 ナカツタカフミ" />
+            <p class="crm-help">お振込み時の名義が申込者名と異なる場合は、予定されている振込名義をご入力ください。</p>
+          </div>
+
           <div class="crm-two">
             <div class="crm-field">
               <label for="donation_amount_jpy">寄付金額 <span class="crm-optional">任意</span></label>
@@ -128,8 +142,15 @@
             <span>当日の撮影・記録に関する案内を確認しました。</span>
           </label>
 
+          <div class="crm-notice crm-notice--plain">
+            <h3>キャンセル・返金について</h3>
+            <p>キャンセルをご希望の場合は、問い合わせ先までご連絡ください。</p>
+            <p>開催7日前までのキャンセルは返金対応いたします。それ以降のキャンセルについては、原則として返金いたしかねます。</p>
+            <p>返金時の振込手数料は参加者様のご負担となります。</p>
+          </div>
+
           <div id="turnstile-slot"></div>
-          <button class="crm-button" type="submit">申込してテスト決済へ進む</button>
+          <button class="crm-button" type="submit">申込する</button>
           <p id="form-message" class="crm-message" hidden></p>
         </form>
 
@@ -138,12 +159,42 @@
           <p class="crm-small">このページは本番導線には出さず、Cloudflare Pages PreviewとAccessで非公開にする想定です。</p>
           <ul class="crm-small">
             <li>D1 binding: <code>DB</code></li>
-            <li>Preview Stripe: <code>sk_test_...</code> のみ許可</li>
-            <li>Stripe本番キーはこのTEST環境では使用不可</li>
+            <li>現在の支払い方法: <code>bank_transfer</code></li>
+            <li>現在の支払いプロバイダ: <code>manual</code></li>
+            <li>将来のオンライン決済IDは <code>externalPaymentId</code> に分離して保存</li>
             <li>Turnstile secret未設定時はローカル検証用にskip</li>
           </ul>
         </aside>
       </div>
+
+      <section id="completion-panel" class="crm-section crm-stack" hidden>
+        <h2>お申し込みありがとうございます。</h2>
+        <p>受付番号を発行しました。ご登録いただいたメールアドレス宛に、受付番号とお振込先をお送りしています。</p>
+        <p>入金確認後、参加確定メールをお送りします。</p>
+        <p>お振込みの際は、振込名義に受付番号とお名前をご入力ください。</p>
+        <dl class="crm-summary">
+          <div>
+            <dt>受付番号</dt>
+            <dd id="complete-application-id"></dd>
+          </div>
+          <div>
+            <dt>お支払金額</dt>
+            <dd id="complete-amount"></dd>
+          </div>
+          <div>
+            <dt>支払方法</dt>
+            <dd>銀行振込</dd>
+          </div>
+          <div>
+            <dt>振込名義例</dt>
+            <dd id="complete-transfer-name"></dd>
+          </div>
+          <div>
+            <dt>振込先</dt>
+            <dd id="complete-bank-info"></dd>
+          </div>
+        </dl>
+      </section>
     </main>
     <script src="../assets/js/festa60-register.js" defer></script>
   </body>

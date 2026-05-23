@@ -193,6 +193,53 @@ body.festa60-crm {
   font-weight: 900;
 }
 
+.crm-notice {
+  display: grid;
+  gap: 8px;
+  border: 1px solid rgba(198, 154, 24, 0.28);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fffaf0;
+}
+
+.crm-notice h3,
+.crm-notice p {
+  margin: 0;
+}
+
+.crm-notice--plain {
+  background: #fff;
+}
+
+.crm-example {
+  color: #6f5600;
+  font-weight: 900;
+}
+
+.crm-summary {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.crm-summary div {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 12px;
+  border-bottom: 1px solid var(--crm-line);
+  padding-bottom: 10px;
+}
+
+.crm-summary dt {
+  color: #6f5600;
+  font-weight: 900;
+}
+
+.crm-summary dd {
+  margin: 0;
+  font-weight: 800;
+}
+
 .crm-check {
   display: flex;
   gap: 10px;
@@ -268,7 +315,7 @@ body.festa60-crm {
 
 .crm-table {
   width: 100%;
-  min-width: 860px;
+  min-width: 1180px;
   border-collapse: collapse;
   background: #fff;
 }
@@ -295,6 +342,44 @@ body.festa60-crm {
 .crm-import-box {
   min-height: 180px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.crm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.crm-mini-button {
+  min-height: 32px;
+  border: 1px solid var(--crm-line);
+  border-radius: 999px;
+  padding: 0 10px;
+  color: var(--crm-ink);
+  background: #fff;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.crm-mini-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.crm-email-draft {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+  border: 1px solid var(--crm-line);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.crm-email-draft[hidden] {
+  display: none;
 }
 
 @media (max-width: 760px) {

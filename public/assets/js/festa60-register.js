@@ -7,6 +7,7 @@
   const feePeriod = document.getElementById("fee_period");
   const receptionAttendance = document.getElementById("reception_attendance");
   const feePreview = document.getElementById("fee-preview");
+  const completionPanel = document.getElementById("completion-panel");
   let turnstileToken = "";
   const obogSixTenFrom = 2016;
   const obogSixTenTo = 2020;
@@ -72,7 +73,7 @@
         throw new Error(clientErrors.join("\n"));
       }
       payload.turnstile_token = turnstileToken;
-      payload.pay_now = true;
+      payload.pay_now = false;
 
       const response = await fetch("/api/festa60/applications", {
         method: "POST",
@@ -84,15 +85,12 @@
         throw new Error(result.message || result.error || "送信に失敗しました。");
       }
 
-      if (result.checkout && result.checkout.url) {
-        setMessage("申込を保存しました。Stripe Checkoutへ移動します。", "success");
-        location.href = result.checkout.url;
-        return;
-      }
-
-      setMessage(`申込を保存しました。受付番号: ${result.application.application_code}`, "success");
+      renderCompletion(result, payload);
+      setMessage(`申込を保存しました。受付番号: ${result.application.applicationId || result.application.application_code}`, "success");
       form.reset();
       renderCompanions();
+      completionPanel.hidden = false;
+      completionPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
       setMessage(error.message, "error");
     } finally {
@@ -150,6 +148,7 @@
     payload.photo_consent = data.has("photo_consent");
     payload.donation_amount_jpy = normalizeAmount(payload.donation_amount_jpy);
     payload.sponsorship_amount_jpy = normalizeAmount(payload.sponsorship_amount_jpy);
+    payload.expected_transfer_name = String(payload.expected_transfer_name || "").trim();
     const count = Number(payload.companion_count || 0);
     payload.companions = [];
     for (let index = 0; index < count; index += 1) {
@@ -246,5 +245,34 @@
     message.hidden = false;
     message.textContent = text;
     message.dataset.kind = kind;
+  }
+
+  function renderCompletion(result, payload) {
+    const application = result.application || {};
+    const payment = result.payment || {};
+    const applicationId = application.applicationId || application.application_code || payment.applicationId || "";
+    const amount = Number(application.amount || application.total_amount_jpy || payment.amount || 0);
+    const transferName = payment.transferNameExample || `${applicationId} ${payload.full_name}`.trim();
+    const bank = payment.bankInfo || {};
+    document.getElementById("complete-application-id").textContent = applicationId;
+    document.getElementById("complete-amount").textContent = `${amount.toLocaleString("ja-JP")}円`;
+    document.getElementById("complete-transfer-name").textContent = transferName;
+    document.getElementById("complete-bank-info").innerHTML = [
+      `銀行名：${escapeHtml(bank.bankName || "銀行名未設定")}`,
+      `支店名：${escapeHtml(bank.branchName || "支店名未設定")}`,
+      `口座種別：${escapeHtml(bank.accountType || "口座種別未設定")}`,
+      `口座番号：${escapeHtml(bank.accountNumber || "口座番号未設定")}`,
+      `口座名義：${escapeHtml(bank.accountName || "口座名義未設定")}`,
+    ].join("<br>");
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    })[char]);
   }
 })();
