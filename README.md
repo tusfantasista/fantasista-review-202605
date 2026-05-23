@@ -1,63 +1,66 @@
-# FANTASISTA 60周年FESTA フォーム運用メモ
+# FANTASISTA サイト構成メモ
 
-## 現在の静的フォーム運用
+このリポジトリは、FANTASISTA会の仮公式サイトと、60周年記念FESTA関連ページを管理します。
 
-- GitHub Pages公開時は、`assets/js/site.js` の `data-mailto-form` 処理で入力内容からメール件名・本文を生成します。
-- 入力内容はブラウザ上でメール本文に変換するだけで、GitHubリポジトリや公開サイト内には保存しません。
-- メールソフトが開けない場合に備え、確認欄から本文をコピーできるようにしています。
-- 将来Netlify Forms、Google Forms、Supabase、Airtable、CRM APIへ移行する場合は、HTMLの `name` 属性を取り込み項目として使い、送信処理だけを差し替えます。
-- 管理項目（`obog_master_id`、`payment_status` など）はユーザー入力フォームには出さず、CSV出力後またはCRM側で付与します。
+## 公式ページ
 
-## Netlify Forms
+以下の2つを、外部共有用の仮公式ページとして扱います。
+
+- GitHub Pages: `https://tusfantasista.github.io/fantasista-review-202605/`
+- Cloudflare Workers: `https://fantasista-review-202605.tus-fantasista.workers.dev/`
+
+どちらも同じ静的サイトを表示する想定です。公開対象は `public/` 配下のみです。
+
+## ページの役割
+
+| パス | 役割 | 公開方針 |
+|---|---|---|
+| `/` | FANTASISTA会の仮公式トップ | 外部共有可 |
+| `/festa-60th/` | 60周年記念FESTA特設サイト | 外部共有前提の仮公式ページ |
+| `/festa-60th/#entry` | 60周年FESTAの参加意向登録 | 現時点では正式申込ではない |
+| `/festa/` | 通常FESTAページ | 既存ページとして維持 |
+| `/contact/` | 問い合わせ・写真提供導線 | 外部共有可 |
+
+## 60周年記念FESTA特設サイト
+
+`/festa-60th/` は、OBOG・現役生・先生・関係者に向けた公開前の仮公式ページです。
+
+- 開催日、会場、対象者、参加意向受付中であることを明記します。
+- 正式申込、会費、入金方法、タイムテーブルは未確定として扱い、決定後に案内します。
+- ページ内フォームは参加意向確認であり、決済や会費徴収は行いません。
+- 内部メモや、会場が未確定に見える表現は公開ページに出しません。
+
+## Cloudflareフォーム・CRM
+
+Cloudflare上で動かす申込フォーム、D1保存、管理画面、CSV取込、入金管理は、静的なGitHub Pagesとは分けて扱います。
+
+- Cloudflare Pages/Workers Functions + D1 を使う場合は、GitHub Pages側では動きません。
+- 管理画面や申込管理APIは Cloudflare Access 配下で運用します。
+- 本番DB、staging DB、秘密鍵、口座情報、本物名簿CSVはリポジトリに入れません。
+- 公開前の検収用CRMは、staging/featureブランチとPreview環境で確認します。
+
+想定パスは以下です。
+
+| パス | 役割 | 公開方針 |
+|---|---|---|
+| `/festa60-register/` | Cloudflareフォームページ | Accessまたは限定公開で検収 |
+| `/festa60-admin/` | 管理画面 | Access必須 |
+| `/api/festa60/*` | 申込・管理API | Access/署名/権限確認を前提 |
+
+## デプロイ方針
+
+1. 通常の静的ページ修正はfeatureブランチで作業します。
+2. レビュー後、`main` に反映するとGitHub Pagesの公式仮ページに出ます。
+3. Cloudflare Workers公式ページへ反映する場合は、`public/` を公開対象として手動デプロイします。
+4. Cloudflareフォーム・CRMは、staging/Previewで検収してから本番向けに切り替えます。
+
+## 静的フォームの現在の扱い
+
+`/festa-60th/#entry` のフォームは、現時点では参加意向の確認用です。
 
 - フォーム名: `festa60-obog-crm-entry`
-- 設置場所: `festa-60th/index.html`
-- 送信後遷移先: `/thanks.html`
-- フォーム回答は、OBOGマスタ情報、連絡先情報、FESTA60周年イベント参加情報の3系統に分けて扱う想定です。
+- 送信処理: `assets/js/site.js` の `data-mailto-form` でメール本文を生成
+- 保存先: ブラウザ上でメール本文を作るだけで、リポジトリや静的サイト内には保存しません
+- 将来移行: Cloudflare D1、Google Forms、Airtable、CRM APIなどに送信先を差し替える想定
 
-## CSV出力後に追加する管理列
-
-Netlify FormsからCSVを出力した後、管理用スプレッドシート側で以下の列を追加してください。これらは管理者が後から付与する情報であり、フォーム入力項目には含めません。
-
-- `obog_master_id`
-- `match_status`
-- `match_confidence`
-- `master_update_required`
-- `attendance_status`
-- `payment_status`
-- `payment_date`
-- `reception_status`
-- `last_contact_date`
-- `admin_note`
-
-## `match_status` 候補
-
-- `matched`
-- `possible_match`
-- `new_contact`
-- `duplicate_check_needed`
-- `unmatched`
-
-## `attendance_status` 候補
-
-- `intent_yes`
-- `considering`
-- `intent_no`
-- `confirmed`
-- `cancelled`
-
-## `payment_status` 候補
-
-- `not_required_yet`
-- `unpaid`
-- `paid`
-- `exempted`
-- `refund_needed`
-
-## OBOGマスタ突合の運用イメージ
-
-1. Netlify Formsから `festa60-obog-crm-entry` のCSVを出力します。
-2. OBOGマスタの氏名、旧姓、ふりがな、メールアドレス、卒部年度または期、当時の役割、所属団体と照合します。
-3. 一致度に応じて `match_status` と `match_confidence` を管理者が付与します。
-4. 連絡先や所属情報に差分があれば `master_update_required` を更新します。
-5. 正式参加登録開始後に `attendance_status`、入金確認後に `payment_status` と `payment_date`、当日は `reception_status` を更新します。
+正式申込、入金管理、CSV取込、管理者操作が必要になった段階では、Cloudflareフォーム・CRM側へ移行します。
