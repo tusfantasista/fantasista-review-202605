@@ -3,6 +3,21 @@ import { json } from "./http.js";
 export function assertAdmin(request, env) {
   const accessEmail = request.headers.get("cf-access-authenticated-user-email");
   if (accessEmail) return { ok: true, actor: accessEmail };
+  if (request.headers.get("cf-access-jwt-assertion")) return { ok: true, actor: "cloudflare-access" };
+
+  if (!isPreviewBypassEnabled(env)) {
+    return {
+      ok: false,
+      response: json(
+        {
+          ok: false,
+          error: "cloudflare_access_required",
+          message: "Cloudflare Access is required for admin APIs.",
+        },
+        { status: 401 },
+      ),
+    };
+  }
 
   const expected = env.ADMIN_API_TOKEN;
   if (!expected) {
@@ -44,4 +59,17 @@ function constantTimeEqual(a, b) {
     diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
   }
   return diff === 0;
+}
+
+function isPreviewBypassEnabled(env) {
+  const environment = String(env.ENVIRONMENT || "preview").toLowerCase();
+  const branch = String(env.CF_PAGES_BRANCH || "").toLowerCase();
+  const disabled =
+    env.ADMIN_TOKEN_BYPASS_ENABLED === "false" ||
+    env.ACCESS_BYPASS_ENABLED === "false" ||
+    env.ACCESS_BYPASS_TOKEN_ENABLED === "false";
+
+  if (disabled) return false;
+  if (environment === "production" || branch === "main") return false;
+  return true;
 }

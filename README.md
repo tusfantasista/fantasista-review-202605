@@ -32,7 +32,7 @@
 ## Access保護
 
 stagingのフォームと管理画面はCloudflare Accessで非公開にします。未認証のcurlで `/apply` と `/admin` が HTTP 200 になってはいけません。このブランチではPages Functions middlewareでもAccessヘッダーの有無を確認し、未認証の場合は401を返します。
-CLI検収だけはPreview Secretの `ACCESS_BYPASS_TOKEN`、未設定時は `ADMIN_API_TOKEN` を `x-access-bypass-token` または `x-admin-token` で送ることで通せます。この値もGitには入れません。
+CLI検収だけはPreview Secretの `ACCESS_BYPASS_TOKEN`、未設定時は `ADMIN_API_TOKEN` を `x-access-bypass-token` または `x-admin-token` で送ることで通せます。この値もGitには入れません。検収バイパスはPreview/staging専用で、`main` / `production` では無効です。本物名簿投入前は `ADMIN_TOKEN_BYPASS_ENABLED=false` か `ACCESS_BYPASS_ENABLED=false` を設定、またはトークンSecretを削除して無効化します。
 
 Access対象:
 
@@ -151,9 +151,13 @@ npx wrangler pages secret put TURNSTILE_SECRET_KEY
 npx wrangler pages secret put ADMIN_API_TOKEN
 npx wrangler pages secret put BANK_NAME
 npx wrangler pages secret put BANK_BRANCH_NAME
+npx wrangler pages secret put BANK_BRANCH_CODE
 npx wrangler pages secret put BANK_ACCOUNT_TYPE
 npx wrangler pages secret put BANK_ACCOUNT_NUMBER
-npx wrangler pages secret put BANK_ACCOUNT_NAME
+npx wrangler pages secret put BANK_ACCOUNT_HOLDER
+npx wrangler pages secret put BANK_ACCOUNT_HOLDER_KANA
+npx wrangler pages secret put BANK_TRANSFER_NOTE
+npx wrangler pages secret put BANK_TRANSFER_DEADLINE_DAYS
 npx wrangler pages secret put CONTACT_EMAIL
 ```
 
@@ -179,12 +183,21 @@ Secretsにする変数:
 - `ADMIN_API_TOKEN`
 - `BANK_NAME`
 - `BANK_BRANCH_NAME`
+- `BANK_BRANCH_CODE`
 - `BANK_ACCOUNT_TYPE`
 - `BANK_ACCOUNT_NUMBER`
-- `BANK_ACCOUNT_NAME`
+- `BANK_ACCOUNT_HOLDER`
+- `BANK_ACCOUNT_HOLDER_KANA`
+- `BANK_TRANSFER_NOTE`
+- `BANK_TRANSFER_DEADLINE_DAYS`
 - `CONTACT_EMAIL`
 - `EMAIL_WEBHOOK_URL`
 - `EMAIL_API_TOKEN`
+
+Preview/staging検収用:
+
+- `ACCESS_BYPASS_TOKEN` または `ADMIN_API_TOKEN`
+- `ADMIN_TOKEN_BYPASS_ENABLED` / `ACCESS_BYPASS_ENABLED`
 
 ## 銀行振込運用
 

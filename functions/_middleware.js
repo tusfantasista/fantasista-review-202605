@@ -33,9 +33,23 @@ function hasAccessIdentity(request) {
 }
 
 function hasBypassToken(request, env) {
+  if (!isPreviewBypassEnabled(env)) return false;
   const expected = env.ACCESS_BYPASS_TOKEN || env.ADMIN_API_TOKEN;
   const actual = request.headers.get("x-access-bypass-token") || request.headers.get("x-admin-token");
   return Boolean(expected && actual && constantTimeEqual(actual, expected));
+}
+
+function isPreviewBypassEnabled(env) {
+  const environment = String(env.ENVIRONMENT || "preview").toLowerCase();
+  const branch = String(env.CF_PAGES_BRANCH || "").toLowerCase();
+  const disabled =
+    env.ADMIN_TOKEN_BYPASS_ENABLED === "false" ||
+    env.ACCESS_BYPASS_ENABLED === "false" ||
+    env.ACCESS_BYPASS_TOKEN_ENABLED === "false";
+
+  if (disabled) return false;
+  if (environment === "production" || branch === "main") return false;
+  return true;
 }
 
 function constantTimeEqual(a, b) {

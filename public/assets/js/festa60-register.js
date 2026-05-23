@@ -254,15 +254,20 @@
     const amount = Number(application.amount || application.total_amount_jpy || payment.amount || 0);
     const transferName = payment.transferNameExample || `${applicationId} ${payload.full_name}`.trim();
     const bank = payment.bankInfo || {};
+    const dueDateText = payment.dueDateText || "お申し込み日から7日以内";
     document.getElementById("complete-application-id").textContent = applicationId;
     document.getElementById("complete-amount").textContent = `${amount.toLocaleString("ja-JP")}円`;
     document.getElementById("complete-transfer-name").textContent = transferName;
+    document.getElementById("complete-due-date").textContent = dueDateText;
     document.getElementById("complete-bank-info").innerHTML = [
       `銀行名：${escapeHtml(bank.bankName || "銀行名未設定")}`,
       `支店名：${escapeHtml(bank.branchName || "支店名未設定")}`,
+      `支店コード：${escapeHtml(bank.branchCode || "支店コード未設定")}`,
       `口座種別：${escapeHtml(bank.accountType || "口座種別未設定")}`,
       `口座番号：${escapeHtml(bank.accountNumber || "口座番号未設定")}`,
-      `口座名義：${escapeHtml(bank.accountName || "口座名義未設定")}`,
+      `口座名義：${escapeHtml(bank.accountHolder || bank.accountName || "口座名義未設定")}`,
+      `口座名義カナ：${escapeHtml(bank.accountHolderKana || "口座名義カナ未設定")}`,
+      `備考：${escapeHtml(bank.transferNote || "振込手数料は参加者様のご負担となります。")}`,
     ].join("<br>");
   }
 
