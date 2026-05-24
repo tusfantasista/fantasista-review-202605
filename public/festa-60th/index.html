@@ -638,6 +638,54 @@
         font-size: 0.93rem;
       }
 
+      .inline-check {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #fff3ca;
+        font-weight: 800;
+      }
+
+      .inline-check input {
+        width: auto;
+        min-height: auto;
+      }
+
+      .conditional-panel,
+      .completion-panel {
+        border: 1px solid rgba(255, 210, 28, 0.22);
+        border-radius: 18px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.055);
+      }
+
+      .completion-panel {
+        margin-top: 24px;
+      }
+
+      .completion-panel strong {
+        color: var(--gold);
+        font-size: clamp(1.45rem, 3vw, 2.1rem);
+      }
+
+      .form-message {
+        border-radius: 16px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff5d2;
+        line-height: 1.65;
+        white-space: pre-line;
+      }
+
+      .form-message[data-kind="success"] {
+        border: 1px solid rgba(103, 232, 149, 0.45);
+      }
+
+      .form-message[data-kind="error"] {
+        border: 1px solid rgba(248, 113, 113, 0.55);
+        color: #ffd6d6;
+      }
+
       .privacy-box p + p {
         margin-top: 10px;
       }
@@ -811,10 +859,10 @@
               踊った日々も、悔しかった日も、すべてを連れて集まろう。OBOG、現役生、先生、関係者の皆さまが世代を超えて再会し、60年の歩みを次の世代へつなぐ一日です。
             </p>
             <p class="hero__notice">
-              現在、参加意向を受け付けています。これは正式申込ではありません。正式申込・会費・タイムテーブル・入金方法は、決定次第このページと参加意向登録者へのご案内でお知らせします。
+              現在、参加・寄付意向を受け付けています。これは正式申込ではありません。正式参加登録は2026年8月1日開始予定です。第1期早期登録・振込期限は2026年9月30日です。正式申込・会費・タイムテーブル・入金方法は、決定次第このページと参加意向登録者へのご案内でお知らせします。
             </p>
             <div class="cta-row" aria-label="主要アクション">
-              <a class="btn btn--primary" href="#entry">参加意向を登録する</a>
+              <a class="btn btn--primary" href="#entry">参加・寄付意向を登録する</a>
               <a class="btn btn--ghost" href="#overview">開催概要を見る</a>
               <a class="btn btn--ghost" href="#photo-archive">写真・資料を提供する</a>
             </div>
@@ -841,7 +889,7 @@
             </article>
             <article class="summary-card">
               <span>対象</span>
-              <strong>OBOG、現役生、先生・関係者、同伴者</strong>
+              <strong>東京理科大学舞踏研究部OBOG、学習院大学社交舞踏研究会桜友会、同伴者</strong>
             </article>
             <article class="summary-card">
               <span>現在の受付</span>
@@ -850,8 +898,13 @@
             </article>
             <article class="summary-card">
               <span>正式申込</span>
-              <strong>後日案内</strong>
+              <strong>2026年8月1日開始予定</strong>
               <p>登録いただいた方へも続報をお送りします。</p>
+            </article>
+            <article class="summary-card">
+              <span>第1期早期登録・振込期限</span>
+              <strong>2026年9月30日</strong>
+              <p>正式登録開始後の期限です。現時点では会費請求や振込案内は発生しません。</p>
             </article>
             <article class="summary-card">
               <span>会費</span>
@@ -1015,7 +1068,7 @@
           <div class="section-head">
             <p class="eyebrow">Support</p>
             <h2 id="support-title">協賛・寄付・現役支援</h2>
-            <p>60周年記念FESTAでは、会場運営、記念映像・展示制作、現役支援、記録アーカイブ整備のため、協賛・寄付・物品協力を検討しています。詳細な協賛メニューは準備中ですが、ご関心のある方は事務局までご連絡ください。</p>
+            <p>60周年記念FESTAでは、会場運営、記念映像・展示制作、現役支援、記録アーカイブ整備のため、個人寄付や企業協賛・広告協賛を検討しています。詳細な協賛メニューは準備中ですが、ご関心のある方は事務局までご連絡ください。</p>
           </div>
           <div class="support-grid">
             <article class="support-card">
@@ -1030,8 +1083,8 @@
             </article>
             <article class="support-card">
               <span>Support 03</span>
-              <h3>物品協力</h3>
-              <p>運営、展示、記念品などに関する物品協力です。</p>
+              <h3>広告協賛</h3>
+              <p>記念ページや資料への掲載を想定した協賛です。</p>
             </article>
             <article class="support-card">
               <span>Support 04</span>
@@ -1051,184 +1104,207 @@
         <div class="wrap">
           <div class="section-head">
             <p class="eyebrow">Entry</p>
-            <h2 id="entry-title">参加意向を登録する</h2>
-            <p>このフォームは、60周年FESTAの参加意向確認およびOBOG名簿情報の確認・更新を目的としています。正式な参加確定、会費、入金方法については後日あらためてご案内します。</p>
+            <h2 id="entry-title">60周年記念FESTA 参加・寄付意向登録</h2>
+            <p>このフォームは、60周年記念FESTAの参加意向、個人寄付・広告協賛への関心、OBOG名簿情報の確認を目的とした意向登録フォームです。これは正式申込ではありません。会費の請求、決済、銀行振込案内はまだ発生しません。正式参加登録は2026年8月1日開始予定です。正式申込・会費・入金方法・タイムテーブルは、決定次第あらためてご案内します。</p>
           </div>
 
           <div class="form-intro">
-            現時点では参加意向の確認です。送信後に会費の請求や決済は発生しません。正式申込が始まりましたら、登録いただいた連絡先にもご案内します。
+            <p>参加対象は、東京理科大学舞踏研究部OBOG、学習院大学社交舞踏研究会桜友会、およびその同伴者です。</p>
+            <p>同伴者として参加を希望される場合は、同伴元となる東京理科大学舞踏研究部OBOGまたは学習院大学社交舞踏研究会桜友会の参加者情報を、分かる範囲で入力してください。正式参加登録時には、同伴元参加者との確認が必要になる場合があります。</p>
+            <p>現時点では参加・寄付意向の確認です。送信後に会費の請求や決済は発生しません。</p>
           </div>
 
-          <form name="festa60-obog-crm-entry" method="POST" data-netlify="true" action="/thanks.html" class="entry-form" data-mailto-form="festa60-obog-crm-entry" data-mailto-recipient="tus.fantasista@gmail.com" data-mailto-subject-prefix="【60周年FESTA参加意向】">
-            <input type="hidden" name="form-name" value="festa60-obog-crm-entry" />
+          <div id="interest-completion" class="completion-panel" hidden>
+            <h3>参加・寄付意向を受け付けました。</h3>
+            <p>これは正式な参加確定ではありません。正式参加登録は2026年8月1日開始予定です。正式申込、会費、入金方法、タイムテーブルは、決定次第あらためてご案内します。</p>
+            <p>意向登録番号：<strong id="interest-code-output"></strong></p>
+          </div>
+
+          <form name="festa60-interest-registration" method="POST" class="entry-form" data-interest-form>
+            <input type="hidden" name="form-name" value="festa60-interest-registration" />
 
             <div class="form-block" aria-labelledby="identity-heading">
               <h3 id="identity-heading">本人情報</h3>
               <div class="form-grid">
                 <div class="field">
-                  <label for="full-name">氏名<span class="required">必須</span></label>
-                  <input id="full-name" type="text" name="full_name" placeholder="例：山田 太郎" autocomplete="name" required />
+                  <label for="last-name">姓<span class="required">必須</span></label>
+                  <input id="last-name" type="text" name="last_name" placeholder="例：山田" autocomplete="family-name" required />
+                </div>
+                <div class="field">
+                  <label for="first-name">名<span class="required">必須</span></label>
+                  <input id="first-name" type="text" name="first_name" placeholder="例：太郎" autocomplete="given-name" required />
+                </div>
+                <div class="field">
+                  <label for="last-kana">ふりがな（せい）<span class="required">必須</span></label>
+                  <input id="last-kana" type="text" name="last_kana" placeholder="例：やまだ" required />
+                </div>
+                <div class="field">
+                  <label for="first-kana">ふりがな（めい）<span class="required">必須</span></label>
+                  <input id="first-kana" type="text" name="first_kana" placeholder="例：たろう" required />
                 </div>
                 <div class="field">
                   <label for="maiden-name">旧姓<span class="optional">任意</span></label>
                   <input id="maiden-name" type="text" name="maiden_name" placeholder="該当する方のみ" />
                 </div>
                 <div class="field">
-                  <label for="furigana">ふりがな<span class="optional">任意</span></label>
-                  <input id="furigana" type="text" name="furigana" placeholder="例：やまだ たろう" />
-                </div>
-                <div class="field">
-                  <label for="graduation-year">卒部年度または期<span class="required">必須</span></label>
-                  <input id="graduation-year" list="graduation-options" type="text" name="graduation_year_or_generation" placeholder="例：2010年度卒 / 第45期 / 不明" required />
-                  <datalist id="graduation-options">
-                    <option value="不明"></option>
-                    <option value="現役"></option>
-                    <option value="関係者"></option>
-                  </datalist>
-                </div>
-                <div class="field">
-                  <label for="affiliation">所属区分<span class="required">必須</span></label>
-                  <select id="affiliation" name="affiliation" required>
-                    <option value="">選択してください</option>
-                    <option value="obog">OBOG</option>
-                    <option value="active_student">現役生</option>
-                    <option value="teacher_related">先生・関係者</option>
-                    <option value="companion">同伴者</option>
-                    <option value="other">その他</option>
-                  </select>
-                </div>
-                <div class="field">
                   <label for="email">メールアドレス<span class="required">必須</span></label>
                   <input id="email" type="email" name="email" placeholder="example@example.com" autocomplete="email" required />
+                  <p class="field-note">60周年FESTAに関する必要な連絡を、このメールアドレス宛にお送りします。</p>
                 </div>
-              </div>
-            </div>
-
-            <div class="form-block" aria-labelledby="optional-heading">
-              <h3 id="optional-heading">任意情報</h3>
-              <div class="form-grid">
+                <div class="field">
+                  <label for="email-confirm">メールアドレス確認用<span class="required">必須</span></label>
+                  <input id="email-confirm" type="email" name="email_confirm" placeholder="確認のためもう一度入力" autocomplete="off" required />
+                </div>
                 <div class="field">
                   <label for="phone">電話番号<span class="optional">任意</span></label>
                   <input id="phone" type="tel" name="phone" placeholder="任意" autocomplete="tel" />
                 </div>
                 <div class="field">
-                  <label for="dance-role">当時の役割<span class="optional">任意</span></label>
-                  <select id="dance-role" name="dance_role">
-                    <option value="">未選択</option>
-                    <option value="leader">リーダー</option>
-                    <option value="partner">パートナー</option>
-                    <option value="both">両方</option>
-                    <option value="manager_other">マネージャー・その他</option>
+                  <label for="participant-category">参加区分<span class="required">必須</span></label>
+                  <select id="participant-category" name="participant_category" required>
+                    <option value="">選択してください</option>
+                    <option value="tus_obog">東京理科大学舞踏研究部OBOG</option>
+                    <option value="gakushuin_oyu">学習院大学社交舞踏研究会桜友会</option>
+                    <option value="tus_obog_companion">東京理科大学舞踏研究部OBOGの同伴者</option>
+                    <option value="gakushuin_oyu_companion">学習院大学社交舞踏研究会桜友会の同伴者</option>
+                    <option value="eligibility_consultation">参加資格について事務局に相談したい</option>
                   </select>
                 </div>
-                <div class="field">
-                  <label for="school-group">所属大学・団体<span class="optional">任意</span></label>
-                  <input id="school-group" type="text" name="school_or_group" placeholder="例：東京理科大学 / 理科大舞踏研究部" />
+                <div id="graduation-year-field" class="field-full conditional-panel">
+                  <div class="form-grid">
+                    <div class="field">
+                      <label for="graduation-year">卒部年度 西暦<span class="required">条件付き必須</span></label>
+                      <input id="graduation-year" type="text" name="graduation_year" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="例：2003" />
+                      <p class="field-note">東京理科大学舞踏研究部OBOG、学習院大学社交舞踏研究会桜友会の方は、西暦4桁で入力してください。</p>
+                    </div>
+                    <label class="inline-check">
+                      <input type="checkbox" name="graduation_year_unknown" value="1" />
+                      <span>卒部年度は不明</span>
+                    </label>
+                  </div>
                 </div>
-                <div class="field">
-                  <label for="specialty">専攻<span class="optional">任意</span></label>
-                  <select id="specialty" name="specialty">
-                    <option value="">未回答</option>
-                    <option value="standard">スタンダード</option>
-                    <option value="latin">ラテン</option>
-                    <option value="both">両方</option>
-                    <option value="other">その他</option>
-                  </select>
+                <div id="companion-host-fields" class="field-full conditional-panel" hidden>
+                  <h4>同伴元参加者の情報</h4>
+                  <p class="field-note">可能な範囲で入力してください。正式参加登録時には、同伴元参加者との確認が必要になる場合があります。</p>
+                  <div class="form-grid">
+                    <div class="field">
+                      <label for="companion-host-category">同伴元の区分<span class="optional">任意</span></label>
+                      <select id="companion-host-category" name="companion_host_category">
+                        <option value="">未選択</option>
+                        <option value="tus_obog">東京理科大学舞踏研究部OBOG</option>
+                        <option value="gakushuin_oyu">学習院大学社交舞踏研究会桜友会</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="companion-host-last-name">同伴元の姓<span class="optional">任意</span></label>
+                      <input id="companion-host-last-name" type="text" name="companion_host_last_name" />
+                    </div>
+                    <div class="field">
+                      <label for="companion-host-first-name">同伴元の名<span class="optional">任意</span></label>
+                      <input id="companion-host-first-name" type="text" name="companion_host_first_name" />
+                    </div>
+                    <div class="field">
+                      <label for="companion-host-graduation-year">同伴元の卒部年度<span class="optional">任意</span></label>
+                      <input id="companion-host-graduation-year" type="text" name="companion_host_graduation_year" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="例：2003" />
+                    </div>
+                    <div class="field-full">
+                      <label for="companion-host-note">同伴元に関する補足<span class="optional">任意</span></label>
+                      <textarea id="companion-host-note" name="companion_host_note" placeholder="分かる範囲で、旧姓、当時の呼び名、関係性など"></textarea>
+                    </div>
+                  </div>
                 </div>
+                <p id="eligibility-consultation-note" class="field-note field-full" hidden>参加資格について相談したい場合は、その他連絡事項に状況をご記入ください。</p>
               </div>
             </div>
 
             <div class="form-block" aria-labelledby="intent-heading">
-              <h3 id="intent-heading">参加意向</h3>
+              <h3 id="intent-heading">参加・支援意向</h3>
               <div class="form-grid">
                 <fieldset class="field-full">
                   <legend>参加意向<span class="required">必須</span></legend>
                   <div class="choice-grid">
-                    <label class="choice"><input type="radio" name="attendance_intent" value="intent_yes" required />参加したい</label>
+                    <label class="choice"><input type="radio" name="attendance_intent" value="want_to_attend" required />参加したい</label>
                     <label class="choice"><input type="radio" name="attendance_intent" value="considering" />検討中</label>
-                    <label class="choice"><input type="radio" name="attendance_intent" value="intent_no_info" />不参加だが案内希望</label>
+                    <label class="choice"><input type="radio" name="attendance_intent" value="not_attending_info" />不参加だが案内希望</label>
                   </div>
                 </fieldset>
                 <div class="field">
                   <label for="companion-status">同伴者有無<span class="optional">任意</span></label>
                   <select id="companion-status" name="companion_status">
-                    <option value="">未選択</option>
+                    <option value="unanswered">未回答</option>
                     <option value="none">なし</option>
-                    <option value="with_companion">あり</option>
+                    <option value="yes">あり</option>
                     <option value="undecided">未定</option>
                   </select>
                 </div>
                 <div class="field">
-                  <label for="guest-count">同伴者人数<span class="optional">任意</span></label>
-                  <input id="guest-count" type="number" name="guest_count" min="0" placeholder="0" inputmode="numeric" />
+                  <label for="companion-count">同伴者人数<span class="optional">任意</span></label>
+                  <input id="companion-count" type="number" name="companion_count" min="0" max="10" placeholder="0" inputmode="numeric" />
                 </div>
                 <div class="field">
                   <label for="dance-time-intent">ダンスタイム参加意向<span class="optional">任意</span></label>
                   <select id="dance-time-intent" name="dance_time_intent">
-                    <option value="">未選択</option>
+                    <option value="unanswered">未回答</option>
                     <option value="want_to_dance">踊りたい</option>
                     <option value="watch_mainly">見学中心</option>
                     <option value="undecided">未定</option>
                   </select>
                 </div>
                 <div class="field">
-                  <label for="photo-permission">写真掲載・撮影に関する確認<span class="optional">任意</span></label>
-                  <select id="photo-permission" name="photo_permission">
-                    <option value="">未選択</option>
+                  <label for="photo-consent">写真掲載・撮影に関する確認<span class="optional">任意</span></label>
+                  <select id="photo-consent" name="photo_consent">
+                    <option value="unanswered">未回答</option>
                     <option value="ok">記録・広報用撮影に同意</option>
-                    <option value="consult_required">掲載前に相談希望</option>
-                    <option value="no_publication">公開掲載は不可</option>
+                    <option value="consult_before_publish">掲載前に相談希望</option>
+                    <option value="no_public_publish">公開掲載は不可</option>
                   </select>
                 </div>
                 <div class="field">
                   <label for="volunteer-interest">手伝い可否<span class="optional">任意</span></label>
                   <select id="volunteer-interest" name="volunteer_interest">
-                    <option value="">未選択</option>
+                    <option value="unanswered">未回答</option>
                     <option value="yes">手伝える</option>
                     <option value="maybe">内容次第で検討</option>
                     <option value="no">今回は難しい</option>
                   </select>
                 </div>
                 <div class="field">
-                  <label for="sponsorship-interest">協賛・寄付への関心<span class="optional">任意</span></label>
-                  <select id="sponsorship-interest" name="sponsorship_interest">
-                    <option value="">未選択</option>
+                  <label for="donation-interest">個人寄付への関心<span class="optional">任意</span></label>
+                  <select id="donation-interest" name="donation_interest">
+                    <option value="unanswered">未回答</option>
                     <option value="yes">関心あり</option>
                     <option value="maybe">案内を見て検討したい</option>
                     <option value="no">現時点ではなし</option>
                   </select>
                 </div>
-              </div>
-            </div>
-
-            <div class="form-block" aria-labelledby="permission-heading">
-              <h3 id="permission-heading">連絡・同意</h3>
-              <div class="form-grid">
-                <fieldset class="field-full">
-                  <legend>60周年FESTAに関する連絡を受け取る<span class="required">必須</span></legend>
-                  <div class="choice-grid">
-                    <label class="choice"><input type="radio" name="festa60_info_permission" value="yes" required />受け取る</label>
-                    <label class="choice"><input type="radio" name="festa60_info_permission" value="no" />受け取らない</label>
-                  </div>
-                </fieldset>
-                <fieldset class="field-full">
-                  <legend>今後のFANTASISTA会・OBOG会の案内も受け取る<span class="optional">任意</span></legend>
-                  <div class="choice-grid">
-                    <label class="choice"><input type="radio" name="contact_permission" value="yes" />受け取る</label>
-                    <label class="choice"><input type="radio" name="contact_permission" value="no" />受け取らない</label>
-                    <label class="choice"><input type="radio" name="contact_permission" value="undecided" />未定</label>
-                  </div>
-                </fieldset>
+                <div class="field">
+                  <label for="sponsorship-interest">企業協賛・広告への関心<span class="optional">任意</span></label>
+                  <select id="sponsorship-interest" name="sponsorship_interest">
+                    <option value="unanswered">未回答</option>
+                    <option value="yes">関心あり</option>
+                    <option value="maybe">案内を見て検討したい</option>
+                    <option value="no">現時点ではなし</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="archive-material-interest">写真・資料提供への関心<span class="optional">任意</span></label>
+                  <select id="archive-material-interest" name="archive_material_interest">
+                    <option value="unanswered">未回答</option>
+                    <option value="yes">提供できそう</option>
+                    <option value="maybe">探してみる</option>
+                    <option value="no">現時点ではなし</option>
+                  </select>
+                </div>
                 <div class="field-full">
                   <label for="message">その他連絡事項<span class="optional">任意</span></label>
-                  <textarea id="message" name="message" placeholder="連絡事項、近況、事務局へのメッセージなど"></textarea>
+                  <textarea id="message" name="message" placeholder="参加資格の相談、同伴元情報、連絡事項、近況、事務局へのメッセージなど"></textarea>
                 </div>
               </div>
             </div>
 
             <div class="privacy-box" aria-labelledby="privacy-heading">
               <h3 id="privacy-heading">個人情報の取り扱い</h3>
-              <p>ご入力いただいた情報は、60周年FESTAの案内・参加意向確認・名簿確認・OBOG会からの必要な連絡に使用します。</p>
+              <p>ご入力いただいた情報は、60周年FESTAの案内・参加意向確認・名簿確認・正式参加登録開始時のご連絡・OBOG会からの必要な連絡に使用します。</p>
               <p>管理者：FANTASISTA会事務局</p>
               <p>保存期間：60周年FESTA終了後、名簿更新に必要な範囲を除き整理します。</p>
               <p>削除・訂正希望：お問い合わせ窓口までご連絡ください。</p>
@@ -1240,10 +1316,12 @@
               <span>上記の利用目的および個人情報の取り扱いに同意します。<span class="required">必須</span></span>
             </label>
 
-            <p class="form-notes">これは正式な参加確定フォームではありません。正式申込・会費・入金方法は後日あらためてご案内します。</p>
+            <div id="interest-turnstile-slot"></div>
+            <p id="interest-form-message" class="form-message" hidden></p>
+            <p class="form-notes">これは正式な参加確定フォームではありません。会費の請求、決済、銀行振込案内はまだ発生しません。</p>
 
             <div class="form-actions">
-              <button class="btn btn--primary" type="submit">参加意向を登録する</button>
+              <button class="btn btn--primary" type="submit">参加・寄付意向を登録する</button>
               <a class="btn btn--ghost" href="#faq">FAQを見る</a>
             </div>
           </form>
@@ -1259,7 +1337,15 @@
           <div class="faq-list">
             <details>
               <summary>これは正式申込ですか？</summary>
-              <p>いいえ。現時点では参加意向確認です。正式申込、会費、入金方法は後日あらためてご案内します。</p>
+              <p>いいえ。現在は参加・寄付意向登録です。正式参加登録は2026年8月1日開始予定です。会費、入金方法、正式な参加確定方法はあらためてご案内します。</p>
+            </details>
+            <details>
+              <summary>参加できる対象者は誰ですか？</summary>
+              <p>参加対象は、東京理科大学舞踏研究部OBOG、学習院大学社交舞踏研究会桜友会、およびその同伴者です。その他の方で参加を希望される場合は、事務局までご相談ください。</p>
+            </details>
+            <details>
+              <summary>現役時代にシャドーで理科大の相手と組んでいました。参加できますか？</summary>
+              <p>東京理科大学舞踏研究部OBOGの参加者の同伴者として参加可能です。同伴者にしていただく方は、東京理科大学舞踏研究部OBOGであればどなたでも可能です。現役時代のペア相手である必要はありません。</p>
             </details>
             <details>
               <summary>会費はいくらですか？</summary>
@@ -1279,7 +1365,7 @@
             </details>
             <details>
               <summary>家族や同伴者と参加できますか？</summary>
-              <p>同伴者の参加可否・会費は調整中です。参加意向フォームで同伴希望をお知らせください。</p>
+              <p>東京理科大学舞踏研究部OBOG、学習院大学社交舞踏研究会桜友会の参加者の同伴者として参加可能です。同伴希望は参加・寄付意向フォームでお知らせください。</p>
             </details>
             <details>
               <summary>途中参加・途中退出はできますか？</summary>
@@ -1309,7 +1395,7 @@
             <p>60周年記念FESTAの詳細は、決定次第このページでご案内します。通常FESTAページや本サイトもあわせてご覧ください。</p>
           </div>
           <div class="cta-row">
-            <a class="btn btn--primary" href="#entry">参加意向を登録する</a>
+            <a class="btn btn--primary" href="#entry">参加・寄付意向を登録する</a>
             <a class="btn btn--ghost" href="../festa/index.html">通常FESTAページへ</a>
             <a class="btn btn--ghost" href="../">本サイトへ戻る</a>
           </div>
@@ -1325,5 +1411,6 @@
     </footer>
 
     <script src="../assets/js/site.js" defer></script>
+    <script src="../assets/js/festa60-interest.js" defer></script>
   </body>
 </html>

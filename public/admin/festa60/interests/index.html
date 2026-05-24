@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>60周年FESTA 参加・寄付意向管理</title>
+    <link rel="stylesheet" href="../../../assets/css/festa60-crm.css" />
+  </head>
+  <body class="festa60-crm">
+    <div class="crm-test-banner">TEST環境 / 参加・寄付意向管理 / 正式申込管理ではありません</div>
+    <main class="crm-shell">
+      <section class="crm-hero">
+        <span class="crm-kicker">FESTA 60 Interest</span>
+        <h1>参加・寄付意向一覧</h1>
+        <p>2026年7月末までの参加・寄付意向を確認する管理画面です。正式参加登録、会費請求、銀行振込管理とは分けて扱います。</p>
+        <p><a href="/festa60-admin/">正式申込・入金管理の検収画面へ</a></p>
+      </section>
+
+      <section class="crm-section">
+        <div class="crm-admin-bar">
+          <div class="crm-field">
+            <label for="admin-token">管理トークン</label>
+            <input id="admin-token" class="crm-token" type="password" autocomplete="off" />
+          </div>
+          <div class="crm-field">
+            <label for="attendance-filter">参加意向</label>
+            <select id="attendance-filter">
+              <option value="">すべて</option>
+              <option value="want_to_attend">参加したい</option>
+              <option value="considering">検討中</option>
+              <option value="not_attending_info">不参加だが案内希望</option>
+            </select>
+          </div>
+          <div class="crm-field">
+            <label for="category-filter">参加区分</label>
+            <select id="category-filter">
+              <option value="">すべて</option>
+              <option value="tus_obog">理科大OBOG</option>
+              <option value="gakushuin_oyu">学習院桜友会</option>
+              <option value="tus_obog_companion">理科大OBOGの同伴者</option>
+              <option value="gakushuin_oyu_companion">学習院桜友会の同伴者</option>
+              <option value="eligibility_consultation">参加資格相談</option>
+            </select>
+          </div>
+          <div class="crm-field">
+            <label for="interest-filter">関心フィルタ</label>
+            <select id="interest-filter">
+              <option value="">指定なし</option>
+              <option value="donation">個人寄付 関心あり</option>
+              <option value="sponsorship">企業協賛・広告 関心あり</option>
+              <option value="archive">写真・資料提供 関心あり</option>
+              <option value="eligibility">参加資格相談</option>
+            </select>
+          </div>
+          <button id="load-interests" class="crm-button" type="button">意向一覧を読み込む</button>
+          <button id="export-interests" class="crm-button crm-button--ghost" type="button">CSVエクスポート</button>
+        </div>
+        <p id="interest-admin-message" class="crm-message" hidden></p>
+        <div class="crm-table-wrap">
+          <table class="crm-table">
+            <thead>
+              <tr>
+                <th>登録日時</th>
+                <th>意向登録番号</th>
+                <th>氏名</th>
+                <th>連絡先</th>
+                <th>参加区分</th>
+                <th>参加意向</th>
+                <th>同伴者</th>
+                <th>支援関心</th>
+                <th>ステータス</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="interests-body">
+              <tr><td colspan="10">未読み込み</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="crm-section">
+        <h2>詳細</h2>
+        <p class="crm-small">行の「詳細」を押すと、同伴元参加者情報、事務局メモ、その他連絡事項を確認できます。</p>
+        <pre id="interest-detail" class="crm-import-box">未選択</pre>
+      </section>
+    </main>
+    <script src="../../../assets/js/festa60-interests-admin.js" defer></script>
+  </body>
+</html>

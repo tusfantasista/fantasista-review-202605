@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>60周年記念FESTA 参加申込テスト</title>
+    <link rel="stylesheet" href="../assets/css/festa60-crm.css" />
+  </head>
+  <body class="festa60-crm">
+    <div class="crm-test-banner">TEST環境 / Cloudflare Pages Preview / 本番申込ではありません</div>
+    <main class="crm-shell">
+      <section class="crm-hero">
+        <span class="crm-kicker">FESTA 60 Staging</span>
+        <h1>60周年記念FESTA 参加申込</h1>
+        <p>この画面はCloudflare Pages Previewでの検証用です。現時点ではオンライン決済を使わず、銀行振込のみで申込受付と入金管理を行います。</p>
+      </section>
+
+      <div class="crm-grid">
+        <form id="festa60-form" class="crm-card crm-stack">
+          <h2>申込内容</h2>
+          <div class="crm-notice">
+            <h3>お支払い方法</h3>
+            <p>お支払い方法は、現在銀行振込のみとなります。</p>
+            <p>お申し込み後、受付番号とお振込先をメールにてご案内します。入金確認をもって、参加確定とさせていただきます。</p>
+            <p>お振込みの際は、確認のため、振込名義に受付番号とお名前をご入力ください。</p>
+            <p class="crm-example">例：FESTA-000123 ナカツタカフミ</p>
+            <p>振込手数料は参加者様のご負担となります。お申し込み日から7日以内にご入金が確認できない場合、お申し込みをキャンセル扱いとさせていただく場合があります。</p>
+          </div>
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="full_name">氏名 <span class="crm-required">必須</span></label>
+              <input id="full_name" name="full_name" autocomplete="name" required />
+            </div>
+            <div class="crm-field">
+              <label for="full_name_kana">ふりがな <span class="crm-optional">任意</span></label>
+              <input id="full_name_kana" name="full_name_kana" />
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="maiden_name">旧姓 <span class="crm-optional">任意</span></label>
+              <input id="maiden_name" name="maiden_name" />
+            </div>
+            <div class="crm-field">
+              <label for="email">メールアドレス <span class="crm-required">必須</span></label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="graduation_year">卒部年度 <span class="crm-required">OBOGは必須</span></label>
+              <input id="graduation_year" name="graduation_year" inputmode="numeric" placeholder="例: 1996" />
+              <p class="crm-help">会費区分の確認に使います。OBOG 6〜10年目は2016〜2020年度卒、OBOG 5年目以下は2021〜2025年度卒を想定しています。</p>
+            </div>
+            <div></div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="phone">電話番号 <span class="crm-optional">任意</span></label>
+              <input id="phone" name="phone" autocomplete="tel" />
+            </div>
+            <div></div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="ticket_type">会費区分 <span class="crm-required">必須</span></label>
+              <select id="ticket_type" name="ticket_type" required>
+                <option value="obog">一般OBOG</option>
+                <option value="obog_6_10">OBOG 6〜10年目（2016〜2020年度卒）</option>
+                <option value="obog_5_under">OBOG 5年目以下（2021〜2025年度卒）</option>
+                <option value="obog_staff">OBOG役員・当日手伝い</option>
+                <option value="current_student">現役部員</option>
+                <option value="premium">プレミアム参加枠</option>
+              </select>
+              <p class="crm-help">現役部員は本体無料、懇親会参加時のみ4,000円です。</p>
+            </div>
+            <div class="crm-field">
+              <label for="fee_period">入金時期 <span class="crm-required">必須</span></label>
+              <select id="fee_period" name="fee_period" required>
+                <option value="early">早期入金 〜9月末</option>
+                <option value="year_end">年内入金 〜12月中旬</option>
+                <option value="regular">通常 1月以降</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="reception_attendance">懇親会 <span class="crm-required">必須</span></label>
+              <select id="reception_attendance" name="reception_attendance" required>
+                <option value="attending">参加する</option>
+                <option value="without_reception">参加しない（各区分から2,000円引き）</option>
+              </select>
+            </div>
+            <div class="crm-field">
+              <label for="companion_count">同伴者人数 <span class="crm-required">必須</span></label>
+              <input id="companion_count" name="companion_count" type="number" min="0" max="5" value="0" />
+            </div>
+          </div>
+
+          <div id="companions" class="crm-stack"></div>
+
+          <div class="crm-field">
+            <label for="expected_transfer_name">振込名義予定 <span class="crm-optional">任意</span></label>
+            <input id="expected_transfer_name" name="expected_transfer_name" maxlength="120" placeholder="例: FESTA-000123 ナカツタカフミ" />
+            <p class="crm-help">お振込み時の名義が申込者名と異なる場合は、予定されている振込名義をご入力ください。</p>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="donation_amount_jpy">寄付金額 <span class="crm-optional">任意</span></label>
+              <input id="donation_amount_jpy" name="donation_amount_jpy" type="number" min="0" step="1000" inputmode="numeric" placeholder="例: 5000" />
+            </div>
+            <div class="crm-field">
+              <label for="sponsorship_amount_jpy">協賛金額 <span class="crm-optional">任意</span></label>
+              <input id="sponsorship_amount_jpy" name="sponsorship_amount_jpy" type="number" min="0" step="1000" inputmode="numeric" placeholder="例: 30000" />
+            </div>
+          </div>
+
+          <p id="fee-preview" class="crm-fee-preview" aria-live="polite"></p>
+
+          <div class="crm-field">
+            <label for="message">連絡事項 <span class="crm-optional">任意</span></label>
+            <textarea id="message" name="message"></textarea>
+          </div>
+
+          <label class="crm-check">
+            <input type="checkbox" name="privacy_consent" required />
+            <span>個人情報を60周年記念FESTAの申込管理、名簿照合、連絡、決済確認に利用することに同意します。</span>
+          </label>
+          <label class="crm-check">
+            <input type="checkbox" name="contact_consent" checked />
+            <span>事務局からメール等で連絡を受け取ることに同意します。</span>
+          </label>
+          <label class="crm-check">
+            <input type="checkbox" name="photo_consent" />
+            <span>当日の撮影・記録に関する案内を確認しました。</span>
+          </label>
+
+          <div class="crm-notice crm-notice--plain">
+            <h3>キャンセル・返金について</h3>
+            <p>キャンセルをご希望の場合は、問い合わせ先までご連絡ください。</p>
+            <p>開催7日前までのキャンセルは返金対応いたします。それ以降のキャンセルについては、原則として返金いたしかねます。</p>
+            <p>返金時の振込手数料は参加者様のご負担となります。</p>
+          </div>
+
+          <div id="turnstile-slot"></div>
+          <button class="crm-button" type="submit">申込する</button>
+          <p id="form-message" class="crm-message" hidden></p>
+        </form>
+
+        <aside class="crm-card crm-stack">
+          <h2>staging検証メモ</h2>
+          <p class="crm-small">このページは本番導線には出さず、Cloudflare Pages PreviewとAccessで非公開にする想定です。</p>
+          <ul class="crm-small">
+            <li>D1 binding: <code>DB</code></li>
+            <li>現在の支払い方法: <code>bank_transfer</code></li>
+            <li>現在の支払いプロバイダ: <code>manual</code></li>
+            <li>将来のオンライン決済IDは <code>externalPaymentId</code> に分離して保存</li>
+            <li>Turnstile secret未設定時はローカル検証用にskip</li>
+          </ul>
+        </aside>
+      </div>
+
+      <section id="completion-panel" class="crm-section crm-stack" hidden>
+        <h2>お申し込みありがとうございます。</h2>
+        <p>受付番号を発行しました。ご登録いただいたメールアドレス宛に、受付番号とお振込先をお送りしています。</p>
+        <p>入金確認をもって参加確定とし、確認後に参加確定メールをお送りします。</p>
+        <p>お振込みの際は、振込名義に受付番号とお名前をご入力ください。</p>
+        <dl class="crm-summary">
+          <div>
+            <dt>受付番号</dt>
+            <dd id="complete-application-id"></dd>
+          </div>
+          <div>
+            <dt>お支払金額</dt>
+            <dd id="complete-amount"></dd>
+          </div>
+          <div>
+            <dt>支払方法</dt>
+            <dd>銀行振込</dd>
+          </div>
+          <div>
+            <dt>振込名義例</dt>
+            <dd id="complete-transfer-name"></dd>
+          </div>
+          <div>
+            <dt>お振込み期限</dt>
+            <dd id="complete-due-date"></dd>
+          </div>
+          <div>
+            <dt>振込先</dt>
+            <dd id="complete-bank-info"></dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+    <script src="../assets/js/festa60-register.js" defer></script>
+  </body>
+</html>
