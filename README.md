@@ -4,7 +4,7 @@
 
 ## 60周年記念FESTA staging CRM
 
-このブランチでは、60周年記念FESTAの参加申込・CRM検証用に Cloudflare Pages Functions + D1 のstaging実装を追加しています。現時点の支払いは銀行振込のみで、将来のStripe / PAY.JP / KOMOJU等のオンライン決済連携に備えて支払方法・支払プロバイダ・外部決済IDを分離しています。
+このブランチでは、60周年記念FESTAの参加申込・CRM検証用に Cloudflare Pages Functions + D1 のstaging実装を追加しています。支払いはStripeカード決済と銀行振込を選択でき、支払方法・支払プロバイダ・外部決済IDを分離して管理します。
 
 重要な運用ルール:
 
@@ -49,6 +49,7 @@ Access対象:
 
 - `期` は申込フォームと管理画面の表示項目には出しません。名簿CSVの互換性のためDB列は残します。
 - OBOG系の会費区分は `一般OBOG`、`OBOG 6〜10年目`、`OBOG 5年目以下`、`OBOG役員・当日手伝い` に分けます。
+- プレミアム枠は `premium_gold`、`premium_silver`、`premium_bronze` に分けます。旧 `premium` と `donation_only` は互換性のため `premium_bronze` として扱います。
 - OBOG 6〜10年目は `2016〜2020年度卒`、OBOG 5年目以下は `2021〜2025年度卒` を想定しています。この年度定義は参加費に影響するため、本番前に委員会側で最終確定してください。
 - 申込者の会費は `会費区分`、`入金時期`、`懇親会参加有無` で計算します。
 - 懇親会なしの場合は、一般OBOG/OBOG 6〜10年目/OBOG 5年目以下から `2,000円` を差し引きます。
@@ -56,7 +57,7 @@ Access対象:
 - 同伴者がいる場合は、同伴者ごとに `氏名`、`続柄・関係`、`同伴者属性` を必須にします。
 - 同伴者属性は `同伴者（大人）`、`同伴者（子供）` から選択します。大人は懇親会参加 `8,000円` / 懇親会なし `6,000円`、子供は懇親会参加 `3,000円` / 懇親会なし `1,000円` として計算します。
 - 同伴者メールアドレスと補足欄は任意です。
-- 振込名義予定は任意入力です。申込者名と異なる名義で振り込む場合、管理画面で確認できます。
+- 銀行振込を選んだ場合、振込名義は `FESTA-000001 ヤマダタロウ` 形式で自動生成します。申込者名と異なる名義で振り込む場合は、連絡事項に補足します。
 
 ## Pages Functions API
 
@@ -64,8 +65,9 @@ Access対象:
   - 参加申込をD1へ保存
   - Turnstile Secret設定時は検証
   - `FESTA-000001` 形式の受付番号を発行
-  - `payment_method = bank_transfer`、`payment_provider = manual`、`payment_status = unpaid` で手動入金管理用のpaymentを作成
-  - 申込完了メール本文を生成し、`EMAIL_WEBHOOK_URL` 設定時のみ送信
+  - カード決済時は `payment_method = card`、`payment_provider = stripe`、`payment_status = pending` とし、Stripe Checkout URLを返す
+  - 銀行振込時は `payment_method = bank_transfer`、`payment_provider = manual`、`payment_status = unpaid` で手動入金管理用のpaymentを作成
+  - 銀行振込時は申込完了メール本文を生成し、`EMAIL_WEBHOOK_URL` 設定時のみ送信
 - `PATCH /api/festa60/admin/applications/:id`
   - `paymentStatus` を `unpaid` / `paid` / `cancelled` / `refunded` に更新
   - `paidAt` / `cancelledAt` / `refundedAt` に相当する日時を保存
@@ -161,7 +163,7 @@ npx wrangler pages secret put BANK_TRANSFER_DEADLINE_DAYS
 npx wrangler pages secret put CONTACT_EMAIL
 ```
 
-現時点の申込受付は銀行振込のみです。申込時は `payment_method = bank_transfer`、`payment_provider = manual`、`payment_status = unpaid` で保存し、管理画面で入金済み・キャンセル・返金済みに更新します。
+申込受付はStripeカード決済と銀行振込を選択できます。カード決済時はStripe Checkoutへ遷移し、Webhookで入金状態を更新します。銀行振込時は `payment_method = bank_transfer`、`payment_provider = manual`、`payment_status = unpaid` で保存し、管理画面で入金済み・キャンセル・返金済みに更新します。
 メール送信プロバイダを接続する場合は、必要に応じて `EMAIL_WEBHOOK_URL` と `EMAIL_API_TOKEN` をSecretに設定します。未設定の場合は送信をskipし、管理画面でメール本文を生成して手動送信できます。
 
 Production:
@@ -191,6 +193,8 @@ Secretsにする変数:
 - `BANK_TRANSFER_NOTE`
 - `BANK_TRANSFER_DEADLINE_DAYS`
 - `CONTACT_EMAIL`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
 - `EMAIL_WEBHOOK_URL`
 - `EMAIL_API_TOKEN`
 
@@ -199,17 +203,16 @@ Preview/staging検収用:
 - `ACCESS_BYPASS_TOKEN` または `ADMIN_API_TOKEN`
 - `ADMIN_TOKEN_BYPASS_ENABLED` / `ACCESS_BYPASS_ENABLED`
 
-## 銀行振込運用
+## 支払い運用
 
-1. `/festa60-register/` から申込を送る
+1. `/festa60-register/` から支払方法を選んで申込を送る
 2. `FESTA-000001` 形式の受付番号が発行されることを確認する
-3. 申込完了画面に受付番号、金額、銀行振込、振込名義例が表示されることを確認する
-4. 管理画面で `payment_status = unpaid` の申込を確認する
-5. 入金確認後、管理画面の「入金済みにする」で `payment_status = paid`、`paid_at` を保存する
-6. 生成された参加確定メール本文を送信する
-7. キャンセル時は `cancelled`、返金後は `refunded` に更新する
-
-将来オンライン決済を追加する場合は、申込ID `application_code` を中心にし、外部決済IDを `external_payment_id` に保存します。`payment_method` は `card`、`convenience_store`、`paypay` など、`payment_provider` は `stripe`、`payjp`、`komoju` などに拡張できます。
+3. カード決済の場合はStripe Checkoutへ遷移し、戻りURLとWebhookで状態を確認する
+4. 銀行振込の場合は申込完了画面に受付番号、金額、銀行振込、自動生成された振込名義が表示されることを確認する
+5. 管理画面で `payment_status = pending` または `unpaid` の申込を確認する
+6. 銀行振込の入金確認後、管理画面の「入金済みにする」で `payment_status = paid`、`paid_at` を保存する
+7. 生成された参加確定メール本文を送信する
+8. キャンセル時は `cancelled`、返金後は `refunded` に更新する
 
 ## staging検収手順
 
@@ -222,12 +225,13 @@ Preview/staging検収用:
    - `/api/stripe/webhook` はAccess対象外にし、署名なしPOSTでHTTP 400になること
 6. 銀行口座情報と `CONTACT_EMAIL` をPages Preview secretに設定する
 7. `/festa60-register/` で `TEST環境` バナーが見えることを確認する
-8. 有料申込で受付番号が発行され、`payment_method = bank_transfer`、`payment_provider = manual`、`payment_status = unpaid` になることを確認する
-9. 同伴者費、寄付、協賛が `payment_line_items` に保存されることを確認する
-10. 管理画面で入金済み・キャンセル・返金済みへ更新できることを確認する
-11. 入金済み更新時に `paid_at` が保存され、参加確定メール本文が生成されることを確認する
-12. 管理画面で申込一覧、支払状況、名簿照合、CSVエクスポート、ダミーCSV取込を確認する
-13. `git grep` で `.env`、秘密鍵、本物CSV、個人情報がGitに入っていないことを確認する
+8. カード決済の有料申込で受付番号が発行され、Stripe Checkoutへ遷移することを確認する
+9. 銀行振込の有料申込で `payment_method = bank_transfer`、`payment_provider = manual`、`payment_status = unpaid` になることを確認する
+10. 同伴者費、寄付、協賛が `payment_line_items` に保存されることを確認する
+11. 管理画面で入金済み・キャンセル・返金済みへ更新できることを確認する
+12. 入金済み更新時に `paid_at` が保存され、参加確定メール本文が生成されることを確認する
+13. 管理画面で申込一覧、支払状況、名簿照合、CSVエクスポート、ダミーCSV取込を確認する
+14. `git grep` で `.env`、秘密鍵、本物CSV、個人情報がGitに入っていないことを確認する
 
 ## 本番切替
 

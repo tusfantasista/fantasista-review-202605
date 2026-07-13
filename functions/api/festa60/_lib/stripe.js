@@ -73,7 +73,10 @@ function ticketLabel(ticketType) {
     obog_5_under: "60周年記念FESTA OBOG 5年目以下参加費",
     obog_staff: "60周年記念FESTA OBOG役員・当日手伝い参加費",
     current_student: "60周年記念FESTA 現役部員参加費",
-    premium: "60周年記念FESTA プレミアム参加枠",
+    premium: "60周年記念FESTA プレミアム Bronze",
+    premium_gold: "60周年記念FESTA プレミアム Gold",
+    premium_silver: "60周年記念FESTA プレミアム Silver",
+    premium_bronze: "60周年記念FESTA プレミアム Bronze",
   };
   return labels[ticketType] || labels.obog;
 }

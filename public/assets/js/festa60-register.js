@@ -8,6 +8,7 @@
   const receptionAttendance = document.getElementById("reception_attendance");
   const feePreview = document.getElementById("fee-preview");
   const completionPanel = document.getElementById("completion-panel");
+  const bankTransferNote = document.getElementById("bank-transfer-note");
   let turnstileToken = "";
   const obogSixTenFrom = 2016;
   const obogSixTenTo = 2020;
@@ -17,6 +18,9 @@
     obog_6_10: { early: 11000, year_end: 12000, regular: 12000 },
     obog_5_under: { early: 9000, year_end: 10000, regular: 10000 },
     current_student: { early: 4000, year_end: 4000, regular: 4000 },
+    premium_gold: { early: 100000, year_end: 100000, regular: 100000 },
+    premium_silver: { early: 50000, year_end: 50000, regular: 50000 },
+    premium_bronze: { early: 30000, year_end: 30000, regular: 30000 },
     premium: { early: 30000, year_end: 30000, regular: 30000 },
   };
   const companionFees = {
@@ -31,6 +35,7 @@
   fetch("/api/festa60/config")
     .then((response) => response.json())
     .then((config) => {
+      applyPaymentConfig(config);
       if (!config.turnstile_site_key) return;
       const script = document.createElement("script");
       script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
@@ -53,6 +58,9 @@
   ticketType.addEventListener("change", updateFeePreview);
   feePeriod.addEventListener("change", updateFeePreview);
   receptionAttendance.addEventListener("change", updateFeePreview);
+  form.querySelectorAll('input[name="payment_method"]').forEach((input) => {
+    input.addEventListener("change", updatePaymentMethodUi);
+  });
   form.addEventListener("input", function (event) {
     if (["donation_amount_jpy", "sponsorship_amount_jpy"].includes(event.target.name)) {
       updateFeePreview();
@@ -60,6 +68,7 @@
   });
   renderCompanions();
   updateGraduationRequirement();
+  updatePaymentMethodUi();
   updateFeePreview();
 
   form.addEventListener("submit", async function (event) {
@@ -75,7 +84,7 @@
         throw new Error(clientErrors.join("\n"));
       }
       payload.turnstile_token = turnstileToken;
-      payload.pay_now = false;
+      payload.pay_now = payload.payment_method === "card";
 
       const response = await fetch("/api/festa60/applications", {
         method: "POST",
@@ -85,6 +94,12 @@
       const result = await response.json();
       if (!response.ok || !result.ok) {
         throw new Error(result.message || result.error || "送信に失敗しました。");
+      }
+
+      if (result.checkout?.url) {
+        setMessage(`申込を保存しました。受付番号: ${result.application.applicationId || result.application.application_code}。カード決済画面へ移動します。`, "success");
+        window.location.href = result.checkout.url;
+        return;
       }
 
       renderCompletion(result, payload);
@@ -150,7 +165,8 @@
     payload.photo_consent = data.has("photo_consent");
     payload.donation_amount_jpy = normalizeAmount(payload.donation_amount_jpy);
     payload.sponsorship_amount_jpy = normalizeAmount(payload.sponsorship_amount_jpy);
-    payload.expected_transfer_name = String(payload.expected_transfer_name || "").trim();
+    payload.payment_method = payload.payment_method === "bank_transfer" ? "bank_transfer" : "card";
+    delete payload.expected_transfer_name;
     const count = Number(payload.companion_count || 0);
     payload.companions = [];
     for (let index = 0; index < count; index += 1) {
@@ -173,6 +189,30 @@
     return payload;
   }
 
+  function updatePaymentMethodUi() {
+    const method = new FormData(form).get("payment_method") || "card";
+    if (bankTransferNote) bankTransferNote.hidden = method !== "bank_transfer";
+    const button = form.querySelector("button[type='submit']");
+    if (button) button.textContent = method === "card" ? "申込してカード決済へ進む" : "申込して振込案内を受け取る";
+  }
+
+  function applyPaymentConfig(config) {
+    const cardInput = form.querySelector('input[name="payment_method"][value="card"]');
+    const bankInput = form.querySelector('input[name="payment_method"][value="bank_transfer"]');
+    const cardLabel = cardInput ? cardInput.closest(".crm-choice") : null;
+    const stripeEnabled = config && config.stripe_mode !== "disabled";
+    if (!cardInput || !bankInput) return;
+
+    cardInput.disabled = !stripeEnabled;
+    if (!stripeEnabled) {
+      bankInput.checked = true;
+      cardLabel?.classList.add("is-disabled");
+    } else {
+      cardLabel?.classList.remove("is-disabled");
+    }
+    updatePaymentMethodUi();
+  }
+
   function updateGraduationRequirement() {
     const graduationYear = document.getElementById("graduation_year");
     const requiresYear = ["obog", "obog_6_10", "obog_5_under", "obog_staff"].includes(ticketType.value);
@@ -183,7 +223,7 @@
     const data = new FormData(form);
     const payload = formPayload(data);
     const amount = calculateAmount(payload);
-    feePreview.textContent = `概算会費: ${amount.toLocaleString("ja-JP")}円`;
+    feePreview.textContent = `概算会費: ${amount.toLocaleString("ja-JP")}円 / 振込期限目安: ${feePeriodDueDateText(payload.fee_period)}`;
   }
 
   function validatePayload(payload) {
@@ -223,7 +263,7 @@
       base = Math.round((baseFees.obog[period] - noReceptionDiscount(reception)) * 0.5);
     } else if (payload.ticket_type === "current_student") {
       base = reception === "attending" ? baseFees.current_student[period] : 0;
-    } else if (payload.ticket_type !== "premium") {
+    } else if (!isPremiumTicket(payload.ticket_type)) {
       base = Math.max(0, base - noReceptionDiscount(reception));
     }
 
@@ -236,6 +276,19 @@
 
   function noReceptionDiscount(reception) {
     return reception === "without_reception" ? 2000 : 0;
+  }
+
+  function isPremiumTicket(ticketType) {
+    return ["premium", "premium_gold", "premium_silver", "premium_bronze"].includes(ticketType);
+  }
+
+  function feePeriodDueDateText(period) {
+    const labels = {
+      early: "2026年9月30日まで",
+      year_end: "2026年12月15日まで",
+      regular: "2027年1月31日まで",
+    };
+    return labels[period] || labels.regular;
   }
 
   function normalizeAmount(value) {

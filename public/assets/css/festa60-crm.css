@@ -142,6 +142,53 @@ body.festa60-crm {
   line-height: 1.55;
 }
 
+.crm-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.crm-choice {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-height: 72px;
+  border: 1px solid var(--crm-line);
+  border-radius: 14px;
+  padding: 12px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.crm-choice:has(input:checked) {
+  border-color: rgba(198, 154, 24, 0.65);
+  background: #fff8e4;
+}
+
+.crm-choice input {
+  margin-top: 0.35em;
+  accent-color: var(--crm-gold);
+}
+
+.crm-choice span {
+  display: grid;
+  gap: 2px;
+}
+
+.crm-choice strong {
+  color: var(--crm-ink);
+}
+
+.crm-choice small {
+  color: var(--crm-muted);
+  font-weight: 600;
+}
+
+.crm-choice.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .crm-field input,
 .crm-field select,
 .crm-field textarea,
@@ -416,7 +463,8 @@ body.festa60-crm {
 
 @media (max-width: 760px) {
   .crm-grid,
-  .crm-two {
+  .crm-two,
+  .crm-choice-grid {
     grid-template-columns: 1fr;
   }
 

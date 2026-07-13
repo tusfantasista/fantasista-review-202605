@@ -23,10 +23,24 @@ export function bankTransferGuide(application, env) {
     paymentStatus: application.payment_status || "unpaid",
     applicationId: application.application_code,
     amount: application.total_amount_jpy || application.amount_total || 0,
-    transferNameExample: `${application.application_code} ${application.full_name || application.name || ""}`.trim(),
-    dueDateText: `お申し込み日から${days}日以内`,
+    transferNameExample: application.expected_transfer_name || transferNameFor(application.application_code, application.full_name || application.name || ""),
+    dueDateText: feePeriodDueDateText(application.fee_period, days),
     bankInfo: info,
   };
+}
+
+function transferNameFor(applicationCode, fullName) {
+  const normalizedName = String(fullName || "").replace(/\s+/g, "").trim();
+  return `${applicationCode} ${normalizedName}`.trim();
+}
+
+function feePeriodDueDateText(period, fallbackDays) {
+  const labels = {
+    early: "2026年9月30日まで",
+    year_end: "2026年12月15日まで",
+    regular: "2027年1月31日まで",
+  };
+  return labels[period] || `お申し込み日から${fallbackDays}日以内`;
 }
 
 export function renderApplicationReceiptEmail(application, env) {

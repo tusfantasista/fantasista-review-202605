@@ -15,6 +15,9 @@ const BASE_FEES = {
   obog_6_10: { early: 11000, year_end: 12000, regular: 12000 },
   obog_5_under: { early: 9000, year_end: 10000, regular: 10000 },
   current_student: { early: 4000, year_end: 4000, regular: 4000 },
+  premium_gold: { early: 100000, year_end: 100000, regular: 100000 },
+  premium_silver: { early: 50000, year_end: 50000, regular: 50000 },
+  premium_bronze: { early: 30000, year_end: 30000, regular: 30000 },
   premium: { early: 30000, year_end: 30000, regular: 30000 },
 };
 
@@ -29,7 +32,10 @@ const TICKET_LABELS = {
   obog_5_under: "60周年記念FESTA OBOG 5年目以下参加費",
   obog_staff: "60周年記念FESTA OBOG役員・当日手伝い参加費",
   current_student: "60周年記念FESTA 現役部員参加費",
-  premium: "60周年記念FESTA プレミアム参加枠",
+  premium_gold: "60周年記念FESTA プレミアム Gold",
+  premium_silver: "60周年記念FESTA プレミアム Silver",
+  premium_bronze: "60周年記念FESTA プレミアム Bronze",
+  premium: "60周年記念FESTA プレミアム Bronze",
 };
 
 export function ticketAmount(ticketType, companions = 0, feePeriod = "regular", receptionAttendance = "attending") {
@@ -110,7 +116,7 @@ function ticketLineAmount(ticketType, feePeriod, receptionAttendance) {
   if (ticketType === "current_student") {
     return receptionAttendance === "attending" ? BASE_FEES.current_student[feePeriod] : 0;
   }
-  if (ticketType !== "premium") {
+  if (!isPremiumTicket(ticketType)) {
     base = Math.max(0, base - noReceptionDiscount(receptionAttendance));
   }
   return base;
@@ -118,8 +124,18 @@ function ticketLineAmount(ticketType, feePeriod, receptionAttendance) {
 
 export function normalizeTicketType(ticketType) {
   if (ticketType === "young_obog") return "obog_6_10";
-  if (ticketType === "donation_only") return "premium";
+  if (ticketType === "donation_only") return "premium_bronze";
+  if (ticketType === "premium") return "premium_bronze";
   return ticketType || "obog";
+}
+
+function isPremiumTicket(ticketType) {
+  return ["premium", "premium_gold", "premium_silver", "premium_bronze"].includes(ticketType);
+}
+
+function transferNameFor(applicationCode, fullName) {
+  const normalizedName = String(fullName || "").replace(/\s+/g, "").trim();
+  return `${applicationCode} ${normalizedName}`.trim();
 }
 
 function noReceptionDiscount(receptionAttendance) {
@@ -164,9 +180,13 @@ export async function insertApplication(db, payload, requestMeta = {}) {
   const lineItems = buildPaymentLineItems(payload, companions);
   const totalAmountJpy = lineItemsTotal(lineItems);
   const quantity = 1 + companions.length;
-  const paymentStatus = totalAmountJpy > 0 ? "unpaid" : "paid";
+  const payNow = payload.pay_now === true || payload.payment_method === "card";
+  const paymentMethod = payNow ? "card" : "bank_transfer";
+  const paymentProvider = payNow ? "stripe" : "manual";
+  const paymentStatus = totalAmountJpy > 0 ? (payNow ? "pending" : "unpaid") : "paid";
   const paidAt = paymentStatus === "paid" ? nowIso() : null;
   const now = nowIso();
+  const expectedTransferName = paymentMethod === "bank_transfer" ? transferNameFor(applicationCode, payload.full_name_kana || payload.full_name) : null;
 
   await db
     .prepare(
@@ -191,8 +211,8 @@ export async function insertApplication(db, payload, requestMeta = {}) {
       payload.reception_attendance || "attending",
       totalAmountJpy > 0 ? "pending" : "confirmed",
       paymentStatus,
-      "bank_transfer",
-      "manual",
+      paymentMethod,
+      paymentProvider,
       payload.external_payment_id || null,
       totalAmountJpy,
       quantity,
@@ -208,7 +228,7 @@ export async function insertApplication(db, payload, requestMeta = {}) {
       payload.postal_code || null,
       payload.address || null,
       companions.length,
-      payload.expected_transfer_name || null,
+      expectedTransferName,
       payload.actual_transfer_name || null,
       payload.message || null,
       payload.source || "public_form",
@@ -295,14 +315,16 @@ export async function insertApplication(db, payload, requestMeta = {}) {
     ...requestMeta,
   });
 
-  const paymentId = await createManualPayment(db, {
-    id,
-    member_id: match.member?.id || null,
-    amount_total: totalAmountJpy,
-    payment_status: paymentStatus,
-    ticket_type: normalizeTicketType(payload.ticket_type),
-    paid_at: paidAt,
-  });
+  const paymentId = paymentMethod === "bank_transfer"
+    ? await createManualPayment(db, {
+      id,
+      member_id: match.member?.id || null,
+      amount_total: totalAmountJpy,
+      payment_status: paymentStatus,
+      ticket_type: normalizeTicketType(payload.ticket_type),
+      paid_at: paidAt,
+    })
+    : null;
 
   return {
     id,
@@ -312,17 +334,20 @@ export async function insertApplication(db, payload, requestMeta = {}) {
     match_status: match.status,
     match_confidence: match.confidence,
     quantity,
+    ticket_type: normalizeTicketType(payload.ticket_type),
+    fee_period: payload.fee_period || "regular",
+    reception_attendance: payload.reception_attendance || "attending",
     amount_total: totalAmountJpy,
     total_amount_jpy: totalAmountJpy,
     amount: totalAmountJpy,
-    payment_method: "bank_transfer",
-    payment_provider: "manual",
+    payment_method: paymentMethod,
+    payment_provider: paymentProvider,
     payment_status: paymentStatus,
-    paymentMethod: "bank_transfer",
-    paymentProvider: "manual",
+    paymentMethod,
+    paymentProvider,
     paymentStatus,
-    expected_transfer_name: payload.expected_transfer_name || null,
-    expectedTransferName: payload.expected_transfer_name || null,
+    expected_transfer_name: expectedTransferName,
+    expectedTransferName,
     paid_at: paidAt,
     payment_id: paymentId,
     line_items: lineItems,
@@ -387,8 +412,9 @@ export async function createPayment(db, application, session, metadata) {
     .prepare(
       `INSERT INTO payments (
         id, application_id, member_id, stripe_checkout_session_id, stripe_payment_intent_id,
-        stripe_customer_id, amount_total, currency, status, ticket_type, metadata_json, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        stripe_customer_id, amount_total, currency, status, payment_method, payment_provider,
+        external_payment_id, ticket_type, metadata_json, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       paymentId,
@@ -400,6 +426,9 @@ export async function createPayment(db, application, session, metadata) {
       session.amount_total || application.amount_total || 0,
       session.currency || "jpy",
       session.payment_status || "created",
+      "card",
+      "stripe",
+      session.id,
       application.ticket_type,
       JSON.stringify(metadata),
       now,

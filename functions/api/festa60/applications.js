@@ -1,5 +1,5 @@
 import { badRequest, getClientMeta, json, methodNotAllowed, readJson, serverError } from "./_lib/http.js";
-import { requireDb } from "./_lib/env.js";
+import { publicBaseUrl, requireDb } from "./_lib/env.js";
 import { verifyTurnstile } from "./_lib/turnstile.js";
 import {
   FEE_PERIODS,
@@ -7,10 +7,12 @@ import {
   OBOG_6_10_GRADUATION_YEAR_FROM,
   OBOG_6_10_GRADUATION_YEAR_TO,
   RECEPTION_ATTENDANCE,
+  createPayment,
   insertApplication,
   normalizeTicketType,
 } from "./_lib/db.js";
 import { bankTransferGuide, maybeSendEmail, renderApplicationReceiptEmail } from "./_lib/email.js";
+import { createCheckoutSession } from "./_lib/stripe.js";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -22,6 +24,11 @@ export async function onRequestPost({ request, env }) {
 
     const turnstile = await verifyTurnstile(payload.turnstile_token, env, request);
     if (!turnstile.ok) return badRequest("Turnstile verification failed.", turnstile.result || turnstile.message);
+
+    const shouldPayByCard = payload.pay_now === true || payload.payment_method === "card";
+    if (shouldPayByCard && !env.STRIPE_SECRET_KEY) {
+      return badRequest("カード決済は現在利用できません。銀行振込を選択してください。", { payment_method: "stripe_not_configured" });
+    }
 
     const db = requireDb(env);
     payload.ticket_type = normalizeTicketType(payload.ticket_type);
@@ -39,6 +46,42 @@ export async function onRequestPost({ request, env }) {
       email: payload.email,
       quantity: application.quantity,
     };
+
+    if (shouldPayByCard && Number(application.amount_total || application.total_amount_jpy || 0) > 0) {
+      const { session, metadata } = await createCheckoutSession({
+        env,
+        application: applicationForMail,
+        request,
+        baseUrl: publicBaseUrl(env, request),
+      });
+      const paymentId = await createPayment(db, applicationForMail, session, metadata);
+
+      return json({
+        ok: true,
+        application: {
+          ...application,
+          payment_id: paymentId,
+        },
+        payment: {
+          paymentMethod: "card",
+          paymentProvider: "stripe",
+          paymentStatus: "pending",
+          amount: session.amount_total || application.amount_total || application.total_amount_jpy || 0,
+          checkoutSessionId: session.id,
+        },
+        checkout: {
+          id: session.id,
+          url: session.url,
+        },
+        receipt_email: {
+          sent: false,
+          skipped: true,
+          reason: "card_checkout_pending",
+        },
+        turnstile_skipped: Boolean(turnstile.skipped),
+      });
+    }
+
     const receiptEmail = renderApplicationReceiptEmail(applicationForMail, env);
     const emailDelivery = await maybeSendEmail(env, receiptEmail);
 
@@ -79,6 +122,9 @@ function validateApplication(payload) {
   if (!RECEPTION_ATTENDANCE.includes(payload.reception_attendance)) {
     errors.reception_attendance = "required";
   }
+  if (payload.payment_method && !["card", "bank_transfer"].includes(payload.payment_method)) {
+    errors.payment_method = "invalid";
+  }
   if (!payload.privacy_consent) {
     errors.privacy_consent = "required";
   }
@@ -87,9 +133,6 @@ function validateApplication(payload) {
     if (!Number.isFinite(amount) || amount < 0 || !Number.isInteger(amount)) {
       errors[amountField] = "invalid";
     }
-  }
-  if (payload.expected_transfer_name && String(payload.expected_transfer_name).length > 120) {
-    errors.expected_transfer_name = "too_long";
   }
   if (payload.companions && !Array.isArray(payload.companions)) {
     errors.companions = "must_be_array";

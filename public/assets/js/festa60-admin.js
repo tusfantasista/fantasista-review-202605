@@ -188,7 +188,10 @@
       obog_staff: "OBOG役員・当日手伝い",
       current_student: "現役部員",
       donation_only: "プレミアム参加枠",
-      premium: "プレミアム参加枠",
+      premium: "プレミアム Bronze",
+      premium_gold: "プレミアム Gold",
+      premium_silver: "プレミアム Silver",
+      premium_bronze: "プレミアム Bronze",
     };
     return labels[value] || value || "";
   }

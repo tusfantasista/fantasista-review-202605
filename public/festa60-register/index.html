@@ -45,11 +45,32 @@
           <h2>申込内容</h2>
           <div class="crm-notice">
             <h3>お支払い方法</h3>
-            <p>お支払い方法は、現在銀行振込のみとなります。</p>
-            <p>お申し込み後、受付番号とお振込先をメールにてご案内します。入金確認をもって、参加確定とさせていただきます。</p>
-            <p>お振込みの際は、確認のため、振込名義に受付番号とお名前をご入力ください。</p>
+            <p>カード決済または銀行振込を選択できます。カード決済を選ぶと、申込保存後にStripeの決済画面へ進みます。</p>
+            <p>銀行振込の場合は、受付番号とお振込先をメールにてご案内します。入金確認をもって、参加確定とさせていただきます。</p>
+            <p>お振込みの際は、完了画面と受付メールに表示される振込名義をご入力ください。</p>
             <p class="crm-example">例：FESTA-000123 ナカツタカフミ</p>
-            <p>振込手数料は参加者様のご負担となります。お申し込み日から7日以内にご入金が確認できない場合、お申し込みをキャンセル扱いとさせていただく場合があります。</p>
+            <p>振込手数料は参加者様のご負担となります。入金期限までにご入金が確認できない場合、お申し込みをキャンセル扱いとさせていただく場合があります。</p>
+          </div>
+
+          <fieldset class="crm-field">
+            <legend class="crm-label">支払方法 <span class="crm-required">必須</span></legend>
+            <div class="crm-choice-grid">
+              <label class="crm-choice">
+                <input type="radio" name="payment_method" value="card" checked />
+                <span><strong>カード決済</strong><small>Stripeの決済画面へ進みます</small></span>
+              </label>
+              <label class="crm-choice">
+                <input type="radio" name="payment_method" value="bank_transfer" />
+                <span><strong>銀行振込</strong><small>受付番号付きの振込名義を自動発行します</small></span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div id="bank-transfer-note" class="crm-notice crm-notice--plain" hidden>
+            <h3>銀行振込を選択した場合</h3>
+            <p>振込名義は受付番号の発行後に事務局側で自動設定します。</p>
+            <p class="crm-example">例：FESTA-000123 ヤマダタロウ</p>
+            <p>申込者以外の名義で振り込む場合は、連絡事項に補足してください。</p>
           </div>
           <div class="crm-two">
             <div class="crm-field">
@@ -99,9 +120,11 @@
                 <option value="obog_5_under">OBOG 5年目以下（2021〜2025年度卒）</option>
                 <option value="obog_staff">OBOG役員・当日手伝い</option>
                 <option value="current_student">現役部員</option>
-                <option value="premium">プレミアム参加枠</option>
+                <option value="premium_gold">プレミアム Gold</option>
+                <option value="premium_silver">プレミアム Silver</option>
+                <option value="premium_bronze">プレミアム Bronze</option>
               </select>
-              <p class="crm-help">現役部員は本体無料、懇親会参加時のみ4,000円です。</p>
+              <p class="crm-help">現役部員は本体無料、懇親会参加時のみ4,000円です。プレミアム枠は記念事業への支援を含む区分です。</p>
             </div>
             <div class="crm-field">
               <label for="fee_period">入金時期 <span class="crm-required">必須</span></label>
@@ -110,6 +133,7 @@
                 <option value="year_end">年内入金 〜12月中旬</option>
                 <option value="regular">通常 1月以降</option>
               </select>
+              <p class="crm-help">選択した入金時期に応じて会費と振込期限の案内を切り替えます。</p>
             </div>
           </div>
 
@@ -128,12 +152,6 @@
           </div>
 
           <div id="companions" class="crm-stack"></div>
-
-          <div class="crm-field">
-            <label for="expected_transfer_name">振込名義予定 <span class="crm-optional">任意</span></label>
-            <input id="expected_transfer_name" name="expected_transfer_name" maxlength="120" placeholder="例: FESTA-000123 ナカツタカフミ" />
-            <p class="crm-help">お振込み時の名義が申込者名と異なる場合は、予定されている振込名義をご入力ください。</p>
-          </div>
 
           <div class="crm-two">
             <div class="crm-field">
@@ -183,9 +201,9 @@
           <p class="crm-small">このページは本番導線には出さず、Cloudflare Pages PreviewとAccessで非公開にする想定です。</p>
           <ul class="crm-small">
             <li>D1 binding: <code>DB</code></li>
-            <li>現在の支払い方法: <code>bank_transfer</code></li>
-            <li>現在の支払いプロバイダ: <code>manual</code></li>
-            <li>将来のオンライン決済IDは <code>externalPaymentId</code> に分離して保存</li>
+            <li>支払い方法: <code>card</code> / <code>bank_transfer</code></li>
+            <li>支払いプロバイダ: <code>stripe</code> / <code>manual</code></li>
+            <li>オンライン決済IDは <code>externalPaymentId</code> に分離して保存</li>
             <li>Turnstile secret未設定時はローカル検証用にskip</li>
           </ul>
         </aside>
