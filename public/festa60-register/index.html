@@ -13,7 +13,31 @@
       <section class="crm-hero">
         <span class="crm-kicker">FESTA 60 Staging</span>
         <h1>60周年記念FESTA 参加申込</h1>
-        <p>この画面はCloudflare Pages Previewでの検証用です。現時点ではオンライン決済を使わず、銀行振込のみで申込受付と入金管理を行います。</p>
+        <p>この画面はCloudflare Pages Previewでの検証用です。申込情報と支払状況を分けて管理し、Stripe決済・銀行振込・管理画面での入金確認を検証します。</p>
+      </section>
+
+      <section id="checkout-return-panel" class="crm-section crm-return-panel" hidden aria-live="polite">
+        <div class="crm-return-panel__body">
+          <span id="checkout-return-kicker" class="crm-kicker">Checkout</span>
+          <h2 id="checkout-return-title">決済状況を確認しています</h2>
+          <p id="checkout-return-message"></p>
+          <dl class="crm-summary crm-summary--compact">
+            <div>
+              <dt>受付番号</dt>
+              <dd id="checkout-return-application">-</dd>
+            </div>
+            <div>
+              <dt>現在の状態</dt>
+              <dd id="checkout-return-status">-</dd>
+            </div>
+          </dl>
+          <div class="crm-return-actions">
+            <a id="checkout-return-contact" class="crm-button" href="../contact/">事務局へ連絡する</a>
+            <a class="crm-button crm-button--ghost" href="/festa60-register/">申込フォームを開き直す</a>
+            <a class="crm-button crm-button--ghost" href="/festa60-admin/">管理画面で確認する</a>
+          </div>
+          <p class="crm-small">同じ方が再度申し込む場合、重複登録になる可能性があります。受付番号が表示されている場合は、まず事務局または管理画面で状態を確認してください。</p>
+        </div>
       </section>
 
       <div class="crm-grid">

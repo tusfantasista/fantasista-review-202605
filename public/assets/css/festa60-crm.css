@@ -240,6 +240,38 @@ body.festa60-crm {
   font-weight: 800;
 }
 
+.crm-summary--compact {
+  max-width: 720px;
+}
+
+.crm-return-panel {
+  margin-top: 0;
+  margin-bottom: 20px;
+  border-color: rgba(180, 35, 24, 0.24);
+  background: linear-gradient(135deg, #fff7ed 0%, #fff 62%);
+}
+
+.crm-return-panel[data-kind="success"] {
+  border-color: rgba(31, 122, 77, 0.25);
+  background: linear-gradient(135deg, #edf9f1 0%, #fff 62%);
+}
+
+.crm-return-panel__body {
+  display: grid;
+  gap: 14px;
+}
+
+.crm-return-panel h2,
+.crm-return-panel p {
+  margin: 0;
+}
+
+.crm-return-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .crm-check {
   display: flex;
   gap: 10px;
@@ -390,5 +422,14 @@ body.festa60-crm {
 
   .crm-shell {
     width: min(100vw - 28px, 1120px);
+  }
+
+  .crm-summary div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .crm-return-actions .crm-button {
+    width: 100%;
   }
 }

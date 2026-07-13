@@ -26,6 +26,8 @@
 
   if (!form) return;
 
+  initCheckoutReturnPanel();
+
   fetch("/api/festa60/config")
     .then((response) => response.json())
     .then((config) => {
@@ -269,6 +271,59 @@
       `口座名義カナ：${escapeHtml(bank.accountHolderKana || "口座名義カナ未設定")}`,
       `備考：${escapeHtml(bank.transferNote || "振込手数料は参加者様のご負担となります。")}`,
     ].join("<br>");
+  }
+
+  function initCheckoutReturnPanel() {
+    const params = new URLSearchParams(window.location.search);
+    const checkoutStatus = params.get("checkout") || params.get("status") || "";
+    if (!checkoutStatus) return;
+
+    const panel = document.getElementById("checkout-return-panel");
+    const kicker = document.getElementById("checkout-return-kicker");
+    const title = document.getElementById("checkout-return-title");
+    const message = document.getElementById("checkout-return-message");
+    const application = document.getElementById("checkout-return-application");
+    const status = document.getElementById("checkout-return-status");
+    const contact = document.getElementById("checkout-return-contact");
+    if (!panel || !title || !message || !application || !status || !contact) return;
+
+    const applicationCode = sanitizeApplicationCode(params.get("application") || params.get("application_code") || "");
+    const isCancelled = ["cancelled", "canceled", "cancel"].includes(checkoutStatus);
+    const isSuccess = ["success", "completed", "paid"].includes(checkoutStatus);
+    const statusLabel = isSuccess ? "決済完了後の確認中" : isCancelled ? "決済未完了・確認待ち" : "状態確認中";
+    const subject = isCancelled
+      ? `【FANTASISTA 60周年FESTA】決済キャンセル後の確認 ${applicationCode || ""}`.trim()
+      : `【FANTASISTA 60周年FESTA】申込状況確認 ${applicationCode || ""}`.trim();
+    const body = [
+      "FANTASISTA 60周年FESTA事務局 御中",
+      "",
+      "以下の申込について確認をお願いします。",
+      "",
+      `受付番号: ${applicationCode || "不明"}`,
+      `画面表示ステータス: ${statusLabel}`,
+      "",
+      "氏名:",
+      "メールアドレス:",
+      "確認したい内容:",
+    ].join("\n");
+
+    panel.hidden = false;
+    panel.dataset.kind = isSuccess ? "success" : "cancelled";
+    kicker.textContent = isSuccess ? "Checkout Completed" : isCancelled ? "Checkout Cancelled" : "Checkout Status";
+    title.textContent = isSuccess ? "決済完了を確認しています" : isCancelled ? "決済は完了していません" : "申込状況を確認してください";
+    message.textContent = isSuccess
+      ? "Stripeから戻りました。決済反映には少し時間がかかる場合があります。受付番号を控え、管理画面または事務局からの案内をご確認ください。"
+      : isCancelled
+        ? "Stripe決済画面から戻りました。申込情報が作成済みの場合でも、決済はまだ完了していません。重複申込を避けるため、受付番号を控えて事務局または管理画面で状態を確認してください。"
+        : "外部決済画面から戻りました。受付番号を控えて、申込・支払状況をご確認ください。";
+    application.textContent = applicationCode || "URLに受付番号がありません";
+    status.textContent = statusLabel;
+    contact.href = `mailto:tus.fantasista@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  function sanitizeApplicationCode(value) {
+    const code = String(value || "").trim().toUpperCase();
+    return /^FESTA-\d{6}$/.test(code) ? code : "";
   }
 
   function escapeHtml(value) {
