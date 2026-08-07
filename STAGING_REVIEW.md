@@ -41,6 +41,8 @@ npx wrangler pages deploy public \
 - 一般申込はStripeサンドボックスへ遷移し、カード、対象端末のApple Pay・Google Pay、PayPay、銀行振込の有効な方法が表示される。
 - StripeサンドボックスのWebhook送信先は `/api/festa60/stripe/webhook` とし、`checkout.session.completed`、`checkout.session.async_payment_succeeded`、`checkout.session.async_payment_failed`、`checkout.session.expired`、`payment_intent.partially_funded` の5イベントを購読する。
 - 銀行振込の不足入金テストでは、D1の支払状態が `partially_funded`、申込状態が未確定のままとなり、確認済み入金額・不足額・メール送信時刻が記録されることを確認する。
+- `/festa60-admin/` と `/api/festa60/admin/*` はCloudflare Access認証後だけ表示でき、未認証では申込者の個人情報を返さない。
+- 管理画面の集計、検索、入金状態・プラン絞り込み、詳細表示、Stripe決済リンク、CSV出力を確認する。
 - `/festa60-register/?staff=1` だけに役員・当日お手伝い専用申込が表示され、一般申込には専用料金へのリンクがない。
 - 専用申込は正しいアクセスコードでのみ受け付け、コードはD1やGitHubに保存されない。
 - レビュー対象コミットとレビューURLを管理者へ提示する。

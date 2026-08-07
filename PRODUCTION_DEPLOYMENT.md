@@ -34,6 +34,8 @@ Subscribe it to:
 
 In Stripe Dashboard, enable cards, PayPay, and bank transfer for the account. Apple Pay and Google Pay are displayed by Stripe Checkout only when the device, browser, wallet, and card are eligible. The staff menu is available only at `/festa60-register/?staff=1`; never add a public navigation link or commit its access code.
 
+Create a Cloudflare Access application that protects both `/festa60-admin/*` and `/api/festa60/admin/*`. Allow only approved FESTA office members. Verify that an unauthenticated request cannot retrieve the dashboard HTML, JSON API, or CSV export before accepting production applications.
+
 ## Deploy
 
 ```bash

@@ -52,7 +52,7 @@ function resolveLocalTarget(sourceFile, rawPath) {
 
 function checkReference(sourceFile, originalValue) {
   const value = originalValue.trim();
-  if (!value || externalPattern.test(value)) return;
+  if (!value || externalPattern.test(value) || value.startsWith("/api/") || value.startsWith("../api/")) return;
 
   const hashIndex = value.indexOf("#");
   const queryIndex = value.indexOf("?");

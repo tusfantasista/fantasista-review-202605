@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <meta name="referrer" content="same-origin" />
+    <title>FESTA 60 申込管理</title>
+    <link rel="stylesheet" href="../assets/css/festa60-admin.css?v=20260807-1" />
+    <script src="../assets/js/festa60-admin.js?v=20260807-1" defer></script>
+  </head>
+  <body class="admin-page">
+    <div id="environment-banner" class="admin-environment" hidden>TEST環境 / Cloudflare Pages Preview / 本番データではありません</div>
+
+    <header class="admin-header">
+      <div>
+        <p class="admin-eyebrow">FANTASISTA 60TH FESTA</p>
+        <h1>申込・入金管理</h1>
+      </div>
+      <div class="admin-header__meta">
+        <span class="admin-access">Cloudflare Access 保護中</span>
+        <span id="admin-actor" class="admin-actor">認証確認中</span>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <section aria-labelledby="summary-title">
+        <div class="admin-section-heading">
+          <div>
+            <p class="admin-section-label">Summary</p>
+            <h2 id="summary-title">申込状況</h2>
+          </div>
+          <p id="last-updated" class="admin-updated">取得中</p>
+        </div>
+
+        <div id="summary-metrics" class="admin-metrics" aria-live="polite">
+          <article class="admin-metric"><span>申込件数</span><strong id="metric-applications">-</strong><small id="metric-attendees">参加人数 -</small></article>
+          <article class="admin-metric admin-metric--success"><span>入金済み</span><strong id="metric-paid">-</strong><small id="metric-paid-amount">-</small></article>
+          <article class="admin-metric admin-metric--warning"><span>不足入金</span><strong id="metric-partial">-</strong><small id="metric-partial-amount">-</small></article>
+          <article class="admin-metric admin-metric--danger"><span>未入金・手続中</span><strong id="metric-pending">-</strong><small id="metric-outstanding">-</small></article>
+          <article class="admin-metric"><span>申込総額</span><strong id="metric-expected-total">-</strong><small>取消・返金を含む</small></article>
+          <article class="admin-metric admin-metric--accent"><span>確認済み入金額</span><strong id="metric-received-total">-</strong><small id="metric-collection-rate">入金率 -</small></article>
+        </div>
+
+        <div class="admin-summary-grid">
+          <div class="admin-panel">
+            <h3>入金状況</h3>
+            <div id="payment-chart" class="admin-bar-chart" aria-label="入金状況の件数"></div>
+          </div>
+          <div class="admin-panel">
+            <h3>参加プラン</h3>
+            <div id="plan-chart" class="admin-bar-chart" aria-label="参加プラン別の件数"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-list-section" aria-labelledby="applications-title">
+        <div class="admin-section-heading admin-section-heading--actions">
+          <div>
+            <p class="admin-section-label">Applications</p>
+            <h2 id="applications-title">申込一覧</h2>
+          </div>
+          <div class="admin-command-bar">
+            <button id="refresh-button" class="admin-button" type="button">更新</button>
+            <a class="admin-button admin-button--primary" href="../api/festa60/admin/export" download>CSV出力</a>
+          </div>
+        </div>
+
+        <div class="admin-filters" aria-label="申込一覧の絞り込み">
+          <div class="admin-field admin-field--search">
+            <label for="search-input">検索</label>
+            <input id="search-input" type="search" placeholder="受付番号・氏名・メール" autocomplete="off" />
+          </div>
+          <div class="admin-field">
+            <label for="payment-filter">入金状態</label>
+            <select id="payment-filter">
+              <option value="all">すべて</option>
+              <option value="paid">入金済み</option>
+              <option value="partially_funded">不足入金</option>
+              <option value="pending">手続中</option>
+              <option value="unpaid">未入金</option>
+              <option value="cancelled">取消</option>
+              <option value="refunded">返金済み</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label for="plan-filter">プラン</label>
+            <select id="plan-filter">
+              <option value="all">すべて</option>
+              <option value="platinum">プラチナ</option>
+              <option value="gold">ゴールド</option>
+              <option value="silver">シルバー</option>
+              <option value="bronze">ブロンズ</option>
+              <option value="standard">通常参加</option>
+              <option value="staff">役員・お手伝い</option>
+              <option value="current_student">現役</option>
+              <option value="absent_donation">欠席者寄付</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label for="sort-select">並び順</label>
+            <select id="sort-select">
+              <option value="newest">申込日時が新しい順</option>
+              <option value="oldest">申込日時が古い順</option>
+              <option value="amount_desc">金額が高い順</option>
+              <option value="amount_asc">金額が低い順</option>
+              <option value="code">受付番号順</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="admin-list-meta">
+          <p id="result-count">0件</p>
+          <button id="clear-filters" class="admin-text-button" type="button">絞り込みを解除</button>
+        </div>
+
+        <div id="admin-message" class="admin-message" role="status" aria-live="polite">申込データを読み込んでいます。</div>
+
+        <div id="table-wrapper" class="admin-table-wrapper" hidden>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th scope="col">受付番号・申込日</th>
+                <th scope="col">申込者</th>
+                <th scope="col">プラン</th>
+                <th scope="col">金額</th>
+                <th scope="col">入金状態</th>
+                <th scope="col">参加状態</th>
+                <th scope="col"><span class="visually-hidden">操作</span></th>
+              </tr>
+            </thead>
+            <tbody id="applications-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="application-dialog" class="admin-dialog" aria-labelledby="dialog-title">
+      <div class="admin-dialog__header">
+        <div>
+          <p class="admin-section-label">Application Detail</p>
+          <h2 id="dialog-title">申込詳細</h2>
+        </div>
+        <form method="dialog"><button class="admin-button" type="submit">閉じる</button></form>
+      </div>
+      <div id="dialog-content" class="admin-dialog__content"></div>
+    </dialog>
+  </body>
+</html>

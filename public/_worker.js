@@ -880,7 +880,8 @@ async function listApplications(db) {
         a.match_confidence, a.status, a.payment_status, a.payment_method, a.payment_provider, a.external_payment_id,
         a.admin_note, a.attendance_status, a.total_amount_jpy, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at,
         m.member_code, m.full_name AS matched_member_name,
-        p.stripe_checkout_session_id, p.status AS latest_payment_status, p.amount_total,
+        p.stripe_checkout_session_id, p.stripe_payment_intent_id, p.stripe_customer_id, p.stripe_event_id,
+        p.status AS latest_payment_status, p.amount_total,
         p.amount_received_jpy, p.amount_remaining_jpy, p.partial_payment_at, p.partial_payment_email_sent_at,
         p.payment_method AS latest_payment_method, p.payment_provider AS latest_payment_provider,
         (
@@ -1871,6 +1872,7 @@ __name(onRequestPost7, "onRequestPost");
 var PROTECTED_PREFIXES = [
   "/apply",
   "/admin",
+  "/festa60-admin",
   "/api/festa60/admin"
 ];
 async function onRequest({ request, env, next }) {
