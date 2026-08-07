@@ -902,6 +902,54 @@ function numberOrNull(value) {
 __name(numberOrNull, "numberOrNull");
 
 // api/festa60/_lib/email.js
+function renderApplicationReceivedEmail(application, checkoutUrl) {
+  const name = application.full_name || application.name || "";
+  return {
+    to: application.email,
+    subject: "【60周年FESTA】お申込受付・お支払い手続きのご案内",
+    body: `${name} 様
+
+60周年FESTAへのお申込を受け付けました。
+現時点では未入金のため、参加はまだ確定していません。
+
+受付番号：${application.application_code || application.applicationId}
+お申込者名：${name}
+申込内容：${ticketLabel(application.ticket_type)}
+お支払い予定額：${formatYen(application.amount_total || application.total_amount_jpy)}
+
+お支払い手続き：
+${checkoutUrl}
+
+Stripeの画面で、カード、Apple Pay・Google Pay、PayPay、銀行振込から表示された方法をお選びください。
+銀行振込を選択すると、Stripeが振込先口座と支払期限を表示します。振込先を控え忘れた場合に備え、銀行振込選択後にも案内ページへのリンクをメールでお送りします。
+
+このメールは参加確定のお知らせではありません。入金確認後に、あらためて参加確定メールと領収書をご案内します。
+
+お支払い手続きのリンクには有効期限があります。開けない場合は、受付番号を添えてFESTA事務局へご連絡ください。`
+  };
+}
+__name(renderApplicationReceivedEmail, "renderApplicationReceivedEmail");
+function renderBankTransferInstructionsEmail(application, hostedInstructionsUrl) {
+  const name = application.full_name || application.name || "";
+  return {
+    to: application.email,
+    subject: "【60周年FESTA】銀行振込先・お支払い手順のご案内",
+    body: `${name} 様
+
+60周年FESTAのお支払い方法として銀行振込を受け付けました。
+現時点では未入金のため、参加はまだ確定していません。
+
+受付番号：${application.application_code || application.applicationId}
+お支払い予定額：${formatYen(application.amount_total || application.total_amount_jpy)}
+
+Stripeが発行した振込先口座と支払期限は、次の案内ページでご確認ください。
+${hostedInstructionsUrl}
+
+FESTAの受付番号を振込名義へ付ける必要はありません。Stripeの案内どおりにお振り込みください。
+入金確認後に、FESTA事務局から参加確定メールをお送りします。`
+  };
+}
+__name(renderBankTransferInstructionsEmail, "renderBankTransferInstructionsEmail");
 function renderPaymentConfirmedEmail(application) {
   const name = application.full_name || application.name || "";
   const quantity = application.quantity || 1;
@@ -1339,6 +1387,7 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   params.set("metadata[ticket_type]", metadata.ticket_type);
   params.set("payment_intent_data[metadata][application_id]", metadata.application_id);
   params.set("payment_intent_data[metadata][application_code]", application.application_code);
+  params.set("payment_intent_data[receipt_email]", application.email);
   const lineItems = (application.line_items || []).filter((item) => Number(item.amount_jpy || 0) > 0).slice(0, 20);
   if (!lineItems.length) {
     throw new Error("Stripe Checkout requires at least one positive payment line item.");
@@ -1368,6 +1417,23 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   return { session: result, metadata };
 }
 __name(createCheckoutSession, "createCheckoutSession");
+async function retrieveStripePaymentIntent(stripeSecret, paymentIntent) {
+  const paymentIntentId = typeof paymentIntent === "string" ? paymentIntent : paymentIntent?.id;
+  if (!paymentIntentId) return null;
+  const response = await fetch(`https://api.stripe.com/v1/payment_intents/${encodeURIComponent(paymentIntentId)}`, {
+    headers: { authorization: `Bearer ${stripeSecret}` }
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(`Stripe PaymentIntent retrieval failed: ${result.error?.message || response.status}`);
+  }
+  return result;
+}
+__name(retrieveStripePaymentIntent, "retrieveStripePaymentIntent");
+function bankTransferInstructionsUrl(paymentIntent) {
+  return paymentIntent?.next_action?.display_bank_transfer_instructions?.hosted_instructions_url || "";
+}
+__name(bankTransferInstructionsUrl, "bankTransferInstructionsUrl");
 async function verifyStripeSignature(payload, signatureHeader, webhookSecret) {
   if (!signatureHeader) return false;
   const parts = signatureHeader.split(",").reduce((result, part) => {
@@ -1437,6 +1503,13 @@ async function onRequestPost5({ request, env }) {
         if (event.data.object.payment_status === "paid" && event.data.object.metadata?.application_id) {
           const application = await getApplicationById(db, event.data.object.metadata.application_id);
           if (application) await maybeSendEmail(env, renderPaymentConfirmedEmail(application));
+        } else if (event.type === "checkout.session.completed" && event.data.object.metadata?.application_id) {
+          const paymentIntent = await retrieveStripePaymentIntent(requireStripeSecret(env), event.data.object.payment_intent);
+          const instructionsUrl = bankTransferInstructionsUrl(paymentIntent);
+          if (instructionsUrl) {
+            const application = await getApplicationById(db, event.data.object.metadata.application_id);
+            if (application) await maybeSendEmail(env, renderBankTransferInstructionsEmail(application, instructionsUrl));
+          }
         }
       } else if (event.type === "checkout.session.async_payment_failed") {
         await markCheckoutFailed(db, event.data.object, event.id);
@@ -1517,6 +1590,13 @@ async function onRequestPost6({ request, env }) {
         });
         application.payment_id = await createPayment(db, application, session, metadata);
         application.external_payment_id = session.id;
+        let applicationEmail;
+        try {
+          applicationEmail = await maybeSendEmail(env, renderApplicationReceivedEmail(application, session.url));
+        } catch (emailError) {
+          console.error("Application received email failed after Checkout creation.", emailError);
+          applicationEmail = { sent: false, skipped: false, error: emailError.message || "Email delivery failed." };
+        }
         return json({
           ok: true,
           application,
@@ -1527,7 +1607,8 @@ async function onRequestPost6({ request, env }) {
             checkoutUrl: session.url,
             checkoutSessionId: session.id
           },
-          receipt_email: { sent: false, skipped: true, reason: "Sent after Stripe payment confirmation." },
+          application_email: applicationEmail,
+          receipt_email: { sent: false, skipped: true, reason: "Sent by Stripe after payment confirmation." },
           turnstile_skipped: Boolean(turnstile.skipped)
         });
       } catch (stripeError) {
