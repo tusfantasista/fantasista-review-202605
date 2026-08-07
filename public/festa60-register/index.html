@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>60周年記念FESTA 参加申込</title>
+    <link rel="canonical" href="https://tus-fantasista-festa60.pages.dev/festa60-register/" />
+    <link rel="stylesheet" href="../assets/css/festa60-crm.css?v=20260807-1" />
+  </head>
+  <body class="festa60-crm">
+    <div id="environment-banner" class="crm-test-banner" hidden>TEST環境 / Cloudflare Pages Preview / 本番申込ではありません</div>
+    <main class="crm-shell">
+      <section class="crm-hero">
+        <span class="crm-kicker">FESTA 60 Registration</span>
+        <h1>60周年記念FESTA 参加申込</h1>
+        <p>参加情報、参加費・寄付、お支払い方法をご入力ください。入力内容に応じて、お支払い予定額をご案内します。</p>
+      </section>
+
+      <ol class="crm-steps" aria-label="申込手順">
+        <li id="step-entry" class="is-current" aria-current="step"><span>1</span>入力</li>
+        <li id="step-confirm"><span>2</span>内容確認</li>
+        <li id="step-complete"><span>3</span>申込完了</li>
+      </ol>
+
+      <div id="entry-panel" class="crm-grid">
+        <form id="festa60-form" class="crm-card crm-stack">
+          <h2>申込内容</h2>
+          <fieldset class="crm-payment-methods">
+            <legend>お支払い方法 <span class="crm-required">必須</span></legend>
+            <label class="crm-payment-option">
+              <input id="card-payment-method" type="radio" name="payment_method" value="card" checked />
+              <span><strong>クレジットカード <em id="stripe-payment-status"></em></strong><small id="stripe-payment-help">Stripeの決済画面へ移動します。</small></span>
+            </label>
+            <label class="crm-payment-option">
+              <input type="radio" name="payment_method" value="bank_transfer" />
+              <span><strong>銀行振込</strong><small>受付番号を発行し、振込先をご案内します。</small></span>
+            </label>
+          </fieldset>
+
+          <div id="card-payment-notice" class="crm-notice">
+            <h3>カード決済について</h3>
+            <ul>
+              <li>申込内容を保存した後、Stripeの決済画面へ移動します。</li>
+              <li>カード情報はStripeの画面で入力し、FESTAのサイトやデータベースには保存しません。</li>
+              <li>カード会社の判断により、3Dセキュアなどの本人認証を求められる場合があります。</li>
+              <li>決済完了後、Stripeの領収書メールとFESTA事務局の参加確定メールを送信します。</li>
+            </ul>
+            <p><a href="../festa-60th/faq/#payment">カード決済についてよくある質問を見る</a></p>
+          </div>
+
+          <div id="bank-payment-notice" class="crm-notice" hidden>
+            <h3>銀行振込</h3>
+            <p>お申し込み後、受付番号とお振込先をご案内します。入金確認をもって、参加確定とさせていただきます。</p>
+            <p>振込名義は、受付番号と申込者のカナ氏名から自動発行します。申込完了画面と受付メールに表示された名義をご入力ください。</p>
+            <p class="crm-example">例：FESTA-000123 ナカツタカフミ</p>
+            <p>振込手数料は参加者様のご負担となります。お申し込み日から7日以内にご入金が確認できない場合、お申し込みをキャンセル扱いとさせていただく場合があります。</p>
+          </div>
+
+          <div class="crm-field">
+            <label for="application_mode">申込区分 <span class="crm-required">必須</span></label>
+            <select id="application_mode" name="application_mode" required>
+              <option value="attending">FESTAに参加する</option>
+              <option value="absent_donation">欠席して寄付のみ申し込む</option>
+            </select>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="family_name">姓 <span class="crm-required">必須</span></label>
+              <input id="family_name" name="family_name" autocomplete="family-name" placeholder="例: 山田" required />
+            </div>
+            <div class="crm-field">
+              <label for="given_name">名 <span class="crm-required">必須</span></label>
+              <input id="given_name" name="given_name" autocomplete="given-name" placeholder="例: 太郎" required />
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="family_name_kana">姓（ふりがな） <span class="crm-required">必須</span></label>
+              <input id="family_name_kana" name="family_name_kana" placeholder="例: やまだ" required />
+            </div>
+            <div class="crm-field">
+              <label for="given_name_kana">名（ふりがな） <span class="crm-required">必須</span></label>
+              <input id="given_name_kana" name="given_name_kana" placeholder="例: たろう" required />
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="maiden_name">旧姓 <span class="crm-optional">任意</span></label>
+              <input id="maiden_name" name="maiden_name" />
+            </div>
+            <div class="crm-field">
+              <label for="email">メールアドレス <span class="crm-required">必須</span></label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div id="graduation-section" class="crm-two">
+            <div class="crm-field">
+              <label for="school_lineage">所属区分 <span class="crm-required">必須</span></label>
+              <select id="school_lineage" name="school_lineage" required>
+                <option value="">選択してください</option>
+                <option value="tus_obog">東京理科大学舞踏研究部 OBOG</option>
+                <option value="gakushuin_ouyukai">学習院ボールルームダンスクラブ桜友会</option>
+              </select>
+              <p class="crm-help">本人確認、全参加プランの卒部年度割引、ダンスタイムチケット枚数の判定に使用します。</p>
+            </div>
+            <div class="crm-field">
+              <label for="graduation_year">卒部年度 <span id="graduation-required-label" class="crm-required">必須</span></label>
+              <input id="graduation_year" name="graduation_year" inputmode="numeric" pattern="[0-9]{4}" placeholder="例: 1996" />
+              <p id="graduation-help" class="crm-help">東京理科大学舞踏研究部OBOGは必須です。学習院桜友会の方は任意です。</p>
+            </div>
+          </div>
+
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="phone">電話番号 <span class="crm-optional">任意</span></label>
+              <input id="phone" name="phone" autocomplete="tel" />
+            </div>
+            <div></div>
+          </div>
+
+          <div id="attendance-plan-section" class="crm-two">
+            <div class="crm-field">
+              <label for="ticket_type_display">卒部区分（割引・チケット判定）</label>
+              <input id="ticket_type_display" value="所属区分と卒部年度から自動判定" readonly />
+              <input id="ticket_type" name="ticket_type" type="hidden" value="obog" />
+              <p class="crm-help">卒部年度から、すべての参加者向けプランに適用する年次割引とチケット枚数を自動判定します。学習院桜友会の方は卒業11年目以上と同じ扱いです。</p>
+            </div>
+            <div class="crm-field">
+              <label for="support_tier">参加プラン <span class="crm-required">必須</span></label>
+              <select id="support_tier" name="support_tier" required>
+                <option value="platinum">プラチナ（プラン料金 100,000円）</option>
+                <option value="gold">ゴールド（プラン料金 50,000円）</option>
+                <option value="silver">シルバー（プラン料金 30,000円）</option>
+                <option value="bronze">ブロンズ（プラン料金 20,000円）</option>
+                <option value="none" selected>通常参加（基準額 15,000円・各種割引あり）</option>
+              </select>
+              <p class="crm-help">表示額は参加費・寄付・寄付特典を含む支払総額です。参加費相当額と寄付相当額の内訳は表示しません。</p>
+            </div>
+          </div>
+
+          <div id="support-plan-detail" class="crm-notice crm-notice--plain"></div>
+
+          <div id="fee-period-section" class="crm-field">
+            <label for="fee_period_display">申込時期</label>
+            <input id="fee_period_display" value="判定中" readonly />
+            <input id="fee_period" name="fee_period" type="hidden" value="early" />
+            <p class="crm-help">プラチナ・ゴールド・シルバー・ブロンズ・通常参加のすべてに、申込時期割引と卒部年度割引を併用します。</p>
+            <ul class="crm-help">
+              <li>2026年9月30日まで：各プランの基準価格から2,000円引き</li>
+              <li>2026年10月1日〜12月31日：各プランの基準価格から1,000円引き</li>
+              <li>卒業6〜10年目：さらに2,000円引き／卒業5年目以下：さらに4,000円引き</li>
+            </ul>
+          </div>
+
+          <div id="attendance-ticket-notice" class="crm-notice crm-notice--plain">
+            <h3>現役支援・ダンスタイムチケット</h3>
+            <p>現役部員とのダンスタイムで、1曲踊るごとにチケット1枚を現役部員へ渡せます。チケット相当額はすべて現役部へ還元し、競技力向上のための強化資金に充てます。</p>
+            <ul>
+              <li>プラチナ（基準100,000円）：600円券×25枚</li>
+              <li>ゴールド（基準50,000円）：500円券×20枚</li>
+              <li>シルバー（基準30,000円）：400円券×12枚</li>
+              <li>ブロンズ（基準20,000円）：300円券×5枚</li>
+              <li>通常参加（基準15,000円）：卒業11年目以上は300円券×3枚、卒業10年目以下は300円券×2枚</li>
+            </ul>
+            <p>各プランのチケットには通常参加分を含みます。プラン券と通常参加券は重複して配布しません。</p>
+            <ul>
+              <li>有料の大人同伴者には、お一人につき300円券を1枚配布します。子供同伴者への自動配布はありません。</li>
+              <li>同一申込・同一世帯内でのチケット共有は可能です。換金・第三者への転売はできません。</li>
+            </ul>
+            <p><strong>当日の追加購入は、1枚300円のチケットのみ販売します。</strong>売上はすべて現役支援に充てます。</p>
+          </div>
+
+          <div id="attendance-options-section">
+          <div class="crm-two">
+            <div class="crm-field">
+              <label for="reception_attendance">懇親会 <span class="crm-required">必須</span></label>
+              <select id="reception_attendance" name="reception_attendance" required>
+                <option value="attending">参加する</option>
+                <option value="without_reception">参加しない</option>
+              </select>
+              <p class="crm-help">懇親会へ参加しない場合も、参加プランの料金は変わりません。</p>
+            </div>
+            <div class="crm-field">
+              <label for="companion_count">OBOG以外の同伴者人数 <span class="crm-required">必須</span></label>
+              <input id="companion_count" name="companion_count" type="number" min="0" max="5" value="0" />
+              <p class="crm-help">大人8,000円、子供3,000円。懇親会不参加の場合は、大人6,000円、子供1,000円です。有料の大人同伴者には300円券を1枚配布し、子供同伴者への自動配布はありません。OBOGは同伴者に含めず、お一人ずつ別にお申し込み・お支払いください。</p>
+            </div>
+          </div>
+
+          <div id="companions" class="crm-stack"></div>
+          </div>
+
+          <div id="absent-donation-section" class="crm-notice crm-notice--plain" hidden>
+            <h3>欠席者向け寄付パッケージ</h3>
+            <p>FESTAを欠席し、寄付のみお申し込みになる方のパッケージです。申込時期による割引はありません。</p>
+            <div class="crm-field">
+              <label for="absent_donation_tier">寄付パッケージ <span class="crm-required">必須</span></label>
+              <select id="absent_donation_tier" name="absent_donation_tier">
+                <option value="" selected disabled>選択してください</option>
+                <option value="absent_donation_30000">プレミアム（30,000円）</option>
+                <option value="absent_donation_10000">アドバンス（10,000円）</option>
+                <option value="absent_donation_5000">スタンダード（5,000円）</option>
+              </select>
+            </div>
+            <div id="absent-plan-detail"></div>
+            <p class="crm-help">返礼品のデザイン・商品仕様・お渡し方法は、制作・配送状況等により変更する場合があります。</p>
+          </div>
+
+          <section class="crm-benefit-matrix" aria-labelledby="donation-benefits-title">
+            <div class="crm-benefit-matrix__heading">
+              <span class="crm-kicker">Donation Benefits</span>
+              <h3 id="donation-benefits-title">寄付と返礼のご案内</h3>
+              <p>寄付をいただいた方へ、感謝をお伝えする手書きメッセージや記念写真などをお送りします。返礼内容は参加者向けと欠席者向けで異なります。</p>
+            </div>
+
+            <div class="crm-benefit-group">
+              <h4>FESTA参加者向けプラン</h4>
+              <p>プラチナ、ゴールド、シルバー、ブロンズの表示額は、参加費・寄付・寄付特典を含む一体価格です。寄付は、記念展示、写真や映像、プロデモ、トライアル、世代交流を充実させ、FESTAをより彩り豊かな場にするための原資となります。</p>
+              <div class="crm-benefit-note">
+                <strong>寄付が現役支援につながります</strong>
+                <p>各プランに含まれるダンスタイムチケットは、当日のダンスタイムで皆さまから現役部員へ直接お渡しいただけます。受け取った現役部員には、チケットの券面相当額を全額還元します。</p>
+                <p>基本参加費とダンスタイムチケットの券面相当額を除く寄付相当分は、FESTAの交流企画や記念コンテンツの充実と、FMドレス・必要備品などを通じた現役部員の継続的な活動支援に活用します。</p>
+              </div>
+              <p>プラチナ、ゴールド、シルバー、ブロンズには、印刷した記念写真、手書きメッセージ、記念動画の視聴案内（QR）、記念ステッカーを後日郵送する予定です。土産品類は設けません。</p>
+              <div class="crm-benefit-table-wrap" tabindex="0" role="region" aria-label="FESTA参加者向けプランの比較表">
+                <table class="crm-benefit-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">プラン</th>
+                      <th scope="col">基準一体価格<br /><small>参加費・寄付を含む</small></th>
+                      <th scope="col">ダンスタイム券</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">プラチナ</th>
+                      <td>100,000円</td>
+                      <td>600円券×25枚</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">ゴールド</th>
+                      <td>50,000円</td>
+                      <td>500円券×20枚</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">シルバー</th>
+                      <td>30,000円</td>
+                      <td>400円券×12枚</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">ブロンズ</th>
+                      <td>20,000円</td>
+                      <td>300円券×5枚</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">通常参加</th>
+                      <td>15,000円</td>
+                      <td>卒業11年目以上：300円券×3枚<br />卒業10年目以下：300円券×2枚</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="crm-benefit-group">
+              <h4>欠席者向け寄付パッケージ</h4>
+              <p>参加費は含まれません。会場へお越しになれない方へ、プランに応じた返礼を後日お送りします。</p>
+              <div class="crm-benefit-table-wrap" tabindex="0" role="region" aria-label="欠席者向け寄付と返礼の比較表">
+                <table class="crm-benefit-table crm-benefit-table--compact">
+                  <thead>
+                    <tr>
+                      <th scope="col">プラン</th>
+                      <th scope="col">寄付額</th>
+                      <th scope="col">返礼の予定</th>
+                      <th scope="col">送付方法</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">プレミアム</th>
+                      <td>30,000円</td>
+                      <td>印刷写真、手書き手紙、動画QR、ステッカー、写真盾、限定記念品（ハンカチ）</td>
+                      <td>宅急便コンパクト</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">アドバンス</th>
+                      <td>10,000円</td>
+                      <td>印刷写真、手書き手紙、動画QR、ステッカー、写真スタンド</td>
+                      <td>レターパック</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">スタンダード</th>
+                      <td>5,000円</td>
+                      <td>印刷写真、手書き手紙、動画QR、ステッカー</td>
+                      <td>定形郵便等</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="crm-benefit-note">
+              <strong>返礼品・送付について</strong>
+              <p>掲載内容は現時点の予定です。写真・動画・記念品の仕様、配送方法、発送時期は制作状況により変更する場合があります。寄付をお申し込みの方は、下記の送付先をご入力ください。</p>
+            </div>
+          </section>
+
+          <section id="return-address-section" class="crm-notice crm-return-address" aria-labelledby="return-address-title" hidden>
+            <div>
+              <h3 id="return-address-title">返礼品・お礼状の送付先</h3>
+              <p>寄付者へのお礼状・返礼品の発送に使用します。寄付をお申し込みの場合は必須です。</p>
+            </div>
+            <div class="crm-two crm-address-grid">
+              <div class="crm-field">
+                <label for="postal_code">郵便番号 <span class="crm-required">必須</span></label>
+                <div class="crm-input-action">
+                  <input id="postal_code" name="postal_code" inputmode="numeric" autocomplete="postal-code" maxlength="8" placeholder="例: 123-4567" />
+                  <button id="postal-lookup-button" class="crm-button crm-button--secondary" type="button">住所を検索</button>
+                </div>
+                <p id="postal-lookup-status" class="crm-help" aria-live="polite">7桁を入力すると住所を自動検索します。</p>
+              </div>
+              <div class="crm-field">
+                <label for="prefecture">都道府県 <span class="crm-required">必須</span></label>
+                <select id="prefecture" name="prefecture" autocomplete="address-level1">
+                  <option value="">選択してください</option>
+                  <option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option><option>秋田県</option><option>山形県</option><option>福島県</option>
+                  <option>茨城県</option><option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option><option>東京都</option><option>神奈川県</option>
+                  <option>新潟県</option><option>富山県</option><option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option><option>岐阜県</option><option>静岡県</option><option>愛知県</option>
+                  <option>三重県</option><option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option><option>奈良県</option><option>和歌山県</option>
+                  <option>鳥取県</option><option>島根県</option><option>岡山県</option><option>広島県</option><option>山口県</option><option>徳島県</option><option>香川県</option><option>愛媛県</option><option>高知県</option>
+                  <option>福岡県</option><option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option><option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option>
+                </select>
+              </div>
+            </div>
+            <div class="crm-field">
+              <label for="city">市区町村・町域 <span class="crm-required">必須</span></label>
+              <input id="city" name="city" autocomplete="address-level2" placeholder="例: 新宿区西新宿" />
+            </div>
+            <div class="crm-two">
+              <div class="crm-field">
+                <label for="street_address">番地 <span class="crm-required">必須</span></label>
+                <input id="street_address" name="street_address" autocomplete="address-line1" placeholder="例: 1-2-3" />
+              </div>
+              <div class="crm-field">
+                <label for="building">建物名・部屋番号 <span class="crm-optional">任意</span></label>
+                <input id="building" name="building" autocomplete="address-line2" placeholder="例: 理科大マンション101" />
+              </div>
+            </div>
+            <p class="crm-help">郵便番号検索では都道府県と市区町村・町域を補完します。番地と建物名はご自身で入力してください。送付先情報は返礼品・お礼状の発送と必要な連絡のみに使用します。</p>
+          </section>
+
+          <p id="fee-preview" class="crm-fee-preview" role="status" aria-live="polite"></p>
+
+          <div class="crm-field">
+            <label for="message">連絡事項 <span class="crm-optional">任意</span></label>
+            <textarea id="message" name="message"></textarea>
+          </div>
+
+          <label class="crm-check">
+            <input type="checkbox" name="privacy_consent" required />
+            <span>個人情報を60周年記念FESTAの申込内容確認、連絡、決済確認に利用することに同意します。</span>
+          </label>
+          <label class="crm-check">
+            <input type="checkbox" name="contact_consent" checked />
+            <span>事務局からメール等で連絡を受け取ることに同意します。</span>
+          </label>
+          <div id="photo-consent-section">
+          <div class="crm-notice crm-notice--plain">
+            <h3>当日の撮影・動画配信について</h3>
+            <p>当日は、イベントの記録および関係者への共有を目的として、会場内の写真・動画を撮影する場合があります。</p>
+            <p>撮影した動画は、YouTubeの限定公開等により関係者へ配信・共有する場合があります。会場全景、演技、ダンスタイム等の撮影時に、参加者の姿や音声が映り込むことがあります。</p>
+            <p>YouTubeの限定公開動画は、URLを知っている方が視聴でき、URLの再共有を完全に防ぐことはできません。</p>
+          </div>
+          <label class="crm-check">
+            <input type="checkbox" name="photo_consent" required />
+            <span>上記の撮影・限定公開による配信および映り込みについて了承します。</span>
+          </label>
+          </div>
+
+          <div class="crm-notice crm-notice--plain">
+            <h3>キャンセル・返金について</h3>
+            <p>キャンセルをご希望の場合は、問い合わせ先までご連絡ください。</p>
+            <p><strong>お支払い後のキャンセルに伴う返金は、原則として行いません。</strong></p>
+            <p>主催者都合による開催中止など、事務局が必要と判断した場合は個別にご案内します。</p>
+          </div>
+
+          <label class="crm-check">
+            <input type="checkbox" name="cancellation_policy_consent" required />
+            <span>上記のキャンセル・返金規定を確認し、同意します。</span>
+          </label>
+
+          <div id="turnstile-slot"></div>
+          <button class="crm-button" type="submit">入力内容を確認してカード決済へ</button>
+          <p id="form-message" class="crm-message" hidden></p>
+        </form>
+
+        <aside class="crm-card crm-stack">
+          <h2>お申し込み前に</h2>
+          <ul class="crm-small">
+            <li>申込完了後に受付番号を発行します。</li>
+            <li>カード情報はStripeが取り扱い、本サイトには保存しません。</li>
+            <li>銀行振込では、受付番号とお名前から振込名義を自動発行します。</li>
+            <li>寄付をお申し込みの方は、お礼状・返礼品の送付先住所をご入力ください。</li>
+          </ul>
+        </aside>
+      </div>
+
+      <section id="confirmation-panel" class="crm-section crm-stack" hidden aria-labelledby="confirmation-title">
+        <div>
+          <span class="crm-kicker">Confirm Registration</span>
+          <h2 id="confirmation-title" tabindex="-1">入力内容をご確認ください</h2>
+          <p class="crm-small">まだ申込は完了していません。内容を確認し、画面下部の確定ボタンを押してください。</p>
+        </div>
+        <div id="confirmation-summary" class="crm-confirmation"></div>
+        <div class="crm-notice">
+          <h3 id="confirmation-payment-title">確定後のお支払い</h3>
+          <p id="confirmation-payment-note"></p>
+        </div>
+        <div class="crm-confirmation-actions">
+          <button id="edit-application" class="crm-button crm-button--ghost" type="button">入力内容を修正する</button>
+          <button id="confirm-application" class="crm-button" type="button">この内容で申し込む</button>
+        </div>
+        <p id="confirmation-message" class="crm-message" hidden aria-live="assertive"></p>
+      </section>
+
+      <section id="completion-panel" class="crm-section crm-stack" hidden>
+        <h2 id="completion-title">お申し込みありがとうございます。</h2>
+        <p id="completion-guide">受付番号を発行しました。ご登録いただいたメールアドレス宛に、受付番号とお振込先をご案内します。</p>
+        <p id="completion-status">入金確認をもって参加確定とし、確認後に参加確定メールをお送りします。</p>
+        <p id="completion-transfer-guide">お振込みの際は、下記の自動発行された振込名義をご入力ください。</p>
+        <dl class="crm-summary">
+          <div>
+            <dt>受付番号</dt>
+            <dd id="complete-application-id"></dd>
+          </div>
+          <div>
+            <dt>お支払金額</dt>
+            <dd id="complete-amount"></dd>
+          </div>
+          <div>
+            <dt>支払方法</dt>
+            <dd id="complete-payment-method">銀行振込</dd>
+          </div>
+          <div>
+            <dt id="complete-transfer-name-label">振込名義例</dt>
+            <dd id="complete-transfer-name"></dd>
+          </div>
+          <div>
+            <dt>お振込み期限</dt>
+            <dd id="complete-due-date"></dd>
+          </div>
+          <div>
+            <dt id="complete-bank-info-label">振込先</dt>
+            <dd id="complete-bank-info"></dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+    <script src="../assets/js/festa60-register.js?v=20260807-1" defer></script>
+  </body>
+</html>

@@ -15,9 +15,35 @@ _backup*/
 
 # unpublished / private working materials
 private/
+private-imports/
 drafts/
 memo/
 notes/
+
+# credentials and personal data
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+*.pem
+*.key
+*alumni-master*
+*obog-master*
+*responses*.csv
+*contacts*.csv
+
+# generated Cloudflare production artifacts
+festa60-public/
+fantasista-site/public/
+
+# local databases and exports
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+exports/
 
 # git / OS
 .git/

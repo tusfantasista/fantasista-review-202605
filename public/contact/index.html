@@ -4,14 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>お問い合わせ | 東京理科大学舞踏研究部 OBOG会</title>
-    <meta name="description" content="FANTASISTA会へのお問い合わせ、60周年FESTA参加意向、写真・資料提供、協賛相談、近況・住所変更を受け付けます。GitHub Pages上に個人情報を保存しない静的メールフォームです。" />
-    <link rel="canonical" href="https://tusfantasista.github.io/fantasista-review-202605/contact/" />
+    <meta name="description" content="FANTASISTA会へのお問い合わせ、60周年FESTA参加、写真・資料提供、協賛相談、近況・住所変更をメールで受け付けます。" />
+    <link rel="canonical" href="https://tus-fantasista.pages.dev/contact/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/style.css" />
     <link rel="stylesheet" href="../assets/css/pages.css" />
-    <link rel="stylesheet" href="../assets/css/enhancements.css" />    <!-- REVIEW_CONTACT_PREPUBLISH_STYLE_START -->
+    <link rel="stylesheet" href="../assets/css/enhancements.css?v=20260803-1" />    <!-- REVIEW_CONTACT_PREPUBLISH_STYLE_START -->
     <style>
       .contact-list,
       .contact-example-list {
@@ -92,10 +92,10 @@
             <h2>お問い合わせ窓口</h2>
             <p>FANTASISTA会へのご連絡は、下記メールアドレスで受け付けています。内容に応じて事務局より順次ご返信します。</p>
             <p class="contact-card__mail">
-              <a href="mailto:tus.fantasista@gmail.com">tus.fantasista@gmail.com</a>
+              <a href="mailto:tus.festa.office@gmail.com">tus.festa.office@gmail.com</a>
             </p>
             <div class="contact-actions">
-              <a class="button button--primary" href="mailto:tus.fantasista@gmail.com">
+              <a class="button button--primary" href="mailto:tus.festa.office@gmail.com">
                 メールを送る
               </a>
             </div>
@@ -128,12 +128,18 @@
             <p class="contact-subnote">返信は原則1〜2週間程度を目安にしています。内容確認に時間を要する場合は、さらにお時間をいただくことがあります。</p>
           </div>
 
-          <div class="contact-card contact-form-card">
-            <p class="panel__eyebrow"><span class="label-ja">参加・問い合わせフォーム</span><span class="label-en">Static Form</span></p>
+          <div id="contact-form" class="contact-card contact-form-card">
+            <p class="panel__eyebrow"><span class="label-ja">参加・問い合わせフォーム</span><span class="label-en">Contact Form</span></p>
             <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z" /><path d="M4 8l8 6 8-6" /></svg></span>
-            <h2>入力内容は端末内だけで使います</h2>
-            <p>このフォームは静的サイト上の案内UIです。送信時はメールソフトを開き、GitHub上に個人情報を保存しません。</p>
-            <form class="static-contact-form" action="mailto:tus.fantasista@gmail.com" method="post" enctype="text/plain" data-mailto-form="general-contact" data-mailto-recipient="tus.fantasista@gmail.com" data-mailto-subject-prefix="【FANTASISTA会お問い合わせ】">
+            <h2>メールで問い合わせる</h2>
+            <p>必要事項を入力すると、送信内容の確認後にFANTASISTA会事務局へ直接送信できます。入力内容がこのサイト上に保存されることはありません。</p>
+            <form class="static-contact-form" action="mailto:tus.festa.office@gmail.com" method="post" enctype="text/plain" data-mailto-form="general-contact" data-contact-api="/api/contact" data-mailto-recipient="tus.festa.office@gmail.com" data-mailto-subject-prefix="【FANTASISTA会お問い合わせ】">
+              <div class="form-honeypot" aria-hidden="true">
+                <label>この欄は入力しないでください
+                  <input type="text" name="website" tabindex="-1" autocomplete="off" />
+                </label>
+              </div>
+              <input type="hidden" name="form_started_at" value="" />
               <div class="form-grid">
                 <label>氏名<span class="form-required">必須</span>
                   <input type="text" name="full_name" autocomplete="name" placeholder="例: 山田 太郎" required />
@@ -141,30 +147,8 @@
                 <label>旧姓・現姓がある場合の表記
                   <input type="text" name="maiden_name" placeholder="例: 旧姓 鈴木" />
                 </label>
-                <label>卒部年度
-                  <input type="text" name="graduation_year" placeholder="例: 2010年度卒 / 第45期" />
-                </label>
-                <label>所属校・系統
-                  <select name="school_lineage">
-                    <option value="">未回答</option>
-                    <option value="tokyo_university_of_science">東京理科大学</option>
-                    <option value="partner_school">提携校・関係校</option>
-                    <option value="active_student">現役</option>
-                    <option value="teacher_related">先生・関係者</option>
-                    <option value="other">その他</option>
-                  </select>
-                </label>
-                <label>所属校・団体名
-                  <input type="text" name="school_name" placeholder="例: 東京理科大学 / 理科大舞踏研究部" />
-                </label>
-                <label>専攻
-                  <select name="specialty">
-                    <option value="">未回答</option>
-                    <option value="standard">スタンダード</option>
-                    <option value="latin">ラテン</option>
-                    <option value="both">両方</option>
-                    <option value="other">その他</option>
-                  </select>
+                <label>卒部年度（西暦）
+                  <input type="text" name="graduation_year" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="例: 2010" />
                 </label>
                 <label>メールアドレス<span class="form-required">必須</span>
                   <input type="email" name="email" autocomplete="email" placeholder="example@example.com" required />
@@ -175,15 +159,12 @@
                 <label class="form-field--full">問い合わせ種別<span class="form-required">必須</span>
                   <select name="inquiry_type" required>
                     <option value="">選択してください</option>
-                    <option value="festa60_intent">60周年FESTA参加意向</option>
-                    <option value="photo_material_contribution">写真・資料提供</option>
-                    <option value="sponsorship_donation">協賛・広告・寄付相談</option>
-                    <option value="profile_update">近況連絡・住所変更</option>
-                    <option value="general">一般問い合わせ</option>
+                    <option value="festa60">60周年記念FESTA</option>
+                    <option value="general">一般の問い合わせ</option>
                   </select>
                 </label>
                 <label class="form-field--full">本文<span class="form-required">必須</span>
-                  <textarea name="message" placeholder="差し支えない範囲で、参加意向・写真提供内容・協賛相談・近況変更などをご記入ください。" required></textarea>
+                  <textarea name="message" placeholder="お問い合わせ内容をご記入ください。" required></textarea>
                 </label>
               </div>
 
@@ -195,23 +176,15 @@
                 </div>
               </fieldset>
 
-              <fieldset>
-                <legend>60周年FESTA案内の受信可否<span class="form-required">必須</span></legend>
-                <div class="form-choice-row">
-                  <label class="form-choice"><input type="radio" name="festa60_info_permission" value="yes" required />受け取る</label>
-                  <label class="form-choice"><input type="radio" name="festa60_info_permission" value="no" />受け取らない</label>
-                </div>
-              </fieldset>
-
               <label class="form-choice">
                 <input type="checkbox" name="privacy_consent" value="agree" required />
-                個人情報が問い合わせ対応、60周年FESTA運営、OBOG名簿確認、FANTASISTA会からの関連連絡の目的に使用されることに同意します。
+                個人情報が問い合わせ対応、60周年FESTA運営、会員情報の確認、FANTASISTA会からの関連連絡の目的に使用されることに同意します。
               </label>
 
-              <p class="form-note">入力内容はメール本文生成のみに使われ、GitHub Pages上には保存されません。将来Netlify FormsやCRMへ移行する際は、各項目のname属性をそのまま取り込み項目として利用できます。</p>
+              <p class="form-note">入力内容は問い合わせメールの送信にのみ使用し、このサイトやGitHub、Cloudflareのデータベースには保存しません。送信後、入力したメールアドレスへ自動受付メールをお送りします。</p>
               <div class="contact-actions">
                 <button class="button button--primary" type="submit">入力内容を確認する</button>
-                <a class="button button--ghost" href="mailto:tus.fantasista@gmail.com?subject=%E3%80%9060%E5%91%A8%E5%B9%B4FESTA%E3%80%91%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">60周年FESTAについてメールする</a>
+                <a class="button button--ghost" href="mailto:tus.festa.office@gmail.com?subject=%E3%80%9060%E5%91%A8%E5%B9%B4FESTA%E3%80%91%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">60周年FESTAについてメールする</a>
               </div>
             </form>
           </div>
@@ -224,15 +197,8 @@
         <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
       </div>
     </footer>
-    <script src="../assets/js/site.js" defer></script>
+    <script src="../assets/js/site.js?v=20260803-1" defer></script>
   </body>
 </html>
-
-
-
-
-
-
-
 
 

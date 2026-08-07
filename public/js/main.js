@@ -170,6 +170,17 @@
     document.body.appendChild(link);
   }
 
+  function initContactTypeFromUrl() {
+    const select = document.querySelector('select[name="inquiry_type"]');
+    if (!select) return;
+
+    const requestedType = new URLSearchParams(window.location.search).get("type");
+    const availableValues = Array.from(select.options).map((option) => option.value);
+    if (requestedType && availableValues.includes(requestedType)) {
+      select.value = requestedType;
+    }
+  }
+
   function initMailtoForms() {
     const forms = Array.from(document.querySelectorAll("[data-mailto-form]"));
     if (!forms.length) return;
@@ -180,18 +191,11 @@
       maiden_name: "旧姓・現姓",
       furigana: "ふりがな",
       graduation_year: "卒部年度",
-      graduation_year_or_generation: "卒部年度または期",
-      generation: "期",
-      school_lineage: "所属校・系統",
-      school_name: "所属校・団体名",
-      school_or_group: "所属していた大学・団体",
-      specialty: "専攻",
       affiliation: "所属区分",
       dance_role: "当時の役割",
       email: "メールアドレス",
       phone: "電話番号",
       contact_permission: "事務局からの連絡可否",
-      festa60_info_permission: "60周年FESTA案内の受信可否",
       preferred_contact_method: "主な連絡希望手段",
       attendance_intent: "参加意向",
       companion_status: "同伴者の有無",
@@ -249,7 +253,6 @@
         "FANTASISTA会 事務局 御中",
         "",
         "以下の内容で連絡します。",
-        "このメール本文はFANTASISTA会サイト上で生成されたものです。個人情報はGitHub Pages上には保存されません。",
         "",
         "---- 入力内容 ----",
       ];
@@ -260,23 +263,21 @@
         lines.push((fieldLabels[name] || name) + ": " + value);
       });
 
-      lines.push("", "---- 管理メモ ----");
-      lines.push("CSV/CRM移行時は、上記のname属性に対応する項目として取り込んでください。");
       return lines.join("\n");
     }
 
     function ensurePreview(form) {
-      let preview = form.querySelector(".mailto-preview");
+      let preview = form.parentElement.querySelector(".mailto-preview");
       if (preview) return preview;
 
-      preview = document.createElement("div");
+      preview = document.createElement("section");
       preview.className = "mailto-preview";
-      preview.setAttribute("role", "status");
-      preview.setAttribute("aria-live", "polite");
+      preview.id = "contact-confirm";
+      preview.setAttribute("aria-labelledby", "contact-confirm-title");
       preview.hidden = true;
       preview.innerHTML =
-        '<h3>送信内容の確認</h3><p>内容を確認し、メールソフトを開いて送信してください。開けない場合は本文をコピーして通常のメールに貼り付けられます。</p><textarea class="mailto-preview__body" readonly aria-label="生成されたメール本文"></textarea><div class="mailto-preview__actions"><a class="button button--primary mailto-preview__open" href="#">メールソフトを開く</a><button class="button button--ghost mailto-preview__copy" type="button">本文をコピーする</button></div><p class="mailto-preview__status" aria-live="polite"></p>';
-      form.appendChild(preview);
+        '<p class="panel__eyebrow">Confirm</p><h2 id="contact-confirm-title" tabindex="-1">入力内容の確認</h2><p class="mailto-preview__notice"><strong>まだ送信は完了していません。</strong><br>内容を確認し、メールソフトを開いて送信してください。</p><textarea class="mailto-preview__body" readonly aria-label="生成されたメール本文"></textarea><div class="mailto-preview__actions"><button class="button button--ghost mailto-preview__edit" type="button">入力内容を修正する</button><a class="button button--primary mailto-preview__open" href="#">メールソフトを開く</a><button class="button button--ghost mailto-preview__copy" type="button">本文をコピーする</button></div><p class="mailto-preview__fallback">メールソフトが開かない場合は、本文をコピーして通常のメールに貼り付けてください。</p><p class="mailto-preview__status" aria-live="polite"></p>';
+      form.insertAdjacentElement("afterend", preview);
       return preview;
     }
 
@@ -288,7 +289,7 @@
           return;
         }
 
-        const recipient = form.dataset.mailtoRecipient || "tus.fantasista@gmail.com";
+        const recipient = form.dataset.mailtoRecipient || "tus.festa.office@gmail.com";
         const subjectPrefix = form.dataset.mailtoSubjectPrefix || "【FANTASISTA会】問い合わせ";
         const name = getFieldValue(form, "full_name");
         const subject = name ? subjectPrefix + " " + name : subjectPrefix;
@@ -297,15 +298,25 @@
         const preview = ensurePreview(form);
         const textarea = preview.querySelector(".mailto-preview__body");
         const openLink = preview.querySelector(".mailto-preview__open");
+        const editButton = preview.querySelector(".mailto-preview__edit");
         const copyButton = preview.querySelector(".mailto-preview__copy");
         const status = preview.querySelector(".mailto-preview__status");
+        const title = preview.querySelector("#contact-confirm-title");
 
         textarea.value = body;
         openLink.href = href;
+        form.hidden = true;
         preview.hidden = false;
         status.textContent = "";
-        preview.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        openLink.focus();
+        preview.scrollIntoView({ behavior: "smooth", block: "start" });
+        title.focus();
+
+        editButton.onclick = function () {
+          preview.hidden = true;
+          form.hidden = false;
+          form.scrollIntoView({ behavior: "smooth", block: "start" });
+          form.querySelector("[name='full_name']").focus();
+        };
 
         copyButton.onclick = function () {
           const copy = navigator.clipboard
@@ -333,5 +344,6 @@
   initFilters();
   initLightbox();
   initFestaQuickLink();
+  initContactTypeFromUrl();
   initMailtoForms();
 })();

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tus-fantasista.pages.dev/sitemap.xml

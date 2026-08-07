@@ -1,0 +1,40 @@
+name: Validate public site
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Build production artifacts
+        run: |
+          ./scripts/build-festa60-production.sh
+          ./scripts/build-fantasista-production.sh
+
+      - name: Check links, assets, and fragments
+        run: |
+          node scripts/check-local-links.mjs public
+          node scripts/check-local-links.mjs festa60-public
+          node scripts/check-local-links.mjs fantasista-site/public
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check public/_worker.js
+          node --check public/assets/js/festa60-register.js
+          node --check public/assets/js/site.js
+          node --check scripts/check-local-links.mjs

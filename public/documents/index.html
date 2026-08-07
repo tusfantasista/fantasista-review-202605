@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>資料のご案内｜東京理科大学舞踏研究部 FANTASISTA会</title>
+    <title>公開資料｜東京理科大学舞踏研究部 FANTASISTA会</title>
     <meta
       name="description"
-      content="東京理科大学舞踏研究部 FANTASISTA会の資料公開方針と、今後掲載予定の資料に関するご案内ページです。"
+      content="東京理科大学舞踏研究部OBOG会 FANTASISTAの会則など、一般公開資料を閲覧・ダウンロードできます。"
     />
     
     
@@ -78,18 +78,41 @@
 
       .docs-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 780px);
+        justify-content: center;
         gap: 18px;
       }
 
       .docs-card {
-        padding: 24px 22px;
-        border-radius: 24px;
+        display: grid;
+        grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+        overflow: hidden;
+        border: 1px solid rgba(25, 31, 42, 0.1);
+        border-radius: 8px;
         background: #ffffff;
         box-shadow: 0 18px 44px rgba(12, 18, 28, 0.10);
       }
 
-      .docs-card span {
+      .docs-card__preview {
+        min-height: 320px;
+        background: #e9e7e2;
+      }
+
+      .docs-card__preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+      }
+
+      .docs-card__body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 28px;
+      }
+
+      .docs-card__category {
         display: block;
         margin-bottom: 8px;
         color: #8a6a00;
@@ -106,9 +129,30 @@
       }
 
       .docs-card p {
-        margin: 0;
+        margin: 0 0 14px;
         color: #59606b;
         line-height: 1.85;
+      }
+
+      .docs-card__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        margin: 0 0 20px;
+        padding: 0;
+        color: #59606b;
+        font-size: 0.9rem;
+        list-style: none;
+      }
+
+      .docs-card__meta li {
+        position: relative;
+      }
+
+      .docs-card__meta li + li::before {
+        position: absolute;
+        left: -10px;
+        content: "·";
       }
 
       .docs-layout {
@@ -122,6 +166,12 @@
         border-radius: 28px;
         background: linear-gradient(180deg, #fffdfa 0%, #fff8ee 100%);
         box-shadow: 0 20px 48px rgba(12, 18, 28, 0.10);
+      }
+
+      .docs-access-note {
+        max-width: 780px;
+        margin: 0 auto;
+        text-align: center;
       }
 
       .docs-panel--white {
@@ -198,7 +248,16 @@
           margin-right: auto;
         }
 
-        .docs-card,
+        .docs-card {
+          grid-template-columns: 1fr;
+        }
+
+        .docs-card__preview {
+          min-height: 0;
+          aspect-ratio: 16 / 10;
+        }
+
+        .docs-card__body,
         .docs-panel {
           padding: 22px 18px;
         }
@@ -259,107 +318,123 @@
         <div class="page-hero__grid" aria-hidden="true"></div>
         <img class="page-hero__seal" src="../assets/img/university-seal.png" alt="" aria-hidden="true" />
         <div class="container page-hero__inner">
-          <p class="page-hero__eyebrow"><span class="label-ja">資料のご案内</span><span class="label-en">Documents</span></p>
-          <h1 class="page-hero__title">資料のご案内</h1>
-                    <p class="page-hero__lead">
-            FANTASISTA会で扱う資料の位置づけと、今後の公開方針をご案内するページです。
-            現在は、公開範囲と掲載方法を整理しながら、関係者向け資料の案内方針を中心に掲載しています。
+          <p class="page-hero__eyebrow"><span class="label-ja">公開資料</span><span class="label-en">Documents</span></p>
+          <h1 class="page-hero__title">公開資料</h1>
+          <p class="page-hero__lead">
+            FANTASISTA会の会則など、一般公開している資料を閲覧・ダウンロードできます。
           </p>
-          <p class="docs-note">
-            ※ 総会資料、過去FESTAパンフレット、会則、議事録等は、
-            公開範囲と掲載方法を整理したうえで順次ご案内します。
-          </p>
+          <p class="docs-note">掲載資料は、個人情報を含まない一般公開版です。</p>
         </div>
       </section>
 
       <section class="page-section">
         <div class="container">
           <div class="section-head section-head--center">
-            <p class="section-head__kicker"><span class="label-ja">資料の位置づけ</span><span class="label-en">Overview</span></p>
-            <h2>主な資料カテゴリ</h2>
-            <p>
-              FANTASISTA会では、記録とつながりを大切にしながら、
-              会の歩みを振り返るための資料を整理していく予定です。
-            </p>
+            <p class="section-head__kicker"><span class="label-ja">資料一覧</span><span class="label-en">Library</span></p>
+            <h2>閲覧できる資料</h2>
+            <p>資料名を選ぶとPDFをブラウザで閲覧できます。</p>
           </div>
 
           <div class="filter-toolbar" data-doc-filter aria-label="資料カテゴリフィルター">
             <button class="filter-button" type="button" data-filter="all" aria-pressed="true">すべて</button>
             <button class="filter-button" type="button" data-filter="meeting" aria-pressed="false">総会資料</button>
-            <button class="filter-button" type="button" data-filter="festa" aria-pressed="false">FESTA資料</button>
-            <button class="filter-button" type="button" data-filter="rules" aria-pressed="false">会則・記録</button>
+            <button class="filter-button" type="button" data-filter="rules" aria-pressed="false">会則・規程</button>
           </div>
 
           <div class="docs-grid">
             <article class="docs-card" data-doc-category="meeting">
-              <span>General Meeting</span>
-              <h3>総会資料</h3>
-              <p>年度ごとの総会関連資料を、公開範囲を確認しながら整理していきます。</p>
-            </article>
-
-            <article class="docs-card" data-doc-category="festa">
-              <span>FESTA Archive</span>
-              <h3>過去FESTA関連資料</h3>
-              <p>パンフレットや配布資料など、記録性の高い資料を順次整理していきます。</p>
+              <a
+                class="docs-card__preview"
+                href="../assets/documents/public/fantasista-general-meeting-2025-public-summary.pdf"
+                target="_blank"
+                rel="noopener"
+                aria-label="FANTASISTA 2025年度総会 公開用要約のPDFを開く"
+              >
+                <img
+                  src="../assets/img/documents/fantasista-general-meeting-2025-public-summary.jpg"
+                  alt="FANTASISTA 2025年度総会 公開用要約の表紙"
+                  width="707"
+                  height="1000"
+                />
+              </a>
+              <div class="docs-card__body">
+                <span class="docs-card__category">総会資料</span>
+                <h3>FANTASISTA 2025年度総会 公開用要約</h3>
+                <p>総会で承認された事項、2025年度の活動報告、2026年度の活動方針を一般公開向けにまとめた資料です。</p>
+                <ul class="docs-card__meta" aria-label="資料情報">
+                  <li>2026年2月7日開催</li>
+                  <li>2ページ</li>
+                  <li>PDF・68KB</li>
+                </ul>
+                <div class="docs-actions">
+                  <a
+                    class="button button--primary"
+                    href="../assets/documents/public/fantasista-general-meeting-2025-public-summary.pdf"
+                    target="_blank"
+                    rel="noopener"
+                  >PDFを開く</a>
+                  <a
+                    class="button button--ghost"
+                    href="../assets/documents/public/fantasista-general-meeting-2025-public-summary.pdf"
+                    download="fantasista-general-meeting-2025-public-summary.pdf"
+                  >ダウンロード</a>
+                </div>
+              </div>
             </article>
 
             <article class="docs-card" data-doc-category="rules">
-              <span>Records</span>
-              <h3>会則・活動記録</h3>
-              <p>会の運営や歴史をたどる資料として、必要な範囲でご案内していく予定です。</p>
+              <a
+                class="docs-card__preview"
+                href="../assets/documents/public/fantasista-bylaws-2026-02-07.pdf"
+                target="_blank"
+                rel="noopener"
+                aria-label="FANTASISTA会則のPDFを開く"
+              >
+                <img
+                  src="../assets/img/documents/fantasista-bylaws-2026-02-07.jpg"
+                  alt="東京理科大学舞踏研究部OBOG会 FANTASISTA会則の表紙"
+                  width="1000"
+                  height="647"
+                />
+              </a>
+              <div class="docs-card__body">
+                <span class="docs-card__category">会則・規程</span>
+                <h3>東京理科大学舞踏研究部OBOG会「FANTASISTA」会則</h3>
+                <p>FANTASISTA会の目的、会員、役員、総会、会計などを定めた会則です。</p>
+                <ul class="docs-card__meta" aria-label="資料情報">
+                  <li>2026年2月7日施行</li>
+                  <li>4ページ</li>
+                  <li>PDF・102KB</li>
+                </ul>
+                <div class="docs-actions">
+                  <a
+                    class="button button--primary"
+                    href="../assets/documents/public/fantasista-bylaws-2026-02-07.pdf"
+                    target="_blank"
+                    rel="noopener"
+                  >PDFを開く</a>
+                  <a
+                    class="button button--ghost"
+                    href="../assets/documents/public/fantasista-bylaws-2026-02-07.pdf"
+                    download="fantasista-bylaws-2026-02-07.pdf"
+                  >ダウンロード</a>
+                </div>
+              </div>
             </article>
           </div>
         </div>
       </section>
 
       <section class="page-section page-section--light">
-        <div class="container docs-layout">
-          <div class="docs-panel">
-            <div class="section-head">
-              <p class="section-head__kicker"><span class="label-ja">公開方針</span><span class="label-en">Policy</span></p>
-              <h2>現在の公開方針</h2>
-              <p>
-                資料には関係者向けの情報が含まれる場合があるため、
-                現時点では個別資料の掲載を最小限にとどめています。
-              </p>
+        <div class="container">
+          <div class="docs-panel docs-panel--white docs-access-note">
+            <div class="section-head section-head--center">
+              <p class="section-head__kicker"><span class="label-ja">お問い合わせ</span><span class="label-en">Contact</span></p>
+              <h2>会員向け資料について</h2>
+              <p>このページに掲載していない資料については、FANTASISTA会事務局へお問い合わせください。</p>
             </div>
-
-            <ul class="docs-list">
-              <li>公開範囲が明確なものから順次ご案内します。</li>
-              <li>関係者向け資料は、外部への転送・再配布を前提としない形で整理します。</li>
-              <li>正式な閲覧方法や掲載場所は、決定次第このページでお知らせします。</li>
-            </ul>
-          </div>
-
-          <div class="docs-panel docs-panel--white">
-            <div class="section-head">
-              <p class="section-head__kicker"><span class="label-ja">今後のご案内</span><span class="label-en">Next</span></p>
-              <h2>準備中の内容</h2>
-              <p>
-                公開方法が整い次第、以下のような資料カテゴリを中心にご案内していきます。
-              </p>
-            </div>
-
-            <div class="docs-policy">
-              <article class="docs-policy-item">
-                <h3>OBOG向け資料の整理</h3>
-                <p>総会資料や過去記録を、公開範囲に配慮しながら分かりやすく整理していきます。</p>
-              </article>
-
-              <article class="docs-policy-item">
-                <h3>過去FESTAアーカイブとの連携</h3>
-                <p>ギャラリーやアーカイブページと役割を分けながら、記録資料としての位置づけを明確にします。</p>
-              </article>
-
-              <article class="docs-policy-item">
-                <h3>閲覧方法の明確化</h3>
-                <p>問い合わせ導線や資料掲載方法が固まり次第、改めて本ページでご案内します。</p>
-              </article>
-            </div>
-
-            <!-- TODO: OBOG向け資料室や正式な資料公開方法が決まり次第、ここに導線を追加する -->
             <div class="docs-actions">
-              <a class="button button--primary" href="../contact/">お問い合わせ</a>
+              <a class="button button--primary" href="../contact/">資料について問い合わせる</a>
               <a class="button button--ghost" href="../archive/">アーカイブを見る</a>
             </div>
           </div>
@@ -375,6 +450,3 @@
     <script src="../assets/js/site.js" defer></script>
   </body>
 </html>
-
-
-

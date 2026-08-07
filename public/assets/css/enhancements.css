@@ -145,6 +145,11 @@ html {
   margin-top: 18px;
 }
 
+.static-contact-form[hidden],
+.mailto-preview[hidden] {
+  display: none;
+}
+
 .static-contact-form label,
 .static-contact-form fieldset {
   display: grid;
@@ -233,14 +238,14 @@ html {
 }
 
 .mailto-preview {
-  margin-top: 10px;
+  margin-top: 18px;
   border: 1px solid rgba(161, 119, 20, 0.22);
   border-radius: 16px;
   background: #fffaf0;
   padding: 18px;
 }
 
-.mailto-preview h3 {
+.mailto-preview h2 {
   margin: 0 0 8px;
   color: #26211a;
 }
@@ -249,6 +254,17 @@ html {
   margin: 0 0 12px;
   color: #5f5547;
   line-height: 1.7;
+}
+
+.mailto-preview__notice {
+  border-left: 4px solid #a17714;
+  background: rgba(161, 119, 20, 0.08);
+  padding: 12px 14px;
+}
+
+.mailto-preview__fallback {
+  margin-top: 14px !important;
+  font-size: 0.9rem;
 }
 
 .mailto-preview__body {
@@ -298,15 +314,19 @@ html {
   font-weight: 700;
 }
 
+.form-honeypot {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+
 @media (max-width: 760px) {
   .festa-quick-link {
-    left: 12px;
-    right: 70px;
-    bottom: 14px;
-    justify-content: center;
-    max-width: none;
-    padding: 11px 12px;
-    font-size: 0.8rem;
+    display: none;
   }
 
   .top-button {

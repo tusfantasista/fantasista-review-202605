@@ -1,5 +1,15 @@
 # FANTASISTA サイト構成メモ
 
+## 現在の正本と公開手順
+
+- 編集の正本は `public/` です。ルート直下に残る旧ページを直接編集しません。
+- 60周年特設の本番成果物は `scripts/build-festa60-production.sh` で `festa60-public/` に生成します。
+- FANTASISTA本体の本番成果物は `scripts/build-fantasista-production.sh` で `fantasista-site/public/` に生成します。
+- 生成物、秘密情報、フォーム回答、名簿、管理用CSVはGitHubへ保存しません。
+- 本番反映は、ローカルプレビューと差分レビューの後、サイト管理者が明示的に許可した場合だけ実施します。
+
+詳細は [`RELEASE_WORKFLOW.md`](./RELEASE_WORKFLOW.md) を参照してください。
+
 このリポジトリは、FANTASISTA会の仮公式サイトと、60周年記念FESTA関連ページを管理します。
 
 ## 公式ページ

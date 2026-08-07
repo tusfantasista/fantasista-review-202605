@@ -121,8 +121,7 @@
   }
 
   function initLightbox() {
-    const links = Array.from(document.querySelectorAll('.gallery-thumb-card[href$=".jpg"], .gallery-photo-card a[href$=".jpg"]'));
-    if (!links.length) return;
+    const selector = '.gallery-thumb-card[href$=".jpg"], .gallery-thumb-card[href$=".jpeg"], .gallery-thumb-card[href$=".png"], .gallery-thumb-card[href$=".webp"], .gallery-photo-card a[href$=".jpg"], .gallery-photo-card a[href$=".jpeg"], .gallery-photo-card a[href$=".png"], .gallery-photo-card a[href$=".webp"], .archive-photo-card[href$=".webp"]';
 
     const lightbox = document.createElement("div");
     lightbox.className = "lightbox";
@@ -139,17 +138,17 @@
       document.body.style.overflow = "";
     }
 
-    links.forEach((link) => {
-      link.addEventListener("click", function (event) {
-        const img = link.querySelector("img");
-        event.preventDefault();
-        image.src = link.href;
-        image.alt = img ? img.alt : "";
-        caption.textContent = img ? img.alt : "";
-        lightbox.hidden = false;
-        document.body.style.overflow = "hidden";
-        close.focus();
-      });
+    document.addEventListener("click", function (event) {
+      const link = event.target.closest(selector);
+      if (!link) return;
+      const img = link.querySelector("img");
+      event.preventDefault();
+      image.src = link.href;
+      image.alt = img ? img.alt : "";
+      caption.textContent = img ? img.alt : "";
+      lightbox.hidden = false;
+      document.body.style.overflow = "hidden";
+      close.focus();
     });
 
     close.addEventListener("click", hide);
@@ -170,6 +169,17 @@
     document.body.appendChild(link);
   }
 
+  function initContactTypeFromUrl() {
+    const select = document.querySelector('select[name="inquiry_type"]');
+    if (!select) return;
+
+    const requestedType = new URLSearchParams(window.location.search).get("type");
+    const availableValues = Array.from(select.options).map((option) => option.value);
+    if (requestedType && availableValues.includes(requestedType)) {
+      select.value = requestedType;
+    }
+  }
+
   function initMailtoForms() {
     const forms = Array.from(document.querySelectorAll("[data-mailto-form]"));
     if (!forms.length) return;
@@ -180,18 +190,11 @@
       maiden_name: "旧姓・現姓",
       furigana: "ふりがな",
       graduation_year: "卒部年度",
-      graduation_year_or_generation: "卒部年度または期",
-      generation: "期",
-      school_lineage: "所属校・系統",
-      school_name: "所属校・団体名",
-      school_or_group: "所属していた大学・団体",
-      specialty: "専攻",
       affiliation: "所属区分",
       dance_role: "当時の役割",
       email: "メールアドレス",
       phone: "電話番号",
       contact_permission: "事務局からの連絡可否",
-      festa60_info_permission: "60周年FESTA案内の受信可否",
       preferred_contact_method: "主な連絡希望手段",
       attendance_intent: "参加意向",
       companion_status: "同伴者の有無",
@@ -204,7 +207,7 @@
       privacy_consent: "個人情報の取り扱いへの同意",
     };
 
-    const hiddenFields = new Set(["form-name"]);
+    const hiddenFields = new Set(["form-name", "website", "form_started_at"]);
 
     function getFieldValue(form, name) {
       const fields = Array.from(form.elements).filter((field) => field.name === name);
@@ -249,7 +252,6 @@
         "FANTASISTA会 事務局 御中",
         "",
         "以下の内容で連絡します。",
-        "このメール本文はFANTASISTA会サイト上で生成されたものです。個人情報はGitHub Pages上には保存されません。",
         "",
         "---- 入力内容 ----",
       ];
@@ -260,27 +262,45 @@
         lines.push((fieldLabels[name] || name) + ": " + value);
       });
 
-      lines.push("", "---- 管理メモ ----");
-      lines.push("CSV/CRM移行時は、上記のname属性に対応する項目として取り込んでください。");
       return lines.join("\n");
     }
 
+    function buildPayload(form) {
+      const payload = {};
+      Array.from(form.elements).forEach((field) => {
+        if (!field.name || field.disabled) return;
+        if (field.type === "radio") {
+          if (field.checked) payload[field.name] = field.value;
+          return;
+        }
+        if (field.type === "checkbox") {
+          payload[field.name] = field.checked ? field.value : "";
+          return;
+        }
+        payload[field.name] = field.value ? field.value.trim() : "";
+      });
+      return payload;
+    }
+
     function ensurePreview(form) {
-      let preview = form.querySelector(".mailto-preview");
+      let preview = form.parentElement.querySelector(".mailto-preview");
       if (preview) return preview;
 
-      preview = document.createElement("div");
+      preview = document.createElement("section");
       preview.className = "mailto-preview";
-      preview.setAttribute("role", "status");
-      preview.setAttribute("aria-live", "polite");
+      preview.id = "contact-confirm";
+      preview.setAttribute("aria-labelledby", "contact-confirm-title");
       preview.hidden = true;
       preview.innerHTML =
-        '<h3>送信内容の確認</h3><p>内容を確認し、メールソフトを開いて送信してください。開けない場合は本文をコピーして通常のメールに貼り付けられます。</p><textarea class="mailto-preview__body" readonly aria-label="生成されたメール本文"></textarea><div class="mailto-preview__actions"><a class="button button--primary mailto-preview__open" href="#">メールソフトを開く</a><button class="button button--ghost mailto-preview__copy" type="button">本文をコピーする</button></div><p class="mailto-preview__status" aria-live="polite"></p>';
-      form.appendChild(preview);
+        '<p class="panel__eyebrow">Confirm</p><h2 id="contact-confirm-title" tabindex="-1">入力内容の確認</h2><p class="mailto-preview__notice"><strong>まだ送信は完了していません。</strong><br>内容を確認し、「この内容で送信する」を押してください。</p><textarea class="mailto-preview__body" readonly aria-label="送信するお問い合わせ内容"></textarea><div class="mailto-preview__actions"><button class="button button--ghost mailto-preview__edit" type="button">入力内容を修正する</button><button class="button button--primary mailto-preview__send" type="button">この内容で送信する</button><button class="button button--ghost mailto-preview__copy" type="button">本文をコピーする</button></div><p class="mailto-preview__fallback" hidden>直接送信できない場合は、<a class="mailto-preview__open" href="#">メールソフトを開く</a>か、本文をコピーしてお送りください。</p><p class="mailto-preview__status" role="status" aria-live="polite"></p>';
+      form.insertAdjacentElement("afterend", preview);
       return preview;
     }
 
     forms.forEach((form) => {
+      const startedAt = form.querySelector("[name='form_started_at']");
+      if (startedAt) startedAt.value = String(Date.now());
+
       form.addEventListener("submit", function (event) {
         event.preventDefault();
         if (!form.checkValidity()) {
@@ -288,24 +308,74 @@
           return;
         }
 
-        const recipient = form.dataset.mailtoRecipient || "tus.fantasista@gmail.com";
+        const recipient = form.dataset.mailtoRecipient || "tus.festa.office@gmail.com";
         const subjectPrefix = form.dataset.mailtoSubjectPrefix || "【FANTASISTA会】問い合わせ";
         const name = getFieldValue(form, "full_name");
         const subject = name ? subjectPrefix + " " + name : subjectPrefix;
         const body = buildBody(form);
         const href = "mailto:" + recipient + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+        const payload = buildPayload(form);
         const preview = ensurePreview(form);
         const textarea = preview.querySelector(".mailto-preview__body");
-        const openLink = preview.querySelector(".mailto-preview__open");
+        const sendButton = preview.querySelector(".mailto-preview__send");
+        const fallback = preview.querySelector(".mailto-preview__fallback");
+        const fallbackLink = preview.querySelector(".mailto-preview__open");
+        const editButton = preview.querySelector(".mailto-preview__edit");
         const copyButton = preview.querySelector(".mailto-preview__copy");
         const status = preview.querySelector(".mailto-preview__status");
+        const title = preview.querySelector("#contact-confirm-title");
+        const notice = preview.querySelector(".mailto-preview__notice");
 
         textarea.value = body;
-        openLink.href = href;
+        fallbackLink.href = href;
+        fallback.hidden = true;
+        form.hidden = true;
         preview.hidden = false;
         status.textContent = "";
-        preview.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        openLink.focus();
+        sendButton.hidden = false;
+        sendButton.disabled = false;
+        editButton.hidden = false;
+        preview.scrollIntoView({ behavior: "smooth", block: "start" });
+        title.focus();
+
+        sendButton.onclick = async function () {
+          sendButton.disabled = true;
+          editButton.disabled = true;
+          status.textContent = "送信しています。画面を閉じずにお待ちください。";
+
+          try {
+            const response = await fetch(form.dataset.contactApi || "/api/contact", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const result = await response.json().catch(() => null);
+            if (!response.ok || !result?.ok) throw new Error(result?.error || "send_failed");
+
+            notice.innerHTML = `<strong>送信しました。</strong><br>受付番号：${result.receipt_id}`;
+            status.textContent = result.receipt_email_sent
+              ? "入力したメールアドレスへ自動受付メールを送信しました。"
+              : "事務局への送信は完了しました。自動受付メールを送れなかったため、事務局からの連絡をお待ちください。";
+            sendButton.hidden = true;
+            editButton.hidden = true;
+            fallback.hidden = true;
+          } catch (error) {
+            console.error("Contact form submission failed.", error);
+            status.textContent = "直接送信できませんでした。メールソフトまたは本文コピーをご利用ください。";
+            fallback.hidden = false;
+            sendButton.disabled = false;
+            editButton.disabled = false;
+          }
+        };
+
+        editButton.onclick = function () {
+          sendButton.disabled = false;
+          editButton.disabled = false;
+          preview.hidden = true;
+          form.hidden = false;
+          form.scrollIntoView({ behavior: "smooth", block: "start" });
+          form.querySelector("[name='full_name']").focus();
+        };
 
         copyButton.onclick = function () {
           const copy = navigator.clipboard
@@ -333,5 +403,6 @@
   initFilters();
   initLightbox();
   initFestaQuickLink();
+  initContactTypeFromUrl();
   initMailtoForms();
 })();

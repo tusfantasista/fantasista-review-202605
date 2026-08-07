@@ -1,56 +1,28 @@
 <!doctype html>
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<html lang="ja"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>東京理科大学舞踏研究部 60周年記念FESTA｜FANTASISTA会</title>
-    <meta name="description" content="東京理科大学舞踏研究部の創部60周年を記念し、OBOG・現役生・関係者が世代を超えて集う記念FESTAを開催します。現在、参加意向を受け付けています。" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="東京理科大学舞踏研究部 60周年記念FESTA｜FANTASISTA会" />
-    <meta property="og:description" content="東京理科大学舞踏研究部の創部60周年を記念し、OBOG・現役生・関係者が世代を超えて集う記念FESTAを開催します。現在、参加意向を受け付けています。" />
-    <meta property="og:url" content="https://tusfantasista.github.io/fantasista-review-202605/festa-60th/" />
-    <meta property="og:image" content="https://tusfantasista.github.io/fantasista-review-202605/assets/img/gallery/festa-2024-hero-02.jpg" />
-    <link rel="canonical" href="https://tusfantasista.github.io/fantasista-review-202605/festa-60th/" />
-    <link rel="icon" href="../assets/img/logo-mark.png" />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Event",
-        "name": "東京理科大学舞踏研究部 60周年記念FESTA",
-        "description": "東京理科大学舞踏研究部の創部60周年を記念し、OBOG、現役生、先生、関係者が世代を超えて集う記念イベントです。",
-        "startDate": "2027-02-11",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-        "location": {
-          "@type": "Place",
-          "name": "東京都立産業貿易センター 台東館 6階展示室",
-          "address": "東京都台東区花川戸2-6-5"
-        },
-        "organizer": {
-          "@type": "Organization",
-          "name": "東京理科大学舞踏研究部 FANTASISTA会",
-          "url": "https://tusfantasista.github.io/fantasista-review-202605/"
-        }
-      }
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../assets/css/enhancements.css" />
+    <meta name="description" content="2027年2月11日（木・祝）、東京都立産業貿易センター台東館で開催する東京理科大学舞踏研究部60周年記念FESTAの公式案内です。開催概要、当日の企画、参加費、寄付、参加申込をご案内します。">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="東京理科大学舞踏研究部 60周年記念FESTA">
+    <meta property="og:description" content="2027年2月11日（木・祝）浅草・台東館で開催。OBOG、現役生、関係者が集う60周年記念FESTAの開催概要と参加案内です。">
+    <link rel="canonical" href="https://tus-fantasista-festa60.pages.dev/festa-60th/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet">
     <style>
       :root {
         --bg: #070707;
-        --bg-soft: #14100a;
-        --panel: rgba(18, 16, 12, 0.92);
-        --panel-soft: rgba(255, 255, 255, 0.055);
+        --bg-soft: #12100c;
+        --panel: rgba(18, 16, 12, 0.88);
+        --panel-soft: rgba(255, 255, 255, 0.04);
         --line: rgba(255, 210, 28, 0.18);
-        --line-strong: rgba(255, 210, 28, 0.36);
+        --line-strong: rgba(255, 210, 28, 0.34);
         --gold: #ffd21c;
-        --gold-deep: #9a7400;
-        --paper: #fff8e6;
-        --text: #f7edcc;
-        --muted: #cfc09b;
-        --ink: #17130c;
+        --gold-soft: #f0dfaf;
+        --text: #f6ebc7;
+        --muted: #c4b892;
         --max: 1120px;
       }
 
@@ -67,27 +39,32 @@
         font-family: "Noto Sans JP", "Yu Gothic", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
         color: var(--text);
         background:
-          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-          linear-gradient(180deg, #050505 0%, #110e08 45%, #050505 100%);
-        background-size: 48px 48px, 48px 48px, auto;
+          radial-gradient(circle at 12% 0%, rgba(255, 210, 28, 0.16), transparent 30%),
+          radial-gradient(circle at 88% 12%, rgba(82, 56, 10, 0.26), transparent 28%),
+          linear-gradient(180deg, #050505 0%, #0d0b08 46%, #050505 100%);
         overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: linear-gradient(180deg, #000 0%, transparent 88%);
+        opacity: 0.38;
       }
 
       a {
         color: inherit;
       }
 
-      img {
-        display: block;
-        max-width: 100%;
-      }
-
-      p,
-      h1,
-      h2,
-      h3 {
-        margin: 0;
+      .page {
+        position: relative;
+        z-index: 1;
       }
 
       .wrap {
@@ -98,117 +75,98 @@
       .header {
         position: sticky;
         top: 0;
-        z-index: 20;
-        background: rgba(5, 5, 5, 0.88);
-        border-bottom: 1px solid var(--line);
+        z-index: 50;
         backdrop-filter: blur(16px);
+        background: rgba(5, 5, 5, 0.8);
+        border-bottom: 1px solid var(--line);
       }
 
       .header__inner {
-        min-height: 72px;
+        min-height: 76px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 20px;
-        padding: 12px 0;
+        padding: 14px 0;
       }
 
       .brand {
         text-decoration: none;
       }
 
-      .brand small,
-      .label-en,
-      .eyebrow {
-        letter-spacing: 0.12em;
-      }
-
       .brand small {
         display: block;
         color: var(--gold);
-        font-size: 11px;
         font-weight: 800;
+        letter-spacing: 0.14em;
+        font-size: 11px;
       }
 
       .brand strong {
         display: block;
+        color: #fff3ca;
+        font-size: 18px;
+        line-height: 1.25;
         margin-top: 4px;
-        color: #fff5d2;
-        font-size: 17px;
-        line-height: 1.35;
       }
 
       .nav {
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
-        justify-content: flex-end;
-        gap: 10px 16px;
+        flex-wrap: wrap;
+        gap: 14px 18px;
       }
 
       .nav a {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
         text-decoration: none;
-        color: #eadcb7;
-        font-size: 13px;
-        font-weight: 800;
-        line-height: 1.2;
+        color: #e6d7ab;
+        font-size: 14px;
+        font-weight: 700;
       }
 
       .nav a:hover {
         color: var(--gold);
       }
 
-      .label-en {
-        margin-top: 2px;
-        font-size: 0.72em;
-        opacity: 0.68;
-        text-transform: uppercase;
-      }
-
-      .menu-toggle {
-        display: none;
-      }
-
       .hero {
         position: relative;
-        min-height: calc(100vh - 72px);
+        min-height: 84vh;
         display: flex;
         align-items: center;
-        padding: 84px 0 72px;
-        isolation: isolate;
+        padding: 84px 0 56px;
         overflow: hidden;
       }
 
       .hero::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: -2;
-        background:
-          linear-gradient(90deg, rgba(5, 5, 5, 0.92) 0%, rgba(5, 5, 5, 0.76) 50%, rgba(5, 5, 5, 0.34) 100%),
-          linear-gradient(180deg, rgba(5, 5, 5, 0.28), rgba(5, 5, 5, 0.9)),
-          url("../assets/img/gallery/festa-2024-hero-02.jpg") center / cover no-repeat;
-      }
-
-      .hero::after {
         content: "60";
         position: absolute;
         right: -2vw;
-        bottom: -4vw;
-        z-index: -1;
+        top: 6vh;
         font-family: "Oswald", sans-serif;
-        font-size: min(30vw, 340px);
+        font-size: min(32vw, 360px);
         line-height: 1;
         color: transparent;
-        -webkit-text-stroke: 2px rgba(255, 210, 28, 0.16);
+        -webkit-text-stroke: 2px rgba(255, 210, 28, 0.12);
         letter-spacing: -0.06em;
       }
 
-      .hero__content {
-        width: min(760px, 100%);
+      .hero::after {
+        content: "";
+        position: absolute;
+        right: 6vw;
+        bottom: 6vh;
+        width: min(34vw, 420px);
+        aspect-ratio: 1 / 1;
+        background: url("../assets/img/university-seal.png") center / contain no-repeat;
+        opacity: 0.08;
+        filter: grayscale(1);
+      }
+
+      .hero__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+        gap: 42px;
+        align-items: end;
       }
 
       .eyebrow {
@@ -218,6 +176,7 @@
         color: var(--gold);
         font-size: 12px;
         font-weight: 800;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
       }
 
@@ -225,49 +184,74 @@
         content: "";
         width: 28px;
         height: 1px;
-        background: rgba(255, 210, 28, 0.72);
+        background: rgba(255, 210, 28, 0.6);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
       }
 
       .hero h1 {
         margin-top: 18px;
-        color: #fff8df;
-        font-size: clamp(38px, 6.6vw, 78px);
+        color: #fff7dd;
+        font-size: clamp(38px, 6.8vw, 78px);
         line-height: 1.08;
-        font-weight: 800;
         letter-spacing: -0.04em;
+        font-weight: 800;
       }
 
-      .hero__date {
-        margin-top: 24px;
+      .hero__copy {
+        margin-top: 22px;
         color: var(--gold);
-        font-size: clamp(20px, 3vw, 34px);
+        font-size: clamp(22px, 3vw, 34px);
         font-weight: 800;
-        line-height: 1.45;
+        line-height: 1.35;
       }
 
       .hero__lead {
-        margin-top: 20px;
-        color: #fff4d7;
-        font-size: clamp(16px, 1.55vw, 19px);
+        margin-top: 22px;
+        max-width: 42rem;
+        color: var(--text);
+        font-size: clamp(16px, 1.7vw, 18px);
         line-height: 2;
       }
 
-      .hero__notice {
-        margin-top: 20px;
+      .hero__facts {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .hero__fact {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.045);
         padding: 16px 18px;
-        border: 1px solid var(--line-strong);
-        border-left: 5px solid var(--gold);
-        border-radius: 18px;
-        background: rgba(8, 7, 5, 0.72);
-        color: #fff8df;
-        line-height: 1.85;
-        font-weight: 700;
+      }
+
+      .hero__fact span {
+        display: block;
+        color: #d8c78f;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        margin-bottom: 6px;
+      }
+
+      .hero__fact strong {
+        display: block;
+        color: #fff5d2;
+        font-size: 16px;
+        line-height: 1.65;
       }
 
       .cta-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 14px;
         margin-top: 28px;
       }
 
@@ -275,101 +259,80 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 50px;
-        padding: 13px 21px;
-        border: 1px solid var(--line-strong);
+        min-height: 52px;
+        padding: 14px 22px;
         border-radius: 999px;
         text-decoration: none;
         font-weight: 800;
-        line-height: 1.35;
-        cursor: pointer;
-      }
-
-      .btn--primary {
-        background: linear-gradient(135deg, var(--gold), #ffb800);
-        color: #0c0904;
-        box-shadow: 0 18px 36px rgba(255, 184, 0, 0.18);
-      }
-
-      .btn--ghost {
-        background: rgba(255, 255, 255, 0.07);
-        color: #f6ebc7;
+        letter-spacing: 0.02em;
+        border: 1px solid var(--line-strong);
+        transition: 0.2s ease;
       }
 
       .btn:hover {
         transform: translateY(-1px);
+        filter: brightness(1.04);
       }
 
-      .btn:focus-visible,
-      .nav a:focus-visible,
-      input:focus-visible,
-      select:focus-visible,
-      textarea:focus-visible,
-      summary:focus-visible {
-        outline: 3px solid rgba(255, 210, 28, 0.52);
-        outline-offset: 3px;
+      .btn--primary {
+        background: linear-gradient(135deg, var(--gold), #ffb800);
+        color: #0a0804;
+        box-shadow: 0 18px 36px rgba(255, 184, 0, 0.18);
+      }
+
+      .btn--ghost {
+        background: rgba(255, 255, 255, 0.04);
+        color: #f2e4b8;
       }
 
       section {
         padding: 72px 0;
-        scroll-margin-top: 96px;
       }
 
       .section-head {
-        margin-bottom: 26px;
+        margin-bottom: 24px;
       }
 
       .section-head h2 {
         margin-top: 14px;
-        color: #fff4cf;
-        font-size: clamp(28px, 4.2vw, 50px);
-        line-height: 1.18;
+        color: #fff3ca;
+        font-size: clamp(28px, 4.8vw, 50px);
+        line-height: 1.16;
         letter-spacing: -0.03em;
       }
 
       .section-head p {
-        margin-top: 14px;
-        max-width: 52rem;
+        margin-top: 16px;
+        max-width: 48rem;
         color: var(--muted);
         line-height: 1.95;
       }
 
-      .summary-grid,
-      .card-grid,
-      .program-grid,
-      .support-grid,
-      .photo-grid {
-        display: grid;
-        gap: 16px;
-      }
-
-      .summary-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
-
-      .card-grid,
-      .program-grid,
-      .support-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .photo-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .card,
-      .summary-card,
-      .program-card,
-      .support-card {
+      .panel {
         border: 1px solid var(--line);
-        border-radius: 22px;
-        background: var(--panel-soft);
-        padding: 22px 20px;
-        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+        border-radius: 28px;
+        background: var(--panel);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+        padding: clamp(24px, 3.4vw, 38px);
       }
 
-      .summary-card span,
-      .support-card span {
+      .outline-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px 26px;
+      }
+
+      .outline-item {
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(255, 210, 28, 0.12);
+      }
+
+      .outline-item:last-child,
+      .outline-item:nth-last-child(2) {
+        border-bottom: 0;
+      }
+
+      .outline-item span {
         display: block;
         color: var(--gold);
         font-size: 12px;
@@ -378,240 +341,1103 @@
         margin-bottom: 8px;
       }
 
-      .summary-card strong,
-      .program-card h3,
-      .support-card h3,
-      .card h3 {
-        color: #fff5d2;
-        font-size: 1.08rem;
-        line-height: 1.55;
+      .outline-item strong,
+      .outline-item p {
+        display: block;
+        color: var(--text);
+        font-size: 16px;
+        line-height: 1.9;
       }
 
-      .summary-card p,
-      .program-card p,
-      .support-card p,
-      .card p {
-        margin-top: 10px;
-        color: var(--muted);
-        line-height: 1.85;
-      }
-
-      .paper-section {
-        background:
-          linear-gradient(180deg, rgba(255, 248, 230, 0.96), rgba(248, 238, 211, 0.96));
-        color: var(--ink);
-      }
-
-      .paper-section .section-head h2,
-      .paper-section .card h3 {
-        color: #221a0c;
-      }
-
-      .paper-section .section-head p,
-      .paper-section .card p,
-      .paper-section .welcome-list li {
-        color: #4d4536;
-      }
-
-      .welcome-list {
+      .story-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .welcome-list li {
-        position: relative;
-        padding: 18px 18px 18px 42px;
-        border: 1px solid rgba(154, 116, 0, 0.22);
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.62);
-        line-height: 1.75;
-        font-weight: 700;
-      }
-
-      .welcome-list li::before {
-        content: "";
-        position: absolute;
-        left: 18px;
-        top: 27px;
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: var(--gold-deep);
-      }
-
-      .concept-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 18px;
-      }
-
-      .memory-layout,
-      .photo-callout {
-        display: grid;
-        grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+        grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
         gap: 24px;
-        align-items: start;
+        align-items: stretch;
       }
 
-      .memory-copy {
+      .story-card {
         border: 1px solid var(--line);
-        border-radius: 26px;
-        background: var(--panel);
-        padding: clamp(24px, 3.5vw, 38px);
+        border-radius: 28px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        padding: clamp(24px, 3.4vw, 36px);
       }
 
-      .memory-copy p {
-        color: var(--muted);
-        line-height: 2;
-      }
-
-      .memory-copy p + p,
-      .memory-copy details + details {
+      .story-card p + p {
         margin-top: 14px;
       }
 
-      details {
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.05);
-        padding: 0;
-        overflow: hidden;
+      .story-card p {
+        color: var(--muted);
+        line-height: 1.95;
       }
 
-      summary {
-        min-height: 52px;
-        padding: 14px 18px;
-        color: #fff4cf;
-        font-weight: 800;
+      .story-mark {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-height: 100%;
+        border: 1px solid rgba(255, 210, 28, 0.2);
+        border-radius: 28px;
+        background:
+          radial-gradient(circle at 82% 18%, rgba(255, 210, 28, 0.12), transparent 28%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        padding: 28px;
+      }
+
+      .story-mark strong {
+        color: var(--gold);
+        font-size: 13px;
+        letter-spacing: 0.14em;
+      }
+
+      .story-mark p {
+        margin-top: 14px;
+        color: #f2e4b8;
+        font-size: 22px;
+        line-height: 1.6;
+        font-weight: 700;
+      }
+
+      .updates p {
+        color: var(--muted);
+        line-height: 1.95;
+      }
+
+      .updates p + p {
+        margin-top: 14px;
+      }
+
+      .footer-links {
+        margin-top: 28px;
+      }
+
+      footer {
+        padding: 40px 0 56px;
+        border-top: 1px solid var(--line);
+        background: rgba(5, 5, 5, 0.76);
+      }
+
+      .footer__inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .footer__inner p {
+        color: #b9ad91;
+        font-size: 13px;
+      }
+
+      @media (max-width: 960px) {
+        .hero__grid,
+        .story-grid,
+        .outline-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .outline-item:nth-last-child(2) {
+          border-bottom: 1px solid rgba(255, 210, 28, 0.12);
+        }
+      }
+
+      @media (max-width: 720px) {
+        .header__inner,
+        .footer__inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .nav {
+          gap: 10px 14px;
+        }
+
+        .hero {
+          min-height: auto;
+          padding: 64px 0 40px;
+        }
+
+        .hero::before {
+          font-size: 34vw;
+          right: -10vw;
+          top: 10vh;
+        }
+
+        .hero::after {
+          width: 44vw;
+          right: 4vw;
+          bottom: 10vh;
+        }
+
+        .hero__copy {
+          margin-top: 18px;
+        }
+
+        .hero__lead {
+          margin-top: 18px;
+        }
+
+        .cta-row {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        section {
+          padding: 56px 0;
+        }
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .menu-toggle {
+        display: none;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .hero > .wrap,
+      .hero__grid {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero::after {
+        left: 50%;
+        top: 50%;
+        right: auto;
+        bottom: auto;
+        transform: translate(-50%, -50%);
+        width: min(44vw, 560px);
+        opacity: 0.075;
+        pointer-events: none;
+      }
+
+      @media (max-width: 860px) {
+        .header {
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          background: rgba(5, 5, 5, 0.92);
+          border-bottom: 1px solid rgba(255, 210, 28, 0.18);
+          backdrop-filter: blur(18px);
+        }
+
+        .header__inner {
+          min-height: 64px;
+          padding: 10px 0;
+          gap: 12px;
+        }
+
+        .brand {
+          min-width: 0;
+          flex: 1 1 auto;
+        }
+
+        .brand small,
+        .brand strong {
+          max-width: calc(100vw - 132px);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .brand small {
+          font-size: 9px;
+          letter-spacing: 0.08em;
+        }
+
+        .brand strong {
+          font-size: 14px;
+          letter-spacing: 0.02em;
+        }
+
+        .menu-toggle {
+          display: inline-flex;
+          width: 44px;
+          height: 44px;
+          flex: 0 0 auto;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          gap: 5px;
+          border: 1px solid rgba(255, 210, 28, 0.38);
+          border-radius: 999px;
+          background: rgba(20, 18, 14, 0.92);
+          color: var(--gold);
+          cursor: pointer;
+          box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+        }
+
+        .menu-toggle-line {
+          display: block;
+          width: 19px;
+          height: 2px;
+          border-radius: 999px;
+          background: var(--gold);
+          transition: transform 0.22s ease, opacity 0.22s ease;
+        }
+
+        .header.is-open .menu-toggle-line:nth-of-type(1) {
+          transform: translateY(7px) rotate(45deg);
+        }
+
+        .header.is-open .menu-toggle-line:nth-of-type(2) {
+          opacity: 0;
+        }
+
+        .header.is-open .menu-toggle-line:nth-of-type(3) {
+          transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .nav {
+          position: fixed;
+          top: 72px;
+          left: 12px;
+          right: 12px;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 6px;
+          padding: 14px;
+          max-height: calc(100dvh - 92px);
+          overflow-y: auto;
+          background: linear-gradient(180deg, rgba(20, 18, 14, 0.98), rgba(8, 7, 5, 0.98));
+          border: 1px solid rgba(255, 210, 28, 0.28);
+          border-radius: 18px;
+          box-shadow: 0 22px 70px rgba(0, 0, 0, 0.58);
+          transform: translateY(-10px);
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transition:
+            opacity 0.22s ease,
+            transform 0.22s ease,
+            visibility 0.22s ease;
+          z-index: 1001;
+        }
+
+        .header.is-open .nav,
+        body.menu-open .nav {
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+          transform: translateY(0);
+        }
+
+        .nav a {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          min-height: 46px;
+          padding: 12px 14px;
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 210, 28, 0.10);
+          color: #f5e7bc;
+          font-size: 15px;
+          font-weight: 800;
+          text-decoration: none;
+        }
+
+        .nav a::after {
+          content: "›";
+          color: var(--gold);
+          font-size: 20px;
+          line-height: 1;
+        }
+
+        body.menu-open {
+          overflow: hidden;
+        }
+      }
+
+      @media (max-width: 640px) {
+        section {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+
+        .hero {
+          min-height: auto;
+          padding-top: 54px;
+          padding-bottom: 46px;
+          text-align: center;
+          align-items: flex-start;
+        }
+
+        .hero::before {
+          font-size: 42vw;
+          right: -18vw;
+          top: 8vh;
+        }
+
+        .hero::after {
+          left: 50%;
+          top: 46%;
+          width: min(78vw, 320px);
+          opacity: 0.09;
+        }
+
+        .hero__grid {
+          grid-template-columns: 1fr;
+          justify-items: center;
+          gap: 26px;
+        }
+
+        .eyebrow {
+          justify-content: center;
+        }
+
+        .hero h1,
+        .hero__copy,
+        .hero__lead {
+          text-align: center;
+        }
+
+        .hero__lead {
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .hero__facts {
+          width: 100%;
+          max-width: 420px;
+        }
+
+        .cta-row {
+          width: 100%;
+          justify-content: center;
+          gap: 10px;
+        }
+
+        .cta-row .btn,
+        .btn {
+          width: 100%;
+          max-width: 360px;
+          justify-content: center;
+          text-align: center;
+        }
+      }
+      @media (min-width: 641px) and (max-width: 860px) {
+        .hero__grid {
+          grid-template-columns: 1fr;
+          justify-items: center;
+          gap: 30px;
+        }
+
+        .hero h1,
+        .hero__copy,
+        .hero__lead {
+          text-align: center;
+        }
+
+        .hero__lead {
+          margin-left: auto;
+          margin-right: auto;
+          max-width: 42rem;
+        }
+
+        .hero__facts {
+          width: 100%;
+          max-width: 540px;
+        }
+
+        .cta-row {
+          justify-content: center;
+        }
+
+        .cta-row .btn {
+          min-width: 240px;
+        }
+
+        .story-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (min-width: 861px) and (max-width: 1100px) {
+        .header__inner {
+          gap: 16px;
+        }
+
+        .brand strong {
+          font-size: 16px;
+        }
+
+        .nav {
+          gap: 10px 14px;
+        }
+
+        .nav a {
+          font-size: 13px;
+        }
+
+        .hero {
+          min-height: auto;
+          padding: 76px 0 52px;
+        }
+
+        .hero__grid {
+          grid-template-columns: 1fr;
+          gap: 34px;
+          justify-items: center;
+        }
+
+        .hero h1,
+        .hero__copy,
+        .hero__lead {
+          text-align: center;
+        }
+
+        .hero__lead {
+          margin-left: auto;
+          margin-right: auto;
+          max-width: 44rem;
+        }
+
+        .hero__facts {
+          width: 100%;
+          max-width: 760px;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .cta-row {
+          justify-content: center;
+        }
+
+        .story-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .nav-copy {
+        display: block;
+        min-width: 0;
+        line-height: 1.2;
+      }
+
+      .nav-ja,
+      .label-ja {
+        display: block;
+        font-weight: 700;
+      }
+
+      .nav-en,
+      .label-en {
+        display: block;
+        font-size: 0.72em;
+        opacity: 0.72;
+        letter-spacing: 0.04em;
+        text-transform: none;
+      }
+
+      .eyebrow .label-ja,
+      .eyebrow .label-en {
+        display: block;
+        text-transform: none;
+      }
+
+      .nav a {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.2;
+      }
+
+      @media (max-width: 860px) {
+        .nav .nav-copy {
+          display: block;
+          text-align: left;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .nav-en,
+        .label-en {
+          display: none;
+        }
+      }
+    </style>
+
+    <style>
+      .btn,
+      .nav a {
         cursor: pointer;
       }
 
-      details p {
-        padding: 0 18px 18px;
+      .btn:focus-visible,
+      .nav a:focus-visible {
+        outline: 3px solid rgba(255, 210, 28, 0.42);
+        outline-offset: 3px;
       }
 
-      .photo-card {
-        margin: 0;
-        border: 1px solid var(--line);
-        border-radius: 22px;
-        overflow: hidden;
-        background: rgba(255, 255, 255, 0.05);
+      .nav a::after {
+        content: "→";
       }
 
-      .photo-card img {
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        object-fit: cover;
+      .keyword-chip,
+      .memory-photo-label {
+        cursor: default;
       }
 
-      .photo-card figcaption {
-        padding: 14px 16px 16px;
-        color: var(--muted);
+      .hero__copy {
+        max-width: 18em;
+      }
+
+      .hero__lead + .hero__lead {
+        margin-top: 14px;
+      }
+
+      .hero__fact strong {
         line-height: 1.7;
+      }
+
+      .hero__fact strong small {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .memory-photo-block {
+        display: grid;
+        gap: 18px;
+      }
+
+      .memory-photo-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .memory-photo-grid--three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .memory-photo-card {
+        margin: 0;
+        padding: 18px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        border-radius: 26px;
+        background:
+          radial-gradient(circle at 82% 18%, rgba(255, 210, 28, 0.10), transparent 22%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+      }
+
+      .memory-photo-placeholder {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 220px;
+        aspect-ratio: 4 / 3;
+        border-radius: 20px;
+        border: 1px dashed rgba(255, 210, 28, 0.28);
+        background:
+          radial-gradient(circle at 22% 18%, rgba(255, 210, 28, 0.10), transparent 20%),
+          repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0 10px, rgba(255, 210, 28, 0.04) 10px 20px),
+          rgba(8, 7, 5, 0.65);
+        overflow: hidden;
+      }
+
+      .memory-photo-placeholder::before {
+        content: "";
+        position: absolute;
+        width: 58px;
+        height: 58px;
+        border: 2px solid rgba(255, 210, 28, 0.18);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+      }
+
+      .memory-photo-placeholder::after {
+        content: "";
+        position: absolute;
+        inset: 8%;
+        border: 1px solid rgba(255, 210, 28, 0.08);
+        border-radius: 16px;
+      }
+
+      .memory-photo-placeholder--wide {
+        aspect-ratio: 16 / 9;
+        min-height: 260px;
+      }
+
+      .memory-photo-label {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 0 14px;
+        margin-top: 72px;
+        border-radius: 999px;
+        background: rgba(8, 7, 5, 0.78);
+        color: #fff8df;
+        font-size: 0.9rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+      }
+
+      .memory-photo-caption {
+        margin-top: 14px;
+        color: #fff1c5;
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.65;
+      }
+
+      .memory-photo-note {
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.75;
         font-size: 0.94rem;
       }
 
-      .form-intro,
-      .privacy-box {
-        border: 1px solid var(--line-strong);
-        border-left: 5px solid var(--gold);
-        border-radius: 20px;
-        background: rgba(255, 210, 28, 0.08);
-        padding: 18px 20px;
-        color: #fff5d2;
-        line-height: 1.85;
-      }
-
-      .entry-form {
-        display: grid;
-        gap: 24px;
-        margin-top: 26px;
-      }
-
-      .form-block {
-        border-top: 1px solid var(--line);
-        padding-top: 26px;
-      }
-
-      .form-block h3 {
-        margin: 0 0 16px;
-        color: #fff4cf;
-        font-size: 1.18rem;
-      }
-
-      .form-grid {
+      .emotion-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 18px;
       }
 
-      .field,
-      .field-full {
+      .emotion-card {
+        padding: 24px 22px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        border-radius: 24px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.20);
+      }
+
+      .emotion-card h3 {
+        margin: 0 0 10px;
+        color: #fff3ca;
+        font-size: 1.2rem;
+      }
+
+      .emotion-card p {
+        color: var(--muted);
+        line-height: 1.85;
+      }
+
+      .memory-keywords {
+        border-top: 1px solid rgba(255, 210, 28, 0.12);
+        border-bottom: 1px solid rgba(255, 210, 28, 0.12);
+        background:
+          radial-gradient(circle at 14% 20%, rgba(255, 210, 28, 0.10), transparent 24%),
+          linear-gradient(180deg, rgba(8, 7, 5, 0.88), rgba(18, 16, 12, 0.92));
+      }
+
+      .keyword-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .keyword-chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 38px;
+        padding: 0 14px;
+        border-radius: 999px;
+        background: rgba(255, 210, 28, 0.12);
+        border: 1px solid rgba(255, 210, 28, 0.22);
+        color: #fff3ca;
+        font-weight: 800;
+      }
+
+      .outline-item--wide {
+        grid-column: 1 / -1;
+      }
+
+      .outline-note {
+        margin-top: 16px;
+        color: var(--muted);
+        line-height: 1.9;
+      }
+
+      .story-card strong {
+        color: #fff1c5;
+      }
+
+      .welcome-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .welcome-card {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 20px 18px;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .welcome-card::before {
+        content: "•";
+        color: var(--gold);
+        font-size: 1.2rem;
+        line-height: 1.4;
+        font-weight: 800;
+      }
+
+      .welcome-card p {
+        color: var(--muted);
+        line-height: 1.78;
+      }
+
+      .welcome-note {
+        margin-top: 18px;
+        color: #f0dfaf;
+        line-height: 1.9;
+      }
+
+      .festa-callout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(240px, 0.9fr);
+        gap: 20px;
+        align-items: center;
+      }
+
+      .festa-callout__copy p + p {
+        margin-top: 12px;
+      }
+
+      .festa-callout__copy p {
+        color: var(--muted);
+        line-height: 1.9;
+      }
+
+      .festa-callout__actions {
+        margin-top: 20px;
+      }
+
+      .festa-callout__media .memory-photo-card,
+      .festa-callout__media .memory-photo-placeholder {
+        height: 100%;
+      }
+
+      .festa-updates p + p {
+        margin-top: 14px;
+      }
+
+      .festa-updates p {
+        color: var(--muted);
+        line-height: 1.95;
+      }
+
+      .footer-cta-panel {
+        display: grid;
+        gap: 18px;
+        text-align: center;
+      }
+
+      .footer-cta-panel p {
+        color: var(--muted);
+        line-height: 1.9;
+      }
+
+      .footer-links {
+        justify-content: center;
+      }
+
+      @media (max-width: 960px) {
+        .emotion-grid,
+        .welcome-grid,
+        .festa-callout,
+        .memory-photo-grid--three {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .memory-photo-placeholder--wide {
+          aspect-ratio: 4 / 3;
+          min-height: 220px;
+        }
+
+        .memory-photo-placeholder {
+          min-height: 200px;
+        }
+
+        .keyword-list {
+          gap: 10px;
+        }
+
+        .keyword-chip {
+          min-height: 36px;
+          font-size: 0.92rem;
+        }
+      }
+    </style>
+    <style>
+      .memory-yearflow {
+        border-top: 1px solid rgba(255, 210, 28, 0.12);
+        border-bottom: 1px solid rgba(255, 210, 28, 0.12);
+        background:
+          radial-gradient(circle at 88% 14%, rgba(255, 210, 28, 0.10), transparent 24%),
+          linear-gradient(180deg, rgba(10, 9, 7, 0.78), rgba(14, 12, 9, 0.92));
+      }
+
+      .memory-yearflow-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .memory-season-card {
+        padding: 24px 22px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.20);
+      }
+
+      .memory-season-card--winter {
+        background:
+          radial-gradient(circle at 82% 18%, rgba(255, 210, 28, 0.12), transparent 24%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.04));
+        border-color: rgba(255, 210, 28, 0.22);
+      }
+
+      .memory-season-card--spotlight {
+        background:
+          radial-gradient(circle at 86% 14%, rgba(255, 210, 28, 0.16), transparent 24%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
+        border-color: rgba(255, 210, 28, 0.34);
+      }
+
+      .memory-season-card__season {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: rgba(255, 210, 28, 0.14);
+        color: var(--gold);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .memory-season-card h3 {
+        margin: 14px 0 10px;
+        color: #fff3ca;
+        font-size: 1.18rem;
+        line-height: 1.4;
+      }
+
+      .memory-season-card p {
+        color: var(--muted);
+        line-height: 1.88;
+      }
+
+      .memory-season-card__keywords {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .memory-season-card__keywords span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 210, 28, 0.12);
+        color: #f0dfaf;
+        font-size: 0.82rem;
+        font-weight: 700;
+        cursor: default;
+      }
+
+      .memory-mini-photo-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .memory-mini-photo-card {
+        margin: 0;
+      }
+
+      .keyword-group-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 22px;
+      }
+
+      .keyword-group {
+        padding: 20px 18px;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 210, 28, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .keyword-group h3 {
+        margin: 0;
+        color: #fff3ca;
+        font-size: 1.05rem;
+      }
+
+      .keyword-group .keyword-list {
+        margin-top: 14px;
+      }
+
+      .keyword-chip--accent {
+        background: rgba(255, 210, 28, 0.22);
+        border-color: rgba(255, 210, 28, 0.36);
+        color: #fff8dd;
+      }
+
+      @media (max-width: 960px) {
+        .memory-yearflow-grid,
+        .keyword-group-grid,
+        .memory-mini-photo-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .memory-season-card {
+          padding: 22px 18px;
+        }
+
+        .memory-season-card__keywords,
+        .keyword-list {
+          gap: 10px;
+        }
+
+      .memory-season-card__keywords span,
+      .keyword-chip {
+          font-size: 0.8rem;
+        }
+      }
+
+      .crm-entry-section {
+        border-top: 1px solid rgba(255, 210, 28, 0.14);
+        border-bottom: 1px solid rgba(255, 210, 28, 0.14);
+        background:
+          radial-gradient(circle at 12% 0%, rgba(255, 210, 28, 0.12), transparent 28%),
+          radial-gradient(circle at 86% 12%, rgba(255, 210, 28, 0.08), transparent 26%),
+          rgba(7, 7, 7, 0.74);
+      }
+
+      .crm-entry-panel {
+        padding: clamp(24px, 4vw, 40px);
+      }
+
+      .crm-entry-form {
+        display: grid;
+        gap: 26px;
+        margin-top: 26px;
+      }
+
+      .crm-form-block {
+        padding: 22px;
+        border: 1px solid rgba(255, 210, 28, 0.14);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.045);
+      }
+
+      .crm-form-block h3 {
+        margin: 0 0 8px;
+        color: #fff3ca;
+        font-size: 1.16rem;
+      }
+
+      .crm-form-block__note {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .crm-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .crm-field,
+      .crm-field--full {
         display: grid;
         gap: 8px;
       }
 
-      .field-full {
+      .crm-field--full {
         grid-column: 1 / -1;
       }
 
-      .entry-form label,
-      .entry-form legend {
-        color: #fff3ca;
-        font-weight: 800;
-        line-height: 1.45;
-      }
-
-      .required,
-      .optional {
-        margin-left: 6px;
-        font-size: 0.76rem;
-        font-weight: 800;
-      }
-
-      .required {
-        color: var(--gold);
-      }
-
-      .optional {
-        color: #bfb08b;
-      }
-
-      .entry-form input,
-      .entry-form select,
-      .entry-form textarea {
-        width: 100%;
-        min-height: 48px;
-        border: 1px solid rgba(255, 210, 28, 0.2);
-        border-radius: 14px;
-        padding: 12px 14px;
-        background: rgba(255, 255, 255, 0.94);
-        color: #17130c;
-        font: inherit;
-      }
-
-      .entry-form textarea {
-        min-height: 132px;
-        resize: vertical;
-      }
-
-      fieldset {
+      .crm-entry-form fieldset {
         margin: 0;
         padding: 0;
         border: 0;
       }
 
-      .choice-grid {
+      .crm-field__label {
+        color: #fff3ca;
+        font-size: 0.92rem;
+        font-weight: 800;
+        line-height: 1.5;
+      }
+
+      .crm-required {
+        margin-left: 6px;
+        color: var(--gold);
+        font-size: 0.78rem;
+      }
+
+      .crm-entry-form input,
+      .crm-entry-form select,
+      .crm-entry-form textarea {
+        width: 100%;
+        min-height: 48px;
+        border: 1px solid rgba(255, 210, 28, 0.18);
+        border-radius: 14px;
+        padding: 12px 14px;
+        background: rgba(255, 255, 255, 0.92);
+        color: #171717;
+        font: inherit;
+      }
+
+      .crm-entry-form textarea {
+        min-height: 132px;
+        resize: vertical;
+      }
+
+      .crm-radio-group {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 10px;
       }
 
-      .choice {
+      .crm-radio {
         display: flex;
         align-items: center;
         gap: 9px;
@@ -624,706 +1450,1309 @@
         font-weight: 800;
       }
 
-      .choice input,
-      .consent input {
+      .crm-radio input,
+      .crm-consent input {
         width: auto;
         min-height: auto;
         accent-color: #ffd21c;
       }
 
-      .field-note,
-      .form-notes {
+      .crm-consent {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 18px;
+        border-radius: 18px;
+        background: rgba(255, 210, 28, 0.08);
+        color: #fff3ca;
+        line-height: 1.75;
+      }
+
+      .crm-form-notes {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding-left: 1.2em;
         color: var(--muted);
         line-height: 1.75;
-        font-size: 0.93rem;
       }
 
-      .privacy-box p + p {
-        margin-top: 10px;
-      }
-
-      .consent {
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-        color: #fff6d6;
-        line-height: 1.75;
-      }
-
-      .form-actions {
+      .crm-form-actions {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 14px;
       }
 
-      .form-actions .btn {
+      .crm-form-actions .btn {
         border: 0;
+        cursor: pointer;
       }
 
-      .faq-list {
+      .stripe-payment-section {
+        border-top: 1px solid rgba(255, 210, 28, 0.14);
+        border-bottom: 1px solid rgba(255, 210, 28, 0.14);
+        background: rgba(255, 210, 28, 0.035);
+      }
+
+      .stripe-payment-grid {
         display: grid;
-        gap: 12px;
-      }
-
-      .footer {
-        padding: 40px 0 56px;
-        border-top: 1px solid var(--line);
-        background: rgba(5, 5, 5, 0.84);
-      }
-
-      .footer__inner {
-        display: flex;
-        justify-content: space-between;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 18px;
-        color: #b9ad91;
-        font-size: 13px;
       }
 
-      @media (max-width: 980px) {
-        .summary-grid,
-        .card-grid,
-        .program-grid,
-        .support-grid,
-        .photo-grid,
-        .concept-grid,
-        .memory-layout,
-        .photo-callout {
-          grid-template-columns: 1fr 1fr;
-        }
-
-        .hero {
-          min-height: auto;
-        }
+      .stripe-payment-card {
+        display: grid;
+        gap: 14px;
+        padding: 22px;
+        border: 1px solid rgba(255, 210, 28, 0.15);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.045);
       }
 
-      @media (max-width: 820px) {
-        .header__inner {
-          align-items: flex-start;
-          flex-direction: column;
-        }
-
-        .nav {
-          justify-content: flex-start;
-        }
-
-        .hero::before {
-          background:
-            linear-gradient(180deg, rgba(5, 5, 5, 0.88), rgba(5, 5, 5, 0.88)),
-            url("../assets/img/gallery/festa-2024-hero-02.jpg") center / cover no-repeat;
-        }
+      .stripe-payment-card h3 {
+        margin: 0;
+        color: #fff3ca;
+        font-size: 1.1rem;
       }
 
-      @media (max-width: 680px) {
-        .wrap {
-          width: min(calc(100% - 28px), var(--max));
-        }
+      .stripe-payment-amount {
+        color: var(--gold);
+        font-size: 1.75rem;
+        font-weight: 800;
+      }
 
-        .brand strong {
-          font-size: 15px;
-        }
+      .stripe-payment-card p {
+        color: var(--muted);
+        line-height: 1.75;
+      }
 
-        .nav {
-          gap: 8px;
-        }
+      .stripe-payment-meta {
+        display: grid;
+        gap: 6px;
+        margin: 0;
+        padding-left: 1.2em;
+        color: var(--muted);
+        line-height: 1.7;
+      }
 
-        .nav a {
-          min-height: 40px;
-          padding: 8px 10px;
-          border: 1px solid rgba(255, 210, 28, 0.12);
-          border-radius: 12px;
-          background: rgba(255, 255, 255, 0.04);
-          font-size: 12px;
-        }
+      .stripe-payment-status {
+        color: #fff3ca;
+        font-size: 0.86rem;
+        font-weight: 800;
+      }
 
-        .label-en {
-          display: none;
-        }
+      .fee-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 22px;
+      }
 
-        .hero {
-          padding: 56px 0 48px;
-        }
+      .fee-summary-card {
+        padding: 20px;
+        border: 1px solid rgba(255, 210, 28, 0.17);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.045);
+      }
 
-        .hero h1 {
-          font-size: clamp(34px, 12vw, 52px);
-        }
+      .fee-summary-card span {
+        display: block;
+        color: var(--gold);
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
 
-        .cta-row,
-        .form-actions {
-          flex-direction: column;
-          align-items: stretch;
-        }
+      .fee-summary-card strong {
+        display: block;
+        margin-top: 8px;
+        color: #fff3ca;
+        font-size: 1.2rem;
+      }
 
-        .btn {
-          width: 100%;
-        }
+      .fee-summary-card p {
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
 
-        section {
-          padding: 54px 0;
-          scroll-margin-top: 124px;
-        }
+      .fee-guide-block + .fee-guide-block {
+        margin-top: 26px;
+      }
 
-        .summary-grid,
-        .card-grid,
-        .program-grid,
-        .support-grid,
-        .photo-grid,
-        .concept-grid,
-        .memory-layout,
-        .photo-callout,
-        .welcome-list,
-        .form-grid,
-        .choice-grid {
+      .fee-guide-block h3 {
+        margin: 0 0 8px;
+        color: #fff3ca;
+        font-size: 1.3rem;
+      }
+
+      .fee-guide-block > p {
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .fee-guide-block > ol {
+        margin: 10px 0 20px;
+        padding-left: 1.7em;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .fee-guide-block > ol li {
+        padding: 3px 0 3px 4px;
+      }
+
+      .fee-guide-block > ol li::marker {
+        color: var(--gold);
+        font-weight: 800;
+      }
+
+      .fee-table-wrap {
+        margin-top: 14px;
+        overflow-x: auto;
+        border: 1px solid rgba(255, 210, 28, 0.16);
+        border-radius: 16px;
+        background: rgba(0, 0, 0, 0.22);
+      }
+
+      .fee-table {
+        width: 100%;
+        min-width: 700px;
+        border-collapse: collapse;
+      }
+
+      .fee-table th,
+      .fee-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(255, 210, 28, 0.12);
+        text-align: left;
+        vertical-align: top;
+        line-height: 1.65;
+      }
+
+      .fee-table th {
+        color: var(--gold);
+        background: rgba(255, 210, 28, 0.07);
+        font-size: 0.84rem;
+        white-space: nowrap;
+      }
+
+      .fee-table td {
+        color: #eadfbf;
+      }
+
+      .fee-table tbody tr:last-child td,
+      .fee-table tbody tr:last-child th {
+        border-bottom: 0;
+      }
+
+      .fee-table__plan {
+        color: #fff3ca;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .fee-guide-note {
+        margin-top: 18px;
+        padding: 16px 18px;
+        border-left: 3px solid var(--gold);
+        background: rgba(255, 210, 28, 0.07);
+        color: #f0dfaf;
+        line-height: 1.8;
+      }
+
+      .fee-guide-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .btn.is-disabled,
+      .btn[aria-disabled="true"] {
+        opacity: 0.56;
+        cursor: not-allowed;
+      }
+
+      @media (max-width: 780px) {
+        .crm-form-grid,
+        .crm-radio-group,
+        .stripe-payment-grid,
+        .fee-summary-grid {
           grid-template-columns: 1fr;
         }
 
-        .footer__inner {
-          flex-direction: column;
+        .crm-form-block {
+          padding: 18px;
         }
       }
     </style>
+    <style>
+      .event-focus {
+        border-bottom: 1px solid rgba(255, 210, 28, 0.16);
+        background:
+          linear-gradient(180deg, rgba(255, 210, 28, 0.08), transparent 42%),
+          #0b0a08;
+      }
+
+      .event-focus__lead {
+        max-width: 800px;
+        color: #f6ebc7;
+        font-size: clamp(1.05rem, 2vw, 1.3rem);
+        line-height: 1.9;
+      }
+
+      .event-focus__facts,
+      .event-focus__program {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 24px;
+      }
+
+      .event-focus__fact,
+      .event-focus__item {
+        min-height: 150px;
+        border: 1px solid rgba(255, 210, 28, 0.2);
+        border-radius: 8px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.045);
+      }
+
+      .event-focus__program {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .event-focus__fact span,
+      .event-focus__item span {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--gold);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+      }
+
+      .event-focus__fact strong,
+      .event-focus__item h3 {
+        display: block;
+        margin: 0;
+        color: #fff4d0;
+        font-size: 1.04rem;
+        line-height: 1.65;
+      }
+
+      .event-focus__item p {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .event-focus__subhead {
+        margin: 36px 0 0;
+        color: #fff4d0;
+        font-size: 1.25rem;
+      }
+
+      .event-focus__note {
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .memory-archive {
+        border-bottom: 1px solid rgba(255, 210, 28, 0.14);
+        background: #080807;
+      }
+
+      .memory-archive > summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        width: min(var(--max), calc(100% - 40px));
+        min-height: 92px;
+        margin: 0 auto;
+        color: #fff4d0;
+        font-size: clamp(1rem, 2vw, 1.3rem);
+        font-weight: 800;
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .memory-archive > summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .memory-archive > summary::after {
+        content: "+";
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(255, 210, 28, 0.36);
+        border-radius: 50%;
+        color: var(--gold);
+        flex: 0 0 auto;
+      }
+
+      .memory-archive[open] > summary::after {
+        content: "−";
+      }
+
+      .memory-archive__copy {
+        display: grid;
+        gap: 2px;
+      }
+
+      .memory-archive__copy small {
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      @media (max-width: 900px) {
+        .event-focus__facts,
+        .event-focus__program {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 560px) {
+        .event-focus__facts,
+        .event-focus__program {
+          grid-template-columns: 1fr;
+        }
+
+        .event-focus__fact,
+        .event-focus__item {
+          min-height: 0;
+        }
+
+        .memory-archive > summary {
+          width: min(var(--max), calc(100% - 28px));
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="../assets/css/enhancements.css?v=20260718-2">
+    <link rel="stylesheet" href="../assets/css/photo-library.css">
   </head>
-  <body>
-    <header class="header">
-      <div class="wrap header__inner">
-        <a class="brand" href="../" aria-label="FANTASISTA会トップへ戻る">
-          <small>FANTASISTA会</small>
-          <strong>東京理科大学舞踏研究部 60周年記念FESTA</strong>
-        </a>
-        <nav class="nav" aria-label="ページ内リンク">
-          <a href="#overview"><span>開催概要</span><span class="label-en">Overview</span></a>
-          <a href="#entry"><span>参加意向</span><span class="label-en">Entry</span></a>
-          <a href="#program"><span>企画予定</span><span class="label-en">Program</span></a>
-          <a href="#photo-archive"><span>写真・記録募集</span><span class="label-en">Archive</span></a>
-          <a href="#faq"><span>FAQ</span><span class="label-en">FAQ</span></a>
-        </nav>
-      </div>
-    </header>
+  <body><div class="page">
+      <header class="header">
+        <div class="wrap header__inner">
+          <a class="brand" href="./" aria-label="60周年記念FESTAトップへ戻る">
+            <small>FANTASISTA会</small>
+            <strong>東京理科大学舞踏研究部 60周年記念FESTA</strong>
+          </a>
 
-    <main>
-      <section class="hero" aria-labelledby="page-title">
-        <div class="wrap">
-          <div class="hero__content">
-            <p class="eyebrow">Save the Date</p>
-            <h1 id="page-title">東京理科大学舞踏研究部 60周年記念FESTA</h1>
-            <p class="hero__date">2027年2月11日（木・祝）、浅草・東京都立産業貿易センター 台東館にて開催します。</p>
-            <p class="hero__lead">
-              踊った日々も、悔しかった日も、すべてを連れて集まろう。OBOG、現役生、先生、関係者の皆さまが世代を超えて再会し、60年の歩みを次の世代へつなぐ一日です。
-            </p>
-            <p class="hero__notice">
-              現在、参加意向を受け付けています。これは正式申込ではありません。正式申込・会費・タイムテーブル・入金方法は、決定次第このページと参加意向登録者へのご案内でお知らせします。
-            </p>
-            <div class="cta-row" aria-label="主要アクション">
-              <a class="btn btn--primary" href="#entry">参加意向を登録する</a>
-              <a class="btn btn--ghost" href="#overview">開催概要を見る</a>
-              <a class="btn btn--ghost" href="#photo-archive">写真・資料を提供する</a>
-            </div>
-          </div>
+          <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+            <span class="sr-only">メニューを開閉</span>
+            <span class="menu-toggle-line" aria-hidden="true"></span>
+            <span class="menu-toggle-line" aria-hidden="true"></span>
+            <span class="menu-toggle-line" aria-hidden="true"></span>
+          </button>
+
+          <nav id="site-nav" class="nav" aria-label="60周年記念サイト">
+            <a href="./" aria-current="page"><span class="nav-copy"><span class="nav-ja">開催概要</span><span class="nav-en">Overview</span></span></a>
+            <a href="./program/"><span class="nav-copy"><span class="nav-ja">プログラム</span><span class="nav-en">Program</span></span></a>
+            <a href="./support/"><span class="nav-copy"><span class="nav-ja">参加費・寄付</span><span class="nav-en">Support</span></span></a>
+            <a href="./chronicle/"><span class="nav-copy"><span class="nav-ja">クロニクル</span><span class="nav-en">Chronicle</span></span></a>
+            <a href="./faq/"><span class="nav-copy"><span class="nav-ja">FAQ</span><span class="nav-en">FAQ</span></span></a>
+            <a href="../festa60-register/"><span class="nav-copy"><span class="nav-ja">参加申込</span><span class="nav-en">Register</span></span></a>
+          </nav>
         </div>
-      </section>
+      </header>
 
-      <section id="overview" aria-labelledby="overview-title">
-        <div class="wrap">
-          <div class="section-head">
-            <p class="eyebrow">Overview</p>
-            <h2 id="overview-title">開催概要</h2>
-            <p>参加判断に必要な情報を、現時点でご案内できる範囲でまとめています。詳細は決定次第、このページで更新します。</p>
-          </div>
-          <div class="summary-grid">
-            <article class="summary-card">
-              <span>開催日</span>
-              <strong>2027年2月11日（木・祝）</strong>
-            </article>
-            <article class="summary-card">
-              <span>会場</span>
-              <strong>東京都立産業貿易センター 台東館 6階展示室</strong>
-              <p>東京都台東区花川戸2-6-5。浅草駅から徒歩圏内です。</p>
-            </article>
-            <article class="summary-card">
-              <span>対象</span>
-              <strong>OBOG、現役生、先生・関係者、同伴者</strong>
-            </article>
-            <article class="summary-card">
-              <span>現在の受付</span>
-              <strong>参加意向受付中</strong>
-              <p>正式申込ではありません。</p>
-            </article>
-            <article class="summary-card">
-              <span>正式申込</span>
-              <strong>後日案内</strong>
-              <p>登録いただいた方へも続報をお送りします。</p>
-            </article>
-            <article class="summary-card">
-              <span>会費</span>
-              <strong>調整中</strong>
-              <p>確定次第、事前にご案内します。</p>
-            </article>
-            <article class="summary-card">
-              <span>服装</span>
-              <strong>後日案内</strong>
-              <p>平服を基本に、少し華やかな装いも歓迎する予定です。</p>
-            </article>
-            <article class="summary-card">
-              <span>踊らない参加</span>
-              <strong>歓迎</strong>
-              <p>交流、展示、記念企画を中心に楽しめる場を準備しています。</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="paper-section" id="welcome" aria-labelledby="welcome-title">
-        <div class="wrap">
-          <div class="section-head">
-            <p class="eyebrow">Invitation</p>
-            <h2 id="welcome-title">こんな方に来てほしい</h2>
-            <p>久しぶりの方も、最近は少し離れていた方も。あの時間を少しでも共有した方に、気軽に参加していただける場を目指しています。</p>
-          </div>
-          <ul class="welcome-list">
-            <li>卒部以来、舞研の集まりから少し離れていた方</li>
-            <li>久しぶりに同期や先輩・後輩に会いたい方</li>
-            <li>現役時代の写真や記録を見返したい方</li>
-            <li>当時は話せなかった思い出を、今なら少し話せそうな方</li>
-            <li>現役生や若い世代の舞研を応援したい方</li>
-            <li>踊る・踊らないに関わらず、理科大舞研の60年を一緒に祝いたい方</li>
-          </ul>
-        </div>
-      </section>
-
-      <section id="concept" aria-labelledby="concept-title">
-        <div class="wrap">
-          <div class="section-head">
-            <p class="eyebrow">Concept</p>
-            <h2 id="concept-title">再会・継承・現役支援</h2>
-            <p>60周年記念FESTAでは、再会・継承・現役支援を軸に、世代を超えて集える一日を準備しています。懐かしい仲間と再び会い、舞研の記録を次の世代へ渡し、今の現役生の活動を応援する場を目指します。</p>
-          </div>
-          <div class="concept-grid">
-            <article class="card">
-              <h3>再会</h3>
-              <p>同期、先輩、後輩、先生、関係者が、時間を越えて同じ場に集うきっかけをつくります。</p>
-            </article>
-            <article class="card">
-              <h3>継承</h3>
-              <p>写真、記録、競技の記憶、イベントの歩みを整理し、次の世代へ渡していきます。</p>
-            </article>
-            <article class="card">
-              <h3>現役支援</h3>
-              <p>今の舞研を知り、活動を応援し、OBOGと現役が自然につながる時間を準備します。</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="program" aria-labelledby="program-title">
-        <div class="wrap">
-          <div class="section-head">
-            <p class="eyebrow">Program</p>
-            <h2 id="program-title">当日の企画予定</h2>
-            <p>当日は、以下のような企画を中心に準備しています。内容・順番・出演者は今後調整のうえ、決定次第ご案内します。</p>
-          </div>
-          <div class="program-grid">
-            <article class="program-card">
-              <h3>60年の歩みを振り返るオープニング映像</h3>
-              <p>写真や記録をもとに、舞研の歩みを世代を超えて振り返ります。</p>
-            </article>
-            <article class="program-card">
-              <h3>OBOG・現役によるデモンストレーション</h3>
-              <p>出演内容は調整のうえ、参加者に無理のない形で準備します。</p>
-            </article>
-            <article class="program-card">
-              <h3>世代別テーブル交流・近況共有</h3>
-              <p>同期や近い世代との再会、先輩・後輩との新しいつながりをつくります。</p>
-            </article>
-            <article class="program-card">
-              <h3>写真・資料展示コーナー</h3>
-              <p>競技会、練習場、理大祭、合宿などの記録を展示資料として確認します。</p>
-            </article>
-            <article class="program-card">
-              <h3>現役支援・活動紹介</h3>
-              <p>今の現役生の活動を知り、OBOGとして応援できる接点をつくります。</p>
-            </article>
-            <article class="program-card">
-              <h3>記念撮影・エンディング</h3>
-              <p>60周年の節目として、参加者の記憶に残る締めくくりを準備します。</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="memory" aria-labelledby="memory-title">
-        <div class="wrap">
-          <div class="section-head">
-            <p class="eyebrow">Memory</p>
-            <h2 id="memory-title">60年の記憶</h2>
-            <p>華やかさの奥にあった努力、悔しさ、仲間との時間。FESTAでは、その記憶を持ち寄り、世代を超えて語り合う一日を目指します。</p>
-          </div>
-          <div class="memory-layout">
-            <div class="memory-copy">
-              <p>学生競技ダンスは、外から見れば華やかな世界です。けれど、その時間を過ごした私たちには、フロアの外にあった緊張や迷い、努力や悔しさもまた、大切な記憶として残っています。</p>
-              <p>春の新歓から、夏合宿、松前杯、東都、東部、理大祭、冬全へ。舞研の一年には、期待、悔しさ、高揚、緊張、誇りがありました。</p>
-              <details>
-                <summary>一年の記憶をたどる</summary>
-                <p>新歓、理工戦、春東都、春東部、夏合宿、シャドーコンペ、松前杯、秋東都、秋東部、理大祭、桜凛祭、冬全、春合宿。季節ごとに、それぞれの舞研がありました。</p>
-              </details>
-              <details>
-                <summary>記憶のキーワード</summary>
-                <p>背番号、レギュラー戦、あと一チェック、ファイナルソロ、オナーダンス、練習場、集合写真。言葉を見ただけで、音楽や空気まで思い出すものがあります。</p>
-              </details>
-            </div>
-            <div class="photo-grid" aria-label="60年の記憶を表す写真">
-              <figure class="photo-card">
-                <img src="../assets/img/history/1996-winter-alljapan-01.jpg" alt="全日本戦に臨む当時の競技会写真" />
-                <figcaption>競技会の記憶。背番号をつけてフロアに立った時間を振り返ります。</figcaption>
-              </figure>
-              <figure class="photo-card">
-                <img src="../assets/img/gallery/festa-2024-01.jpg" alt="FESTAで再会する参加者の写真" />
-                <figcaption>再会の記憶。久しぶりに顔を合わせ、近況を語り合う時間です。</figcaption>
-              </figure>
-              <figure class="photo-card">
-                <img src="../assets/img/gallery/festa-2025-02.jpg" alt="FESTA会場での交流風景" />
-                <figcaption>世代を超えた交流。懐かしい仲間と、新しいつながりが生まれる場を準備します。</figcaption>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="photo-archive" class="paper-section" aria-labelledby="photo-title">
-        <div class="wrap">
-          <div class="photo-callout">
+            <main>
+        <section class="hero">
+          <div class="wrap hero__grid">
             <div>
-              <div class="section-head">
-                <p class="eyebrow">Archive</p>
-                <h2 id="photo-title">写真・記録募集</h2>
-                <p>60周年FESTAに向けて、競技会、練習風景、フォーメーション、集合写真、背番号が分かる写真などを募集しています。</p>
-              </div>
-              <p>ご提供いただいた写真や資料は、60周年FESTAの展示・記念映像・Web掲載の対象として確認します。掲載にあたっては、写っている方への配慮を行い、不都合がある場合は削除・差し替えに対応します。撮影者・提供者が分かる場合は、あわせてお知らせください。</p>
+              <p class="eyebrow"><span class="label-ja">開催決定</span><span class="label-en">Save the Date</span></p>
+              <h1>東京理科大学舞踏研究部 60周年記念FESTA</h1>
+              <p class="hero__copy">2027年2月11日、浅草で。60周年を祝う一日をともに。</p>
+              <p class="hero__lead">
+                OBOG、現役生、関係者が世代を超えて集い、記念企画、交流、デモンストレーション、トライアル、ダンスタイムを楽しむ特別なFESTAです。
+              </p>
+
               <div class="cta-row">
-                <a class="btn btn--primary" href="../contact/">写真・資料を提供する</a>
-              </div>
-            </div>
-            <figure class="photo-card">
-              <img src="../assets/img/gallery/festa-2025-03.jpg" alt="FESTAでの記念写真と交流の様子" />
-              <figcaption>展示・記念映像・Web掲載に向けて、世代を超えて共有できる記録を集めています。</figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
-
-      <section id="support" aria-labelledby="support-title">
-        <div class="wrap">
-          <div class="section-head">
-            <p class="eyebrow">Support</p>
-            <h2 id="support-title">協賛・寄付・現役支援</h2>
-            <p>60周年記念FESTAでは、会場運営、記念映像・展示制作、現役支援、記録アーカイブ整備のため、協賛・寄付・物品協力を検討しています。詳細な協賛メニューは準備中ですが、ご関心のある方は事務局までご連絡ください。</p>
-          </div>
-          <div class="support-grid">
-            <article class="support-card">
-              <span>Support 01</span>
-              <h3>個人寄付</h3>
-              <p>記念事業や現役支援に向けた個人でのご支援です。</p>
-            </article>
-            <article class="support-card">
-              <span>Support 02</span>
-              <h3>企業協賛</h3>
-              <p>企業・団体として記念事業を応援いただく形です。</p>
-            </article>
-            <article class="support-card">
-              <span>Support 03</span>
-              <h3>物品協力</h3>
-              <p>運営、展示、記念品などに関する物品協力です。</p>
-            </article>
-            <article class="support-card">
-              <span>Support 04</span>
-              <h3>写真・資料提供</h3>
-              <p>記録展示や記念映像につながる資料提供です。</p>
-            </article>
-            <article class="support-card">
-              <span>Support 05</span>
-              <h3>現役支援</h3>
-              <p>今の舞研の活動を応援するための支援です。</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="entry" aria-labelledby="entry-title">
-        <div class="wrap">
-          <div class="section-head">
-            <p class="eyebrow">Entry</p>
-            <h2 id="entry-title">参加意向を登録する</h2>
-            <p>このフォームは、60周年FESTAの参加意向確認およびOBOG名簿情報の確認・更新を目的としています。正式な参加確定、会費、入金方法については後日あらためてご案内します。</p>
-          </div>
-
-          <div class="form-intro">
-            現時点では参加意向の確認です。送信後に会費の請求や決済は発生しません。正式申込が始まりましたら、登録いただいた連絡先にもご案内します。
-          </div>
-
-          <form name="festa60-obog-crm-entry" method="POST" data-netlify="true" action="/thanks.html" class="entry-form" data-mailto-form="festa60-obog-crm-entry" data-mailto-recipient="tus.fantasista@gmail.com" data-mailto-subject-prefix="【60周年FESTA参加意向】">
-            <input type="hidden" name="form-name" value="festa60-obog-crm-entry" />
-
-            <div class="form-block" aria-labelledby="identity-heading">
-              <h3 id="identity-heading">本人情報</h3>
-              <div class="form-grid">
-                <div class="field">
-                  <label for="full-name">氏名<span class="required">必須</span></label>
-                  <input id="full-name" type="text" name="full_name" placeholder="例：山田 太郎" autocomplete="name" required />
-                </div>
-                <div class="field">
-                  <label for="maiden-name">旧姓<span class="optional">任意</span></label>
-                  <input id="maiden-name" type="text" name="maiden_name" placeholder="該当する方のみ" />
-                </div>
-                <div class="field">
-                  <label for="furigana">ふりがな<span class="optional">任意</span></label>
-                  <input id="furigana" type="text" name="furigana" placeholder="例：やまだ たろう" />
-                </div>
-                <div class="field">
-                  <label for="graduation-year">卒部年度または期<span class="required">必須</span></label>
-                  <input id="graduation-year" list="graduation-options" type="text" name="graduation_year_or_generation" placeholder="例：2010年度卒 / 第45期 / 不明" required />
-                  <datalist id="graduation-options">
-                    <option value="不明"></option>
-                    <option value="現役"></option>
-                    <option value="関係者"></option>
-                  </datalist>
-                </div>
-                <div class="field">
-                  <label for="affiliation">所属区分<span class="required">必須</span></label>
-                  <select id="affiliation" name="affiliation" required>
-                    <option value="">選択してください</option>
-                    <option value="obog">OBOG</option>
-                    <option value="active_student">現役生</option>
-                    <option value="teacher_related">先生・関係者</option>
-                    <option value="companion">同伴者</option>
-                    <option value="other">その他</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="email">メールアドレス<span class="required">必須</span></label>
-                  <input id="email" type="email" name="email" placeholder="example@example.com" autocomplete="email" required />
-                </div>
+                <a class="btn btn--primary" href="../festa60-register/">60周年FESTAに参加申込する</a>
+                <a class="btn btn--ghost" href="./program/">当日の内容を見る</a>
+                <a class="btn btn--ghost" href="./support/">参加費・寄付を見る</a>
               </div>
             </div>
 
-            <div class="form-block" aria-labelledby="optional-heading">
-              <h3 id="optional-heading">任意情報</h3>
-              <div class="form-grid">
-                <div class="field">
-                  <label for="phone">電話番号<span class="optional">任意</span></label>
-                  <input id="phone" type="tel" name="phone" placeholder="任意" autocomplete="tel" />
+            <div class="hero__facts" aria-label="開催情報">
+              <div class="hero__fact">
+                <span>開催日</span>
+                <strong>2027年2月11日（木・祝）</strong>
+              </div>
+              <div class="hero__fact">
+                <span>会場</span>
+                <strong>第一部：東京都立産業貿易センター 台東館 6階展示室<small>第二部：同じ建物内・台東区民会館 9階 特別会議室（特）および（大）</small></strong>
+              </div>
+              <div class="hero__fact">
+                <span>ご案内</span>
+                <strong>参加費・寄付プランを公開<small>返礼内容は準備状況に応じて順次更新します</small></strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="event-at-a-glance" class="event-focus">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">イベント案内</span><span class="label-en">Event Guide</span></p>
+              <h2>見る、話す、踊る。世代を超えて60周年を祝うFESTA</h2>
+              <p class="event-focus__lead">懐かしい仲間との再会だけでなく、現役生の活動を知り、舞踏研究部のこれからを一緒に応援できる一日を目指しています。最近踊っていない方も、初めてFANTASISTAの催しに参加する方も歓迎します。</p>
+            </div>
+
+            <div class="event-focus__facts" aria-label="イベント基本情報">
+              <div class="event-focus__fact"><span>DATE</span><strong>2027年2月11日<br>木曜日・祝日</strong></div>
+              <div class="event-focus__fact"><span>VENUE</span><strong>第一部：台東館 6階展示室<br>第二部：台東区民会館 9階</strong></div>
+              <div class="event-focus__fact"><span>FOR</span><strong>OBOG・現役生<br>関係者</strong></div>
+              <div class="event-focus__fact"><span>TIME</span><strong>第一部 14:00〜17:30<br>第二部 18:00〜20:00（予定）</strong></div>
+            </div>
+
+            <h3 class="event-focus__subhead">当日に予定していること</h3>
+            <div class="event-focus__program">
+              <article class="event-focus__item"><span>01 / ANNIVERSARY</span><h3>60周年記念展示</h3><p>60年の歩みを写真や資料によるギャラリー展示で振り返ります。記念ムービーの放映も検討しています。</p></article>
+              <article class="event-focus__item"><span>02 / PERFORMANCE</span><h3>現役生デモンストレーション</h3><p>現役生によるダンスを間近で楽しめるプログラムを予定しています。</p></article>
+              <article class="event-focus__item"><span>03 / PRO DEMO</span><h3>理科大OBOGプロデモ</h3><p>プロとして活躍する理科大OBOGによるデモンストレーションを予定しています。</p></article>
+              <article class="event-focus__item"><span>04 / TRIAL</span><h3>トライアル</h3><p>参加者がフロアで踊り、世代を超えてダンスを楽しめる企画を予定しています。</p></article>
+              <article class="event-focus__item"><span>05 / DANCE TIME</span><h3>現役生とのダンスタイム</h3><p>踊る方も見る方も楽しめる、現役支援につながる時間を予定しています。</p></article>
+              <article class="event-focus__item"><span>06 / RECEPTION</span><h3>第二部・懇親会</h3><p>18:00〜20:00、同じ建物内の台東区民会館9階・特別会議室（特）および（大）で、世代を超えて語り合える場をつくります。</p></article>
+            </div>
+            <p class="event-focus__note">企画内容・実施順・時間は調整中です。確定情報は本ページで順次お知らせします。</p>
+            <div class="cta-row">
+              <a class="btn btn--primary" href="../festa60-register/">参加申込画面へ進む</a>
+              <a class="btn btn--ghost" href="#overview">会場・アクセスを見る</a>
+              <a class="btn btn--ghost" href="./support/">参加費・寄付・返礼を見る</a>
+            </div>
+          </div>
+        </section>
+
+        <details class="memory-archive" hidden>
+          <summary>
+            <span class="memory-archive__copy">60年の記憶と舞研の一年を振り返る<small>大会、合宿、練習場、仲間との記憶</small></span>
+          </summary>
+
+        <section id="memory-album">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Memory Album</span><span class="label-en">Photo Chronicle</span></p>
+              <h2>写真でたどる、舞踏研究部の60年</h2>
+              <p>競技会、練習場、理大祭、合宿、仲間との時間。創部期から2010年代までの記録を、年代を越えて並べました。</p>
+            </div>
+
+            <div class="photo-library-grid photo-library-grid--festa" data-photo-library data-role="festa" data-limit="16" data-source="../assets/data/public-photo-library.json?v=20260720-9" aria-live="polite"></div>
+            <p class="photo-library-status" data-photo-library-status role="status">写真候補を読み込んでいます。</p>
+          </div>
+        </section>
+
+                <section id="memory-depth">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Behind the Floor</span><span class="label-en">Memory</span></p>
+              <h2>華やかさの奥にあったもの</h2>
+              <p>学生競技ダンスは、外から見れば華やかな世界です。けれど、その時間を過ごした私たちには、フロアの外にあった緊張や迷い、努力や悔しさもまた、大切な記憶として残っています。</p>
+            </div>
+
+            <div class="emotion-grid">
+              <article class="emotion-card">
+                <h3>誰かと一曲をつくること</h3>
+                <p>一人では成立しない競技だからこそ、距離感や呼吸に悩む日もありました。うまくいく日も、同じ方向を向けなくなる日もある。それでも、誰かと一曲をつくる経験は、学生競技ダンスならではの記憶です。</p>
+              </article>
+
+              <article class="emotion-card">
+                <h3>選ばれること、選ばれないこと</h3>
+                <p>レギュラーを目指して練習した時間。結果表の前で交わした言葉。同期と競い、先輩の背中を追い、後輩に見られる立場になっていく。その重みを知っている人たちが、このFESTAに集まります。</p>
+              </article>
+
+              <article class="emotion-card">
+                <h3>練習場に残った時間</h3>
+                <p>限られた時間、限られた場所、限られた体力の中で、もう一度だけ踊った夜。研究、単位、進路、生活の事情を抱えながら、それでもフロアに向かった日々がありました。</p>
+              </article>
+
+              <article class="emotion-card">
+                <h3>あと一チェックの記憶</h3>
+                <p>予選は、チェック数で次へ進む世界でした。あと一つ届かなかった日、思いがけず通った日、結果表の前で言葉が出なかった日。その一瞬の重みを、きっと多くのOBOGが覚えています。</p>
+              </article>
+
+              <article class="emotion-card">
+                <h3>痛みも、悔しさも、今は記憶になる</h3>
+                <p>思うように動けなかった日、結果が出なかった日、誰かの上達がまぶしかった日。その時は言葉にできなかった感情も、年月を経た今なら、懐かしい仲間と笑って話せるかもしれません。</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+                <section class="memory-yearflow" id="memory-yearflow">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Seasonal Memory</span><span class="label-en">Year Flow</span></p>
+              <h2>一年の記憶をたどる</h2>
+              <p>春の新歓から、冬全のフロアまで。舞研の一年は、ただ大会が並ぶだけではありませんでした。新歓、理工戦、春東都、春東部、夏合宿、シャドーコンペ、松前杯、秋東都、秋東部、理大祭、桜凛祭、冬全、そして春合宿へ。季節ごとに、期待、悔しさ、高揚、緊張、誇りがありました。</p>
+            </div>
+
+            <div class="memory-yearflow-grid">
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">春</span>
+                <h3>新歓、ステップ講習会、理工戦</h3>
+                <p>4月の新歓。新歓ハイク、新歓ダンパ、各種交流、ステップ講習会。初めて聞く種目名、先輩の踊り、慣れない礼儀。5月には、1年生がワルツとジルバで理工戦デビューを迎えました。</p>
+                <div class="memory-season-card__keywords" aria-label="春のキーワード">
+                  <span>新歓</span><span>新歓ハイク</span><span>新歓ダンパ</span><span>ステップ講習会</span><span>理工戦</span><span>ワルツ</span><span>ジルバ</span>
                 </div>
-                <div class="field">
-                  <label for="dance-role">当時の役割<span class="optional">任意</span></label>
-                  <select id="dance-role" name="dance_role">
-                    <option value="">未選択</option>
-                    <option value="leader">リーダー</option>
-                    <option value="partner">パートナー</option>
-                    <option value="both">両方</option>
-                    <option value="manager_other">マネージャー・その他</option>
-                  </select>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">春のレギュラー戦</span>
+                <h3>春東都、春東部、そして夏全へ</h3>
+                <p>2年生以上にとって春は、春東都、春東部へ向かう季節。団体成績、Ⅰ部校への昇格、夏全出場の可能性。その結果が、次の景色を大きく変えていきました。春東部の結果は、Ⅰ部校や夏全出場に関わる大きな節目でした。</p>
+                <div class="memory-season-card__keywords" aria-label="春のレギュラー戦のキーワード">
+                  <span>春東都</span><span>春東部</span><span>Ⅰ部校</span><span>夏全</span><span>団体成績</span>
                 </div>
-                <div class="field">
-                  <label for="school-group">所属大学・団体<span class="optional">任意</span></label>
-                  <input id="school-group" type="text" name="school_or_group" placeholder="例：東京理科大学 / 理科大舞踏研究部" />
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">夏</span>
+                <h3>夏合宿とシャドーコンペ</h3>
+                <p>夏合宿は、体力も気持ちも試される時間でした。最終日のシャドーコンペに向けて、踊り込み、先輩からの厳しい声、何度も繰り返したワルツのボックス。つらかったはずなのに、なぜか今も鮮明に残っている記憶です。</p>
+                <div class="memory-season-card__keywords" aria-label="夏のキーワード">
+                  <span>夏合宿</span><span>シャドーコンペ</span><span>一時間モノ</span><span>ワルツのボックス</span><span>踊り込み</span>
                 </div>
-                <div class="field">
-                  <label for="specialty">専攻<span class="optional">任意</span></label>
-                  <select id="specialty" name="specialty">
-                    <option value="">未回答</option>
-                    <option value="standard">スタンダード</option>
-                    <option value="latin">ラテン</option>
-                    <option value="both">両方</option>
-                    <option value="other">その他</option>
-                  </select>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">秋初戦</span>
+                <h3>松前杯、それぞれの初戦</h3>
+                <p>松前杯は、1年生にとっては実質的なデビュー戦。2年生にとっては固定カップルで迎える初戦。3年生にとっては、秋のレギュラー戦へ向けた試金石でした。期待、悔しさ、高揚が入り混じる、秋の始まりの記憶です。</p>
+                <div class="memory-season-card__keywords" aria-label="秋初戦のキーワード">
+                  <span>松前杯</span><span>1年生のデビュー戦</span><span>固定カップル初戦</span><span>秋初戦</span><span>試金石</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">秋のレギュラー戦</span>
+                <h3>秋東都、秋東部、結果表の前で</h3>
+                <p>秋東都、秋東部へ進む中で、レギュラーに選ばれること、選ばれないこと、結果表の前で味わう一喜一憂がありました。予選はチェック数で進みます。あと一チェックで届かなかった日も、思いがけず次へ進んだ日もありました。</p>
+                <div class="memory-season-card__keywords" aria-label="秋のレギュラー戦のキーワード">
+                  <span>秋東都</span><span>秋東部</span><span>レギュラー戦</span><span>結果表</span><span>チェック数</span><span>あと一チェック</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">秋のイベント</span>
+                <h3>理大祭、桜凛祭、デモと出店</h3>
+                <p>競技だけが舞研ではありませんでした。理大祭や桜凛祭でのデモ披露、出店、準備、片付け。試合とは違う表情で、仲間と過ごした秋の記憶もあります。</p>
+                <div class="memory-season-card__keywords" aria-label="秋イベントのキーワード">
+                  <span>理大祭</span><span>桜凛祭</span><span>デモ披露</span><span>出店</span><span>仲間との時間</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card memory-season-card--winter">
+                <span class="memory-season-card__season">冬全前</span>
+                <h3>単科戦に絞る冬</h3>
+                <p>冬全は単科戦。1組1種目に絞られるからこそ、4年生はその一種目にすべてを注ぎました。種目が絞られる分、入賞のチャンスも広がる。けれど、その一曲に向き合う緊張は、普段の試合とは違う重さがありました。</p>
+                <div class="memory-season-card__keywords" aria-label="冬全前のキーワード">
+                  <span>冬全</span><span>単科戦</span><span>1組1種目</span><span>最後の追い込み</span><span>4年生</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card memory-season-card--winter memory-season-card--spotlight">
+                <span class="memory-season-card__season">冬全当日</span>
+                <h3>ファイナルソロとオナーダンス</h3>
+                <p>冬全当日の緊張は特別でした。1チェックの重み、涙の下位決勝、上位決勝で踊るファイナルソロ。そして、優勝者だけに許されるオナーダンス。届かなかった悔しさも、フロアに残した誇りも、それぞれにとってかけがえのない宝物です。</p>
+                <div class="memory-season-card__keywords" aria-label="冬全当日のキーワード">
+                  <span>冬全</span><span>1チェックの重み</span><span>涙の下位決勝</span><span>ファイナルソロ</span><span>オナーダンス</span><span>優勝</span><span>悔しさ</span><span>誇り</span>
+                </div>
+              </article>
+
+              <article class="memory-season-card">
+                <span class="memory-season-card__season">冬全後〜春</span>
+                <h3>春合宿、新体制、次の新歓へ</h3>
+                <p>冬全が終わると、4年生が抜けた少し寂しい春合宿。新しい幹部、新しい体制、新しい練習場の空気。そしてまた4月、新歓が始まる。そうして舞研の一年は、次の世代へ受け継がれていきました。</p>
+                <div class="memory-season-card__keywords" aria-label="次の春のキーワード">
+                  <span>春合宿</span><span>新幹部</span><span>新体制</span><span>4年生が抜けた後</span><span>新歓</span><span>次の世代</span>
+                </div>
+              </article>
+            </div>
+
+            <div class="memory-mini-photo-grid">
+              <figure class="memory-photo-card memory-mini-photo-card">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/1987-1996/1107692152682240.webp" alt="1995年夏合宿で練習する部員たち" loading="lazy" decoding="async">
+                <figcaption class="memory-photo-caption">夏合宿の記憶</figcaption>
+                <p class="memory-photo-note">シャドーコンペ、踊り込み、集合写真などを掲載予定</p>
+              </figure>
+
+              <figure class="memory-photo-card memory-mini-photo-card">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/1997-2006/1107722159345906.webp" alt="1999年理大祭での集合写真" loading="lazy" decoding="async">
+                <figcaption class="memory-photo-caption">秋のイベント</figcaption>
+                <p class="memory-photo-note">理大祭、桜凛祭、デモ披露、出店などを掲載予定</p>
+              </figure>
+
+              <figure class="memory-photo-card memory-mini-photo-card">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/2007-2016/1107758536008935.webp" alt="2009年東都大会フィナーレの記録" loading="lazy" decoding="async">
+                <figcaption class="memory-photo-caption">冬全のフロア</figcaption>
+                <p class="memory-photo-note">ファイナルソロ、オナーダンス、4年生の最後の一曲などを掲載予定</p>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+                <section class="memory-keywords" id="memory-keywords">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Keywords</span><span class="label-en">Memory Cues</span></p>
+              <h2>記憶のキーワード</h2>
+              <p>言葉を見ただけで、音楽や練習場の空気まで思い出す。そんな舞研だけの言葉を、少しずつ並べました。</p>
+            </div>
+
+            <div class="keyword-group-grid">
+              <article class="keyword-group">
+                <h3>試合と結果</h3>
+                <div class="keyword-list" aria-label="試合と結果のキーワード">
+                  <span class="keyword-chip">背番号</span>
+                  <span class="keyword-chip">レギュラー戦</span>
+                  <span class="keyword-chip">春東都</span>
+                  <span class="keyword-chip">春東部</span>
+                  <span class="keyword-chip">秋東都</span>
+                  <span class="keyword-chip">秋東部</span>
+                  <span class="keyword-chip keyword-chip--accent">松前杯</span>
+                  <span class="keyword-chip keyword-chip--accent">夏全</span>
+                  <span class="keyword-chip keyword-chip--accent">冬全</span>
+                  <span class="keyword-chip">チェック数</span>
+                  <span class="keyword-chip keyword-chip--accent">あと一チェック</span>
+                  <span class="keyword-chip">結果表</span>
+                  <span class="keyword-chip keyword-chip--accent">涙の下位決勝</span>
+                  <span class="keyword-chip keyword-chip--accent">ファイナルソロ</span>
+                  <span class="keyword-chip keyword-chip--accent">オナーダンス</span>
+                </div>
+              </article>
+
+              <article class="keyword-group">
+                <h3>合宿と練習</h3>
+                <div class="keyword-list" aria-label="合宿と練習のキーワード">
+                  <span class="keyword-chip keyword-chip--accent">夏合宿</span>
+                  <span class="keyword-chip">春合宿</span>
+                  <span class="keyword-chip keyword-chip--accent">シャドーコンペ</span>
+                  <span class="keyword-chip">一時間モノ</span>
+                  <span class="keyword-chip">ワルツのボックス</span>
+                  <span class="keyword-chip">踊り込み</span>
+                  <span class="keyword-chip">練習場</span>
+                  <span class="keyword-chip">ステップ講習会</span>
+                  <span class="keyword-chip">曲かけ</span>
+                  <span class="keyword-chip">先輩の声</span>
+                  <span class="keyword-chip">最後の追い込み</span>
+                </div>
+              </article>
+
+              <article class="keyword-group">
+                <h3>カップルとチーム</h3>
+                <div class="keyword-list" aria-label="カップルとチームのキーワード">
+                  <span class="keyword-chip">固定カップル</span>
+                  <span class="keyword-chip">誰と踊るのか</span>
+                  <span class="keyword-chip">組み替え</span>
+                  <span class="keyword-chip">同期の存在</span>
+                  <span class="keyword-chip">先輩の背中</span>
+                  <span class="keyword-chip">後輩に見られる立場</span>
+                  <span class="keyword-chip">フォーメーション</span>
+                  <span class="keyword-chip">幹部交代</span>
+                  <span class="keyword-chip">新体制</span>
+                </div>
+              </article>
+
+              <article class="keyword-group">
+                <h3>イベントと日常</h3>
+                <div class="keyword-list" aria-label="イベントと日常のキーワード">
+                  <span class="keyword-chip">新歓</span>
+                  <span class="keyword-chip">新歓ハイク</span>
+                  <span class="keyword-chip">新歓ダンパ</span>
+                  <span class="keyword-chip">理工戦</span>
+                  <span class="keyword-chip keyword-chip--accent">理大祭</span>
+                  <span class="keyword-chip keyword-chip--accent">桜凛祭</span>
+                  <span class="keyword-chip">デモ披露</span>
+                  <span class="keyword-chip">出店</span>
+                  <span class="keyword-chip">集合写真</span>
+                  <span class="keyword-chip">最後の一曲</span>
+                </div>
+              </article>
+
+              <article class="keyword-group" style="grid-column: 1 / -1;">
+                <h3>それぞれの記憶</h3>
+                <div class="keyword-list" aria-label="それぞれの記憶のキーワード">
+                  <span class="keyword-chip">期待</span>
+                  <span class="keyword-chip">悔しさ</span>
+                  <span class="keyword-chip">高揚</span>
+                  <span class="keyword-chip">緊張</span>
+                  <span class="keyword-chip">涙</span>
+                  <span class="keyword-chip">研究と練習</span>
+                  <span class="keyword-chip">単位と練習</span>
+                  <span class="keyword-chip">怪我との付き合い</span>
+                  <span class="keyword-chip">続けるか迷った日</span>
+                  <span class="keyword-chip">今なら笑える話</span>
+                </div>
+              </article>
+            </div>
+
+            <div class="memory-photo-grid memory-photo-grid--three" style="margin-top: 22px;">
+              <figure class="memory-photo-card">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/1987-1996/1107694519348670.webp" alt="1989年理大祭の記録" loading="lazy" decoding="async">
+                <figcaption class="memory-photo-caption">競技会の記憶</figcaption>
+                <p class="memory-photo-note">背番号をつけて臨んだ一日を思い出す写真を掲載予定です。</p>
+              </figure>
+
+              <figure class="memory-photo-card">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/1977-1986/1107676216017167.webp" alt="1985年夏合宿での練習風景" loading="lazy" decoding="async">
+                <figcaption class="memory-photo-caption">練習場の記憶</figcaption>
+                <p class="memory-photo-note">踊っても踊っても足りなかった時間を伝える写真を掲載予定です。</p>
+              </figure>
+
+              <figure class="memory-photo-card">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/2007-2016/1107756789342443.webp" alt="2008年春合宿の集合写真" loading="lazy" decoding="async">
+                <figcaption class="memory-photo-caption">仲間との記憶</figcaption>
+                <p class="memory-photo-note">同期、先輩、後輩と過ごした時間が伝わる写真を掲載予定です。</p>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        </details>
+
+        <section id="overview">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">開催概要</span><span class="label-en">Overview</span></p>
+              <h2>開催概要</h2>
+            </div>
+
+            <div class="panel">
+              <div class="outline-grid">
+                <div class="outline-item">
+                  <span>名称</span>
+                  <strong>東京理科大学舞踏研究部 60周年記念FESTA</strong>
+                </div>
+
+                <div class="outline-item">
+                  <span>日付</span>
+                  <strong>2027年2月11日（木・祝）</strong>
+                </div>
+
+                <div class="outline-item">
+                  <span>時間</span>
+                  <strong>第一部 14:00〜17:30／第二部 18:00〜20:00（予定）</strong>
+                </div>
+
+                <div class="outline-item">
+                  <span>会場</span>
+                  <strong>第一部：東京都立産業貿易センター 台東館 6階展示室</strong>
+                  <p>第二部：同じ建物内の台東区民会館 9階 特別会議室（特）および（大）</p>
+                  <p>〒111-0033 東京都台東区花川戸2-6-5</p>
+                </div>
+
+                <div class="outline-item outline-item--wide">
+                  <span>アクセス</span>
+                  <p>東京メトロ銀座線・東武スカイツリーライン「浅草駅」から徒歩5分、都営浅草線「浅草駅」から徒歩8分、つくばエクスプレス「浅草駅」から徒歩9分です。</p>
+                  <p>会場に一般駐車場はありません。お車でお越しの際は近隣駐車場をご利用ください。</p>
+                  <p style="margin-top: 12px;">
+                    <a class="btn btn--ghost" href="https://www.sanbo.metro.tokyo.lg.jp/taito/access/" target="_blank" rel="noopener noreferrer">台東館の交通アクセスを見る</a>
+                  </p>
+                </div>
+
+                <div class="outline-item outline-item--wide">
+                  <span>詳細</span>
+                  <p>参加費・寄付プランは本ページでご案内しています。受付時間や各企画の進行は、決定次第順次更新します。</p>
+                </div>
+              </div>
+
+              <p class="outline-note">参加費と寄付プランは2026年7月18日現在の設定です。運営上の事情により変更する場合は、本ページと申込画面でお知らせします。</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="fees-support" class="stripe-payment-section" aria-labelledby="fees-support-heading">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">参加費・寄付・返礼</span><span class="label-en">Fees &amp; Support</span></p>
+              <h2 id="fees-support-heading">参加費と現役支援のご案内</h2>
+              <p>FESTA参加者向けは、参加費・寄付・寄付特典を含む一体価格でご案内します。欠席される方には、参加費を含まない寄付専用プランをご用意しています。</p>
+            </div>
+
+            <div class="panel">
+              <div class="fee-guide-block">
+                <h3>FESTA参加者向け一体価格プラン</h3>
+                <h4>寄付がひらく、より色とりどりのFESTA</h4>
+                <p>プラチナ、ゴールド、シルバー、ブロンズの表示額は、参加費・寄付・寄付特典を含む支払総額です。寄付は、記念展示、写真や映像、プロデモ、トライアル、世代を超えた交流を充実させ、60周年の一日をより彩り豊かな場にするための原資となります。</p>
+                <p><strong>ダンスタイムチケットによる現役支援：</strong>各プランに含まれるチケットは、当日のダンスタイムで皆さまから現役部員へ直接お渡しいただけます。受け取った現役部員には、チケットの券面相当額を全額還元します。</p>
+                <p><strong>寄付相当分の活用：</strong>基本参加費とダンスタイムチケットの券面相当額を除く寄付相当分は、次の2つの目的に活用します。</p>
+                <ol>
+                  <li>会場での交流企画や記念に残るコンテンツを充実させ、FESTAをより彩り豊かな場にすること</li>
+                  <li>フォーメーション（FM）ドレスの整備・更新や、練習・大会運営に必要な備品の購入など、現役部員の継続的な活動と競技力向上を支援すること</li>
+                </ol>
+                <p>プラチナ、ゴールド、シルバー、ブロンズには、印刷した記念写真、手書きメッセージ、記念動画の視聴案内（QR）、記念ステッカーを後日郵送する予定です。土産品類は設けません。</p>
+                <div class="fee-table-wrap" role="region" aria-label="FESTA参加者向け一体価格プラン一覧" tabindex="0">
+                  <table class="fee-table">
+                    <thead>
+                      <tr><th scope="col">プラン</th><th scope="col">基準一体価格<br><small>参加費・寄付を含む</small></th><th scope="col">ダンスタイムチケット</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><th class="fee-table__plan" scope="row">プラチナ</th><td>100,000円</td><td>600円券×25枚</td></tr>
+                      <tr><th class="fee-table__plan" scope="row">ゴールド</th><td>50,000円</td><td>500円券×20枚</td></tr>
+                      <tr><th class="fee-table__plan" scope="row">シルバー</th><td>30,000円</td><td>400円券×12枚</td></tr>
+                      <tr><th class="fee-table__plan" scope="row">ブロンズ</th><td>20,000円</td><td>300円券×5枚</td></tr>
+                      <tr><th class="fee-table__plan" scope="row">通常参加</th><td>15,000円</td><td>卒業11年目以上は300円券×3枚<br>卒業10年目以下は300円券×2枚</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="fee-guide-note">各プランのチケットには通常参加分を含み、通常参加券を重複して配布しません。ブロンズの300円券×5枚にも通常参加分の2〜3枚を含みます。</p>
+                <p class="fee-guide-note"><strong>同伴者向けチケット：</strong>有料の大人同伴者には、お一人につき300円券を1枚配布します。寄付プランのチケットは申込者本人分のため同伴者には重複配布せず、子供同伴者への自動配布もありません。同一申込・同一世帯内では共有できます。当日の追加購入は300円券のみ、1枚300円です。</p>
+                <h4>全プラン共通の割引早見表</h4>
+                <p>申込時期割引と卒部年数割引は併用できます。上の基準一体価格から、該当する合計割引額を差し引いた金額がお支払い額です。</p>
+                <div class="fee-table-wrap" role="region" aria-label="申込時期と卒部年数による合計割引額" tabindex="0">
+                  <table class="fee-table">
+                    <thead><tr><th scope="col">卒部からの年数</th><th scope="col">9月30日まで<br><small>早期申込</small></th><th scope="col">10月1日〜12月31日<br><small>年内申込</small></th><th scope="col">1月1日以降</th></tr></thead>
+                    <tbody>
+                      <tr><th class="fee-table__plan" scope="row">11年目以上</th><td><strong>2,000円引き</strong></td><td>1,000円引き</td><td>割引なし</td></tr>
+                      <tr><th class="fee-table__plan" scope="row">6〜10年目</th><td><strong>4,000円引き</strong></td><td>3,000円引き</td><td>2,000円引き</td></tr>
+                      <tr><th class="fee-table__plan" scope="row">5年目以下<br><small>若手OBOG</small></th><td><strong>6,000円引き</strong></td><td>5,000円引き</td><td>4,000円引き</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="fee-guide-note"><strong>計算例：</strong>9月30日までに申し込む卒部5年目以下の方は、通常参加 15,000円 → <strong>9,000円</strong>、プラチナ 100,000円 → <strong>94,000円</strong>です。申込画面では条件に応じて自動計算します。</p>
+              </div>
+
+              <div class="fee-guide-block">
+                <h3>欠席者向け寄付・返礼パッケージ</h3>
+                <p>当日会場へお越しになれない方も、現役支援と60周年記念事業へご参加いただけます。参加費と現役支援チケットは含まれませんが、すべてのプランにお礼状とプラン別返礼品が付きます。</p>
+                <div class="fee-table-wrap" role="region" aria-label="欠席者向け寄付と返礼一覧" tabindex="0">
+                  <table class="fee-table">
+                    <thead>
+                      <tr><th scope="col">プラン</th><th scope="col">寄付額</th><th scope="col">返礼の予定</th><th scope="col">配送予定</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><th class="fee-table__plan" scope="row">プレミアム</th><td>30,000円</td><td>印刷写真、手書き手紙、動画QR、ステッカー、写真盾、限定記念品（ハンカチ）</td><td>宅急便コンパクト</td></tr>
+                      <tr><th class="fee-table__plan" scope="row">アドバンス</th><td>10,000円</td><td>印刷写真、手書き手紙、動画QR、ステッカー、写真スタンド</td><td>レターパック</td></tr>
+                      <tr><th class="fee-table__plan" scope="row">スタンダード</th><td>5,000円</td><td>印刷写真、手書き手紙、動画QR、ステッカー</td><td>定形郵便等</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <p class="fee-guide-note"><strong>返礼について：</strong>掲載内容は現時点の予定です。写真・動画・記念品の仕様、配送方法、発送時期は制作状況により変更する場合があります。寄付をお申し込みの方は、返礼の発送に必要な住所をご入力ください。</p>
+
+              <div class="stripe-payment-grid" aria-label="お支払い方法">
+                <article class="stripe-payment-card">
+                  <h3>クレジットカード</h3>
+                  <p>申込内容の確認後、Stripeの決済画面へ移動します。決済完了後は、Stripeの領収書メールとFESTA事務局の参加確定メールをお送りします。</p>
+                </article>
+                <article class="stripe-payment-card">
+                  <h3>銀行振込</h3>
+                  <p>受付番号と申込者ごとの振込名義を自動発行します。申込日から7日以内を目安にお振り込みください。</p>
+                </article>
+                <article class="stripe-payment-card">
+                  <h3>カード情報の保護</h3>
+                  <p>カード番号などはStripeが取り扱い、FESTAのサイトや申込データベースには保存しません。</p>
+                </article>
+              </div>
+
+              <div class="fee-guide-actions">
+                <a class="btn btn--primary" href="../festa60-register/">参加申込へ進む</a>
+                <a class="btn btn--ghost" href="./faq/#payment">カード決済のFAQを見る</a>
+                <a class="btn btn--ghost" href="https://tus-fantasista.pages.dev/contact/?type=general#contact-form">参加費・寄付について問い合わせる</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="concept">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">コンセプト</span><span class="label-en">Concept</span></p>
+              <h2>60年の記録を、次の10年の力へ</h2>
+              <p>再会を楽しみながら、舞踏研究部の歩みと現役支援を次の世代へつなぐ記念事業です。</p>
+            </div>
+
+            <div class="story-grid">
+              <article class="story-card">
+                <h3>再会</h3>
+                <p>OBOG、現役生、関係者が世代を越えて集まり、舞研で過ごした時間を安心して語り合える場をつくります。</p>
+              </article>
+              <article class="story-card">
+                <h3>継承</h3>
+                <p>写真、記録、競技成績、資料を整理し、東京理科大学舞踏研究部の歩みを次の世代へ渡します。</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="program">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">当日のプログラム</span><span class="label-en">Program</span></p>
+              <h2>当日の主な内容</h2>
+              <p>60周年を祝い、世代を超えて交流できるプログラムを予定しています。実施順や時間は、決定次第このページでお知らせします。</p>
+            </div>
+
+            <div class="welcome-grid">
+              <article class="welcome-card"><p>60年の歩みを振り返るオープニング映像</p></article>
+              <article class="welcome-card"><p>現役生によるデモンストレーション</p></article>
+              <article class="welcome-card"><p>理科大OBOGプロによるデモンストレーション</p></article>
+              <article class="welcome-card"><p>参加者によるトライアル</p></article>
+              <article class="welcome-card"><p>世代別テーブル交流・近況共有</p></article>
+              <article class="welcome-card"><p>写真・資料展示コーナー</p></article>
+              <article class="welcome-card"><p>現役支援・活動紹介の時間</p></article>
+              <article class="welcome-card"><p>記念撮影・エンディング</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="audience-guide">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">参加者別案内</span><span class="label-en">Guide</span></p>
+              <h2>参加される皆さまへ</h2>
+              <p>最近踊っていない方、FANTASISTAの催しが初めての方も歓迎します。集合時間、服装、当日の詳しい流れは決定次第更新します。</p>
+            </div>
+
+            <div class="story-grid">
+              <article class="story-card">
+                <h3>OBOG向け</h3>
+                <p>同期・先輩・後輩への声かけ、写真・資料提供、協賛や寄付の相談を歓迎します。参加費は卒部年度と申込時期から判定します。</p>
+              </article>
+              <article class="story-card">
+                <h3>現役向け</h3>
+                <p>出演・受付・展示協力など、現役生と相談しながら無理のない形を検討します。授業・試験・競技予定に配慮して調整します。</p>
+              </article>
+              <article class="story-card">
+                <h3>関係者向け</h3>
+                <p>舞踏研究部に関わってくださった皆さまもご参加いただけます。ご不明な点は事務局へお問い合わせください。</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="support">
+          <div class="wrap">
+            <div class="panel festa-callout">
+              <div class="festa-callout__copy">
+                <div class="section-head" style="margin-bottom: 0;">
+                  <p class="eyebrow"><span class="label-ja">協賛・寄付・支援</span><span class="label-en">Support</span></p>
+                  <h2>60周年記念事業への支援について</h2>
+                </div>
+                <p>個人寄付は、参加者向けのゴールド・シルバー・ブロンズと、欠席者向けのスタンダード・アドバンス・プレミアムをご用意しています。企業協賛、広告、物品協力は事務局へご相談ください。</p>
+                <div class="festa-callout__actions">
+                  <a class="btn btn--primary" href="https://tus-fantasista.pages.dev/contact/?type=general#contact-form">協賛・広告について相談する</a>
+                  <a class="btn btn--ghost" href="./support/">寄付と返礼の一覧を見る</a>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
 
-            <div class="form-block" aria-labelledby="intent-heading">
-              <h3 id="intent-heading">参加意向</h3>
-              <div class="form-grid">
-                <fieldset class="field-full">
-                  <legend>参加意向<span class="required">必須</span></legend>
-                  <div class="choice-grid">
-                    <label class="choice"><input type="radio" name="attendance_intent" value="intent_yes" required />参加したい</label>
-                    <label class="choice"><input type="radio" name="attendance_intent" value="considering" />検討中</label>
-                    <label class="choice"><input type="radio" name="attendance_intent" value="intent_no_info" />不参加だが案内希望</label>
+        <section id="faq">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">よくある質問</span><span class="label-en">FAQ</span></p>
+              <h2>知りたい内容から探す</h2>
+              <p>質問を4つのカテゴリに整理しました。詳しい回答はFAQページで確認できます。</p>
+            </div>
+
+            <div class="story-grid">
+              <article class="story-card"><h3>参加・申込</h3><p>参加対象、同伴者、申込後の変更など。</p><a class="btn btn--ghost" href="./faq/#entry">参加・申込のFAQを見る</a></article>
+              <article class="story-card"><h3>当日の過ごし方</h3><p>服装、ダンスタイム、トライアルなど。</p><a class="btn btn--ghost" href="./faq/#day">当日のFAQを見る</a></article>
+              <article class="story-card"><h3>参加費・支払い</h3><p>一体価格の参加プラン、クレジットカード決済、銀行振込など。</p><a class="btn btn--ghost" href="./faq/#payment">支払いのFAQを見る</a></article>
+              <article class="story-card"><h3>寄付・返礼・協賛</h3><p>寄付プラン、返礼、写真提供、協賛相談など。</p><a class="btn btn--ghost" href="./faq/#support">支援のFAQを見る</a></article>
+            </div>
+            <div class="cta-row"><a class="btn btn--primary" href="./faq/">FAQをすべて見る</a></div>
+          </div>
+        </section>
+
+        <section id="anniversary">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">記念FESTAについて</span><span class="label-en">Anniversary</span></p>
+              <h2>60年の歩みを、懐かしい仲間とともに</h2>
+            </div>
+
+            <div class="story-grid">
+              <div class="story-card">
+                <p>60周年記念FESTAは、ただ過去を懐かしむだけの場ではありません。</p>
+                <p><strong>背番号をつけてフロアに立った日。</strong><br>練習場で同じ曲を何度もかけた日。結果に喜び、悔しさを飲み込み、それでも次の一曲へ向かった日。</p>
+                <p>それぞれの時代に、それぞれの舞研がありました。このFESTAは、その記憶を持ち寄り、世代を超えて語り合うための一日です。</p>
+                <p>同期、先輩、後輩、現役生、関係者の皆さまが集い、東京理科大学舞踏研究部の60年を祝う場として開催いたします。</p>
+              </div>
+
+                            <div class="story-mark">
+                <strong>ANNIVERSARY MESSAGE</strong>
+                <p>華やかなフロアの奥にあった時間も、夏合宿の踊り込みも、あと一チェックの悔しさも。今なら笑って語り合える。そんな再会のきっかけになる一日を目指します。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="welcome">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">Welcome</span><span class="label-en">Invitation</span></p>
+              <h2>こんな方に来てほしい</h2>
+              <p>久しぶりの方も、最近は少し離れていた方も。あの時間を少しでも共有した方に、気軽に参加していただける場を目指しています。</p>
+            </div>
+
+                                    <div class="welcome-grid">
+              <article class="welcome-card"><p>卒部以来、舞研の集まりから少し離れていた方</p></article>
+              <article class="welcome-card"><p>久しぶりに同期や先輩・後輩に会いたい方</p></article>
+              <article class="welcome-card"><p>現役時代の写真や記録を見返したい方</p></article>
+              <article class="welcome-card"><p>当時は話せなかった思い出を、今なら少し話せそうな方</p></article>
+              <article class="welcome-card"><p>現役生や若い世代の舞研を応援したい方</p></article>
+              <article class="welcome-card"><p>踊る・踊らないに関わらず、理科大舞研の60年を一緒に祝いたい方</p></article>
+              <article class="welcome-card"><p>シャドーコンペ、松前杯、冬全という言葉に、少しでも胸が動く方</p></article>
+              <article class="welcome-card"><p>ファイナルソロやオナーダンス、涙の下位決勝を覚えている方</p></article>
+            </div>
+
+            <p class="welcome-note">踊れるかどうか、最近つながりがあるかどうかは問いません。あの時間を少しでも共有した方に、気軽に参加していただける場を目指しています。</p>
+          </div>
+        </section>
+
+        <section id="photo-submit">
+          <div class="wrap">
+            <div class="panel festa-callout">
+              <div class="festa-callout__copy">
+                <div class="section-head" style="margin-bottom: 0;">
+                  <p class="eyebrow"><span class="label-ja">Photo Archive</span><span class="label-en">Contribute</span></p>
+                  <h2>写真・記録をお持ちのOBOGへ</h2>
+                </div>
+                <p>60周年記念FESTAに向けて、競技会、練習風景、フォーメーション、集合写真、背番号が分かる写真などを掲載・展示できるよう準備しています。</p>
+                <p>写真や資料をお持ちの方は、FANTASISTA会までお知らせください。</p>
+
+                <div class="festa-callout__actions">
+                  <a class="btn btn--ghost" href="./chronicle/">60年のクロニクルを見る</a>
+                  <a class="btn btn--primary" href="https://tus-fantasista.pages.dev/contact/?type=general#contact-form">写真・資料を提供する</a>
+                </div>
+              </div>
+
+              <div class="festa-callout__media">
+                <figure class="memory-photo-card">
+                  <!-- ここに画像を追加可能 -->
+                  <div class="memory-photo-placeholder" role="img" aria-label="写真募集中">
+                    <span class="memory-photo-label">写真募集中</span>
                   </div>
-                </fieldset>
-                <div class="field">
-                  <label for="companion-status">同伴者有無<span class="optional">任意</span></label>
-                  <select id="companion-status" name="companion_status">
-                    <option value="">未選択</option>
-                    <option value="none">なし</option>
-                    <option value="with_companion">あり</option>
-                    <option value="undecided">未定</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="guest-count">同伴者人数<span class="optional">任意</span></label>
-                  <input id="guest-count" type="number" name="guest_count" min="0" placeholder="0" inputmode="numeric" />
-                </div>
-                <div class="field">
-                  <label for="dance-time-intent">ダンスタイム参加意向<span class="optional">任意</span></label>
-                  <select id="dance-time-intent" name="dance_time_intent">
-                    <option value="">未選択</option>
-                    <option value="want_to_dance">踊りたい</option>
-                    <option value="watch_mainly">見学中心</option>
-                    <option value="undecided">未定</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="photo-permission">写真掲載・撮影に関する確認<span class="optional">任意</span></label>
-                  <select id="photo-permission" name="photo_permission">
-                    <option value="">未選択</option>
-                    <option value="ok">記録・広報用撮影に同意</option>
-                    <option value="consult_required">掲載前に相談希望</option>
-                    <option value="no_publication">公開掲載は不可</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="volunteer-interest">手伝い可否<span class="optional">任意</span></label>
-                  <select id="volunteer-interest" name="volunteer_interest">
-                    <option value="">未選択</option>
-                    <option value="yes">手伝える</option>
-                    <option value="maybe">内容次第で検討</option>
-                    <option value="no">今回は難しい</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="sponsorship-interest">協賛・寄付への関心<span class="optional">任意</span></label>
-                  <select id="sponsorship-interest" name="sponsorship_interest">
-                    <option value="">未選択</option>
-                    <option value="yes">関心あり</option>
-                    <option value="maybe">案内を見て検討したい</option>
-                    <option value="no">現時点ではなし</option>
-                  </select>
-                </div>
+                  <figcaption class="memory-photo-caption">展示・掲載用の写真を順次募集しています</figcaption>
+                  <p class="memory-photo-note">競技会、練習場、集合写真、フォーメーションなど、世代を超えて共有できる写真を歓迎します。</p>
+                </figure>
               </div>
             </div>
+          </div>
+        </section>
 
-            <div class="form-block" aria-labelledby="permission-heading">
-              <h3 id="permission-heading">連絡・同意</h3>
-              <div class="form-grid">
-                <fieldset class="field-full">
-                  <legend>60周年FESTAに関する連絡を受け取る<span class="required">必須</span></legend>
-                  <div class="choice-grid">
-                    <label class="choice"><input type="radio" name="festa60_info_permission" value="yes" required />受け取る</label>
-                    <label class="choice"><input type="radio" name="festa60_info_permission" value="no" />受け取らない</label>
+        <!-- 参加手続きは入力確認・決済に対応した専用申込ページへ集約しています。 -->
+        <section id="crm-entry" class="crm-entry-section" hidden>
+          <div class="wrap">
+            <div class="panel crm-entry-panel">
+              <div class="section-head">
+                <p class="eyebrow"><span class="label-ja">参加意向登録</span><span class="label-en">FESTA Entry</span></p>
+                <h2>60周年FESTA 参加意向フォーム</h2>
+                <p>
+                  本フォームは、60周年FESTAの参加意向と連絡先情報の確認を目的としています。
+                  参加費・寄付プランは本ページで確認でき、正式な参加申込は専用ページから受け付けています。
+                </p>
+              </div>
+
+              <form name="festa60-obog-crm-entry" method="POST" data-netlify="true" action="/thanks.html" class="crm-entry-form">
+                <input type="hidden" name="form-name" value="festa60-obog-crm-entry">
+
+                <section class="crm-form-block" aria-labelledby="crm-master-heading">
+                  <h3 id="crm-master-heading">A. 本人識別・OBOGマスタ照合情報</h3>
+                  <p class="crm-form-block__note">既存OBOGマスタとの突合に使う情報です。分かる範囲でご入力ください。</p>
+
+                  <div class="crm-form-grid">
+                    <label class="crm-field">
+                      <span class="crm-field__label">お名前<span class="crm-required">必須</span></span>
+                      <input type="text" name="full_name" placeholder="例：山田 太郎" autocomplete="name" required="">
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">旧姓</span>
+                      <input type="text" name="maiden_name" placeholder="該当する方のみ">
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">ふりがな</span>
+                      <input type="text" name="furigana" placeholder="例：やまだ たろう">
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">卒部年度または期</span>
+                      <input type="text" name="graduation_year_or_generation" placeholder="例：2010年度卒 / 第45期 など">
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">所属区分<span class="crm-required">必須</span></span>
+                      <select name="affiliation" required="">
+                        <option value="">選択してください</option>
+                        <option value="obog">OBOG</option>
+                        <option value="active_student">現役</option>
+                        <option value="teacher_related">先生・関係者</option>
+                        <option value="other">その他</option>
+                      </select>
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">当時の役割</span>
+                      <select name="dance_role">
+                        <option value="">未選択</option>
+                        <option value="leader">リーダー</option>
+                        <option value="partner">パートナー</option>
+                        <option value="both">両方</option>
+                        <option value="manager_other">マネージャー・その他</option>
+                      </select>
+                    </label>
+
+                    <label class="crm-field crm-field--full">
+                      <span class="crm-field__label">所属していた大学・団体</span>
+                      <input type="text" name="school_or_group" placeholder="例：東京理科大学 / 理科大舞踏研究部 など">
+                    </label>
                   </div>
-                </fieldset>
-                <fieldset class="field-full">
-                  <legend>今後のFANTASISTA会・OBOG会の案内も受け取る<span class="optional">任意</span></legend>
-                  <div class="choice-grid">
-                    <label class="choice"><input type="radio" name="contact_permission" value="yes" />受け取る</label>
-                    <label class="choice"><input type="radio" name="contact_permission" value="no" />受け取らない</label>
-                    <label class="choice"><input type="radio" name="contact_permission" value="undecided" />未定</label>
+                </section>
+
+                <section class="crm-form-block" aria-labelledby="crm-contact-heading">
+                  <h3 id="crm-contact-heading">B. 連絡先情報</h3>
+                  <p class="crm-form-block__note">60周年FESTAの続報と今後のOBOG会連絡に使用します。</p>
+
+                  <div class="crm-form-grid">
+                    <label class="crm-field">
+                      <span class="crm-field__label">メールアドレス<span class="crm-required">必須</span></span>
+                      <input type="email" name="email" placeholder="example@example.com" autocomplete="email" required="">
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">電話番号</span>
+                      <input type="tel" name="phone" placeholder="任意" autocomplete="tel">
+                    </label>
+
+                    <fieldset class="crm-field crm-field--full">
+                      <legend class="crm-field__label">今後の案内を受け取ってよいか<span class="crm-required">必須</span></legend>
+                      <div class="crm-radio-group">
+                        <label class="crm-radio"><input type="radio" name="contact_permission" value="yes" required="">はい</label>
+                        <label class="crm-radio"><input type="radio" name="contact_permission" value="no">いいえ</label>
+                      </div>
+                    </fieldset>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">主な連絡希望手段</span>
+                      <select name="preferred_contact_method">
+                        <option value="">未選択</option>
+                        <option value="email">メール</option>
+                        <option value="line">LINE</option>
+                        <option value="phone">電話</option>
+                        <option value="other">その他</option>
+                      </select>
+                    </label>
                   </div>
-                </fieldset>
-                <div class="field-full">
-                  <label for="message">その他連絡事項<span class="optional">任意</span></label>
-                  <textarea id="message" name="message" placeholder="連絡事項、近況、事務局へのメッセージなど"></textarea>
+                </section>
+
+                <section class="crm-form-block" aria-labelledby="crm-event-heading">
+                  <h3 id="crm-event-heading">C. FESTA60周年イベント参加情報</h3>
+                  <p class="crm-form-block__note">正式な参加登録ではなく、現時点での参加意向確認です。</p>
+
+                  <div class="crm-form-grid">
+                    <fieldset class="crm-field crm-field--full">
+                      <legend class="crm-field__label">参加意向<span class="crm-required">必須</span></legend>
+                      <div class="crm-radio-group">
+                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="intent_yes" required="">参加予定</label>
+                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="considering">検討中</label>
+                        <label class="crm-radio"><input type="radio" name="attendance_intent" value="intent_no">不参加予定</label>
+                      </div>
+                    </fieldset>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">同伴者人数</span>
+                      <input type="number" name="guest_count" min="0" placeholder="0" inputmode="numeric">
+                    </label>
+
+                    <label class="crm-field">
+                      <span class="crm-field__label">ダンスタイムへの参加意向</span>
+                      <select name="dance_time_intent">
+                        <option value="">未選択</option>
+                        <option value="want_to_dance">踊りたい</option>
+                        <option value="watch_mainly">見学中心</option>
+                        <option value="undecided">未定</option>
+                      </select>
+                    </label>
+
+                    <label class="crm-field crm-field--full">
+                      <span class="crm-field__label">その他連絡事項・メッセージ</span>
+                      <textarea name="message" placeholder="連絡事項、近況、事務局へのメッセージなど"></textarea>
+                    </label>
+                  </div>
+                </section>
+
+                <section class="crm-form-block" aria-labelledby="crm-privacy-heading">
+                  <h3 id="crm-privacy-heading">D. 個人情報・同意</h3>
+                  <label class="crm-consent">
+                    <input type="checkbox" name="privacy_consent" value="agree" required="">
+                    <span>入力した情報が、60周年FESTAの連絡・運営、会員情報の確認、FANTASISTA OBOG会からの関連連絡に使用されることに同意します。</span>
+                  </label>
+                </section>
+
+                <ul class="crm-form-notes">
+                  <li>ご入力いただいた情報は、60周年FESTAの連絡・運営、会員情報の確認、およびFANTASISTA OBOG会からの関連連絡の目的にのみ使用します。</li>
+                  <li>これは正式な参加確定フォームではなく、現時点での参加意向確認です。</li>
+                  <li>参加費・寄付プランは本ページで公開しています。正式な参加申込は専用ページからお手続きください。</li>
+                </ul>
+
+                <div class="crm-form-actions">
+                  <button class="btn btn--primary" type="submit">参加意向を送信する</button>
                 </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="updates">
+          <div class="wrap">
+            <div class="section-head">
+              <p class="eyebrow"><span class="label-ja">今後のご案内</span><span class="label-en">Updates</span></p>
+              <h2>今後のご案内</h2>
+            </div>
+
+            <div class="panel festa-updates">
+              <p>参加方法、企画内容、広告・協賛募集等の詳細は、決定次第、本ページで順次お知らせします。</p>
+              <p>当日は、60年の歩みを振り返る時間、世代を超えて語り合う時間、懐かしい仲間と再会する時間を準備していく予定です。</p>
+              <p>久しぶりの方も、現役に近い世代の方も、どうぞ続報をお待ちください。</p>
+              <p>協賛をご検討いただける企業・関係者の皆さまには、歴史ある学生舞踏文化と、世代を超えたFANTASISTAのつながりに寄り添う記念事業として、改めてご案内いたします。</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="footer-cta">
+          <div class="wrap">
+            <div class="panel footer-cta-panel">
+              <div class="section-head" style="margin-bottom: 0;">
+                <p class="eyebrow"><span class="label-ja">Next</span><span class="label-en">Links</span></p>
+                <h2>参加申込とご案内</h2>
+                <p>参加申込の前に、参加費・寄付とよくある質問をご確認ください。</p>
+              </div>
+
+              <div class="cta-row footer-links">
+                <a class="btn btn--primary" href="../festa60-register/">参加申込へ進む</a>
+                <a class="btn btn--ghost" href="./faq/">よくある質問を見る</a>
               </div>
             </div>
+          </div>
+        </section>
+      </main>
 
-            <div class="privacy-box" aria-labelledby="privacy-heading">
-              <h3 id="privacy-heading">個人情報の取り扱い</h3>
-              <p>ご入力いただいた情報は、60周年FESTAの案内・参加意向確認・名簿確認・OBOG会からの必要な連絡に使用します。</p>
-              <p>管理者：FANTASISTA会事務局</p>
-              <p>保存期間：60周年FESTA終了後、名簿更新に必要な範囲を除き整理します。</p>
-              <p>削除・訂正希望：お問い合わせ窓口までご連絡ください。</p>
-              <p>第三者提供：本人の同意なく外部提供しません。ただし、運営に必要な範囲で委託先ツールを利用する場合があります。</p>
-            </div>
-
-            <label class="consent">
-              <input type="checkbox" name="privacy_consent" value="agree" required />
-              <span>上記の利用目的および個人情報の取り扱いに同意します。<span class="required">必須</span></span>
-            </label>
-
-            <p class="form-notes">これは正式な参加確定フォームではありません。正式申込・会費・入金方法は後日あらためてご案内します。</p>
-
-            <div class="form-actions">
-              <button class="btn btn--primary" type="submit">参加意向を登録する</button>
-              <a class="btn btn--ghost" href="#faq">FAQを見る</a>
-            </div>
-          </form>
+      <footer>
+        <div class="wrap footer__inner">
+          <p>東京理科大学舞踏研究部 FANTASISTA会</p>
+          <p>© All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
         </div>
-      </section>
+      </footer>
+    </div>
+    <script src="../assets/js/site.js?v=20260720-1" defer=""></script>
+    <script src="../assets/js/photo-library.js?v=20260720-5" defer=""></script>
 
-      <section id="faq" aria-labelledby="faq-title">
-        <div class="wrap">
-          <div class="section-head">
-            <p class="eyebrow">FAQ</p>
-            <h2 id="faq-title">よくある質問</h2>
-          </div>
-          <div class="faq-list">
-            <details>
-              <summary>これは正式申込ですか？</summary>
-              <p>いいえ。現時点では参加意向確認です。正式申込、会費、入金方法は後日あらためてご案内します。</p>
-            </details>
-            <details>
-              <summary>会費はいくらですか？</summary>
-              <p>現在調整中です。確定次第、このページおよび参加意向登録者への案内でお知らせします。</p>
-            </details>
-            <details>
-              <summary>何時から何時までですか？</summary>
-              <p>現在調整中です。開始・終了時間が決まり次第ご案内します。</p>
-            </details>
-            <details>
-              <summary>服装はどうすればよいですか？</summary>
-              <p>詳細は後日案内します。久しぶりに集まる記念の場として、平服を基本に、少し華やかな装いも歓迎する予定です。</p>
-            </details>
-            <details>
-              <summary>踊らなくても参加できますか？</summary>
-              <p>参加できます。交流、展示、記念企画を中心に、踊らない方にも楽しんでいただける構成を準備しています。</p>
-            </details>
-            <details>
-              <summary>家族や同伴者と参加できますか？</summary>
-              <p>同伴者の参加可否・会費は調整中です。参加意向フォームで同伴希望をお知らせください。</p>
-            </details>
-            <details>
-              <summary>途中参加・途中退出はできますか？</summary>
-              <p>可能な形で調整予定です。正式なタイムテーブル確定後にご案内します。</p>
-            </details>
-            <details>
-              <summary>写真撮影やSNS投稿はできますか？</summary>
-              <p>当日の撮影・投稿ルールは後日ご案内します。写っている方への配慮をお願いします。</p>
-            </details>
-            <details>
-              <summary>写真や資料はどこへ送ればよいですか？</summary>
-              <p>お問い合わせページから事務局へご連絡ください。掲載可否や取り扱いを確認します。</p>
-            </details>
-            <details>
-              <summary>協賛や寄付はできますか？</summary>
-              <p>詳細な協賛メニューは準備中です。ご関心のある方は事務局までご連絡ください。</p>
-            </details>
-          </div>
-        </div>
-      </section>
 
-      <section id="footer-cta">
-        <div class="wrap">
-          <div class="section-head">
-            <p class="eyebrow">Next</p>
-            <h2>続報をお待ちください</h2>
-            <p>60周年記念FESTAの詳細は、決定次第このページでご案内します。通常FESTAページや本サイトもあわせてご覧ください。</p>
-          </div>
-          <div class="cta-row">
-            <a class="btn btn--primary" href="#entry">参加意向を登録する</a>
-            <a class="btn btn--ghost" href="../festa/index.html">通常FESTAページへ</a>
-            <a class="btn btn--ghost" href="../">本サイトへ戻る</a>
-          </div>
-        </div>
-      </section>
-    </main>
 
-    <footer class="footer">
-      <div class="wrap footer__inner">
-        <p>東京理科大学舞踏研究部 FANTASISTA会</p>
-        <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
-      </div>
-    </footer>
 
-    <script src="../assets/js/site.js" defer></script>
-  </body>
-</html>
+
+
+</body></html>
