@@ -26,6 +26,6 @@ cp "$root_dir/production/fantasista-headers.txt" "$output_dir/_headers"
 
 # Internal review-phase labels are not part of the public production artifact.
 find "$output_dir" -type f \( -name "*.html" -o -name "*.css" -o -name "*.js" \) \
-  -exec perl -0pi -e 's{/\*\s*REVIEW_[^*]*\*/}{}g; s{<!--\s*REVIEW_[^-]*-->}{}g' {} +
+  -exec perl -0pi -e 's~/\*\s*REVIEW_[^*]*\*/~~g; s~<!--\s*REVIEW_[^-]*-->~~g' {} +
 
 echo "Built $output_dir"

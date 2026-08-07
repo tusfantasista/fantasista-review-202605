@@ -25,6 +25,6 @@ cp "$root_dir/production/sitemap.xml" "$output_dir/sitemap.xml"
 
 # Remove internal review-phase markers from the standalone production artifact.
 find "$output_dir" -type f \( -name "*.html" -o -name "*.css" -o -name "*.js" \) \
-  -exec perl -0pi -e 's{/\*\s*REVIEW_[^*]*\*/}{}g; s{<!--\s*REVIEW_[^-]*-->}{}g' {} +
+  -exec perl -0pi -e 's~/\*\s*REVIEW_[^*]*\*/~~g; s~<!--\s*REVIEW_[^-]*-->~~g' {} +
 
 echo "Built $output_dir"
