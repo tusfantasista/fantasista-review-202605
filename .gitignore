@@ -7,6 +7,7 @@
 .DS_Store
 Thumbs.db
 .wrangler/
+.npm-cache/
 
 # local backup/work files
 backup/

@@ -737,6 +737,60 @@ async function markCheckoutFailed(db, session, stripeEventId) {
   });
 }
 __name(markCheckoutFailed, "markCheckoutFailed");
+async function markPaymentPartiallyFunded(db, paymentIntent, stripeEventId) {
+  const now = nowIso();
+  const amountTotal = Number(paymentIntent.amount || 0);
+  const amountRemaining = bankTransferAmountRemaining(paymentIntent);
+  const amountReceived = Math.max(0, amountTotal - amountRemaining);
+  const payment = await db.prepare(
+    `SELECT application_id
+       FROM payments
+       WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe'
+       LIMIT 1`
+  ).bind(paymentIntent.id).first();
+  if (!payment?.application_id) {
+    throw new Error("Stripe partially funded PaymentIntent is not linked to a Festa 60 payment.");
+  }
+  await db.prepare(
+    `UPDATE payments
+       SET status = 'partially_funded', amount_received_jpy = ?, amount_remaining_jpy = ?,
+           partial_payment_at = ?, stripe_event_id = ?, updated_at = ?
+       WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe'`
+  ).bind(amountReceived, amountRemaining, now, stripeEventId || null, now, paymentIntent.id).run();
+  await db.prepare(
+    `UPDATE applications
+       SET payment_status = 'pending', status = 'payment_pending', attendance_status = 'pending', updated_at = ?
+       WHERE id = ?`
+  ).bind(now, payment.application_id).run();
+  await audit(db, {
+    actor: "stripe",
+    action: "payment.partially_funded",
+    target_type: "application",
+    target_id: payment.application_id,
+    details_json: JSON.stringify({
+      payment_intent_id: paymentIntent.id,
+      amount_received_jpy: amountReceived,
+      amount_remaining_jpy: amountRemaining
+    })
+  });
+  return {
+    application_id: payment.application_id,
+    amount_total_jpy: amountTotal,
+    amount_received_jpy: amountReceived,
+    amount_remaining_jpy: amountRemaining,
+    hosted_instructions_url: bankTransferInstructionsUrl(paymentIntent)
+  };
+}
+__name(markPaymentPartiallyFunded, "markPaymentPartiallyFunded");
+async function markPartialPaymentEmailSent(db, paymentIntentId) {
+  const now = nowIso();
+  await db.prepare(
+    `UPDATE payments
+       SET partial_payment_email_sent_at = ?, updated_at = ?
+       WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe'`
+  ).bind(now, now, paymentIntentId).run();
+}
+__name(markPartialPaymentEmailSent, "markPartialPaymentEmailSent");
 async function getApplicationById(db, applicationId) {
   return db.prepare(
     `SELECT
@@ -827,6 +881,7 @@ async function listApplications(db) {
         a.admin_note, a.attendance_status, a.total_amount_jpy, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at,
         m.member_code, m.full_name AS matched_member_name,
         p.stripe_checkout_session_id, p.status AS latest_payment_status, p.amount_total,
+        p.amount_received_jpy, p.amount_remaining_jpy, p.partial_payment_at, p.partial_payment_email_sent_at,
         p.payment_method AS latest_payment_method, p.payment_provider AS latest_payment_provider,
         (
           SELECT COALESCE(SUM(
@@ -950,6 +1005,29 @@ FESTAの受付番号を振込名義へ付ける必要はありません。Stripe
   };
 }
 __name(renderBankTransferInstructionsEmail, "renderBankTransferInstructionsEmail");
+function renderPartialPaymentEmail(application, partialPayment) {
+  const name = application.full_name || application.name || "";
+  return {
+    to: application.email,
+    subject: "【60周年FESTA】銀行振込額が不足しています",
+    body: `${name} 様
+
+60周年FESTAのお支払いについて、銀行振込を確認しましたが、お支払い予定額に達していません。
+
+受付番号：${application.application_code || application.applicationId}
+お支払い予定額：${formatYen(partialPayment.amount_total_jpy)}
+確認済み入金額：${formatYen(partialPayment.amount_received_jpy)}
+不足額：${formatYen(partialPayment.amount_remaining_jpy)}
+
+不足額を、前回と同じStripe指定口座へお振り込みください。
+振込先と現在のお支払い状況は、次の案内ページでご確認いただけます。
+${partialPayment.hosted_instructions_url}
+
+FESTAの受付番号を振込名義へ付ける必要はありません。Stripeの案内どおりにお振り込みください。
+全額の入金確認後に、FESTA事務局から参加確定メールをお送りします。`
+  };
+}
+__name(renderPartialPaymentEmail, "renderPartialPaymentEmail");
 function renderPaymentConfirmedEmail(application) {
   const name = application.full_name || application.name || "";
   const quantity = application.quantity || 1;
@@ -1434,6 +1512,14 @@ function bankTransferInstructionsUrl(paymentIntent) {
   return paymentIntent?.next_action?.display_bank_transfer_instructions?.hosted_instructions_url || "";
 }
 __name(bankTransferInstructionsUrl, "bankTransferInstructionsUrl");
+function bankTransferAmountRemaining(paymentIntent) {
+  const amountRemaining = Number(paymentIntent?.next_action?.display_bank_transfer_instructions?.amount_remaining);
+  if (!Number.isFinite(amountRemaining) || amountRemaining < 0) {
+    throw new Error("Stripe bank transfer amount remaining is unavailable.");
+  }
+  return amountRemaining;
+}
+__name(bankTransferAmountRemaining, "bankTransferAmountRemaining");
 async function verifyStripeSignature(payload, signatureHeader, webhookSecret) {
   if (!signatureHeader) return false;
   const parts = signatureHeader.split(",").reduce((result, part) => {
@@ -1511,6 +1597,18 @@ async function onRequestPost5({ request, env }) {
             if (application) await maybeSendEmail(env, renderBankTransferInstructionsEmail(application, instructionsUrl));
           }
         }
+      } else if (event.type === "payment_intent.partially_funded") {
+        const partialPayment = await markPaymentPartiallyFunded(db, event.data.object, event.id);
+        if (!partialPayment.hosted_instructions_url) {
+          throw new Error("Stripe bank transfer instructions URL is unavailable for a partially funded payment.");
+        }
+        const application = await getApplicationById(db, partialPayment.application_id);
+        if (!application) throw new Error("Festa 60 application was not found for a partially funded payment.");
+        const emailResult = await maybeSendEmail(env, renderPartialPaymentEmail(application, partialPayment));
+        if (!emailResult.sent) {
+          throw new Error(`Partial payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
+        }
+        await markPartialPaymentEmailSent(db, event.data.object.id);
       } else if (event.type === "checkout.session.async_payment_failed") {
         await markCheckoutFailed(db, event.data.object, event.id);
       } else if (event.type === "checkout.session.expired") {
