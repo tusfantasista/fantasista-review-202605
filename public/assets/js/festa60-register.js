@@ -25,10 +25,7 @@
   const editApplicationButton = document.getElementById("edit-application");
   const confirmApplicationButton = document.getElementById("confirm-application");
   const completionPanel = document.getElementById("completion-panel");
-  const paymentMethods = form?.querySelectorAll("input[name='payment_method']") || [];
-  const cardPaymentNotice = document.getElementById("card-payment-notice");
-  const bankPaymentNotice = document.getElementById("bank-payment-notice");
-  const cardPaymentMethod = document.getElementById("card-payment-method");
+  const stripePaymentMethod = document.getElementById("stripe-payment-method");
   const stripePaymentHelp = document.getElementById("stripe-payment-help");
   const stripePaymentStatus = document.getElementById("stripe-payment-status");
   const environmentBanner = document.getElementById("environment-banner");
@@ -50,10 +47,17 @@
   const city = document.getElementById("city");
   const streetAddress = document.getElementById("street_address");
   const building = document.getElementById("building");
+  const applicationModeSection = document.getElementById("application-mode-section");
+  const staffModeBanner = document.getElementById("staff-mode-banner");
+  const staffAccessSection = document.getElementById("staff-access-section");
+  const staffAccessCode = document.getElementById("staff_access_code");
+  const checkoutState = new URLSearchParams(window.location.search);
+  const staffMode = checkoutState.get("staff") === "1";
   let turnstileToken = "";
   let pendingPayload = null;
   let postalLookupTimer = null;
   let lastLookedUpPostalCode = "";
+  let stripeAvailable = false;
   const obogSixTenFrom = 2016;
   const obogSixTenTo = 2020;
   const obogFiveUnderFrom = 2021;
@@ -114,11 +118,10 @@
 
   if (!form) return;
 
-  const checkoutState = new URLSearchParams(window.location.search);
   if (checkoutState.get("checkout") === "success") {
-    setMessage(`カード決済を受け付けました。受付番号: ${checkoutState.get("application") || "確認中"}`, "success");
+    setMessage(`Stripeでのお支払い手続きを受け付けました。入金確認後に確定メールをお送りします。受付番号: ${checkoutState.get("application") || "確認中"}`, "success");
   } else if (checkoutState.get("checkout") === "cancelled") {
-    setMessage(`カード決済を中断しました。申込は未入金で保存されています。受付番号: ${checkoutState.get("application") || ""}`, "error");
+    setMessage(`Stripeでのお支払いを中断しました。申込は未入金で保存されています。受付番号: ${checkoutState.get("application") || ""}`, "error");
   }
 
   fetch("/api/festa60/config")
@@ -167,14 +170,13 @@
     if (normalized.length !== 7 || normalized === lastLookedUpPostalCode) return;
     postalLookupTimer = window.setTimeout(lookupAddressByPostalCode, 400);
   });
-  paymentMethods.forEach((input) => input.addEventListener("change", updatePaymentMethod));
+  activateStaffMode();
   renderCompanions();
   applyFeePeriod(feePeriodForNow(), feePeriodLabels);
   updateIdentityAndTicketType();
   updateSupportTierAvailability();
   updateApplicationMode();
   updatePlanDetails();
-  updatePaymentMethod();
   updateFeePreview();
 
   form.addEventListener("submit", function (event) {
@@ -253,6 +255,11 @@
 
   function formPayload(data) {
     const payload = Object.fromEntries(data.entries());
+    if (staffMode) {
+      payload.application_mode = "attending";
+      payload.ticket_type = "obog_staff";
+      payload.support_tier = "none";
+    }
     payload.full_name = [payload.family_name, payload.given_name].filter(Boolean).join(" ");
     payload.full_name_kana = [payload.family_name_kana, payload.given_name_kana].filter(Boolean).join(" ");
     payload.address = [payload.prefecture, payload.city, payload.street_address, payload.building]
@@ -331,23 +338,29 @@
       ticketTypeDisplay.value = "若手OBOG（5年目以下）";
     }
 
+    if (staffMode) {
+      ticketType.value = "obog_staff";
+      ticketTypeDisplay.value = "役員・当日お手伝い（専用参加費）";
+    }
+
     updateSupportTierAvailability();
     updatePlanDetails();
     updateFeePreview();
   }
 
   function updateSupportTierAvailability() {
-    const supportsPremium = applicationMode.value === "attending" && ["obog", "obog_6_10", "obog_5_under"].includes(ticketType.value);
+    const supportsPremium = !staffMode && applicationMode.value === "attending" && ["obog", "obog_6_10", "obog_5_under"].includes(ticketType.value);
     supportTier.disabled = !supportsPremium;
     if (!supportsPremium) supportTier.value = "none";
   }
 
   function updateApplicationMode() {
+    if (staffMode) applicationMode.value = "attending";
     const isAbsentDonation = applicationMode.value === "absent_donation";
     graduationSection.hidden = false;
-    attendancePlanSection.hidden = isAbsentDonation;
+    attendancePlanSection.hidden = isAbsentDonation || staffMode;
     feePeriodSection.hidden = isAbsentDonation;
-    attendanceTicketNotice.hidden = isAbsentDonation;
+    attendanceTicketNotice.hidden = isAbsentDonation || staffMode;
     attendanceOptionsSection.hidden = isAbsentDonation;
     supportPlanDetail.hidden = isAbsentDonation;
     photoConsentSection.hidden = isAbsentDonation;
@@ -415,6 +428,11 @@
   }
 
   function updatePlanDetails() {
+    if (staffMode) {
+      supportPlanDetail.innerHTML = "<h3>役員・当日お手伝い専用参加費</h3><p>事務局から案内を受けた方に適用する専用料金です。一般向けページには掲載していません。</p>";
+      absentPlanDetail.innerHTML = "";
+      return;
+    }
     const support = supportPlanDetails[supportTier.value];
     if (support) {
       const discountedAmount = attendeePlanAmount(supportTier.value, ticketType.value, feePeriod.value);
@@ -431,15 +449,19 @@
     return `<h3>${plan.title}</h3><p>主な返礼内容</p><ul>${plan.benefits.map((benefit) => `<li>${benefit}</li>`).join("")}</ul>`;
   }
 
-  function updatePaymentMethod() {
-    const method = form.querySelector("input[name='payment_method']:checked")?.value || "card";
-    const isBankTransfer = method === "bank_transfer";
-    cardPaymentNotice.hidden = isBankTransfer;
-    bankPaymentNotice.hidden = !isBankTransfer;
-    const button = form.querySelector("button[type='submit']");
-    button.textContent = isBankTransfer
-      ? "銀行振込の申込内容を確認する"
-      : "入力内容を確認してカード決済へ";
+  function activateStaffMode() {
+    if (!staffMode) return;
+    staffModeBanner.hidden = false;
+    staffAccessSection.hidden = false;
+    staffAccessCode.required = true;
+    applicationModeSection.hidden = true;
+    applicationMode.value = "attending";
+    attendancePlanSection.hidden = true;
+    attendanceTicketNotice.hidden = true;
+    supportTier.value = "none";
+    supportTier.disabled = true;
+    ticketType.value = "obog_staff";
+    ticketTypeDisplay.value = "役員・当日お手伝い（専用参加費）";
   }
 
   function showConfirmation(payload) {
@@ -468,7 +490,10 @@
       const payload = { ...pendingPayload };
       payload.companions = pendingPayload.companions.map((companion) => ({ ...companion }));
       payload.turnstile_token = turnstileToken;
-      payload.pay_now = payload.payment_method === "card";
+      if (!stripeAvailable) {
+        throw new Error("Stripe決済は現在準備中です。時間をおいて再度お試しいただくか、事務局へお問い合わせください。");
+      }
+      payload.pay_now = true;
 
       const response = await fetch("/api/festa60/applications", {
         method: "POST",
@@ -495,7 +520,6 @@
       form.reset();
       updateApplicationMode();
       renderCompanions();
-      updatePaymentMethod();
       confirmationPanel.hidden = true;
       completionPanel.hidden = false;
       setStep("complete");
@@ -516,7 +540,7 @@
       {
         title: "申込者情報",
         rows: [
-          ["申込区分", selectedLabel(applicationMode)],
+          ["申込区分", staffMode ? "役員・当日お手伝い専用申込" : selectedLabel(applicationMode)],
           ["氏名", payload.full_name],
           ["ふりがな", payload.full_name_kana],
           ["旧姓", payload.maiden_name || "未入力"],
@@ -547,10 +571,10 @@
         title: "参加・寄付内容",
         rows: [
           ["卒部区分（割引・チケット判定）", ticketTypeDisplay.value],
-          ["参加費の適用料金区分", feePeriodDisplay.value],
-          ["参加プラン", selectedLabel(supportTier)],
-          ["申込時期割引", applicationPeriodDiscount(payload.fee_period) ? `-${formatYen(applicationPeriodDiscount(payload.fee_period))}` : "割引なし"],
-          ["卒部年度割引", graduationDiscount(payload.ticket_type) ? `-${formatYen(graduationDiscount(payload.ticket_type))}` : "割引なし"],
+          ["参加費区分", staffMode ? "役員・当日お手伝い専用参加費" : feePeriodDisplay.value],
+          ["参加プラン", staffMode ? "役員・当日お手伝い専用" : selectedLabel(supportTier)],
+          ...(!staffMode ? [["申込時期割引", applicationPeriodDiscount(payload.fee_period) ? `-${formatYen(applicationPeriodDiscount(payload.fee_period))}` : "割引なし"]] : []),
+          ...(!staffMode ? [["卒部年度割引", graduationDiscount(payload.ticket_type) ? `-${formatYen(graduationDiscount(payload.ticket_type))}` : "割引なし"]] : []),
           ["懇親会", selectedLabel(receptionAttendance)],
           ...companionRows,
           ["同伴者向けチケット", payload.companion_dance_ticket_count ? `300円券×${payload.companion_dance_ticket_count}枚` : "なし"],
@@ -582,16 +606,9 @@
     });
 
     confirmationSummary.replaceChildren(...groups.map(createConfirmationGroup));
-    const isCard = payload.payment_method === "card";
-    confirmationPaymentTitle.textContent = isCard
-      ? "確定後、Stripeの決済画面へ進みます"
-      : "確定後、振込先をご案内します";
-    confirmationPaymentNote.textContent = isCard
-      ? "「この内容で申し込む」を押すと申込情報を登録し、カード決済画面へ移動します。決済完了までブラウザを閉じないでください。"
-      : "「この内容で申し込む」を押すと受付番号を発行し、受付番号付きの振込名義・振込先・期限を画面とメールでご案内します。";
-    confirmApplicationButton.textContent = isCard
-      ? "この内容で登録してカード決済へ"
-      : "この内容で銀行振込を申し込む";
+    confirmationPaymentTitle.textContent = "確定後、Stripeの決済画面へ進みます";
+    confirmationPaymentNote.textContent = "「この内容で申し込む」を押すと申込情報を登録し、Stripeへ移動します。Stripeの画面で表示された支払い方法から選択してください。銀行振込を選んだ場合は、Stripeが発行する振込先と期限に従ってお支払いください。";
+    confirmApplicationButton.textContent = "この内容で登録してStripeへ";
   }
 
   function createConfirmationGroup(group) {
@@ -619,8 +636,8 @@
   }
 
   function paymentMethodLabel(method) {
-    if (method === "card") return "クレジットカード（Stripe）";
-    return "銀行振込";
+    if (method === "stripe") return "Stripe（カード・Apple Pay・Google Pay・PayPay・銀行振込）";
+    return "Stripe";
   }
 
   function formatYen(amount) {
@@ -657,20 +674,15 @@
     const stripeMode = config.stripe_mode || "not_configured";
     const isAvailable = stripeMode === "live" || stripeMode === "sandbox";
     const isSandbox = stripeMode === "sandbox";
-    if (cardPaymentMethod) cardPaymentMethod.disabled = !isAvailable;
+    stripeAvailable = isAvailable;
     if (stripePaymentStatus) stripePaymentStatus.textContent = isSandbox ? "テスト環境" : isAvailable ? "利用できます" : "準備中";
     if (stripePaymentHelp) {
       stripePaymentHelp.textContent = isAvailable
-        ? "オンラインで安全に決済できます。確認後、Stripeの決済画面へ移動します。"
-        : "現在カード決済を準備中です。銀行振込をご利用ください。";
+        ? "確認後、Stripeの決済画面へ移動します。表示された支払い方法から選択してください。"
+        : "現在Stripe決済を準備中です。ご利用開始までお待ちください。";
     }
     if (environmentBanner) {
       environmentBanner.hidden = !(isSandbox || window.location.hostname.includes("-staging"));
-    }
-    if (!isAvailable && cardPaymentMethod?.checked) {
-      const bankTransfer = form.querySelector("input[name='payment_method'][value='bank_transfer']");
-      if (bankTransfer) bankTransfer.checked = true;
-      updatePaymentMethod();
     }
   }
 
@@ -707,6 +719,10 @@
     const graduationYear = Number(payload.graduation_year || 0);
     const isAbsentDonation = Object.hasOwn(absentDonationTotals, payload.ticket_type);
     const isGakushuin = payload.school_lineage === "gakushuin_ouyukai";
+    const isStaffApplication = staffMode && payload.ticket_type === "obog_staff";
+    if (isStaffApplication && !String(payload.staff_access_code || "").trim()) {
+      errors.push("役員・お手伝い用アクセスコードを入力してください。");
+    }
     if (!["tus_obog", "gakushuin_ouyukai"].includes(payload.school_lineage)) {
       errors.push("所属区分を選択してください。");
     }
@@ -716,13 +732,13 @@
     if (graduationYear && (!Number.isInteger(graduationYear) || graduationYear < 1900 || graduationYear > 2026)) {
       errors.push("卒部年度は1900〜2026の西暦4桁で入力してください。");
     }
-    if (!isGakushuin && !isAbsentDonation && payload.ticket_type === "obog" && graduationYear > obogElevenOverTo) {
+    if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog" && graduationYear > obogElevenOverTo) {
       errors.push(`一般OBOG（11年目以上）は${obogElevenOverTo}年度以前の卒部を対象とします。参加費区分または卒部年度を確認してください。`);
     }
-    if (!isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_6_10" && (graduationYear < obogSixTenFrom || graduationYear > obogSixTenTo)) {
+    if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_6_10" && (graduationYear < obogSixTenFrom || graduationYear > obogSixTenTo)) {
       errors.push(`OBOG 6〜10年目は${obogSixTenFrom}〜${obogSixTenTo}年度卒を想定しています。参加費区分または卒部年度を確認してください。`);
     }
-    if (!isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_5_under" && graduationYear < obogFiveUnderFrom) {
+    if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_5_under" && graduationYear < obogFiveUnderFrom) {
       errors.push(`OBOG 5年目以下は${obogFiveUnderFrom}年度以降の卒部生を想定しています。参加費区分または卒部年度を確認してください。`);
     }
     if (payload.support_tier && payload.support_tier !== "none" && !["obog", "obog_6_10", "obog_5_under"].includes(payload.ticket_type)) {
@@ -806,43 +822,15 @@
     const payment = result.payment || {};
     const applicationId = application.applicationId || application.application_code || payment.applicationId || "";
     const amount = Number(application.amount || application.total_amount_jpy || payment.amount || 0);
-    const transferName = payment.transferNameExample || `${applicationId} ${payload.full_name}`.trim();
-    const bank = payment.bankInfo || {};
-    const dueDateText = payment.dueDateText || "お申し込み日から7日以内";
     const isAbsentDonation = Object.hasOwn(absentDonationTotals, payload.ticket_type);
     document.getElementById("completion-title").textContent = isAbsentDonation
       ? "寄付のお申し込みありがとうございます。"
       : "お申し込みありがとうございます。";
     document.getElementById("completion-status").textContent = isAbsentDonation
-      ? "入金確認をもって寄付受付完了とし、確認後にメールでお知らせします。"
-      : "入金確認をもって参加確定とし、確認後に参加確定メールをお送りします。";
+      ? "Stripeでの入金確認後に、寄付受付完了メールをお送りします。"
+      : "Stripeでの入金確認後に、参加確定メールをお送りします。";
     document.getElementById("complete-application-id").textContent = applicationId;
     document.getElementById("complete-amount").textContent = `${amount.toLocaleString("ja-JP")}円`;
     document.getElementById("complete-payment-method").textContent = paymentMethodLabel(payload.payment_method);
-    document.getElementById("complete-transfer-name-label").textContent = "振込名義例";
-    document.getElementById("complete-transfer-name").textContent = transferName;
-    document.getElementById("complete-bank-info-label").textContent = "振込先";
-    document.getElementById("completion-transfer-guide").textContent = "お振込みの際は、下記の自動発行された振込名義をご入力ください。";
-    document.getElementById("complete-due-date").textContent = dueDateText;
-    document.getElementById("complete-bank-info").innerHTML = [
-      `銀行名：${escapeHtml(bank.bankName || "銀行名未設定")}`,
-      `支店名：${escapeHtml(bank.branchName || "支店名未設定")}`,
-      `支店コード：${escapeHtml(bank.branchCode || "支店コード未設定")}`,
-      `口座種別：${escapeHtml(bank.accountType || "口座種別未設定")}`,
-      `口座番号：${escapeHtml(bank.accountNumber || "口座番号未設定")}`,
-      `口座名義：${escapeHtml(bank.accountHolder || bank.accountName || "口座名義未設定")}`,
-      `口座名義カナ：${escapeHtml(bank.accountHolderKana || "口座名義カナ未設定")}`,
-      `備考：${escapeHtml(bank.transferNote || "振込手数料は参加者様のご負担となります。")}`,
-    ].join("<br>");
-  }
-
-  function escapeHtml(value) {
-    return String(value ?? "").replace(/[&<>"']/g, (char) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;",
-    })[char]);
   }
 })();

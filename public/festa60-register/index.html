@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex,nofollow" />
     <title>60周年記念FESTA 参加申込</title>
     <link rel="canonical" href="https://tus-fantasista-festa60.pages.dev/festa60-register/" />
-    <link rel="stylesheet" href="../assets/css/festa60-crm.css?v=20260807-1" />
+    <link rel="stylesheet" href="../assets/css/festa60-crm.css?v=20260807-2" />
   </head>
   <body class="festa60-crm">
     <div id="environment-banner" class="crm-test-banner" hidden>TEST環境 / Cloudflare Pages Preview / 本番申込ではありません</div>
@@ -15,6 +15,11 @@
         <span class="crm-kicker">FESTA 60 Registration</span>
         <h1>60周年記念FESTA 参加申込</h1>
         <p>参加情報、参加費・寄付、お支払い方法をご入力ください。入力内容に応じて、お支払い予定額をご案内します。</p>
+      </section>
+
+      <section id="staff-mode-banner" class="crm-notice" hidden>
+        <h2>役員・当日お手伝い専用申込</h2>
+        <p>事務局から案内を受けた方のみ利用できる専用申込です。一般向けの申込ページには、この料金区分への導線を掲載していません。</p>
       </section>
 
       <ol class="crm-steps" aria-label="申込手順">
@@ -26,43 +31,37 @@
       <div id="entry-panel" class="crm-grid">
         <form id="festa60-form" class="crm-card crm-stack">
           <h2>申込内容</h2>
-          <fieldset class="crm-payment-methods">
-            <legend>お支払い方法 <span class="crm-required">必須</span></legend>
-            <label class="crm-payment-option">
-              <input id="card-payment-method" type="radio" name="payment_method" value="card" checked />
-              <span><strong>クレジットカード <em id="stripe-payment-status"></em></strong><small id="stripe-payment-help">Stripeの決済画面へ移動します。</small></span>
-            </label>
-            <label class="crm-payment-option">
-              <input type="radio" name="payment_method" value="bank_transfer" />
-              <span><strong>銀行振込</strong><small>受付番号を発行し、振込先をご案内します。</small></span>
-            </label>
-          </fieldset>
-
-          <div id="card-payment-notice" class="crm-notice">
-            <h3>カード決済について</h3>
+          <input id="stripe-payment-method" type="hidden" name="payment_method" value="stripe" />
+          <div id="stripe-payment-notice" class="crm-notice">
+            <h3>Stripeでのお支払い <em id="stripe-payment-status"></em></h3>
+            <p id="stripe-payment-help">申込内容の確認後、Stripeの決済画面へ移動します。</p>
             <ul>
-              <li>申込内容を保存した後、Stripeの決済画面へ移動します。</li>
+              <li>クレジットカード</li>
+              <li>Apple Pay・Google Pay（対応端末・ブラウザで表示）</li>
+              <li>PayPay</li>
+              <li>銀行振込（Stripeが発行する振込先を使用）</li>
+            </ul>
+            <ul>
               <li>カード情報はStripeの画面で入力し、FESTAのサイトやデータベースには保存しません。</li>
               <li>カード会社の判断により、3Dセキュアなどの本人認証を求められる場合があります。</li>
-              <li>決済完了後、Stripeの領収書メールとFESTA事務局の参加確定メールを送信します。</li>
+              <li>銀行振込はStripeの案内画面に従ってお支払いください。入金完了後に参加確定となります。</li>
+              <li>利用できる支払い方法は、ご利用環境やStripeの判定により表示が異なる場合があります。</li>
             </ul>
-            <p><a href="../festa-60th/faq/#payment">カード決済についてよくある質問を見る</a></p>
+            <p><a href="../festa-60th/faq/#payment">Stripeでのお支払いについて確認する</a></p>
           </div>
 
-          <div id="bank-payment-notice" class="crm-notice" hidden>
-            <h3>銀行振込</h3>
-            <p>お申し込み後、受付番号とお振込先をご案内します。入金確認をもって、参加確定とさせていただきます。</p>
-            <p>振込名義は、受付番号と申込者のカナ氏名から自動発行します。申込完了画面と受付メールに表示された名義をご入力ください。</p>
-            <p class="crm-example">例：FESTA-000123 ナカツタカフミ</p>
-            <p>振込手数料は参加者様のご負担となります。お申し込み日から7日以内にご入金が確認できない場合、お申し込みをキャンセル扱いとさせていただく場合があります。</p>
-          </div>
-
-          <div class="crm-field">
+          <div id="application-mode-section" class="crm-field">
             <label for="application_mode">申込区分 <span class="crm-required">必須</span></label>
             <select id="application_mode" name="application_mode" required>
               <option value="attending">FESTAに参加する</option>
               <option value="absent_donation">欠席して寄付のみ申し込む</option>
             </select>
+          </div>
+
+          <div id="staff-access-section" class="crm-field" hidden>
+            <label for="staff_access_code">役員・お手伝い用アクセスコード <span class="crm-required">必須</span></label>
+            <input id="staff_access_code" name="staff_access_code" type="password" autocomplete="one-time-code" />
+            <p class="crm-help">事務局から案内されたコードを入力してください。コードは申込データやGitHubには保存しません。</p>
           </div>
 
           <div class="crm-two">
@@ -395,7 +394,7 @@
           </label>
 
           <div id="turnstile-slot"></div>
-          <button class="crm-button" type="submit">入力内容を確認してカード決済へ</button>
+          <button class="crm-button" type="submit">入力内容を確認してStripeへ</button>
           <p id="form-message" class="crm-message" hidden></p>
         </form>
 
@@ -403,8 +402,8 @@
           <h2>お申し込み前に</h2>
           <ul class="crm-small">
             <li>申込完了後に受付番号を発行します。</li>
-            <li>カード情報はStripeが取り扱い、本サイトには保存しません。</li>
-            <li>銀行振込では、受付番号とお名前から振込名義を自動発行します。</li>
+            <li>カード情報や各支払い方法の情報はStripeが取り扱い、本サイトには保存しません。</li>
+            <li>銀行振込を選ぶ場合も、振込先・期限はStripeの決済画面で発行されます。</li>
             <li>寄付をお申し込みの方は、お礼状・返礼品の送付先住所をご入力ください。</li>
           </ul>
         </aside>
@@ -430,9 +429,8 @@
 
       <section id="completion-panel" class="crm-section crm-stack" hidden>
         <h2 id="completion-title">お申し込みありがとうございます。</h2>
-        <p id="completion-guide">受付番号を発行しました。ご登録いただいたメールアドレス宛に、受付番号とお振込先をご案内します。</p>
-        <p id="completion-status">入金確認をもって参加確定とし、確認後に参加確定メールをお送りします。</p>
-        <p id="completion-transfer-guide">お振込みの際は、下記の自動発行された振込名義をご入力ください。</p>
+        <p id="completion-guide">受付番号を発行しました。お支払い状況はStripeで確認します。</p>
+        <p id="completion-status">決済完了後に参加確定メールをお送りします。</p>
         <dl class="crm-summary">
           <div>
             <dt>受付番号</dt>
@@ -444,23 +442,11 @@
           </div>
           <div>
             <dt>支払方法</dt>
-            <dd id="complete-payment-method">銀行振込</dd>
-          </div>
-          <div>
-            <dt id="complete-transfer-name-label">振込名義例</dt>
-            <dd id="complete-transfer-name"></dd>
-          </div>
-          <div>
-            <dt>お振込み期限</dt>
-            <dd id="complete-due-date"></dd>
-          </div>
-          <div>
-            <dt id="complete-bank-info-label">振込先</dt>
-            <dd id="complete-bank-info"></dd>
+            <dd id="complete-payment-method">Stripe</dd>
           </div>
         </dl>
       </section>
     </main>
-    <script src="../assets/js/festa60-register.js?v=20260807-1" defer></script>
+    <script src="../assets/js/festa60-register.js?v=20260807-2" defer></script>
   </body>
 </html>

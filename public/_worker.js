@@ -421,14 +421,11 @@ async function insertApplication(db, payload, requestMeta = {}) {
   const totalAmountJpy = lineItemsTotal(lineItems);
   const quantity = 1 + companions.length;
   const paymentStatus = totalAmountJpy > 0 ? "unpaid" : "paid";
-  const requestedPaymentMethod = payload.payment_method === "card" ? "card" : "bank_transfer";
-  const paymentMethod = totalAmountJpy > 0 ? requestedPaymentMethod : "bank_transfer";
-  const paymentProvider = paymentMethod === "card" ? "stripe" : "manual";
+  const paymentMethod = totalAmountJpy > 0 ? "stripe_checkout" : "not_required";
+  const paymentProvider = totalAmountJpy > 0 ? "stripe" : "none";
   const paidAt = paymentStatus === "paid" ? nowIso() : null;
   const now = nowIso();
-  const expectedTransferName = paymentMethod === "bank_transfer"
-    ? transferNameFor(applicationCode, payload.full_name_kana || payload.full_name)
-    : null;
+  const expectedTransferName = null;
   await db.prepare(
     `INSERT INTO applications (
         id, application_code, member_id, match_status, match_confidence, status, ticket_type, fee_period, reception_attendance,
@@ -552,16 +549,7 @@ async function insertApplication(db, payload, requestMeta = {}) {
     details_json: JSON.stringify({ match_status: match2.status, ticket_type: normalizeTicketType(payload.ticket_type), fee_period: payload.fee_period, reception_attendance: payload.reception_attendance }),
     ...requestMeta
   });
-  const paymentId = paymentMethod !== "card" ? await createManualPayment(db, {
-    id,
-    member_id: match2.member?.id || null,
-    amount_total: totalAmountJpy,
-    payment_status: paymentStatus,
-    payment_method: paymentMethod,
-    payment_provider: paymentProvider,
-    ticket_type: normalizeTicketType(payload.ticket_type),
-    paid_at: paidAt
-  }) : null;
+  const paymentId = null;
   return {
     id,
     application_code: applicationCode,
@@ -599,34 +587,6 @@ async function nextApplicationCode(db) {
   return `FESTA-${String(row.last_value).padStart(6, "0")}`;
 }
 __name(nextApplicationCode, "nextApplicationCode");
-async function createManualPayment(db, application) {
-  const now = nowIso();
-  const paymentId = newId("pay");
-  await db.prepare(
-    `INSERT INTO payments (
-        id, application_id, member_id, amount_total, currency, status, payment_method, payment_provider,
-        external_payment_id, ticket_type, metadata_json, created_at, paid_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).bind(
-    paymentId,
-    application.id,
-    application.member_id || null,
-    application.amount_total || 0,
-    "jpy",
-    application.payment_status || "unpaid",
-    application.payment_method || "bank_transfer",
-    application.payment_provider || "manual",
-    null,
-    application.ticket_type,
-    JSON.stringify({ application_id: application.id, method: application.payment_method || "bank_transfer", provider: application.payment_provider || "manual" }),
-    now,
-    application.paid_at || null,
-    now
-  ).run();
-  await db.prepare("UPDATE payment_line_items SET payment_id = ? WHERE application_id = ?").bind(paymentId, application.id).run();
-  return paymentId;
-}
-__name(createManualPayment, "createManualPayment");
 async function createPayment(db, application, session, metadata) {
   const now = nowIso();
   const paymentId = newId("pay");
@@ -646,7 +606,7 @@ async function createPayment(db, application, session, metadata) {
     session.amount_total || application.amount_total || 0,
     session.currency || "jpy",
     session.payment_status || "created",
-    "card",
+    "stripe_checkout",
     "stripe",
     session.id,
     application.ticket_type,
@@ -657,7 +617,7 @@ async function createPayment(db, application, session, metadata) {
   await db.prepare("UPDATE payment_line_items SET payment_id = ? WHERE application_id = ?").bind(paymentId, application.id).run();
   await db.prepare(
     `UPDATE applications
-       SET payment_method = 'card', payment_provider = 'stripe', external_payment_id = ?, updated_at = ?
+       SET payment_method = 'stripe_checkout', payment_provider = 'stripe', external_payment_id = ?, updated_at = ?
        WHERE id = ?`
   ).bind(session.id, now, application.id).run();
   return paymentId;
@@ -755,6 +715,28 @@ async function markCheckoutExpired(db, session, stripeEventId) {
   });
 }
 __name(markCheckoutExpired, "markCheckoutExpired");
+async function markCheckoutFailed(db, session, stripeEventId) {
+  const now = nowIso();
+  const applicationId = session.metadata?.application_id;
+  await db.prepare(
+    `UPDATE payments
+       SET status = ?, stripe_event_id = ?, updated_at = ?
+       WHERE stripe_checkout_session_id = ?`
+  ).bind("failed", stripeEventId || null, now, session.id).run();
+  if (applicationId) {
+    await db.prepare(
+      "UPDATE applications SET payment_status = ?, status = ?, attendance_status = ?, updated_at = ? WHERE id = ?"
+    ).bind("unpaid", "payment_pending", "pending", now, applicationId).run();
+  }
+  await audit(db, {
+    actor: "stripe",
+    action: "payment.checkout_failed",
+    target_type: "application",
+    target_id: applicationId || session.id,
+    details_json: JSON.stringify({ checkout_session_id: session.id, payment_status: "failed" })
+  });
+}
+__name(markCheckoutFailed, "markCheckoutFailed");
 async function getApplicationById(db, applicationId) {
   return db.prepare(
     `SELECT
@@ -875,8 +857,8 @@ async function listApplications(db) {
     name: row.full_name,
     quantity: row.quantity || 1 + Number(row.companion_count || 0),
     amount: row.total_amount_jpy ?? row.amount_total ?? expectedApplicationAmount(row),
-    paymentMethod: row.payment_method || row.latest_payment_method || "bank_transfer",
-    paymentProvider: row.payment_provider || row.latest_payment_provider || "manual",
+    paymentMethod: row.payment_method || row.latest_payment_method || "stripe_checkout",
+    paymentProvider: row.payment_provider || row.latest_payment_provider || "stripe",
     paymentStatus: row.payment_status,
     externalPaymentId: row.external_payment_id || "",
     expectedTransferName: row.expected_transfer_name || "",
@@ -920,93 +902,6 @@ function numberOrNull(value) {
 __name(numberOrNull, "numberOrNull");
 
 // api/festa60/_lib/email.js
-function bankInfo(env) {
-  const accountHolder = env.BANK_ACCOUNT_HOLDER || env.BANK_ACCOUNT_NAME || "\u53E3\u5EA7\u540D\u7FA9\u672A\u8A2D\u5B9A";
-  return {
-    bankName: env.BANK_NAME || "\u9280\u884C\u540D\u672A\u8A2D\u5B9A",
-    branchName: env.BANK_BRANCH_NAME || "\u652F\u5E97\u540D\u672A\u8A2D\u5B9A",
-    branchCode: env.BANK_BRANCH_CODE || "\u652F\u5E97\u30B3\u30FC\u30C9\u672A\u8A2D\u5B9A",
-    accountType: env.BANK_ACCOUNT_TYPE || "\u53E3\u5EA7\u7A2E\u5225\u672A\u8A2D\u5B9A",
-    accountNumber: env.BANK_ACCOUNT_NUMBER || "\u53E3\u5EA7\u756A\u53F7\u672A\u8A2D\u5B9A",
-    accountHolder,
-    accountName: accountHolder,
-    accountHolderKana: env.BANK_ACCOUNT_HOLDER_KANA || "\u53E3\u5EA7\u540D\u7FA9\u30AB\u30CA\u672A\u8A2D\u5B9A",
-    transferNote: env.BANK_TRANSFER_NOTE || "\u632F\u8FBC\u624B\u6570\u6599\u306F\u53C2\u52A0\u8005\u69D8\u306E\u3054\u8CA0\u62C5\u3068\u306A\u308A\u307E\u3059\u3002",
-    contactEmail: env.CONTACT_EMAIL || "CONTACT_EMAIL\u672A\u8A2D\u5B9A"
-  };
-}
-__name(bankInfo, "bankInfo");
-function bankTransferGuide(application, env) {
-  const info = bankInfo(env);
-  const days = bankTransferDeadlineDays(env);
-  return {
-    paymentMethod: "bank_transfer",
-    paymentProvider: "manual",
-    paymentStatus: application.payment_status || "unpaid",
-    applicationId: application.application_code,
-    amount: application.total_amount_jpy || application.amount_total || 0,
-    transferNameExample: application.expected_transfer_name || `${application.application_code} ${transferNameForBank(application.full_name_kana || application.full_name || application.name || "")}`.trim(),
-    dueDateText: `\u304A\u7533\u3057\u8FBC\u307F\u65E5\u304B\u3089${days}\u65E5\u4EE5\u5185`,
-    transferNote: info.transferNote,
-    bankInfo: info
-  };
-}
-__name(bankTransferGuide, "bankTransferGuide");
-function renderApplicationReceiptEmail(application, env) {
-  const guide = bankTransferGuide(application, env);
-  const name = application.full_name || application.name || "";
-  const quantity = application.quantity || 1;
-  const amount = formatYen(guide.amount);
-  const isAbsentDonation = String(application.ticket_type || "").startsWith("absent_donation_");
-  const donationPlan = donationPlanDetails(application.ticket_type);
-  const applicationDetails = isAbsentDonation ? `\u7533\u8FBC\u5185\u5BB9\uFF1A\u6B20\u5E2D\u8005\u5411\u3051\u5BC4\u4ED8 ${donationPlan?.name || ""}
-\u8FD4\u793C\u5185\u5BB9\uFF1A${donationPlan?.description || ""}` : `\u53C2\u52A0\u4EBA\u6570\uFF1A${quantity}\u540D
-\u30C0\u30F3\u30B9\u30BF\u30A4\u30E0\u30C1\u30B1\u30C3\u30C8\uFF1A${danceTicketDescription(application.ticket_type)}${donationPlan ? `
-\u5BC4\u4ED8\u30D7\u30E9\u30F3\uFF1A${donationPlan.name}
-\u8FD4\u793C\u5185\u5BB9\uFF1A${donationPlan.description}` : ""}`;
-  const paymentInstructions = `お支払いは、以下の銀行口座へお振込みをお願いいたします。
-
-【振込先】
-銀行名：${guide.bankInfo.bankName}
-支店名：${guide.bankInfo.branchName}
-支店コード：${guide.bankInfo.branchCode}
-口座種別：${guide.bankInfo.accountType}
-口座番号：${guide.bankInfo.accountNumber}
-口座名義：${guide.bankInfo.accountHolder}
-口座名義カナ：${guide.bankInfo.accountHolderKana}
-
-お振込みの際は、以下の自動発行された振込名義をご入力ください。
-
-${guide.transferNameExample}`;
-  return {
-    to: application.email,
-    subject: `\u301060\u5468\u5E74FESTA\u3011${isAbsentDonation ? "\u5BC4\u4ED8" : "\u304A\u7533\u8FBC\u307F"}\u53D7\u4ED8\u30FB\u304A\u632F\u8FBC\u306E\u3054\u6848\u5185`,
-    body: `${name} \u69D8
-
-\u3053\u306E\u305F\u3073\u306F\u300160\u5468\u5E74FESTA${isAbsentDonation ? "\u3078\u306E\u5BC4\u4ED8" : ""}\u306B\u304A\u7533\u3057\u8FBC\u307F\u3044\u305F\u3060\u304D\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\u3002
-\u4EE5\u4E0B\u306E\u5185\u5BB9\u3067\u53D7\u4ED8\u3044\u305F\u3057\u307E\u3057\u305F\u3002
-
-\u53D7\u4ED8\u756A\u53F7\uFF1A${guide.applicationId}
-\u304A\u7533\u8FBC\u8005\u540D\uFF1A${name}
-${applicationDetails}
-\u304A\u652F\u6255\u91D1\u984D\uFF1A${amount}
-
-${paymentInstructions}
-
-\u304A\u632F\u8FBC\u307F\u671F\u9650\uFF1A${guide.dueDateText}
-
-\u5165\u91D1\u78BA\u8A8D\u5F8C\u3001${isAbsentDonation ? "\u5BC4\u4ED8\u53D7\u4ED8\u5B8C\u4E86" : "\u53C2\u52A0\u78BA\u5B9A"}\u30E1\u30FC\u30EB\u3092\u304A\u9001\u308A\u3057\u307E\u3059\u3002
-${guide.transferNote}
-
-\u30AD\u30E3\u30F3\u30BB\u30EB\u3092\u3054\u5E0C\u671B\u306E\u5834\u5408\u306F\u3001\u554F\u3044\u5408\u308F\u305B\u5148\u307E\u3067\u3054\u9023\u7D61\u304F\u3060\u3055\u3044\u3002
-\u304A\u652F\u6255\u3044\u5F8C\u306E\u30AD\u30E3\u30F3\u30BB\u30EB\u306B\u4F34\u3046\u8FD4\u91D1\u306F\u3001\u539F\u5247\u3068\u3057\u3066\u884C\u3044\u307E\u305B\u3093\u3002
-\u4E3B\u50AC\u8005\u90FD\u5408\u306B\u3088\u308B\u958B\u50AC\u4E2D\u6B62\u306A\u3069\u3001\u4E8B\u52D9\u5C40\u304C\u5FC5\u8981\u3068\u5224\u65AD\u3057\u305F\u5834\u5408\u306F\u500B\u5225\u306B\u3054\u6848\u5185\u3057\u307E\u3059\u3002
-
-\u3054\u4E0D\u660E\u70B9\u304C\u3054\u3056\u3044\u307E\u3057\u305F\u3089\u3001\u4EE5\u4E0B\u307E\u3067\u304A\u554F\u3044\u5408\u308F\u305B\u304F\u3060\u3055\u3044\u3002
-${guide.bankInfo.contactEmail}`
-  };
-}
-__name(renderApplicationReceiptEmail, "renderApplicationReceiptEmail");
 function renderPaymentConfirmedEmail(application) {
   const name = application.full_name || application.name || "";
   const quantity = application.quantity || 1;
@@ -1101,23 +996,12 @@ function formatYen(value) {
   return `${Number(value || 0).toLocaleString("ja-JP")}\u5186`;
 }
 __name(formatYen, "formatYen");
-function transferNameForBank(value) {
-  return String(value || "").replace(/[ぁ-ゖ]/g, (character) => String.fromCharCode(character.charCodeAt(0) + 96)).replace(/[ 　]/g, "");
-}
-__name(transferNameForBank, "transferNameForBank");
 function danceTicketDescription(ticketType) {
   const benefit = danceTicketBenefit(ticketType);
   if (!benefit.count) return "\u914D\u5E03\u306A\u3057";
   return `${benefit.unit_amount_jpy.toLocaleString("ja-JP")}\u5186\u5238\xD7${benefit.count}\u679A\uFF08${benefit.total_amount_jpy.toLocaleString("ja-JP")}\u5186\u76F8\u5F53\uFF09`;
 }
 __name(danceTicketDescription, "danceTicketDescription");
-function bankTransferDeadlineDays(env) {
-  const days = Number(env.BANK_TRANSFER_DEADLINE_DAYS || 7);
-  if (!Number.isInteger(days) || days <= 0 || days > 90) return 7;
-  return days;
-}
-__name(bankTransferDeadlineDays, "bankTransferDeadlineDays");
-
 // api/festa60/admin/applications/[id].js
 async function onRequestPatch({ request, env, params }) {
   const auth = assertAdmin(request, env);
@@ -1406,8 +1290,31 @@ function numberOrNull2(value) {
 __name(numberOrNull2, "numberOrNull");
 
 // api/festa60/_lib/stripe.js
+async function createStripeCustomer(stripeSecret, application) {
+  const params = new URLSearchParams();
+  params.set("email", application.email);
+  params.set("name", application.full_name || "");
+  params.set("metadata[application_id]", application.id);
+  params.set("metadata[application_code]", application.application_code);
+  const response = await fetch("https://api.stripe.com/v1/customers", {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${stripeSecret}`,
+      "content-type": "application/x-www-form-urlencoded",
+      "idempotency-key": `festa60-customer-${application.id}`
+    },
+    body: params
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(`Stripe Customer creation failed: ${result.error?.message || response.status}`);
+  }
+  return result;
+}
+__name(createStripeCustomer, "createStripeCustomer");
 async function createCheckoutSession({ env, application, request, baseUrl }) {
   const stripeSecret = requireStripeSecret(env);
+  const customer = await createStripeCustomer(stripeSecret, application);
   const metadata = {
     application_id: application.id,
     member_id: application.member_id || "",
@@ -1416,12 +1323,17 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   const params = new URLSearchParams();
   params.set("mode", "payment");
   params.set("payment_method_types[0]", "card");
+  params.set("payment_method_types[1]", "paypay");
+  params.set("payment_method_types[2]", "customer_balance");
+  params.set("payment_method_options[customer_balance][funding_type]", "bank_transfer");
+  params.set("payment_method_options[customer_balance][bank_transfer][type]", "jp_bank_transfer");
   params.set("locale", "ja");
   params.set("submit_type", "book");
-  params.set("success_url", `${baseUrl}/festa60-register/?checkout=success&application=${application.application_code}`);
-  params.set("cancel_url", `${baseUrl}/festa60-register/?checkout=cancelled&application=${application.application_code}`);
+  const staffQuery = splitTicketType(application.ticket_type).base_ticket_type === "obog_staff" ? "staff=1&" : "";
+  params.set("success_url", `${baseUrl}/festa60-register/?${staffQuery}checkout=success&application=${application.application_code}`);
+  params.set("cancel_url", `${baseUrl}/festa60-register/?${staffQuery}checkout=cancelled&application=${application.application_code}`);
   params.set("client_reference_id", application.id);
-  params.set("customer_email", application.email);
+  params.set("customer", customer.id);
   params.set("metadata[application_id]", metadata.application_id);
   params.set("metadata[member_id]", metadata.member_id);
   params.set("metadata[ticket_type]", metadata.ticket_type);
@@ -1520,12 +1432,14 @@ async function onRequestPost5({ request, env }) {
       return json({ ok: true, received: true, duplicate: true });
     }
     try {
-      if (event.type === "checkout.session.completed") {
+      if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
         await markCheckoutCompleted(db, event.data.object, event.id);
         if (event.data.object.payment_status === "paid" && event.data.object.metadata?.application_id) {
           const application = await getApplicationById(db, event.data.object.metadata.application_id);
           if (application) await maybeSendEmail(env, renderPaymentConfirmedEmail(application));
         }
+      } else if (event.type === "checkout.session.async_payment_failed") {
+        await markCheckoutFailed(db, event.data.object, event.id);
       } else if (event.type === "checkout.session.expired") {
         await markCheckoutExpired(db, event.data.object, event.id);
       }
@@ -1564,6 +1478,7 @@ __name(verifyTurnstile, "verifyTurnstile");
 
 // api/festa60/applications.js
 var PUBLIC_OBOG_TICKET_TYPES = ["obog", "obog_6_10", "obog_5_under"];
+var STAFF_TICKET_TYPES = ["obog_staff"];
 var ABSENT_DONATION_TICKET_TYPES = ["absent_donation_30000", "absent_donation_10000", "absent_donation_5000"];
 var SCHOOL_LINEAGES = ["tus_obog", "gakushuin_ouyukai"];
 async function onRequestPost6({ request, env }) {
@@ -1575,8 +1490,11 @@ async function onRequestPost6({ request, env }) {
     payload.address = [payload.prefecture, payload.city, payload.street_address, payload.building].filter((value) => String(value || "").trim()).join(" ");
     payload.fee_period = feePeriodForDate();
     payload.ticket_type = normalizeTicketType(payload.ticket_type, payload.support_tier);
-    const validation = validateApplication(payload);
+    const validation = validateApplication(payload, env);
     if (!validation.ok) return badRequest("\u5165\u529B\u5185\u5BB9\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002", validation.errors);
+    const isStaffApplication = STAFF_TICKET_TYPES.includes(splitTicketType(payload.ticket_type).base_ticket_type);
+    payload.source = isStaffApplication ? "staff_invite" : "public_form";
+    delete payload.staff_access_code;
     const turnstile = await verifyTurnstile(payload.turnstile_token, env, request);
     if (!turnstile.ok) return badRequest("Turnstile verification failed.", turnstile.result || turnstile.message);
     const db = requireDb(env);
@@ -1589,13 +1507,7 @@ async function onRequestPost6({ request, env }) {
       },
       getClientMeta(request)
     );
-    const applicationForMail = {
-      ...application,
-      full_name: payload.full_name,
-      email: payload.email,
-      quantity: application.quantity
-    };
-    if (application.payment_method === "card") {
+    if (application.payment_provider === "stripe") {
       try {
         const { session, metadata } = await createCheckoutSession({
           env,
@@ -1609,7 +1521,7 @@ async function onRequestPost6({ request, env }) {
           ok: true,
           application,
           payment: {
-            paymentMethod: "card",
+            paymentMethod: "stripe_checkout",
             paymentProvider: "stripe",
             paymentStatus: "unpaid",
             checkoutUrl: session.url,
@@ -1624,26 +1536,18 @@ async function onRequestPost6({ request, env }) {
           {
             ok: false,
             error: "stripe_checkout_unavailable",
-            message: "\u7533\u8FBC\u306F\u4FDD\u5B58\u3055\u308C\u307E\u3057\u305F\u304C\u3001\u30AB\u30FC\u30C9\u6C7A\u6E08\u753B\u9762\u3092\u958B\u3051\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u53D7\u4ED8\u756A\u53F7\u3092\u63A7\u3048\u3066\u4E8B\u52D9\u5C40\u3078\u3054\u9023\u7D61\u304F\u3060\u3055\u3044\u3002",
+            message: "\u7533\u8FBC\u306F\u4FDD\u5B58\u3055\u308C\u307E\u3057\u305F\u304C\u3001Stripe\u306E\u6C7A\u6E08\u753B\u9762\u3092\u958B\u3051\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u53D7\u4ED8\u756A\u53F7\u3092\u63A7\u3048\u3066\u4E8B\u52D9\u5C40\u3078\u3054\u9023\u7D61\u304F\u3060\u3055\u3044\u3002",
             application
           },
           { status: 502 }
         );
       }
     }
-    const receiptEmail = renderApplicationReceiptEmail(applicationForMail, env);
-    const emailDelivery = await maybeSendEmail(env, receiptEmail);
     return json({
       ok: true,
       application,
-      payment: bankTransferGuide(applicationForMail, env),
-      receipt_email: {
-        sent: emailDelivery.sent,
-        skipped: emailDelivery.skipped,
-        reason: emailDelivery.reason || null,
-        subject: receiptEmail.subject,
-        body: emailDelivery.sent ? void 0 : receiptEmail.body
-      },
+      payment: { paymentMethod: "not_required", paymentProvider: "none", paymentStatus: "paid" },
+      receipt_email: { sent: false, skipped: true, reason: "No payment required." },
       turnstile_skipped: Boolean(turnstile.skipped)
     });
   } catch (error) {
@@ -1655,7 +1559,7 @@ async function onRequestGet6() {
   return methodNotAllowed();
 }
 __name(onRequestGet6, "onRequestGet");
-function validateApplication(payload) {
+function validateApplication(payload, env) {
   const errors = {};
   const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(payload.ticket_type);
   for (const field of ["family_name", "given_name", "family_name_kana", "given_name_kana", "full_name", "full_name_kana", "email", "ticket_type"]) {
@@ -1680,11 +1584,19 @@ function validateApplication(payload) {
   if (!payload.cancellation_policy_consent) {
     errors.cancellation_policy_consent = "required";
   }
-  if (!["card", "bank_transfer"].includes(payload.payment_method)) {
+  if (payload.payment_method !== "stripe") {
     errors.payment_method = "invalid";
   }
-  if (![...PUBLIC_OBOG_TICKET_TYPES, ...ABSENT_DONATION_TICKET_TYPES].includes(baseTicketType)) {
+  const isStaffApplication = STAFF_TICKET_TYPES.includes(baseTicketType);
+  if (![...PUBLIC_OBOG_TICKET_TYPES, ...ABSENT_DONATION_TICKET_TYPES, ...STAFF_TICKET_TYPES].includes(baseTicketType)) {
     errors.ticket_type = "invalid_public_ticket_type";
+  }
+  if (isStaffApplication) {
+    const expectedStaffCode = String(env.STAFF_PAYMENT_ACCESS_CODE || "");
+    const submittedStaffCode = String(payload.staff_access_code || "");
+    if (!expectedStaffCode || !constantTimeEqual(submittedStaffCode, expectedStaffCode)) {
+      errors.staff_access_code = "invalid";
+    }
   }
   if (!SCHOOL_LINEAGES.includes(payload.school_lineage)) {
     errors.school_lineage = "required";
@@ -1751,8 +1663,8 @@ async function onRequestGet7({ env }) {
     environment: environmentName(env),
     is_production: isProduction(env),
     turnstile_site_key: env.TURNSTILE_SITE_KEY || "",
-    payment_mode: "card_and_bank_transfer",
-    payment_provider: "stripe_and_manual",
+    payment_mode: "stripe_checkout",
+    payment_provider: "stripe",
     stripe_mode: stripeMode(env),
     fee_period: feePeriodForDate(),
     fee_periods: {

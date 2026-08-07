@@ -5,7 +5,7 @@
 - Pages project: `tus-fantasista-festa60`
 - D1 database: `festa60_production`
 - Configuration: `wrangler.toml`
-- Public payment methods: Stripe card payment and bank transfer
+- Public payment methods: Stripe Checkout (cards, Apple Pay, Google Pay, PayPay, and JPY bank transfer)
 
 The production D1 database is intentionally separate from `festa60_staging`.
 
@@ -15,6 +15,7 @@ Set these as encrypted Pages secrets. Never commit their values.
 
 - `STRIPE_SECRET_KEY`: Stripe live secret key (`sk_live_...`)
 - `STRIPE_WEBHOOK_SECRET`: signing secret for the production webhook (`whsec_...`)
+- `STAFF_PAYMENT_ACCESS_CODE`: private code for the officers/helper payment menu
 - `ADMIN_API_TOKEN`: random token for administrator APIs
 - `EMAIL_WEBHOOK_URL`: mail delivery endpoint
 - `EMAIL_API_TOKEN`: token used by the mail delivery endpoint
@@ -23,7 +24,14 @@ The Stripe production webhook URL is:
 
 `https://tus-fantasista-festa60.pages.dev/api/stripe/webhook`
 
-Subscribe it to `checkout.session.completed` and `checkout.session.expired`.
+Subscribe it to:
+
+- `checkout.session.completed`
+- `checkout.session.async_payment_succeeded`
+- `checkout.session.async_payment_failed`
+- `checkout.session.expired`
+
+In Stripe Dashboard, enable cards, PayPay, and bank transfer for the account. Apple Pay and Google Pay are displayed by Stripe Checkout only when the device, browser, wallet, and card are eligible. The staff menu is available only at `/festa60-register/?staff=1`; never add a public navigation link or commit its access code.
 
 ## Deploy
 
