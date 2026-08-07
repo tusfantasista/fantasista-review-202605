@@ -6,9 +6,11 @@
 - 60周年特設の本番成果物は `scripts/build-festa60-production.sh` で `festa60-public/` に生成します。
 - FANTASISTA本体の本番成果物は `scripts/build-fantasista-production.sh` で `fantasista-site/public/` に生成します。
 - 生成物、秘密情報、フォーム回答、名簿、管理用CSVはGitHubへ保存しません。
-- 本番反映は、ローカルプレビューと差分レビューの後、サイト管理者が明示的に許可した場合だけ実施します。
+- GitHub管理先は `https://github.com/tusfantasista/fantasista-review-202605` です。
+- 「レビュー」はCloudflareテスト環境 `https://fantasista-review-202605-staging.pages.dev/` で行います。
+- 本番反映は、テスト環境でのレビュー後、サイト管理者が明示的に許可した場合だけ実施します。
 
-詳細は [`RELEASE_WORKFLOW.md`](./RELEASE_WORKFLOW.md) を参照してください。
+詳細は [`RELEASE_WORKFLOW.md`](./RELEASE_WORKFLOW.md) と [`STAGING_REVIEW.md`](./STAGING_REVIEW.md) を参照してください。
 
 このリポジトリは、FANTASISTA会の仮公式サイトと、60周年記念FESTA関連ページを管理します。
 
@@ -59,10 +61,11 @@ Cloudflare上で動かす申込フォーム、D1保存、管理画面、CSV取�
 
 ## デプロイ方針
 
-1. 通常の静的ページ修正はfeatureブランチで作業します。
-2. レビュー後、`main` に反映するとGitHub Pagesの公式仮ページに出ます。
-3. Cloudflare Workers公式ページへ反映する場合は、`public/` を公開対象として手動デプロイします。
-4. Cloudflareフォーム・CRMは、staging/Previewで検収してから本番向けに切り替えます。
+1. 通常の静的ページ修正はfeatureブランチで作業し、GitHubへ履歴を残します。
+2. ローカル検査後、Cloudflareのテスト環境へ反映します。
+3. テスト環境のURLを管理者がレビューします。
+4. 管理者の明示的な許可後にだけ、`main`への反映と本番Cloudflare Pagesへのデプロイを行います。
+5. フォーム・CRM・決済は、staging DBとStripeサンドボックスで検収してから本番向けに切り替えます。
 
 ## 静的フォームの現在の扱い
 

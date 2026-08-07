@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fantasista-review-202605-staging",
+  "compatibility_date": "2026-08-02",
+  "pages_build_output_dir": "./public",
+  "vars": {
+    "ENVIRONMENT": "staging"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "festa60_staging",
+      "database_id": "b7b6640d-a39f-49fc-b8e1-f4d286129911"
+    }
+  ]
+}
