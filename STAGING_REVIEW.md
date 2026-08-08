@@ -4,7 +4,7 @@
 
 レビュー環境は、管理者が本番公開前に実際のURLで変更内容を確認するためのCloudflare Pagesテスト環境です。
 
-- GitHub: `https://github.com/tusfantasista/fantasista-review-202605`
+- GitHub: `https://github.com/tusfantasista/tus-fantasista`
 - Cloudflare Pagesプロジェクト: `fantasista-review-202605-staging`
 - レビューURL: `https://fantasista-review-202605-staging.pages.dev/`
 - D1: `festa60_staging`

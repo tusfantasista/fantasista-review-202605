@@ -6,7 +6,7 @@ GitHubでソースと変更履歴を管理し、Cloudflare Pagesのテスト環�
 
 ## 用語と管理場所
 
-- GitHub管理先: `https://github.com/tusfantasista/fantasista-review-202605`
+- GitHub管理先: `https://github.com/tusfantasista/tus-fantasista`
 - レビュー: Cloudflareのテスト環境へ反映し、実際のURLで確認する工程
 - レビュー環境: `https://fantasista-review-202605-staging.pages.dev/`
 - 本番環境: `tus-fantasista.pages.dev` と `tus-fantasista-festa60.pages.dev`
