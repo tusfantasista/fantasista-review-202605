@@ -152,7 +152,7 @@ img { max-width: 100%; }
 .legal-table dt { color: var(--f60-cream); background: rgba(255, 210, 28, 0.06); font-weight: 800; }
 .legal-table dd { color: var(--f60-muted); overflow-wrap: anywhere; }
 .legal-table a { color: var(--f60-gold); font-weight: 700; text-underline-offset: 4px; }
-.legal-table__note { display: inline-block; margin-top: 6px; font-size: 0.9rem; }
+.legal-content__disclosure { margin: 18px 0 0; color: var(--f60-muted); font-size: 0.76rem; text-align: right; }
 .legal-content__updated { margin: 22px 0 0; color: var(--f60-muted); font-size: 0.86rem; text-align: right; }
 .top-button { position: fixed; right: 18px; bottom: 18px; z-index: 40; width: 46px; height: 46px; border: 1px solid var(--f60-line); border-radius: 50%; background: var(--f60-panel); color: var(--f60-gold); opacity: 0; pointer-events: none; }
 .top-button.is-visible { opacity: 1; pointer-events: auto; }
