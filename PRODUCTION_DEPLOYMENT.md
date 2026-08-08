@@ -5,7 +5,7 @@
 - Pages project: `tus-fantasista-festa60`
 - D1 database: `festa60_production`
 - Configuration: `wrangler.toml`
-- Public payment methods: Stripe Checkout (cards, Apple Pay, Google Pay, PayPay, and JPY bank transfer)
+- Public payment methods: Stripe Checkout (cards, Apple Pay, and Google Pay) plus JPY bank transfer
 
 The production D1 database is intentionally separate from `festa60_staging`.
 
@@ -33,7 +33,7 @@ Subscribe it to:
 - `payment_intent.succeeded`
 - `payment_intent.partially_funded`
 
-In Stripe Dashboard, enable cards, PayPay, and bank transfer for the account. Apple Pay and Google Pay are displayed by Stripe Checkout only when the device, browser, wallet, and card are eligible. The staff menu is available only at `/festa60-register/?staff=1`; never add a public navigation link or commit its access code.
+In Stripe Dashboard, enable cards and bank transfer for the account. Apple Pay and Google Pay are displayed by Stripe Checkout only when the device, browser, wallet, and card are eligible. The staff menu is available only at `/festa60-register/?staff=1`; never add a public navigation link or commit its access code.
 
 Create a Cloudflare Access application that protects both `/festa60-admin/*` and `/api/festa60/admin/*`. Allow only approved FESTA office members. Verify that an unauthenticated request cannot retrieve the dashboard HTML, JSON API, or CSV export before accepting production applications.
 
