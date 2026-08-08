@@ -61,8 +61,31 @@
       const target = document.querySelector(hash);
       if (!target) return;
       event.preventDefault();
+      if (target.matches("details.faq-group")) target.open = true;
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+  }
+
+  function initFaqGroups() {
+    const groups = Array.from(document.querySelectorAll("details.faq-group"));
+    if (!groups.length) return;
+
+    function openGroupFromHash() {
+      const group = location.hash ? document.querySelector(location.hash) : null;
+      if (group && group.matches("details.faq-group")) group.open = true;
+    }
+
+    groups.forEach((group) => {
+      group.addEventListener("toggle", function () {
+        if (!group.open) return;
+        groups.forEach((other) => {
+          if (other !== group) other.open = false;
+        });
+      });
+    });
+
+    openGroupFromHash();
+    window.addEventListener("hashchange", openGroupFromHash);
   }
 
   function initActiveSectionNav() {
@@ -402,6 +425,7 @@
   initMobileMenu();
   initTopButton();
   initSmoothScroll();
+  initFaqGroups();
   initActiveSectionNav();
   initFilters();
   initLightbox();

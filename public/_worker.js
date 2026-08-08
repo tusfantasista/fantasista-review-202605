@@ -177,6 +177,12 @@ var OBOG_6_10_GRADUATION_YEAR_TO = 2020;
 var OBOG_5_UNDER_GRADUATION_YEAR_FROM = 2021;
 var OBOG_5_UNDER_GRADUATION_YEAR_TO = 2025;
 var OBOG_11_OVER_GRADUATION_YEAR_TO = 2015;
+var APPLICATION_DEADLINE_ISO = "2027-01-31T23:59:59+09:00";
+function isApplicationOpen(date = /* @__PURE__ */ new Date()) {
+  const instant = date instanceof Date ? date : new Date(date);
+  return !Number.isNaN(instant.getTime()) && instant.getTime() <= new Date(APPLICATION_DEADLINE_ISO).getTime();
+}
+__name(isApplicationOpen, "isApplicationOpen");
 function feePeriodForDate(date = /* @__PURE__ */ new Date()) {
   const instant = date instanceof Date ? date : new Date(date);
   if (Number.isNaN(instant.getTime())) return "regular";
@@ -217,7 +223,8 @@ var STANDARD_DANCE_TICKET_BENEFITS = {
 };
 var COMPANION_FEES = {
   adult: { attending: 8e3, without_reception: 6e3 },
-  child: { attending: 3e3, without_reception: 1e3 }
+  child: { attending: 3e3, without_reception: 1e3 },
+  preschool: { attending: 0, without_reception: 0 }
 };
 var TICKET_LABELS = {
   obog: "60\u5468\u5E74\u8A18\u5FF5FESTA \u4E00\u822COBOG\u53C2\u52A0\u8CBB",
@@ -234,31 +241,31 @@ var TICKET_LABELS = {
 var DONATION_PLAN_DETAILS = {
   platinum: {
     name: "\u30D7\u30E9\u30C1\u30CA",
-    description: "600\u5186\u5238\xD725\u679A\u3001\u5370\u5237\u5199\u771F\u3001\u624B\u66F8\u304D\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u52D5\u753BQR\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\uFF08\u4E88\u5B9A\uFF09"
+    description: "600\u5186\u5238\xD725\u679A\u3001\u5F53\u65E5\u306E\u96C6\u5408\u5199\u771F\u3001\u73FE\u5F79\u304B\u3089\u306E\u304A\u793C\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\uFF08\u4E88\u5B9A\uFF09"
   },
   bronze: {
     name: "\u30D6\u30ED\u30F3\u30BA",
-    description: "300\u5186\u5238\xD75\u679A\u3001\u5370\u5237\u5199\u771F\u3001\u624B\u66F8\u304D\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u52D5\u753BQR\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\uFF08\u4E88\u5B9A\uFF09"
+    description: "300\u5186\u5238\xD75\u679A\u3001\u5F53\u65E5\u306E\u96C6\u5408\u5199\u771F\u3001\u73FE\u5F79\u304B\u3089\u306E\u304A\u793C\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\uFF08\u4E88\u5B9A\uFF09"
   },
   silver: {
     name: "\u30B7\u30EB\u30D0\u30FC",
-    description: "400\u5186\u5238\xD712\u679A\u3001\u5370\u5237\u5199\u771F\u3001\u624B\u66F8\u304D\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u52D5\u753BQR\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\uFF08\u4E88\u5B9A\uFF09"
+    description: "400\u5186\u5238\xD712\u679A\u3001\u5F53\u65E5\u306E\u96C6\u5408\u5199\u771F\u3001\u73FE\u5F79\u304B\u3089\u306E\u304A\u793C\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\uFF08\u4E88\u5B9A\uFF09"
   },
   gold: {
     name: "\u30B4\u30FC\u30EB\u30C9",
-    description: "500\u5186\u5238\xD720\u679A\u3001\u5370\u5237\u5199\u771F\u3001\u624B\u66F8\u304D\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u52D5\u753BQR\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\uFF08\u4E88\u5B9A\uFF09"
+    description: "500\u5186\u5238\xD720\u679A\u3001\u5F53\u65E5\u306E\u96C6\u5408\u5199\u771F\u3001\u73FE\u5F79\u304B\u3089\u306E\u304A\u793C\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\uFF08\u4E88\u5B9A\uFF09"
   },
   absent_donation_5000: {
     name: "\u30B9\u30BF\u30F3\u30C0\u30FC\u30C9",
-    description: "\u5370\u5237\u5199\u771F\u3001\u624B\u66F8\u304D\u624B\u7D19\u3001\u8A18\u5FF5\u52D5\u753BQR\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\u3001\u5B9A\u5F62\u90F5\u4FBF\u7B49"
+    description: "\u5F53\u65E5\u306E\u96C6\u5408\u5199\u771F\u3001\u73FE\u5F79\u304B\u3089\u306E\u304A\u793C\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\u3001\u5B9A\u5F62\u90F5\u4FBF\u7B49"
   },
   absent_donation_10000: {
     name: "\u30A2\u30C9\u30D0\u30F3\u30B9",
-    description: "\u5370\u5237\u5199\u771F\u3001\u624B\u66F8\u304D\u624B\u7D19\u3001\u8A18\u5FF5\u52D5\u753BQR\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\u3001\u5199\u771F\u30B9\u30BF\u30F3\u30C9\u3001\u30EC\u30BF\u30FC\u30D1\u30C3\u30AF"
+    description: "\u5F53\u65E5\u306E\u96C6\u5408\u5199\u771F\u3001\u73FE\u5F79\u304B\u3089\u306E\u304A\u793C\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\u3001\u5199\u771F\u30B9\u30BF\u30F3\u30C9\u3001\u30EC\u30BF\u30FC\u30D1\u30C3\u30AF"
   },
   absent_donation_30000: {
     name: "\u30D7\u30EC\u30DF\u30A2\u30E0",
-    description: "\u5370\u5237\u5199\u771F\u3001\u624B\u66F8\u304D\u624B\u7D19\u3001\u8A18\u5FF5\u52D5\u753BQR\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\u3001\u5199\u771F\u76FE\u3001\u9650\u5B9A\u8A18\u5FF5\u54C1\uFF08\u30CF\u30F3\u30AB\u30C1\uFF09\u3001\u5B85\u6025\u4FBF\u30B3\u30F3\u30D1\u30AF\u30C8"
+    description: "\u5F53\u65E5\u306E\u96C6\u5408\u5199\u771F\u3001\u73FE\u5F79\u304B\u3089\u306E\u304A\u793C\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3001\u8A18\u5FF5\u30B9\u30C6\u30C3\u30AB\u30FC\u3001\u5199\u771F\u76FE\u3001\u8A18\u5FF5\u54C1\u3001\u5B85\u6025\u4FBF\u30B3\u30F3\u30D1\u30AF\u30C8"
   }
 };
 function danceTicketBenefit(ticketType) {
@@ -273,7 +280,7 @@ function danceTicketBenefit(ticketType) {
 __name(danceTicketBenefit, "danceTicketBenefit");
 function companionDanceTicketBenefit(ticketType, companions = []) {
   const adultCount = Array.isArray(companions)
-    ? companions.filter((companion) => companion.attendee_type !== "child").length
+    ? companions.filter((companion) => companion.attendee_type === "adult").length
     : Math.max(0, Number(companions || 0));
   const unitAmount = adultCount ? danceTicketBenefit(ticketType).unit_amount_jpy || 300 : 0;
   return {
@@ -355,14 +362,14 @@ function buildPaymentLineItems(payload, companions = []) {
     });
   }
   if (!isAbsentDonation) companions.forEach((companion, index) => {
-    const type = companion.attendee_type === "child" ? "child" : "adult";
+    const type = ["adult", "child", "preschool"].includes(companion.attendee_type) ? companion.attendee_type : "adult";
     const companionReception = RECEPTION_ATTENDANCE.includes(companion.reception_attendance) ? companion.reception_attendance : normalizedReception;
     const amount = COMPANION_FEES[type][companionReception];
     const danceTicketCount = type === "adult" ? 1 : 0;
     if (amount <= 0) return;
     items.push({
       item_type: "companion",
-      label: `\u540C\u4F34\u8005${index + 1} ${type === "child" ? "\u5B50\u4F9B" : "\u5927\u4EBA"}`,
+      label: `\u540C\u4F34\u8005${index + 1} ${type === "adult" ? "\u5927\u4EBA\uFF08\u4E2D\u5B66\u751F\u4EE5\u4E0A\uFF09" : type === "child" ? "\u5B50\u4F9B\uFF08\u5C0F\u5B66\u751F\uFF09" : "\u672A\u5C31\u5B66\u5150\uFF08\u7121\u6599\uFF09"}`,
       quantity: 1,
       unit_amount_jpy: amount,
       amount_jpy: amount,
@@ -986,7 +993,7 @@ async function getApplicationById(db, applicationId) {
         a.expected_transfer_name, a.actual_transfer_name, a.admin_note, a.total_amount_jpy,
         a.status, a.attendance_status, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at,
         a.application_received_email_sent_at,
-        (SELECT COUNT(*) FROM companions c WHERE c.application_id = a.id AND c.attendee_type <> 'child') AS adult_companion_count
+        (SELECT COUNT(*) FROM companions c WHERE c.application_id = a.id AND c.attendee_type = 'adult') AS adult_companion_count
        FROM applications a
        WHERE a.id = ? OR a.application_code = ?
        LIMIT 1`
@@ -1098,6 +1105,7 @@ async function listApplications(db) {
         (
           SELECT COALESCE(SUM(
             CASE
+              WHEN c.attendee_type = 'preschool' THEN 0
               WHEN c.attendee_type = 'child' THEN
                 CASE WHEN COALESCE(c.reception_attendance, a.reception_attendance) = 'without_reception' THEN 1000 ELSE 3000 END
               ELSE
@@ -1172,10 +1180,10 @@ async function getAdminParticipationSummary(db) {
          c.application_id,
          COUNT(*) AS companion_count,
          SUM(CASE WHEN c.attendee_type = 'adult' THEN 1 ELSE 0 END) AS adult_companion_count,
-         SUM(CASE WHEN c.attendee_type = 'child' THEN 1 ELSE 0 END) AS child_companion_count,
+         SUM(CASE WHEN c.attendee_type IN ('child', 'preschool') THEN 1 ELSE 0 END) AS child_companion_count,
          SUM(CASE WHEN c.reception_attendance = 'attending' THEN 1 ELSE 0 END) AS companion_reception_count,
          SUM(CASE WHEN c.attendee_type = 'adult' AND c.reception_attendance = 'attending' THEN 1 ELSE 0 END) AS adult_companion_reception_count,
-         SUM(CASE WHEN c.attendee_type = 'child' AND c.reception_attendance = 'attending' THEN 1 ELSE 0 END) AS child_companion_reception_count
+         SUM(CASE WHEN c.attendee_type IN ('child', 'preschool') AND c.reception_attendance = 'attending' THEN 1 ELSE 0 END) AS child_companion_reception_count
        FROM companions c
        INNER JOIN attendee_applications a ON a.id = c.application_id
        GROUP BY c.application_id
@@ -2317,6 +2325,9 @@ async function onRequestPost6({ request, env }) {
     const action = payload.action || "submit_online";
     const allowedActions = ["submit_online", "preview_bank_transfer", "confirm_bank_transfer", "switch_to_online", "cancel_bank_preview"];
     if (!allowedActions.includes(action)) return badRequest("Invalid application action.");
+    if (action !== "cancel_bank_preview" && !isApplicationOpen()) {
+      return json({ ok: false, error: "application_closed", message: "参加申込は2027年1月31日をもって締め切りました。変更や確認はFESTA事務局へお問い合わせください。" }, { status: 410 });
+    }
     payload.full_name = [payload.family_name, payload.given_name].filter(Boolean).join(" ").trim();
     payload.full_name_kana = [payload.family_name_kana, payload.given_name_kana].filter(Boolean).join(" ").trim();
     payload.address = [payload.prefecture, payload.city, payload.street_address, payload.building].filter((value) => String(value || "").trim()).join(" ");
@@ -2680,7 +2691,7 @@ function validateApplication(payload, env, action = "submit_online") {
       const key = `companions.${index}`;
       if (!companion.full_name || String(companion.full_name).trim() === "") errors[`${key}.full_name`] = "required";
       if (!companion.relationship || String(companion.relationship).trim() === "") errors[`${key}.relationship`] = "required";
-      if (!["adult", "child"].includes(companion.attendee_type)) errors[`${key}.attendee_type`] = "invalid";
+      if (!["adult", "child", "preschool"].includes(companion.attendee_type)) errors[`${key}.attendee_type`] = "invalid";
       if (!RECEPTION_ATTENDANCE.includes(companion.reception_attendance)) errors[`${key}.reception_attendance`] = "invalid";
       if (payload.reception_attendance === "without_reception" && companion.reception_attendance === "attending") {
         errors[`${key}.reception_attendance`] = "companion_cannot_attend_without_applicant";
@@ -2733,11 +2744,13 @@ async function onRequestGet7({ env }) {
     payment_mode: "stripe_checkout",
     payment_provider: "stripe",
     stripe_mode: stripeMode(env),
+    application_open: isApplicationOpen(),
+    application_deadline: APPLICATION_DEADLINE_ISO,
     fee_period: feePeriodForDate(),
     fee_periods: {
       early: "2026\u5E749\u670830\u65E5\u307E\u3067\u306E\u7533\u8FBC",
       year_end: "2026\u5E7410\u67081\u65E5\u301C12\u670831\u65E5\u306E\u7533\u8FBC",
-      regular: "2027\u5E741\u67081\u65E5\u4EE5\u964D\u306E\u7533\u8FBC"
+      regular: "2027\u5E741\u67081\u65E5\u301C1\u670831\u65E5\u306E\u7533\u8FBC"
     }
   });
 }

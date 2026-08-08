@@ -109,7 +109,7 @@ body.festa60-crm {
 
 .crm-steps {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   margin: 0 0 20px;
   padding: 0;
@@ -439,12 +439,76 @@ body.festa60-crm {
   background: #fff;
 }
 
-.crm-benefit-matrix {
+.crm-disclosure > summary,
+.crm-inline-disclosure > summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 34px;
+  color: var(--crm-ink);
+  font-weight: 900;
+  cursor: pointer;
+  list-style: none;
+}
+
+.crm-disclosure > summary::-webkit-details-marker,
+.crm-inline-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.crm-disclosure > summary::after,
+.crm-inline-disclosure > summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  color: var(--crm-gold);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.crm-disclosure[open] > summary::after,
+.crm-inline-disclosure[open] > summary::after {
+  content: "−";
+}
+
+.crm-disclosure > summary small {
+  color: var(--crm-muted);
+  font-size: 0.76rem;
+}
+
+.crm-disclosure__body {
   display: grid;
-  gap: 22px;
+  gap: 10px;
+  margin-top: 12px;
+  border-top: 1px solid var(--crm-line);
+  padding-top: 12px;
+}
+
+.crm-inline-disclosure {
+  border-top: 1px solid var(--crm-line);
+  padding-top: 8px;
+}
+
+.crm-inline-disclosure > summary {
+  min-height: 38px;
+  color: #6f5600;
+  font-size: 0.86rem;
+}
+
+.crm-inline-disclosure > ul,
+.crm-inline-disclosure > .crm-small {
+  margin: 8px 0 0;
+}
+
+.crm-benefit-matrix {
   border-top: 1px solid var(--crm-line);
   border-bottom: 1px solid var(--crm-line);
   padding: 24px 0;
+}
+
+.crm-benefit-matrix__body {
+  gap: 22px;
 }
 
 .crm-benefit-matrix__heading,

@@ -58,6 +58,10 @@
   const staffModeBanner = document.getElementById("staff-mode-banner");
   const staffAccessSection = document.getElementById("staff-access-section");
   const staffAccessCode = document.getElementById("staff_access_code");
+  const reviewApplicationButton = document.getElementById("review-application");
+  const schoolLineageGuide = document.getElementById("school-lineage-guide");
+  const openSchoolLineageGuide = document.getElementById("open-school-lineage-guide");
+  const closeSchoolLineageGuide = document.getElementById("close-school-lineage-guide");
   const graduationYearGuide = document.getElementById("graduation-year-guide");
   const openGraduationYearGuide = document.getElementById("open-graduation-year-guide");
   const closeGraduationYearGuide = document.getElementById("close-graduation-year-guide");
@@ -68,6 +72,7 @@
   let bankPreviewToken = "";
   let bankPreviewDetails = null;
   let postalLookupTimer = null;
+  let applicationOpen = true;
   let lastLookedUpPostalCode = "";
   let stripeAvailable = false;
   const obogSixTenFrom = 2016;
@@ -92,49 +97,50 @@
   const supportPlanDetails = {
     bronze: {
       title: "ブロンズ（プラン料金20,000円）",
-      benefits: ["300円券×5枚", "印刷した記念写真", "手書きメッセージ", "記念動画の視聴案内（QR）", "記念ステッカー（予定）"],
+      benefits: ["300円券×5枚", "当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー（予定）"],
     },
     silver: {
       title: "シルバー（プラン料金30,000円）",
-      benefits: ["400円券×12枚", "印刷した記念写真", "手書きメッセージ", "記念動画の視聴案内（QR）", "記念ステッカー（予定）"],
+      benefits: ["400円券×12枚", "当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー（予定）"],
     },
     gold: {
       title: "ゴールド（プラン料金50,000円）",
-      benefits: ["500円券×20枚", "印刷した記念写真", "手書きメッセージ", "記念動画の視聴案内（QR）", "記念ステッカー（予定）"],
+      benefits: ["500円券×20枚", "当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー（予定）"],
     },
     platinum: {
       title: "プラチナ（プラン料金100,000円）",
-      benefits: ["600円券×25枚", "印刷した記念写真", "手書きメッセージ", "記念動画の視聴案内（QR）", "記念ステッカー（予定）"],
+      benefits: ["600円券×25枚", "当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー（予定）"],
     },
   };
   const absentPlanDetails = {
     absent_donation_5000: {
       title: "スタンダード（5,000円）",
-      benefits: ["印刷写真", "手書き手紙", "記念動画の視聴案内（QR）", "記念ステッカー", "定形郵便等で配送予定"],
+      benefits: ["当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー", "定形郵便等で配送予定"],
     },
     absent_donation_10000: {
       title: "アドバンス（10,000円）",
-      benefits: ["印刷写真", "手書き手紙", "記念動画の視聴案内（QR）", "記念ステッカー", "写真スタンド", "レターパックで配送予定"],
+      benefits: ["当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー", "写真スタンド", "レターパックで配送予定"],
     },
     absent_donation_30000: {
       title: "プレミアム（30,000円）",
-      benefits: ["印刷写真", "手書き手紙", "記念動画の視聴案内（QR）", "記念ステッカー", "写真盾", "限定記念品（ハンカチ）", "宅急便コンパクトで配送予定"],
+      benefits: ["当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー", "写真盾", "記念品", "宅急便コンパクトで配送予定"],
     },
   };
   const companionFees = {
     adult: { attending: 8000, without_reception: 6000 },
     child: { attending: 3000, without_reception: 1000 },
+    preschool: { attending: 0, without_reception: 0 },
   };
   const feePeriodLabels = {
     early: "2026年9月30日までの申込",
     year_end: "2026年10月1日〜12月31日の申込",
-    regular: "2027年1月1日以降の申込",
+    regular: "2027年1月1日〜1月31日の申込",
   };
 
   if (!form) return;
 
   if (checkoutState.get("checkout") === "success") {
-    setMessage(`お支払いが完了し、申込が完了しました。参加確定メールをお送りします。受付番号: ${checkoutState.get("application") || "確認中"}`, "success");
+    showCheckoutSuccess();
   } else if (checkoutState.get("checkout") === "cancelled") {
     setMessage("お支払いが完了しなかったため、申込は完了していません。内容をご確認のうえ、もう一度お申し込みください。", "error");
   }
@@ -143,6 +149,7 @@
     .then((response) => response.json())
     .then((config) => {
       applyFeePeriod(config.fee_period || feePeriodForNow(), config.fee_periods || feePeriodLabels);
+      updateApplicationDeadline(config);
       updateStripeAvailability(config);
       if (!config.turnstile_site_key) return;
       const script = document.createElement("script");
@@ -161,6 +168,7 @@
     })
     .catch(() => {
       applyFeePeriod(feePeriodForNow(), feePeriodLabels);
+      updateApplicationDeadline({ application_open: applicationOpenForNow() });
       updateStripeAvailability({ stripe_mode: "not_configured" });
     });
 
@@ -183,6 +191,18 @@
     updateFeePreview();
   });
   postalLookupButton.addEventListener("click", lookupAddressByPostalCode);
+  openSchoolLineageGuide?.addEventListener("click", function () {
+    schoolLineageGuide?.showModal();
+  });
+  closeSchoolLineageGuide?.addEventListener("click", function () {
+    schoolLineageGuide?.close();
+  });
+  schoolLineageGuide?.addEventListener("click", function (event) {
+    if (event.target === schoolLineageGuide) schoolLineageGuide.close();
+  });
+  schoolLineageGuide?.addEventListener("close", function () {
+    openSchoolLineageGuide?.focus();
+  });
   openGraduationYearGuide?.addEventListener("click", function () {
     graduationYearGuide?.showModal();
   });
@@ -204,6 +224,7 @@
   activateStaffMode();
   renderCompanions();
   applyFeePeriod(feePeriodForNow(), feePeriodLabels);
+  updateApplicationDeadline({ application_open: applicationOpenForNow() });
   updateIdentityAndTicketType();
   updateSupportTierAvailability();
   updateApplicationMode();
@@ -213,6 +234,7 @@
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     try {
+      if (!applicationOpen) throw new Error("参加申込は2027年1月31日をもって締め切りました。変更や確認はFESTA事務局へお問い合わせください。");
       const payload = formPayload(new FormData(form));
       payload.client_submission_id = crypto.randomUUID();
       const clientErrors = validatePayload(payload);
@@ -276,10 +298,11 @@
             <label for="companion_${index}_attendee_type">同伴者属性 <span class="crm-required">必須</span></label>
             <select id="companion_${index}_attendee_type" name="companion_${index}_attendee_type" required>
               <option value="">選択してください</option>
-              <option value="adult">同伴者（大人）</option>
-              <option value="child">同伴者（子供）</option>
+              <option value="adult">大人（中学生以上）</option>
+              <option value="child">子供（小学生）</option>
+              <option value="preschool">未就学児（無料）</option>
             </select>
-            <p class="crm-help">大人には申込者本人の参加プランと同じ券種を1枚配布します。子供への自動配布はありません。</p>
+            <p class="crm-help">中学生以上は「大人」、小学生は「小学生」、小学校入学前は「未就学児（無料）」を選択してください。大人には申込者本人の参加プランと同じ金額のダンスタイムチケットを1枚配布し、小学生・未就学児への自動配布はありません。</p>
           </div>
           <div class="crm-field">
             <label for="companion_${index}_reception_attendance">懇親会 <span class="crm-required">必須</span></label>
@@ -590,6 +613,7 @@
       confirmationActions.hidden = true;
       bankTransferPreview.hidden = false;
       confirmationMessage.hidden = true;
+      setStep("payment");
       bankTransferPreview.scrollIntoView({ behavior: "smooth", block: "start" });
       document.getElementById("bank-transfer-preview-title")?.focus({ preventScroll: true });
     } catch (error) {
@@ -612,6 +636,7 @@
     editApplicationButton.disabled = true;
     confirmBankTransferButton.disabled = true;
     changeToOnlinePaymentButton.disabled = true;
+    setStep("payment");
     setConfirmationMessage("申込内容を送信しています...", "");
 
     try {
@@ -643,6 +668,7 @@
       setStep("complete");
       completionPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
+      setStep(action === "confirm_bank_transfer" ? "payment" : "confirm");
       setConfirmationMessage(error.message, "error");
     } finally {
       confirmApplicationButton.disabled = applicationSaved;
@@ -732,7 +758,7 @@
       const companionRows = payload.companions.length
         ? payload.companions.map((companion, index) => [
           `同伴者${index + 1}`,
-          `${companion.full_name} / ${companion.relationship} / ${companion.attendee_type === "child" ? "子供（チケット自動配布なし）" : `大人（${companionTicketUnitAmount}円券×1枚）`} / ${companion.reception_attendance === "attending" ? "懇親会参加" : "懇親会不参加"}${companion.email ? ` / ${companion.email}` : ""}${companion.note ? `\n補足: ${companion.note}` : ""}`,
+          `${companion.full_name} / ${companion.relationship} / ${companion.attendee_type === "adult" ? `大人・中学生以上（${companionTicketUnitAmount}円券×1枚）` : companion.attendee_type === "child" ? "子供・小学生（チケット自動配布なし）" : "未就学児・無料（チケット自動配布なし）"} / ${companion.reception_attendance === "attending" ? "懇親会参加" : "懇親会不参加"}${companion.email ? ` / ${companion.email}` : ""}${companion.note ? `\n補足: ${companion.note}` : ""}`,
         ])
         : [["同伴者", "なし"]];
       groups.push({
@@ -746,7 +772,7 @@
           ["懇親会", selectedLabel(receptionAttendance)],
           ...companionRows,
           ["同伴者向けチケット", payload.companion_dance_ticket_count ? `${companionTicketUnitAmount}円券×${payload.companion_dance_ticket_count}枚` : "なし"],
-          ["当日追加購入できる券種", `${companionTicketUnitAmount}円券（原則）`],
+          ["当日追加購入できるダンスタイムチケット", `${companionTicketUnitAmount}円券（原則）`],
           ["お支払い予定額", formatYen(amount)],
         ],
       });
@@ -873,7 +899,7 @@
   }
 
   function setStep(current) {
-    const order = ["entry", "confirm", "complete"];
+    const order = ["entry", "confirm", "payment", "complete"];
     const currentIndex = order.indexOf(current);
     order.forEach((step, index) => {
       const item = document.getElementById(`step-${step}`);
@@ -934,6 +960,18 @@
     if (date <= "2026-09-30") return "early";
     if (date <= "2026-12-31") return "year_end";
     return "regular";
+  }
+
+  function applicationOpenForNow() {
+    return Date.now() <= new Date("2027-01-31T23:59:59+09:00").getTime();
+  }
+
+  function updateApplicationDeadline(config) {
+    applicationOpen = config.application_open ?? applicationOpenForNow();
+    reviewApplicationButton.disabled = !applicationOpen;
+    if (!applicationOpen) {
+      setMessage("参加申込は2027年1月31日をもって締め切りました。変更や確認はFESTA事務局へお問い合わせください。", "error");
+    }
   }
 
   function validatePayload(payload) {
@@ -1022,7 +1060,7 @@
     }
 
     const companionTotal = payload.companions.reduce((sum, companion) => {
-      const type = companion.attendee_type === "child" ? "child" : "adult";
+      const type = ["adult", "child", "preschool"].includes(companion.attendee_type) ? companion.attendee_type : "adult";
       const companionReception = companion.reception_attendance || reception;
       return sum + companionFees[type][companionReception];
     }, base);
@@ -1087,6 +1125,22 @@
     message.hidden = false;
     message.textContent = text;
     message.dataset.kind = kind;
+  }
+
+  function showCheckoutSuccess() {
+    const applicationId = checkoutState.get("application") || "確認中";
+    entryPanel.hidden = true;
+    confirmationPanel.hidden = true;
+    completionPanel.hidden = false;
+    document.getElementById("completion-title").textContent = "お支払いが完了し、申込が完了しました。";
+    document.getElementById("completion-guide").textContent = `受付番号：${applicationId}`;
+    document.getElementById("completion-status").textContent = "参加確定メールをお送りします。メールが届かない場合は、受付番号を添えてFESTA事務局へお問い合わせください。";
+    document.getElementById("complete-application-id").textContent = applicationId;
+    document.getElementById("complete-amount").closest("div").hidden = true;
+    document.getElementById("complete-payment-method").textContent = "カード・スマホ決済等";
+    document.getElementById("completion-payment-link").hidden = true;
+    setStep("complete");
+    completionPanel.scrollIntoView({ block: "start" });
   }
 
   function renderCompletion(result, payload) {
