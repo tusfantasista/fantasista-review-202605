@@ -1147,6 +1147,32 @@
         line-height: 1.95;
       }
 
+      .latest-news {
+        border-bottom: 1px solid var(--line);
+        padding: 44px 0;
+        background: #0d0c09;
+      }
+
+      .latest-news__head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 14px 24px;
+        margin-bottom: 22px;
+      }
+
+      .latest-news__head h2 { margin: 0; color: var(--cream); font-size: clamp(1.6rem, 4vw, 2.4rem); }
+      .latest-news__head a { color: var(--gold); font-weight: 800; text-underline-offset: 4px; }
+      .latest-news__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+      .latest-news__item { padding: 22px 24px 22px 0; border-bottom: 1px solid var(--line); }
+      .latest-news__item + .latest-news__item { border-left: 1px solid var(--line); padding-left: 24px; }
+      .latest-news__item time { color: var(--gold); font-size: 0.85rem; font-weight: 800; }
+      .latest-news__item h3 { margin: 8px 0; color: var(--cream); font-size: 1.18rem; }
+      .latest-news__item h3 a { text-decoration: none; }
+      .latest-news__item h3 a:hover, .latest-news__item h3 a:focus-visible { color: var(--gold); outline: none; }
+      .latest-news__item p { margin: 0; color: var(--muted); line-height: 1.8; }
+
       .footer-cta-panel {
         display: grid;
         gap: 18px;
@@ -1172,6 +1198,8 @@
       }
 
       @media (max-width: 720px) {
+        .latest-news__list { grid-template-columns: 1fr; }
+        .latest-news__item, .latest-news__item + .latest-news__item { border-left: 0; padding-inline: 0; }
         .memory-photo-placeholder--wide {
           aspect-ratio: 4 / 3;
           min-height: 220px;
@@ -1853,6 +1881,7 @@
 
           <nav id="site-nav" class="nav" aria-label="60周年記念サイト">
             <a href="./" aria-current="page"><span class="nav-copy"><span class="nav-ja">開催概要</span><span class="nav-en">Overview</span></span></a>
+            <a href="./news/"><span class="nav-copy"><span class="nav-ja">最新情報</span><span class="nav-en">News</span></span></a>
             <a href="./program/"><span class="nav-copy"><span class="nav-ja">プログラム</span><span class="nav-en">Program</span></span></a>
             <a href="./support/"><span class="nav-copy"><span class="nav-ja">参加費・寄付</span><span class="nav-en">Support</span></span></a>
             <a href="./chronicle/"><span class="nav-copy"><span class="nav-ja">クロニクル</span><span class="nav-en">Chronicle</span></span></a>
@@ -1891,8 +1920,29 @@
               </div>
               <div class="hero__fact">
                 <span>ご案内</span>
-                <strong>参加費・寄付プランを公開<small>返礼内容は準備状況に応じて順次更新します</small></strong>
+                <strong>参加・寄付の申込受付中<small>参加費・寄付プランと返礼内容をご案内しています</small></strong>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="latest-news" aria-labelledby="latest-news-title">
+          <div class="wrap">
+            <div class="latest-news__head">
+              <div><p class="eyebrow">Latest Updates</p><h2 id="latest-news-title">最新情報</h2></div>
+              <a href="./news/">60周年FESTAの更新一覧を見る</a>
+            </div>
+            <div class="latest-news__list">
+              <article class="latest-news__item">
+                <time datetime="2026-08-11">2026年8月11日</time>
+                <h3><a href="./news/#registration-open">参加申込受付を開始しました</a></h3>
+                <p>参加者向けプランと欠席者向け寄付の申込受付を開始しました。</p>
+              </article>
+              <article class="latest-news__item">
+                <time datetime="2026-08-11">2026年8月11日</time>
+                <h3><a href="./news/#site-open">60周年記念FESTA特設サイトを公開しました</a></h3>
+                <p>開催概要、当日の予定、参加費・寄付、FAQ、クロニクルを公開しました。</p>
+              </article>
             </div>
           </div>
         </section>
@@ -2710,12 +2760,12 @@
         <section id="updates">
           <div class="wrap">
             <div class="section-head">
-              <p class="eyebrow"><span class="label-ja">今後のご案内</span><span class="label-en">Updates</span></p>
-              <h2>今後のご案内</h2>
+              <p class="eyebrow"><span class="label-ja">今後の更新予定</span><span class="label-en">Coming Updates</span></p>
+              <h2>今後お知らせする内容</h2>
             </div>
 
             <div class="panel festa-updates">
-              <p>参加方法、企画内容、広告・協賛募集等の詳細は、決定次第、本ページで順次お知らせします。</p>
+              <p>受付時間、服装、トライアルの参加方法、出演者、当日の詳しい進行は、決定次第「最新情報」と各案内ページで順次お知らせします。</p>
               <p>当日は、60年の歩みを振り返る時間、世代を超えて語り合う時間、懐かしい仲間と再会する時間を準備していく予定です。</p>
               <p>久しぶりの方も、現役に近い世代の方も、どうぞ続報をお待ちください。</p>
               <p>協賛をご検討いただける企業・関係者の皆さまには、歴史ある学生舞踏文化と、世代を超えたFANTASISTAのつながりに寄り添う記念事業として、改めてご案内いたします。</p>

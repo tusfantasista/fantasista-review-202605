@@ -164,7 +164,10 @@
     if (location.pathname.includes("/festa-60th/")) return;
     const link = document.createElement("a");
     link.className = "festa-quick-link";
-    link.href = assetPrefix + "festa-60th/";
+    const isReviewEnvironment = location.hostname.includes("fantasista-review-202605-staging.pages.dev");
+    link.href = isReviewEnvironment
+      ? assetPrefix + "festa-60th/"
+      : "https://tus-fantasista-festa60.pages.dev/festa-60th/";
     link.textContent = "60周年FESTA 特設ページ";
     document.body.appendChild(link);
   }
