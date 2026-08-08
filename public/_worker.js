@@ -1855,6 +1855,18 @@ async function createBankTransferPreviewCustomer(stripeSecret, payload, previewI
   return result;
 }
 __name(createBankTransferPreviewCustomer, "createBankTransferPreviewCustomer");
+async function deleteBankTransferPreviewCustomer(stripeSecret, customerId) {
+  if (!customerId) return;
+  const response = await fetch(`https://api.stripe.com/v1/customers/${encodeURIComponent(customerId)}`, {
+    method: "DELETE",
+    headers: { authorization: `Bearer ${stripeSecret}` }
+  });
+  if (!response.ok) {
+    const result = await response.json().catch(() => ({}));
+    console.error(`Stripe bank transfer preview customer cleanup failed: ${result.error?.message || response.status}`);
+  }
+}
+__name(deleteBankTransferPreviewCustomer, "deleteBankTransferPreviewCustomer");
 async function createBankTransferPreview({ env, payload, amount }) {
   const stripeSecret = requireStripeSecret(env);
   const previewId = crypto.randomUUID();
@@ -1865,6 +1877,7 @@ async function createBankTransferPreview({ env, payload, amount }) {
   params.set("customer", customer.id);
   params.set("confirm", "true");
   params.set("payment_method_types[0]", "customer_balance");
+  params.set("payment_method_data[type]", "customer_balance");
   params.set("payment_method_options[customer_balance][funding_type]", "bank_transfer");
   params.set("payment_method_options[customer_balance][bank_transfer][type]", "jp_bank_transfer");
   params.set("payment_method_options[customer_balance][bank_transfer][requested_address_types][0]", "zengin");
@@ -1882,6 +1895,7 @@ async function createBankTransferPreview({ env, payload, amount }) {
   });
   const paymentIntent = await response.json();
   if (!response.ok) {
+    await deleteBankTransferPreviewCustomer(stripeSecret, customer.id);
     throw new Error(`Stripe bank transfer preview failed: ${paymentIntent.error?.message || response.status}`);
   }
   return { previewId, customer, paymentIntent };
@@ -2350,7 +2364,17 @@ async function onRequestPost6({ request, env }) {
       if (amount <= 0) return badRequest("銀行振込が必要なお支払い金額ではありません。");
       const turnstile = await verifyTurnstile(payload.turnstile_token, env, request);
       if (!turnstile.ok) return badRequest("Turnstile verification failed.", turnstile.result || turnstile.message);
-      const preview = await createBankTransferPreview({ env, payload, amount });
+      let preview;
+      try {
+        preview = await createBankTransferPreview({ env, payload, amount });
+      } catch (error) {
+        console.error(error);
+        return json({
+          ok: false,
+          error: "bank_transfer_unavailable",
+          message: "振込先を表示できませんでした。時間をおいてもう一度お試しいただくか、カード・スマホ決済等を選択してください。"
+        }, { status: 502 });
+      }
       const payloadHash = await bankPreviewPayloadHash(payload);
       const expiresAt = Date.now() + 30 * 60 * 1e3;
       let previewDetails;
