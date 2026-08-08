@@ -534,7 +534,7 @@
       const discountedAmount = attendeePlanAmount(supportTier.value, ticketType.value, feePeriod.value, receptionAttendance.value);
       const ticketUnitAmount = danceTicketUnitAmount(supportTier.value);
       const staffExplanation = staffMode
-        ? "<p>役員割引は参加費相当分にのみ適用し、上乗せ寄付相当分は割引しません。申込時期割引と卒部年度割引は一般申込と同額を適用します。</p>"
+        ? "<p>参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。上乗せ寄付相当分は割引しません。懇親会不参加の場合は、半額後に2,000円を控除します。</p>"
         : "<p>申込時期割引と卒部年度割引を併用しています。</p>";
       supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p><p>通常参加分の300円券は別途配布しません。有料の大人同伴者には${ticketUnitAmount}円券を1枚配布し、当日の追加購入も原則として${ticketUnitAmount}円券です。</p>${staffExplanation}`;
     } else {
@@ -542,7 +542,7 @@
       const staffAmount = staffMode ? staffParticipationAmount(ticketType.value, feePeriod.value, receptionAttendance.value) : null;
       const standardAmount = attendeePlanAmount("none", ticketType.value, feePeriod.value, receptionAttendance.value);
       supportPlanDetail.innerHTML = staffMode
-        ? `<h3>役員・当日お手伝い 通常参加</h3><p>参加費15,000円（懇親会不参加は懇親会費控除後）の50%を起点に、申込時期割引と卒部年度割引を一般申込と同額で適用します。</p><p><strong>現在の割引・控除適用額：${staffAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。有料の大人同伴者には300円券を1枚配布し、当日の追加購入も原則として300円券です。</p>`
+        ? `<h3>役員・当日お手伝い 通常参加</h3><p>参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。懇親会不参加の場合は、半額後に2,000円を控除します。</p><p><strong>現在の割引・控除適用額：${staffAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。有料の大人同伴者には300円券を1枚配布し、当日の追加購入も原則として300円券です。</p>`
         : `<h3>通常参加（基準額15,000円）</h3><p>申込時期割引・卒部年度割引・懇親会不参加時の2,000円控除を自動適用します。</p><p><strong>現在の割引・控除適用額：${standardAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。有料の大人同伴者には300円券を1枚配布し、当日の追加購入も原則として300円券です。</p>`;
     }
     const absent = absentPlanDetails[absentDonationTier.value];
@@ -564,7 +564,7 @@
     attendanceTicketNotice.hidden = false;
     ticketType.value = "obog_staff";
     ticketTypeDisplay.value = "一般OBOG（11年目以上）／役員・当日お手伝い";
-    receptionAttendanceHelp.textContent = "役員・当日お手伝いは、懇親会不参加の場合に懇親会費相当額を控除してから参加費部分を50%にします。上乗せ寄付相当分と同伴者料金には役員割引を適用しません。";
+    receptionAttendanceHelp.textContent = "役員・当日お手伝いは、参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。懇親会不参加の場合は、半額後に2,000円を控除します。上乗せ寄付相当分と同伴者料金には役員割引を適用しません。";
   }
 
   function showConfirmation(payload) {
@@ -1096,8 +1096,12 @@
   }
 
   function staffParticipationAmount(attendeeType, period, reception) {
-    const staffBase = Math.round((baseFees.obog.regular - noReceptionDiscount(reception)) * 0.5);
-    return Math.max(0, staffBase - applicationPeriodDiscount(period) - graduationDiscount(attendeeType));
+    const discountedParticipationFee = Math.max(
+      0,
+      baseFees.obog.regular - applicationPeriodDiscount(period) - graduationDiscount(attendeeType)
+    );
+    const staffParticipationFee = Math.round(discountedParticipationFee * 0.5);
+    return Math.max(0, staffParticipationFee - noReceptionDiscount(reception));
   }
 
   function publicTicketType(attendeeType) {

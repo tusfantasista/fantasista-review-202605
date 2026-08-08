@@ -28,6 +28,8 @@ const checks = [
   ["bank actions pass payment validation", files.worker.includes('const bankTransferActions = ["preview_bank_transfer", "confirm_bank_transfer", "cancel_bank_preview"]') && files.worker.includes('validateApplication(payload, env, action)')],
   ["validation errors identify fields", files.registerScript.includes("formatApplicationError(result)") && files.registerScript.includes("確認が必要な項目")],
   ["cohort baseline is fixed", files.worker.includes("OBOG_5_UNDER_GRADUATION_YEAR_TO = 2025") && files.register.includes("2026年4月1日時点で固定")],
+  ["staff discounts applied before half", files.worker.includes("BASE_FEES.obog.regular - staffApplicationPeriodDiscount(feePeriod) - staffGraduationDiscount(baseTicketType)") && files.registerScript.includes("baseFees.obog.regular - applicationPeriodDiscount(period) - graduationDiscount(attendeeType)")],
+  ["staff no-reception deduction applied after half", files.worker.includes("staffParticipationFee - noReceptionDiscount(receptionAttendance)") && files.registerScript.includes("staffParticipationFee - noReceptionDiscount(reception)")],
   ["preview omits actionable hosted link", !files.register.includes('id="bank-preview-instructions"')],
   ["design covers five issues", [1, 2, 3, 4, 5].every((number) => files.design.includes(`| ${number} |`))]
 ];

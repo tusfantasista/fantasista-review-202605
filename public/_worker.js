@@ -442,8 +442,12 @@ function staffGraduationDiscount(baseTicketType) {
 }
 __name(staffGraduationDiscount, "staffGraduationDiscount");
 function staffParticipationAmount(baseTicketType, feePeriod, receptionAttendance) {
-  const discountedBase = Math.round((BASE_FEES.obog.regular - noReceptionDiscount(receptionAttendance)) * 0.5);
-  return Math.max(0, discountedBase - staffApplicationPeriodDiscount(feePeriod) - staffGraduationDiscount(baseTicketType));
+  const discountedParticipationFee = Math.max(
+    0,
+    BASE_FEES.obog.regular - staffApplicationPeriodDiscount(feePeriod) - staffGraduationDiscount(baseTicketType)
+  );
+  const staffParticipationFee = Math.round(discountedParticipationFee * 0.5);
+  return Math.max(0, staffParticipationFee - noReceptionDiscount(receptionAttendance));
 }
 __name(staffParticipationAmount, "staffParticipationAmount");
 function noReceptionDiscount(receptionAttendance) {
