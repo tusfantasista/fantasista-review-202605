@@ -121,9 +121,9 @@
   if (!form) return;
 
   if (checkoutState.get("checkout") === "success") {
-    setMessage(`Stripeでのお支払い手続きを受け付けました。入金確認後に確定メールをお送りします。受付番号: ${checkoutState.get("application") || "確認中"}`, "success");
+    setMessage(`お支払い手続きを受け付けました。入金確認後に確定メールをお送りします。受付番号: ${checkoutState.get("application") || "確認中"}`, "success");
   } else if (checkoutState.get("checkout") === "cancelled") {
-    setMessage(`Stripeでのお支払いを中断しました。申込は未入金で保存されています。受付番号: ${checkoutState.get("application") || ""}`, "error");
+    setMessage(`お支払いを中断しました。申込は未入金の状態でFANTASISTAが受け付けています。受付番号: ${checkoutState.get("application") || ""}`, "error");
   }
 
   fetch("/api/festa60/config")
@@ -523,7 +523,7 @@
       payload.companions = pendingPayload.companions.map((companion) => ({ ...companion }));
       payload.turnstile_token = turnstileToken;
       if (!stripeAvailable) {
-        throw new Error("Stripe決済は現在準備中です。時間をおいて再度お試しいただくか、事務局へお問い合わせください。");
+        throw new Error("オンライン決済は現在準備中です。時間をおいて再度お試しいただくか、事務局へお問い合わせください。");
       }
       payload.pay_now = true;
 
@@ -542,7 +542,7 @@
       }
 
       if (result.payment?.checkoutUrl) {
-        setConfirmationMessage("申込を保存しました。Stripeの決済画面へ移動します...", "success");
+        setConfirmationMessage("申込を受け付けました。安全な決済画面へ移動します...", "success");
         window.location.assign(result.payment.checkoutUrl);
         return;
       }
@@ -638,9 +638,9 @@
     });
 
     confirmationSummary.replaceChildren(...groups.map(createConfirmationGroup));
-    confirmationPaymentTitle.textContent = "確定後、Stripeの決済画面へ進みます";
-    confirmationPaymentNote.textContent = "「この内容で申し込む」を押すと申込情報を登録し、Stripeへ移動します。Stripeの画面に表示された支払い方法から選択してください。";
-    confirmApplicationButton.textContent = "この内容で登録してStripeへ";
+    confirmationPaymentTitle.textContent = "確定後、安全な決済画面へ進みます";
+    confirmationPaymentNote.textContent = "「この内容で申し込む」を押すとFANTASISTAが申込を受け付け、外部決済画面へ移動します。画面に表示された支払い方法から選択してください。";
+    confirmApplicationButton.textContent = "この内容で申し込み、お支払いへ";
   }
 
   function createConfirmationGroup(group) {
@@ -668,8 +668,8 @@
   }
 
   function paymentMethodLabel(method) {
-    if (method === "stripe") return "Stripe（画面に表示された支払い方法）";
-    return "Stripe";
+    if (method === "stripe") return "オンライン決済（画面に表示された支払い方法）";
+    return "オンライン決済";
   }
 
   function formatYen(amount) {
@@ -710,8 +710,8 @@
     if (stripePaymentStatus) stripePaymentStatus.textContent = isSandbox ? "テスト環境" : isAvailable ? "利用できます" : "準備中";
     if (stripePaymentHelp) {
       stripePaymentHelp.textContent = isAvailable
-        ? "確認後、Stripeの決済画面へ移動します。表示された支払い方法から選択してください。"
-        : "現在Stripe決済を準備中です。ご利用開始までお待ちください。";
+        ? "確認後、安全な外部決済画面へ移動します。表示された支払い方法から選択してください。"
+        : "現在オンライン決済を準備中です。ご利用開始までお待ちください。";
     }
     if (environmentBanner) {
       environmentBanner.hidden = !(isSandbox || window.location.hostname.includes("-staging"));
@@ -891,8 +891,8 @@
       ? "寄付のお申し込みありがとうございます。"
       : "お申し込みありがとうございます。";
     document.getElementById("completion-status").textContent = isAbsentDonation
-      ? "Stripeでの入金確認後に、寄付受付完了メールをお送りします。"
-      : "Stripeでの入金確認後に、参加確定メールをお送りします。";
+      ? "入金確認後に、寄付受付完了メールをお送りします。"
+      : "入金確認後に、参加確定メールをお送りします。";
     document.getElementById("complete-application-id").textContent = applicationId;
     document.getElementById("complete-amount").textContent = `${amount.toLocaleString("ja-JP")}円`;
     document.getElementById("complete-payment-method").textContent = paymentMethodLabel(payload.payment_method);

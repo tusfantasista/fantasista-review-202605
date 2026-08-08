@@ -33,20 +33,20 @@
           <h2>申込内容</h2>
           <input id="stripe-payment-method" type="hidden" name="payment_method" value="stripe" />
           <div id="stripe-payment-notice" class="crm-notice">
-            <h3>Stripeでのお支払い <em id="stripe-payment-status"></em></h3>
-            <p id="stripe-payment-help">申込内容の確認後、Stripeの決済画面へ移動します。</p>
+            <h3>お支払いについて <em id="stripe-payment-status"></em></h3>
+            <p id="stripe-payment-help">申込内容の確認後、安全な外部決済画面へ移動します。</p>
             <ul>
               <li>クレジットカード</li>
               <li>Apple Pay・Google Pay（対応端末・ブラウザで表示）</li>
-              <li>PayPay（Stripeの本番審査完了後に提供予定）</li>
-              <li>銀行振込（Stripeの追加確認完了後に提供予定）</li>
+              <li>PayPay（現在準備中）</li>
+              <li>銀行振込（現在準備中）</li>
             </ul>
             <ul>
-              <li>カード情報はStripeの画面で入力し、FESTAのサイトやデータベースには保存しません。</li>
+              <li>カード情報は外部決済サービスの安全な画面で入力し、FANTASISTAでは取得・保存しません。</li>
               <li>カード会社の判断により、3Dセキュアなどの本人認証を求められる場合があります。</li>
-              <li>利用できる支払い方法は、Stripeの審査状況、ご利用環境、端末、ブラウザなどにより異なります。</li>
+              <li>利用できる支払い方法は、ご利用環境、端末、ブラウザなどにより異なります。</li>
             </ul>
-            <p><a href="../festa-60th/faq/#payment">Stripeでのお支払いについて確認する</a></p>
+            <p><a href="../festa-60th/faq/#payment">お支払い方法の詳細を確認する</a></p>
           </div>
 
           <div id="application-mode-section" class="crm-field">
@@ -395,7 +395,7 @@
           <p class="crm-small">お申し込み前に<a href="../festa-60th/legal/" target="_blank" rel="noopener">特定商取引法に基づく表記</a>をご確認ください。</p>
 
           <div id="turnstile-slot"></div>
-          <button class="crm-button" type="submit">入力内容を確認してStripeへ</button>
+          <button class="crm-button" type="submit">入力内容を確認する</button>
           <p id="form-message" class="crm-message" hidden></p>
         </form>
 
@@ -403,9 +403,9 @@
           <h2>お申し込み前に</h2>
           <ul class="crm-small">
             <li>申込完了後に受付番号を発行します。</li>
-            <li>申込直後に、受付番号・申込内容・Stripeへ戻るリンクをメールでお送りします。</li>
-            <li>カード情報や各支払い方法の情報はStripeが取り扱い、本サイトには保存しません。</li>
-            <li>銀行振込の提供開始後は、振込先・期限を再確認できるStripe案内ページへのリンクもメールでお送りします。</li>
+            <li>申込直後に、受付番号・申込内容・お支払い手続きに戻るリンクをメールでお送りします。</li>
+            <li>カード情報や各支払い方法の認証情報は外部決済サービスが取り扱い、FANTASISTAでは取得・保存しません。</li>
+            <li>銀行振込の提供開始後は、振込先・期限を再確認できる案内ページへのリンクもメールでお送りします。</li>
             <li>寄付をお申し込みの方は、お礼状・返礼品の送付先住所をご入力ください。</li>
           </ul>
         </aside>
@@ -431,7 +431,7 @@
 
       <section id="completion-panel" class="crm-section crm-stack" hidden>
         <h2 id="completion-title">お申し込みありがとうございます。</h2>
-        <p id="completion-guide">受付番号を発行しました。お支払い状況はStripeで確認します。</p>
+        <p id="completion-guide">受付番号を発行しました。お支払い状況はFANTASISTA事務局で確認します。</p>
         <p id="completion-status">決済完了後に参加確定メールをお送りします。</p>
         <dl class="crm-summary">
           <div>
@@ -444,12 +444,12 @@
           </div>
           <div>
             <dt>支払方法</dt>
-            <dd id="complete-payment-method">Stripe</dd>
+            <dd id="complete-payment-method">オンライン決済</dd>
           </div>
         </dl>
       </section>
     </main>
     <footer class="crm-legal-footer"><a href="../festa-60th/legal/">特定商取引法に基づく表記</a></footer>
-    <script src="../assets/js/festa60-register.js?v=20260807-2" defer></script>
+    <script src="../assets/js/festa60-register.js?v=20260808-1" defer></script>
   </body>
 </html>

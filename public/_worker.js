@@ -1085,8 +1085,8 @@ function renderApplicationReceivedEmail(application, checkoutUrl) {
 お支払い手続き：
 ${checkoutUrl}
 
-Stripeの画面に表示された支払い方法からお選びください。
-利用できる方法は、Stripeの審査状況、ご利用環境、端末、ブラウザなどにより異なります。
+外部決済画面に表示された支払い方法からお選びください。
+利用できる方法は、ご利用環境、端末、ブラウザなどにより異なります。
 
 このメールは参加確定のお知らせではありません。入金確認後に、あらためて参加確定メールと領収書をご案内します。
 
@@ -1107,10 +1107,10 @@ function renderBankTransferInstructionsEmail(application, hostedInstructionsUrl)
 受付番号：${application.application_code || application.applicationId}
 お支払い予定額：${formatYen(application.amount_total || application.total_amount_jpy)}
 
-Stripeが発行した振込先口座と支払期限は、次の案内ページでご確認ください。
+振込先口座と支払期限は、次の案内ページでご確認ください。
 ${hostedInstructionsUrl}
 
-FESTAの受付番号を振込名義へ付ける必要はありません。Stripeの案内どおりにお振り込みください。
+FESTAの受付番号を振込名義へ付ける必要はありません。案内ページの内容に従ってお振り込みください。
 入金確認後に、FESTA事務局から参加確定メールをお送りします。`
   };
 }
@@ -1129,11 +1129,11 @@ function renderPartialPaymentEmail(application, partialPayment) {
 確認済み入金額：${formatYen(partialPayment.amount_received_jpy)}
 不足額：${formatYen(partialPayment.amount_remaining_jpy)}
 
-不足額を、前回と同じStripe指定口座へお振り込みください。
+不足額を、前回と同じ指定口座へお振り込みください。
 振込先と現在のお支払い状況は、次の案内ページでご確認いただけます。
 ${partialPayment.hosted_instructions_url}
 
-FESTAの受付番号を振込名義へ付ける必要はありません。Stripeの案内どおりにお振り込みください。
+FESTAの受付番号を振込名義へ付ける必要はありません。案内ページの内容に従ってお振り込みください。
 全額の入金確認後に、FESTA事務局から参加確定メールをお送りします。`
   };
 }
@@ -1824,7 +1824,7 @@ async function onRequestPost6({ request, env }) {
           {
             ok: false,
             error: "stripe_checkout_unavailable",
-            message: "\u7533\u8FBC\u306F\u4FDD\u5B58\u3055\u308C\u307E\u3057\u305F\u304C\u3001Stripe\u306E\u6C7A\u6E08\u753B\u9762\u3092\u958B\u3051\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u53D7\u4ED8\u756A\u53F7\u3092\u63A7\u3048\u3066\u4E8B\u52D9\u5C40\u3078\u3054\u9023\u7D61\u304F\u3060\u3055\u3044\u3002",
+            message: "\u7533\u8FBC\u306F\u53D7\u3051\u4ED8\u3051\u307E\u3057\u305F\u304C\u3001\u6C7A\u6E08\u753B\u9762\u3092\u958B\u3051\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u53D7\u4ED8\u756A\u53F7\u3092\u63A7\u3048\u3066FESTA\u4E8B\u52D9\u5C40\u3078\u3054\u9023\u7D61\u304F\u3060\u3055\u3044\u3002",
             application
           },
           { status: 502 }
