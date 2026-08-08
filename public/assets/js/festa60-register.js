@@ -58,6 +58,9 @@
   const staffModeBanner = document.getElementById("staff-mode-banner");
   const staffAccessSection = document.getElementById("staff-access-section");
   const staffAccessCode = document.getElementById("staff_access_code");
+  const graduationYearGuide = document.getElementById("graduation-year-guide");
+  const openGraduationYearGuide = document.getElementById("open-graduation-year-guide");
+  const closeGraduationYearGuide = document.getElementById("close-graduation-year-guide");
   const checkoutState = new URLSearchParams(window.location.search);
   const staffMode = checkoutState.get("staff") === "1";
   let turnstileToken = "";
@@ -179,6 +182,18 @@
     updateFeePreview();
   });
   postalLookupButton.addEventListener("click", lookupAddressByPostalCode);
+  openGraduationYearGuide?.addEventListener("click", function () {
+    graduationYearGuide?.showModal();
+  });
+  closeGraduationYearGuide?.addEventListener("click", function () {
+    graduationYearGuide?.close();
+  });
+  graduationYearGuide?.addEventListener("click", function (event) {
+    if (event.target === graduationYearGuide) graduationYearGuide.close();
+  });
+  graduationYearGuide?.addEventListener("close", function () {
+    openGraduationYearGuide?.focus();
+  });
   postalCode.addEventListener("input", function () {
     window.clearTimeout(postalLookupTimer);
     const normalized = normalizePostalCode(postalCode.value);
@@ -376,7 +391,7 @@
     graduationRequiredLabel.textContent = isGakushuin ? "任意" : "必須";
     graduationRequiredLabel.className = isGakushuin ? "crm-optional" : "crm-required";
     graduationHelp.textContent = isGakushuin
-      ? "学習院桜友会の方は任意です。参加プランの割引とチケット枚数は卒業11年目以上と同じ扱いです。"
+      ? "学習院桜友会の方は任意です。参加プランの割引とチケット枚数は卒部11年目以上と同じ扱いです。"
       : "東京理科大学舞踏研究部OBOGは必須です。全参加プランの卒部年度割引とダンスタイムチケット枚数を自動判定します。";
 
     const year = Number(graduationYear.value);
@@ -945,10 +960,10 @@
       errors.push(`一般OBOG（11年目以上）は${obogElevenOverTo}年度以前の卒部を対象とします。参加費区分または卒部年度を確認してください。`);
     }
     if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_6_10" && (graduationYear < obogSixTenFrom || graduationYear > obogSixTenTo)) {
-      errors.push(`OBOG 6〜10年目は${obogSixTenFrom}〜${obogSixTenTo}年度卒を想定しています。参加費区分または卒部年度を確認してください。`);
+      errors.push(`OBOG 6〜10年目は${obogSixTenFrom}〜${obogSixTenTo}年度に卒部した方を想定しています。参加費区分または卒部年度を確認してください。`);
     }
     if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_5_under" && graduationYear < obogFiveUnderFrom) {
-      errors.push(`OBOG 5年目以下は${obogFiveUnderFrom}年度以降の卒部生を想定しています。参加費区分または卒部年度を確認してください。`);
+      errors.push(`OBOG 5年目以下は${obogFiveUnderFrom}年度以降の卒部を想定しています。参加費区分または卒部年度を確認してください。`);
     }
     if (payload.support_tier && payload.support_tier !== "none" && !["obog", "obog_6_10", "obog_5_under", ...staffTicketTypes].includes(payload.ticket_type)) {
       errors.push("参加者向け支援プランはOBOG区分で選択してください。");

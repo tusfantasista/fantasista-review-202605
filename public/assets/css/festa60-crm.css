@@ -187,6 +187,41 @@ body.festa60-crm {
   font-weight: 800;
 }
 
+.crm-field-heading,
+.crm-dialog__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.crm-info-button,
+.crm-dialog__close {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--crm-line);
+  border-radius: 50%;
+  color: var(--crm-ink);
+  background: #fff8e4;
+  font: 900 1rem/1 system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.crm-info-button:hover,
+.crm-dialog__close:hover {
+  border-color: var(--crm-gold);
+  background: #fff1bc;
+}
+
+.crm-info-button:focus-visible,
+.crm-dialog__close:focus-visible {
+  outline: 3px solid rgba(198, 154, 24, 0.35);
+  outline-offset: 2px;
+}
+
 .crm-required,
 .crm-optional {
   display: inline-flex;
@@ -234,6 +269,81 @@ body.festa60-crm {
 .crm-field textarea {
   min-height: 120px;
   resize: vertical;
+}
+
+.crm-dialog {
+  width: min(760px, calc(100vw - 32px));
+  max-height: min(86vh, 860px);
+  border: 1px solid var(--crm-line);
+  border-radius: 8px;
+  padding: 0;
+  color: var(--crm-ink);
+  background: #fff;
+  box-shadow: 0 24px 72px rgba(22, 26, 34, 0.24);
+}
+
+.crm-dialog::backdrop {
+  background: rgba(22, 26, 34, 0.6);
+}
+
+.crm-dialog__body {
+  padding: 24px;
+}
+
+.crm-dialog__heading {
+  margin-bottom: 16px;
+}
+
+.crm-dialog__heading h2,
+.crm-dialog__body p {
+  margin: 0;
+}
+
+.crm-dialog__body {
+  display: grid;
+  gap: 14px;
+}
+
+.crm-guide-example {
+  border-left: 4px solid var(--crm-gold);
+  padding: 10px 12px;
+  background: #fff8e4;
+}
+
+.crm-guide-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--crm-line);
+  border-radius: 8px;
+}
+
+.crm-guide-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.crm-guide-table th,
+.crm-guide-table td {
+  border-bottom: 1px solid var(--crm-line);
+  border-left: 1px solid var(--crm-line);
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.crm-guide-table th:first-child,
+.crm-guide-table td:first-child {
+  border-left: 0;
+}
+
+.crm-guide-table thead th {
+  background: #fff1bc;
+  white-space: nowrap;
+}
+
+.crm-guide-table tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .crm-input-action {
@@ -1128,5 +1238,9 @@ body.festa60-crm {
 
   .crm-confirmation-actions .crm-button {
     width: 100%;
+  }
+
+  .crm-dialog__body {
+    padding: 18px;
   }
 }

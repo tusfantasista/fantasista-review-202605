@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex,nofollow" />
     <title>60周年記念FESTA 参加申込</title>
     <link rel="canonical" href="https://tus-fantasista-festa60.pages.dev/festa60-register/" />
-    <link rel="stylesheet" href="../assets/css/festa60-crm.css?v=20260811-1" />
+    <link rel="stylesheet" href="../assets/css/festa60-crm.css?v=20260811-2" />
   </head>
   <body class="festa60-crm">
     <div id="environment-banner" class="crm-test-banner" hidden>TEST環境 / Cloudflare Pages Preview / 本番申込ではありません</div>
@@ -106,8 +106,11 @@
               <p class="crm-help">本人確認、全参加プランの卒部年度割引、ダンスタイムチケット枚数の判定に使用します。</p>
             </div>
             <div class="crm-field">
-              <label for="graduation_year">卒部年度 <span id="graduation-required-label" class="crm-required">必須</span></label>
-              <input id="graduation_year" name="graduation_year" inputmode="numeric" pattern="[0-9]{4}" placeholder="例: 1996" />
+              <div class="crm-field-heading">
+                <label for="graduation_year">卒部年度（西暦） <span id="graduation-required-label" class="crm-required">必須</span></label>
+                <button id="open-graduation-year-guide" class="crm-info-button" type="button" aria-haspopup="dialog" aria-controls="graduation-year-guide" aria-label="卒部年度の早見表を開く" title="卒部年度の早見表">i</button>
+              </div>
+              <input id="graduation_year" name="graduation_year" inputmode="numeric" pattern="[0-9]{4}" placeholder="例: 2021" />
               <p id="graduation-help" class="crm-help">東京理科大学舞踏研究部OBOGは必須です。学習院桜友会の方は任意です。</p>
             </div>
           </div>
@@ -125,7 +128,7 @@
               <label for="ticket_type_display">卒部区分（割引・チケット判定）</label>
               <input id="ticket_type_display" value="所属区分と卒部年度から自動判定" readonly />
               <input id="ticket_type" name="ticket_type" type="hidden" value="obog" />
-              <p class="crm-help">卒部年度から、すべての参加者向けプランに適用する年次割引とチケット枚数を自動判定します。学習院桜友会の方は卒業11年目以上と同じ扱いです。</p>
+              <p class="crm-help">卒部年度から、すべての参加者向けプランに適用する年次割引とチケット枚数を自動判定します。学習院桜友会の方は卒部11年目以上と同じ扱いです。</p>
             </div>
             <div class="crm-field">
               <label for="support_tier">参加プラン <span class="crm-required">必須</span></label>
@@ -150,7 +153,7 @@
             <ul class="crm-help">
               <li>2026年9月30日まで：各プランの基準価格から2,000円引き</li>
               <li>2026年10月1日〜12月31日：各プランの基準価格から1,000円引き</li>
-              <li>卒業6〜10年目：さらに2,000円引き／卒業5年目以下：さらに4,000円引き</li>
+              <li>卒部6〜10年目：さらに2,000円引き／卒部5年目以下：さらに4,000円引き</li>
             </ul>
           </div>
 
@@ -162,7 +165,7 @@
               <li>ゴールド（基準50,000円）：500円券×20枚</li>
               <li>シルバー（基準30,000円）：400円券×12枚</li>
               <li>ブロンズ（基準20,000円）：300円券×5枚</li>
-              <li>通常参加（基準15,000円）：卒業11年目以上は300円券×3枚、卒業10年目以下は300円券×2枚</li>
+              <li>通常参加（基準15,000円）：卒部11年目以上は300円券×3枚、卒部10年目以下は300円券×2枚</li>
             </ul>
             <p>各プランのチケットには通常参加分を含みます。プラン券と通常参加券は重複して配布しません。</p>
             <ul>
@@ -257,7 +260,7 @@
                     <tr>
                       <th scope="row">通常参加</th>
                       <td>15,000円</td>
-                      <td>卒業11年目以上：300円券×3枚<br />卒業10年目以下：300円券×2枚</td>
+                      <td>卒部11年目以上：300円券×3枚<br />卒部10年目以下：300円券×2枚</td>
                     </tr>
                   </tbody>
                 </table>
@@ -483,7 +486,38 @@
         </dl>
       </section>
     </main>
+    <dialog id="graduation-year-guide" class="crm-dialog" aria-labelledby="graduation-year-guide-title">
+      <div class="crm-dialog__body">
+        <div class="crm-dialog__heading">
+          <h2 id="graduation-year-guide-title">卒部年度 早見表</h2>
+          <button id="close-graduation-year-guide" class="crm-dialog__close" type="button" aria-label="早見表を閉じる">×</button>
+        </div>
+        <p><strong>卒部年度は、冬の全日本学生競技ダンス選手権大会（冬全）で卒部した年の年度</strong>を入力してください。大学の卒業年度ではありません。</p>
+        <p>1年生の4月に入部し、4年生の12月に冬全で卒部した場合は、入部年に3を足した年が卒部年度の目安です。</p>
+        <p class="crm-guide-example"><strong>例：</strong>2018年4月入部 → 2021年12月の冬全で卒部 → <strong>2021年度卒部</strong></p>
+        <div class="crm-guide-table-wrap" role="region" aria-label="入部年度と卒部年度の早見表" tabindex="0">
+          <table class="crm-guide-table">
+            <thead><tr><th scope="col">入部年度</th><th scope="col">卒部年度</th><th scope="col">2027年FESTAの区分</th></tr></thead>
+            <tbody>
+              <tr><td>2012年度以前</td><td>2015年度以前</td><td>卒部11年目以上</td></tr>
+              <tr><td>2013年度</td><td>2016年度</td><td rowspan="5">卒部6〜10年目</td></tr>
+              <tr><td>2014年度</td><td>2017年度</td></tr>
+              <tr><td>2015年度</td><td>2018年度</td></tr>
+              <tr><td>2016年度</td><td>2019年度</td></tr>
+              <tr><td>2017年度</td><td>2020年度</td></tr>
+              <tr><td>2018年度</td><td>2021年度</td><td rowspan="6">卒部5年目以下</td></tr>
+              <tr><td>2019年度</td><td>2022年度</td></tr>
+              <tr><td>2020年度</td><td>2023年度</td></tr>
+              <tr><td>2021年度</td><td>2024年度</td></tr>
+              <tr><td>2022年度</td><td>2025年度</td></tr>
+              <tr><td>2023年度</td><td>2026年度</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="crm-help">途中入部、休学、卒部時期が異なる場合は、実際に冬全で卒部した年度を入力してください。不明な場合は事務局へお問い合わせください。</p>
+      </div>
+    </dialog>
     <footer class="crm-legal-footer"><a href="../festa-60th/legal/">特定商取引法に基づく表記</a><a href="../festa-60th/privacy/">プライバシーポリシー</a></footer>
-    <script src="../assets/js/festa60-register.js?v=20260808-7" defer></script>
+    <script src="../assets/js/festa60-register.js?v=20260808-8" defer></script>
   </body>
 </html>
