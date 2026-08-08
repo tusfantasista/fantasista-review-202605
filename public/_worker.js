@@ -1562,8 +1562,7 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   };
   const params = new URLSearchParams();
   params.set("mode", "payment");
-  // Stripe presents only payment methods that are enabled and eligible for this payment.
-  params.set("automatic_payment_methods[enabled]", "true");
+  // Omitting payment_method_types lets Stripe present enabled, eligible methods.
   params.set("locale", "ja");
   params.set("submit_type", "book");
   const staffQuery = isStaffTicketType(splitTicketType(application.ticket_type).base_ticket_type) ? "staff=1&" : "";
