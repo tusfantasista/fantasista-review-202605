@@ -287,7 +287,7 @@
     renderBarChart(elements.cohortChart, [
       { label: "卒部11年以上", value: participation.cohort_eleven_over_count, className: "" },
       { label: "卒部6〜10年", value: participation.cohort_six_ten_count, className: "" },
-      { label: "卒部1〜5年目（2021〜2025年度）", value: participation.cohort_five_under_count, className: "" },
+      { label: "卒部1〜5年目（OBOG1〜5年目／2021〜2025年度）", value: participation.cohort_five_under_count, className: "" },
       { label: "学習院桜友会", value: participation.cohort_gakushuin_count, className: "" },
       { label: "現役", value: participation.cohort_current_student_count, className: "" },
       { label: "年次未確認", value: participation.cohort_unknown_count, className: "pending" }

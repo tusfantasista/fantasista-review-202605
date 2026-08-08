@@ -407,10 +407,10 @@
       ticketTypeDisplay.value = "一般OBOG（11年目以上）";
     } else if (year <= obogSixTenTo) {
       ticketType.value = "obog_6_10";
-      ticketTypeDisplay.value = "若手OBOG（6〜10年目）";
+      ticketTypeDisplay.value = "卒部6〜10年目（OBOG6〜10年目）";
     } else if (year <= obogFiveUnderTo) {
       ticketType.value = "obog_5_under";
-      ticketTypeDisplay.value = "若手OBOG（1〜5年目）";
+      ticketTypeDisplay.value = "卒部1〜5年目（OBOG1〜5年目）";
     } else {
       ticketType.value = "obog_5_under";
       ticketTypeDisplay.value = "基準日現在は現役生（事務局へ確認）";
