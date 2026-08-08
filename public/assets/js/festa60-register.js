@@ -466,13 +466,14 @@
       const staffExplanation = staffMode
         ? "<p>役員割引は参加費相当分にのみ適用し、上乗せ寄付相当分は割引しません。申込時期割引と卒部年度割引は一般申込と同額を適用します。</p>"
         : "<p>申込時期割引と卒部年度割引を併用しています。</p>";
-      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>現在の割引適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p>${staffExplanation}`;
+      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p>${staffExplanation}`;
     } else {
       const standardDanceTicket = publicTicketType(ticketType.value) === "obog" ? "300円券×3枚" : "300円券×2枚";
       const staffAmount = staffMode ? staffParticipationAmount(ticketType.value, feePeriod.value, receptionAttendance.value) : null;
+      const standardAmount = attendeePlanAmount("none", ticketType.value, feePeriod.value, receptionAttendance.value);
       supportPlanDetail.innerHTML = staffMode
-        ? `<h3>役員・当日お手伝い 通常参加</h3><p>参加費15,000円（懇親会不参加は懇親会費控除後）の50%を起点に、申込時期割引と卒部年度割引を一般申込と同額で適用します。</p><p><strong>現在の割引適用額：${staffAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。</p>`
-        : `<h3>通常参加（基準額15,000円）</h3><p>申込時期割引と卒部年次割引を自動適用します。ダンスタイム用の${standardDanceTicket}が付きます。</p>`;
+        ? `<h3>役員・当日お手伝い 通常参加</h3><p>参加費15,000円（懇親会不参加は懇親会費控除後）の50%を起点に、申込時期割引と卒部年度割引を一般申込と同額で適用します。</p><p><strong>現在の割引・控除適用額：${staffAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。</p>`
+        : `<h3>通常参加（基準額15,000円）</h3><p>申込時期割引・卒部年度割引・懇親会不参加時の2,000円控除を自動適用します。</p><p><strong>現在の割引・控除適用額：${standardAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。</p>`;
     }
     const absent = absentPlanDetails[absentDonationTier.value];
     absentPlanDetail.innerHTML = absent ? planDetailMarkup(absent) : "";
@@ -818,6 +819,8 @@
       base = reception === "attending" ? baseFees.current_student[period] : 0;
     } else if (payload.support_tier && payload.support_tier !== "none") {
       base = attendeePlanAmount(payload.support_tier, payload.ticket_type, period, reception);
+    } else {
+      base = Math.max(0, base - noReceptionDiscount(reception));
     }
 
     const companionTotal = payload.companions.reduce((sum, companion) => {
@@ -830,14 +833,17 @@
 
   function attendeePlanAmount(plan, attendeeType, period, reception = "attending") {
     const planBase = attendingPlanTotals[plan];
-    if (!planBase) return baseFees[attendeeType]?.[period] ?? baseFees.obog[period];
+    if (!planBase) {
+      const standardFee = baseFees[attendeeType]?.[period] ?? baseFees.obog[period];
+      return Math.max(0, standardFee - noReceptionDiscount(reception));
+    }
     if (staffTicketTypes.includes(attendeeType)) {
       const donationAddOn = Math.max(0, planBase - baseFees.obog.regular);
       return donationAddOn + staffParticipationAmount(attendeeType, period, reception);
     }
     const discountedStandardFee = baseFees[attendeeType]?.[period] ?? baseFees.obog[period];
     const combinedDiscount = Math.max(0, baseFees.obog.regular - discountedStandardFee);
-    return Math.max(0, planBase - combinedDiscount);
+    return Math.max(0, planBase - combinedDiscount - noReceptionDiscount(reception));
   }
 
   function applicationPeriodDiscount(period) {

@@ -381,19 +381,19 @@ function ticketLineAmount(ticketType, feePeriod, receptionAttendance) {
   if (baseTicketType === "current_student") {
     return receptionAttendance === "attending" ? BASE_FEES.current_student[feePeriod] : 0;
   }
-  return base;
+  return Math.max(0, base - noReceptionDiscount(receptionAttendance));
 }
 __name(ticketLineAmount, "ticketLineAmount");
 function attendingPlanAmount(supportTier, baseTicketType, feePeriod, receptionAttendance = "attending") {
   const planBase = ATTENDING_PLAN_TOTALS[supportTier];
-  if (!planBase) return ticketLineAmount(baseTicketType, feePeriod, "attending");
+  if (!planBase) return ticketLineAmount(baseTicketType, feePeriod, receptionAttendance);
   if (isStaffTicketType(baseTicketType)) {
     const donationAddOn = Math.max(0, planBase - BASE_FEES.obog.regular);
     return donationAddOn + staffParticipationAmount(baseTicketType, feePeriod, receptionAttendance);
   }
   const discountedStandardFee = BASE_FEES[baseTicketType]?.[feePeriod] ?? BASE_FEES.obog[feePeriod];
   const combinedDiscount = Math.max(0, BASE_FEES.obog.regular - discountedStandardFee);
-  return Math.max(0, planBase - combinedDiscount);
+  return Math.max(0, planBase - combinedDiscount - noReceptionDiscount(receptionAttendance));
 }
 __name(attendingPlanAmount, "attendingPlanAmount");
 function publicBaseTicketType(baseTicketType) {
