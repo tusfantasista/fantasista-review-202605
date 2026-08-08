@@ -270,6 +270,18 @@ function danceTicketBenefit(ticketType) {
   };
 }
 __name(danceTicketBenefit, "danceTicketBenefit");
+function companionDanceTicketBenefit(ticketType, companions = []) {
+  const adultCount = Array.isArray(companions)
+    ? companions.filter((companion) => companion.attendee_type !== "child").length
+    : Math.max(0, Number(companions || 0));
+  const unitAmount = adultCount ? danceTicketBenefit(ticketType).unit_amount_jpy || 300 : 0;
+  return {
+    count: adultCount,
+    unit_amount_jpy: unitAmount,
+    total_amount_jpy: adultCount * unitAmount
+  };
+}
+__name(companionDanceTicketBenefit, "companionDanceTicketBenefit");
 function splitTicketType(ticketType) {
   const legacy = {
     premium: "obog__gold",
@@ -318,6 +330,7 @@ function buildPaymentLineItems(payload, companions = []) {
   const items = [];
   const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(normalizedTicket);
   const isAbsentDonation = Object.hasOwn(ABSENT_DONATION_TOTALS, baseTicketType);
+  const companionTicketUnitAmount = danceTicketBenefit(normalizedTicket).unit_amount_jpy || 300;
   const ticketAmountJpy = !isAbsentDonation && supportTier !== "none" ? attendingPlanAmount(supportTier, baseTicketType, normalizedPeriod, normalizedReception) : ticketLineAmount(baseTicketType, normalizedPeriod, normalizedReception);
   if (ticketAmountJpy > 0) {
     const danceTicket = danceTicketBenefit(normalizedTicket);
@@ -357,8 +370,8 @@ function buildPaymentLineItems(payload, companions = []) {
         relationship: companion.relationship || "",
         reception_attendance: companionReception,
         dance_ticket_count: danceTicketCount,
-        dance_ticket_unit_amount_jpy: danceTicketCount ? 300 : 0,
-        dance_ticket_total_amount_jpy: danceTicketCount * 300
+        dance_ticket_unit_amount_jpy: danceTicketCount ? companionTicketUnitAmount : 0,
+        dance_ticket_total_amount_jpy: danceTicketCount * companionTicketUnitAmount
       }
     });
   });
@@ -616,7 +629,8 @@ async function insertApplication(db, payload, requestMeta = {}) {
     paid_at: paidAt,
     payment_id: paymentId,
     line_items: lineItems,
-    dance_ticket_benefit: danceTicketBenefit(payload.ticket_type)
+    dance_ticket_benefit: danceTicketBenefit(payload.ticket_type),
+    companion_dance_ticket_benefit: companionDanceTicketBenefit(payload.ticket_type, companions)
   };
 }
 __name(insertApplication, "insertApplication");
@@ -832,17 +846,22 @@ async function markPartialPaymentEmailSent(db, paymentIntentId) {
 }
 __name(markPartialPaymentEmailSent, "markPartialPaymentEmailSent");
 async function getApplicationById(db, applicationId) {
-  return db.prepare(
+  const application = await db.prepare(
     `SELECT
         a.id, a.application_code, a.member_id, a.full_name, a.full_name_kana, a.email, a.phone,
         a.quantity, a.companion_count, a.ticket_type, a.fee_period, a.reception_attendance,
         a.payment_status, a.payment_method, a.payment_provider, a.external_payment_id,
         a.expected_transfer_name, a.actual_transfer_name, a.admin_note, a.total_amount_jpy,
-        a.status, a.attendance_status, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at
+        a.status, a.attendance_status, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at,
+        (SELECT COUNT(*) FROM companions c WHERE c.application_id = a.id AND c.attendee_type <> 'child') AS adult_companion_count
        FROM applications a
        WHERE a.id = ? OR a.application_code = ?
        LIMIT 1`
   ).bind(applicationId, applicationId).first();
+  if (!application) return null;
+  application.dance_ticket_benefit = danceTicketBenefit(application.ticket_type);
+  application.companion_dance_ticket_benefit = companionDanceTicketBenefit(application.ticket_type, application.adult_companion_count);
+  return application;
 }
 __name(getApplicationById, "getApplicationById");
 async function updateApplicationPaymentStatus(db, applicationId, update, requestMeta = {}) {
@@ -1069,6 +1088,10 @@ __name(numberOrNull, "numberOrNull");
 // api/festa60/_lib/email.js
 function renderApplicationReceivedEmail(application, checkoutUrl) {
   const name = application.full_name || application.name || "";
+  const isAbsentDonation = String(application.ticket_type || "").startsWith("absent_donation_");
+  const ticketSummary = isAbsentDonation ? "" : `
+ダンスタイムチケット：${danceTicketDescription(application.ticket_type)}
+同伴者向けチケット：${companionDanceTicketDescription(application)}`;
   return {
     to: application.email,
     subject: "【60周年FESTA】お申込受付・お支払い手続きのご案内",
@@ -1080,7 +1103,7 @@ function renderApplicationReceivedEmail(application, checkoutUrl) {
 受付番号：${application.application_code || application.applicationId}
 お申込者名：${name}
 申込内容：${ticketLabel(application.ticket_type)}
-お支払い予定額：${formatYen(application.amount_total || application.total_amount_jpy)}
+お支払い予定額：${formatYen(application.amount_total || application.total_amount_jpy)}${ticketSummary}
 
 お支払い手続き：
 ${checkoutUrl}
@@ -1176,6 +1199,7 @@ function renderPaymentConfirmedEmail(application) {
 \u53C2\u52A0\u4EBA\u6570\uFF1A${quantity}\u540D
 \u5165\u91D1\u78BA\u8A8D\u65E5\uFF1A${paidAt}
 \u30C0\u30F3\u30B9\u30BF\u30A4\u30E0\u30C1\u30B1\u30C3\u30C8\uFF1A${danceTicketDescription(application.ticket_type)}
+\u540C\u4F34\u8005\u5411\u3051\u30C1\u30B1\u30C3\u30C8\uFF1A${companionDanceTicketDescription(application)}
 ${donationPlan ? `\u5BC4\u4ED8\u30D7\u30E9\u30F3\uFF1A${donationPlan.name}
 \u8FD4\u793C\u5185\u5BB9\uFF1A${donationPlan.description}` : ""}
 
@@ -1238,6 +1262,12 @@ function danceTicketDescription(ticketType) {
   return `${benefit.unit_amount_jpy.toLocaleString("ja-JP")}\u5186\u5238\xD7${benefit.count}\u679A\uFF08${benefit.total_amount_jpy.toLocaleString("ja-JP")}\u5186\u76F8\u5F53\uFF09`;
 }
 __name(danceTicketDescription, "danceTicketDescription");
+function companionDanceTicketDescription(application) {
+  const benefit = application.companion_dance_ticket_benefit || { count: 0, unit_amount_jpy: 0, total_amount_jpy: 0 };
+  if (!benefit.count) return "配布なし";
+  return `${Number(benefit.unit_amount_jpy).toLocaleString("ja-JP")}円券×${benefit.count}枚（${Number(benefit.total_amount_jpy).toLocaleString("ja-JP")}円相当）`;
+}
+__name(companionDanceTicketDescription, "companionDanceTicketDescription");
 // api/festa60/admin/applications/[id].js
 async function onRequestPatch({ request, env, params }) {
   const auth = assertAdmin(request, env);

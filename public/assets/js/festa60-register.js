@@ -70,6 +70,7 @@
     current_student: { early: 4000, year_end: 4000, regular: 4000 },
   };
   const attendingPlanTotals = { platinum: 100000, gold: 50000, silver: 30000, bronze: 20000 };
+  const attendingPlanTicketUnits = { platinum: 600, gold: 500, silver: 400, bronze: 300 };
   const staffTicketTypes = ["obog_staff", "obog_staff_6_10", "obog_staff_5_under"];
   const absentDonationTotals = {
     absent_donation_30000: 30000,
@@ -237,7 +238,7 @@
               <option value="adult">同伴者（大人）</option>
               <option value="child">同伴者（子供）</option>
             </select>
-            <p class="crm-help">大人には300円券を1枚配布します。子供への自動配布はありません。</p>
+            <p class="crm-help">大人には申込者本人の参加プランと同じ券種を1枚配布します。子供への自動配布はありません。</p>
           </div>
           <div class="crm-field">
             <label for="companion_${index}_reception_attendance">懇親会 <span class="crm-required">必須</span></label>
@@ -309,6 +310,7 @@
     }
     delete payload.absent_donation_tier;
     const count = isAbsentDonation ? 0 : Number(payload.companion_count || 0);
+    const companionTicketUnitAmount = danceTicketUnitAmount(payload.support_tier);
     payload.companions = [];
     for (let index = 0; index < count; index += 1) {
       const fullName = payload[`companion_${index}_name`];
@@ -324,8 +326,8 @@
         email: payload[`companion_${index}_email`] || "",
         note: payload[`companion_${index}_note`] || "",
         dance_ticket_count: danceTicketCount,
-        dance_ticket_unit_amount_jpy: danceTicketCount ? 300 : 0,
-        dance_ticket_total_amount_jpy: danceTicketCount * 300,
+        dance_ticket_unit_amount_jpy: danceTicketCount ? companionTicketUnitAmount : 0,
+        dance_ticket_total_amount_jpy: danceTicketCount * companionTicketUnitAmount,
       });
       delete payload[`companion_${index}_name`];
       delete payload[`companion_${index}_relationship`];
@@ -337,8 +339,8 @@
     }
     payload.adult_companion_count = payload.companions.filter((companion) => companion.attendee_type === "adult").length;
     payload.companion_dance_ticket_count = payload.adult_companion_count;
-    payload.companion_dance_ticket_unit_amount_jpy = payload.adult_companion_count ? 300 : 0;
-    payload.companion_dance_ticket_total_amount_jpy = payload.adult_companion_count * 300;
+    payload.companion_dance_ticket_unit_amount_jpy = payload.adult_companion_count ? companionTicketUnitAmount : 0;
+    payload.companion_dance_ticket_total_amount_jpy = payload.adult_companion_count * companionTicketUnitAmount;
     delete payload.generation;
     return payload;
   }
@@ -463,17 +465,18 @@
     const support = supportPlanDetails[supportTier.value];
     if (support) {
       const discountedAmount = attendeePlanAmount(supportTier.value, ticketType.value, feePeriod.value, receptionAttendance.value);
+      const ticketUnitAmount = danceTicketUnitAmount(supportTier.value);
       const staffExplanation = staffMode
         ? "<p>役員割引は参加費相当分にのみ適用し、上乗せ寄付相当分は割引しません。申込時期割引と卒部年度割引は一般申込と同額を適用します。</p>"
         : "<p>申込時期割引と卒部年度割引を併用しています。</p>";
-      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p>${staffExplanation}`;
+      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p><p>通常参加分の300円券は別途配布しません。有料の大人同伴者には${ticketUnitAmount}円券を1枚配布し、当日の追加購入も原則として${ticketUnitAmount}円券です。</p>${staffExplanation}`;
     } else {
       const standardDanceTicket = publicTicketType(ticketType.value) === "obog" ? "300円券×3枚" : "300円券×2枚";
       const staffAmount = staffMode ? staffParticipationAmount(ticketType.value, feePeriod.value, receptionAttendance.value) : null;
       const standardAmount = attendeePlanAmount("none", ticketType.value, feePeriod.value, receptionAttendance.value);
       supportPlanDetail.innerHTML = staffMode
-        ? `<h3>役員・当日お手伝い 通常参加</h3><p>参加費15,000円（懇親会不参加は懇親会費控除後）の50%を起点に、申込時期割引と卒部年度割引を一般申込と同額で適用します。</p><p><strong>現在の割引・控除適用額：${staffAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。</p>`
-        : `<h3>通常参加（基準額15,000円）</h3><p>申込時期割引・卒部年度割引・懇親会不参加時の2,000円控除を自動適用します。</p><p><strong>現在の割引・控除適用額：${standardAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。</p>`;
+        ? `<h3>役員・当日お手伝い 通常参加</h3><p>参加費15,000円（懇親会不参加は懇親会費控除後）の50%を起点に、申込時期割引と卒部年度割引を一般申込と同額で適用します。</p><p><strong>現在の割引・控除適用額：${staffAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。有料の大人同伴者には300円券を1枚配布し、当日の追加購入も原則として300円券です。</p>`
+        : `<h3>通常参加（基準額15,000円）</h3><p>申込時期割引・卒部年度割引・懇親会不参加時の2,000円控除を自動適用します。</p><p><strong>現在の割引・控除適用額：${standardAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。有料の大人同伴者には300円券を1枚配布し、当日の追加購入も原則として300円券です。</p>`;
     }
     const absent = absentPlanDetails[absentDonationTier.value];
     absentPlanDetail.innerHTML = absent ? planDetailMarkup(absent) : "";
@@ -594,10 +597,11 @@
         ],
       });
     } else {
+      const companionTicketUnitAmount = danceTicketUnitAmount(payload.support_tier);
       const companionRows = payload.companions.length
         ? payload.companions.map((companion, index) => [
           `同伴者${index + 1}`,
-          `${companion.full_name} / ${companion.relationship} / ${companion.attendee_type === "child" ? "子供（チケット自動配布なし）" : "大人（300円券×1枚）"} / ${companion.reception_attendance === "attending" ? "懇親会参加" : "懇親会不参加"}${companion.email ? ` / ${companion.email}` : ""}${companion.note ? `\n補足: ${companion.note}` : ""}`,
+          `${companion.full_name} / ${companion.relationship} / ${companion.attendee_type === "child" ? "子供（チケット自動配布なし）" : `大人（${companionTicketUnitAmount}円券×1枚）`} / ${companion.reception_attendance === "attending" ? "懇親会参加" : "懇親会不参加"}${companion.email ? ` / ${companion.email}` : ""}${companion.note ? `\n補足: ${companion.note}` : ""}`,
         ])
         : [["同伴者", "なし"]];
       groups.push({
@@ -610,7 +614,8 @@
           ["卒部年度割引", graduationDiscount(payload.ticket_type) ? `-${formatYen(graduationDiscount(payload.ticket_type))}` : "割引なし"],
           ["懇親会", selectedLabel(receptionAttendance)],
           ...companionRows,
-          ["同伴者向けチケット", payload.companion_dance_ticket_count ? `300円券×${payload.companion_dance_ticket_count}枚` : "なし"],
+          ["同伴者向けチケット", payload.companion_dance_ticket_count ? `${companionTicketUnitAmount}円券×${payload.companion_dance_ticket_count}枚` : "なし"],
+          ["当日追加購入できる券種", `${companionTicketUnitAmount}円券（原則）`],
           ["お支払い予定額", formatYen(amount)],
         ],
       });
@@ -879,6 +884,10 @@
 
   function noReceptionDiscount(reception) {
     return reception === "without_reception" ? 2000 : 0;
+  }
+
+  function danceTicketUnitAmount(plan) {
+    return attendingPlanTicketUnits[plan] || 300;
   }
 
   function setMessage(text, kind) {
