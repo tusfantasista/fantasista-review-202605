@@ -7,6 +7,7 @@
   const state = {
     applications: [],
     filtered: [],
+    participationSummary: null,
     config: null,
     actor: "",
     filters: {
@@ -33,6 +34,9 @@
     refreshButton: document.querySelector("#refresh-button"),
     paymentChart: document.querySelector("#payment-chart"),
     planChart: document.querySelector("#plan-chart"),
+    participantChart: document.querySelector("#participant-chart"),
+    receptionChart: document.querySelector("#reception-chart"),
+    cohortChart: document.querySelector("#cohort-chart"),
     dialog: document.querySelector("#application-dialog"),
     dialogTitle: document.querySelector("#dialog-title"),
     dialogContent: document.querySelector("#dialog-content")
@@ -40,7 +44,13 @@
 
   const metricElements = {
     applications: document.querySelector("#metric-applications"),
-    attendees: document.querySelector("#metric-attendees"),
+    festaAttendees: document.querySelector("#metric-festa-attendees"),
+    confirmedFesta: document.querySelector("#metric-confirmed-festa"),
+    receptionAttendees: document.querySelector("#metric-reception-attendees"),
+    confirmedReception: document.querySelector("#metric-confirmed-reception"),
+    receptionNonAttendees: document.querySelector("#metric-reception-non-attendees"),
+    applicantCompanion: document.querySelector("#metric-applicant-companion"),
+    attendingApplications: document.querySelector("#metric-attending-applications"),
     paid: document.querySelector("#metric-paid"),
     paidAmount: document.querySelector("#metric-paid-amount"),
     partial: document.querySelector("#metric-partial"),
@@ -196,6 +206,7 @@
         fetchJson(CONFIG_URL).catch(() => null)
       ]);
       state.applications = applicationResult.applications || [];
+      state.participationSummary = applicationResult.participation_summary || null;
       state.actor = applicationResult.actor || "Cloudflare Access user";
       state.config = configResult;
       elements.actor.textContent = state.actor;
@@ -224,11 +235,17 @@
     const expectedTotal = active.reduce((sum, item) => sum + expectedAmount(item), 0);
     const receivedTotal = active.reduce((sum, item) => sum + receivedAmount(item), 0);
     const outstandingTotal = active.reduce((sum, item) => sum + outstandingAmount(item), 0);
-    const attendees = active.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
     const collectionRate = expectedTotal > 0 ? Math.round((receivedTotal / expectedTotal) * 100) : 0;
+    const participation = state.participationSummary || fallbackParticipationSummary(applications);
 
     metricElements.applications.textContent = `${applications.length}件`;
-    metricElements.attendees.textContent = `参加人数 ${attendees}名`;
+    metricElements.festaAttendees.textContent = `${participation.festa_attendee_count}名`;
+    metricElements.confirmedFesta.textContent = `入金済み・参加確定 ${participation.confirmed_festa_attendee_count}名`;
+    metricElements.receptionAttendees.textContent = `${participation.reception_attendee_count}名`;
+    metricElements.confirmedReception.textContent = `入金済み・参加確定 ${participation.confirmed_reception_attendee_count}名`;
+    metricElements.receptionNonAttendees.textContent = `${participation.reception_non_attendee_count}名`;
+    metricElements.applicantCompanion.textContent = `${participation.application_count}名 / ${participation.companion_count}名`;
+    metricElements.attendingApplications.textContent = `参加申込 ${participation.application_count}件`;
     metricElements.paid.textContent = `${paid.length}件`;
     metricElements.paidAmount.textContent = formatYen(paid.reduce((sum, item) => sum + receivedAmount(item), 0));
     metricElements.partial.textContent = `${partial.length}件`;
@@ -245,6 +262,29 @@
       { label: "未入金等", value: pending.length, className: "pending" },
       { label: "取消・返金", value: applications.length - active.length, className: "" }
     ]);
+
+    renderBarChart(elements.participantChart, [
+      { label: "OBOG本人", value: participation.obog_applicant_count, className: "" },
+      { label: "現役本人", value: participation.current_student_applicant_count, className: "" },
+      { label: "大人同伴", value: participation.adult_companion_count, className: "" },
+      { label: "子供同伴", value: participation.child_companion_count, className: "" }
+    ].filter((item) => item.value > 0));
+
+    renderBarChart(elements.receptionChart, [
+      { label: "OBOG本人", value: participation.obog_reception_count, className: "paid" },
+      { label: "現役本人", value: participation.current_student_reception_count, className: "paid" },
+      { label: "大人同伴", value: participation.adult_companion_reception_count, className: "paid" },
+      { label: "子供同伴", value: participation.child_companion_reception_count, className: "paid" }
+    ].filter((item) => item.value > 0));
+
+    renderBarChart(elements.cohortChart, [
+      { label: "卒部11年以上", value: participation.cohort_eleven_over_count, className: "" },
+      { label: "卒部6〜10年", value: participation.cohort_six_ten_count, className: "" },
+      { label: "卒部5年以下", value: participation.cohort_five_under_count, className: "" },
+      { label: "学習院桜友会", value: participation.cohort_gakushuin_count, className: "" },
+      { label: "現役", value: participation.cohort_current_student_count, className: "" },
+      { label: "年次未確認", value: participation.cohort_unknown_count, className: "pending" }
+    ].filter((item) => item.value > 0));
 
     const planCounts = ["platinum", "gold", "silver", "bronze", "standard", "staff", "current_student", "absent_donation"]
       .map((key) => ({ key, value: applications.filter((item) => planKey(item.ticket_type) === key).length }))
@@ -264,6 +304,43 @@
         className: ""
       }));
     renderBarChart(elements.planChart, planCounts);
+  }
+
+  function fallbackParticipationSummary(applications) {
+    const attendees = applications.filter((item) => {
+      const status = effectivePaymentStatus(item);
+      return !["cancelled", "refunded"].includes(status) && planKey(item.ticket_type) !== "absent_donation";
+    });
+    const paid = attendees.filter((item) => effectivePaymentStatus(item) === "paid");
+    const summarizePeople = (rows) => rows.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+    const summarizeReception = (rows) => rows.reduce((sum, item) => {
+      return sum + (item.reception_attendance === "attending" ? Number(item.quantity || 1) : 0);
+    }, 0);
+    const festaCount = summarizePeople(attendees);
+    const receptionCount = summarizeReception(attendees);
+    return {
+      application_count: attendees.length,
+      festa_attendee_count: festaCount,
+      confirmed_festa_attendee_count: summarizePeople(paid),
+      companion_count: attendees.reduce((sum, item) => sum + Number(item.companion_count || 0), 0),
+      reception_attendee_count: receptionCount,
+      confirmed_reception_attendee_count: summarizeReception(paid),
+      reception_non_attendee_count: Math.max(0, festaCount - receptionCount),
+      obog_applicant_count: attendees.filter((item) => item.ticket_type !== "current_student").length,
+      current_student_applicant_count: attendees.filter((item) => item.ticket_type === "current_student").length,
+      adult_companion_count: attendees.reduce((sum, item) => sum + Number(item.companion_count || 0), 0),
+      child_companion_count: 0,
+      obog_reception_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.reception_attendance === "attending").length,
+      current_student_reception_count: attendees.filter((item) => item.ticket_type === "current_student" && item.reception_attendance === "attending").length,
+      adult_companion_reception_count: 0,
+      child_companion_reception_count: 0,
+      cohort_eleven_over_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage !== "gakushuin_ouyukai" && Number(item.graduation_year) > 0 && Number(item.graduation_year) <= 2015).length,
+      cohort_six_ten_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage !== "gakushuin_ouyukai" && Number(item.graduation_year) >= 2016 && Number(item.graduation_year) <= 2020).length,
+      cohort_five_under_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage !== "gakushuin_ouyukai" && Number(item.graduation_year) >= 2021).length,
+      cohort_gakushuin_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage === "gakushuin_ouyukai").length,
+      cohort_current_student_count: attendees.filter((item) => item.ticket_type === "current_student").length,
+      cohort_unknown_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage !== "gakushuin_ouyukai" && !Number(item.graduation_year)).length
+    };
   }
 
   function renderBarChart(container, items) {

@@ -973,6 +973,67 @@ async function listApplications(db) {
   }));
 }
 __name(listApplications, "listApplications");
+async function getAdminParticipationSummary(db) {
+  const row = await db.prepare(
+    `WITH attendee_applications AS (
+       SELECT
+         id, ticket_type, school_lineage, graduation_year, reception_attendance, payment_status
+       FROM applications
+       WHERE COALESCE(payment_status, 'unpaid') NOT IN ('cancelled', 'refunded')
+         AND ticket_type NOT LIKE 'absent_donation_%'
+     ),
+     companion_counts AS (
+       SELECT
+         c.application_id,
+         COUNT(*) AS companion_count,
+         SUM(CASE WHEN c.attendee_type = 'adult' THEN 1 ELSE 0 END) AS adult_companion_count,
+         SUM(CASE WHEN c.attendee_type = 'child' THEN 1 ELSE 0 END) AS child_companion_count,
+         SUM(CASE WHEN c.reception_attendance = 'attending' THEN 1 ELSE 0 END) AS companion_reception_count,
+         SUM(CASE WHEN c.attendee_type = 'adult' AND c.reception_attendance = 'attending' THEN 1 ELSE 0 END) AS adult_companion_reception_count,
+         SUM(CASE WHEN c.attendee_type = 'child' AND c.reception_attendance = 'attending' THEN 1 ELSE 0 END) AS child_companion_reception_count
+       FROM companions c
+       INNER JOIN attendee_applications a ON a.id = c.application_id
+       GROUP BY c.application_id
+     ),
+     participation AS (
+       SELECT
+         a.*,
+         COALESCE(c.companion_count, 0) AS companion_count,
+         COALESCE(c.adult_companion_count, 0) AS adult_companion_count,
+         COALESCE(c.child_companion_count, 0) AS child_companion_count,
+         COALESCE(c.companion_reception_count, 0) AS companion_reception_count,
+         COALESCE(c.adult_companion_reception_count, 0) AS adult_companion_reception_count,
+         COALESCE(c.child_companion_reception_count, 0) AS child_companion_reception_count
+       FROM attendee_applications a
+       LEFT JOIN companion_counts c ON c.application_id = a.id
+     )
+     SELECT
+       COUNT(*) AS application_count,
+       COALESCE(SUM(1 + companion_count), 0) AS festa_attendee_count,
+       COALESCE(SUM(CASE WHEN payment_status = 'paid' THEN 1 + companion_count ELSE 0 END), 0) AS confirmed_festa_attendee_count,
+       COALESCE(SUM(companion_count), 0) AS companion_count,
+       COALESCE(SUM(CASE WHEN reception_attendance = 'attending' THEN 1 ELSE 0 END + companion_reception_count), 0) AS reception_attendee_count,
+       COALESCE(SUM(CASE WHEN payment_status = 'paid' THEN CASE WHEN reception_attendance = 'attending' THEN 1 ELSE 0 END + companion_reception_count ELSE 0 END), 0) AS confirmed_reception_attendee_count,
+       COALESCE(SUM(CASE WHEN reception_attendance = 'without_reception' THEN 1 ELSE 0 END + companion_count - companion_reception_count), 0) AS reception_non_attendee_count,
+       COALESCE(SUM(CASE WHEN ticket_type = 'current_student' THEN 0 ELSE 1 END), 0) AS obog_applicant_count,
+       COALESCE(SUM(CASE WHEN ticket_type = 'current_student' THEN 1 ELSE 0 END), 0) AS current_student_applicant_count,
+       COALESCE(SUM(adult_companion_count), 0) AS adult_companion_count,
+       COALESCE(SUM(child_companion_count), 0) AS child_companion_count,
+       COALESCE(SUM(CASE WHEN reception_attendance = 'attending' AND ticket_type <> 'current_student' THEN 1 ELSE 0 END), 0) AS obog_reception_count,
+       COALESCE(SUM(CASE WHEN reception_attendance = 'attending' AND ticket_type = 'current_student' THEN 1 ELSE 0 END), 0) AS current_student_reception_count,
+       COALESCE(SUM(adult_companion_reception_count), 0) AS adult_companion_reception_count,
+       COALESCE(SUM(child_companion_reception_count), 0) AS child_companion_reception_count,
+       COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND school_lineage <> 'gakushuin_ouyukai' AND graduation_year <= ${OBOG_11_OVER_GRADUATION_YEAR_TO} THEN 1 ELSE 0 END), 0) AS cohort_eleven_over_count,
+       COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND school_lineage <> 'gakushuin_ouyukai' AND graduation_year BETWEEN ${OBOG_6_10_GRADUATION_YEAR_FROM} AND ${OBOG_6_10_GRADUATION_YEAR_TO} THEN 1 ELSE 0 END), 0) AS cohort_six_ten_count,
+       COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND school_lineage <> 'gakushuin_ouyukai' AND graduation_year >= ${OBOG_5_UNDER_GRADUATION_YEAR_FROM} THEN 1 ELSE 0 END), 0) AS cohort_five_under_count,
+       COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND school_lineage = 'gakushuin_ouyukai' THEN 1 ELSE 0 END), 0) AS cohort_gakushuin_count,
+       COALESCE(SUM(CASE WHEN ticket_type = 'current_student' THEN 1 ELSE 0 END), 0) AS cohort_current_student_count,
+       COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND (school_lineage IS NULL OR (school_lineage <> 'gakushuin_ouyukai' AND graduation_year IS NULL)) THEN 1 ELSE 0 END), 0) AS cohort_unknown_count
+     FROM participation`
+  ).first();
+  return Object.fromEntries(Object.entries(row || {}).map(([key, value]) => [key, Number(value || 0)]));
+}
+__name(getAdminParticipationSummary, "getAdminParticipationSummary");
 function expectedApplicationAmount(row) {
   if (row.companion_fee_total > 0 || row.companion_count === 0) {
     return ticketAmount(row.ticket_type, [], row.fee_period, row.reception_attendance) + Number(row.companion_fee_total || 0);
@@ -1240,8 +1301,12 @@ async function onRequestGet2({ request, env }) {
   const auth = assertAdmin(request, env);
   if (!auth.ok) return auth.response;
   try {
-    const rows = await listApplications(requireDb(env));
-    return json({ ok: true, actor: auth.actor, applications: rows });
+    const db = requireDb(env);
+    const [rows, summary] = await Promise.all([
+      listApplications(db),
+      getAdminParticipationSummary(db)
+    ]);
+    return json({ ok: true, actor: auth.actor, applications: rows, participation_summary: summary });
   } catch (error) {
     return serverError(error);
   }

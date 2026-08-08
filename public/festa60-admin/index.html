@@ -6,8 +6,8 @@
     <meta name="robots" content="noindex,nofollow,noarchive" />
     <meta name="referrer" content="same-origin" />
     <title>FESTA 60 申込管理</title>
-    <link rel="stylesheet" href="../assets/css/festa60-admin.css?v=20260807-1" />
-    <script src="../assets/js/festa60-admin.js?v=20260807-1" defer></script>
+    <link rel="stylesheet" href="../assets/css/festa60-admin.css?v=20260808-1" />
+    <script src="../assets/js/festa60-admin.js?v=20260808-1" defer></script>
   </head>
   <body class="admin-page">
     <div id="environment-banner" class="admin-environment" hidden>TEST環境 / Cloudflare Pages Preview / 本番データではありません</div>
@@ -15,7 +15,7 @@
     <header class="admin-header">
       <div>
         <p class="admin-eyebrow">FANTASISTA 60TH FESTA</p>
-        <h1>申込・入金管理</h1>
+        <h1>申込・参加・入金管理</h1>
       </div>
       <div class="admin-header__meta">
         <span class="admin-access">Cloudflare Access 保護中</span>
@@ -28,13 +28,44 @@
         <div class="admin-section-heading">
           <div>
             <p class="admin-section-label">Summary</p>
-            <h2 id="summary-title">申込状況</h2>
+            <h2 id="summary-title">参加状況</h2>
           </div>
           <p id="last-updated" class="admin-updated">取得中</p>
         </div>
 
+        <p class="admin-definition">取消・返金と欠席者向け寄付を除く申込を「参加予定」、そのうち入金済みを「参加確定」として集計します。卒部年次構成は申込者本人のみの集計です。</p>
+
+        <div class="admin-metrics admin-metrics--participation" aria-live="polite">
+          <article class="admin-metric admin-metric--accent"><span>FESTA参加予定</span><strong id="metric-festa-attendees">-</strong><small id="metric-confirmed-festa">参加確定 -</small></article>
+          <article class="admin-metric admin-metric--success"><span>懇親会参加予定</span><strong id="metric-reception-attendees">-</strong><small id="metric-confirmed-reception">参加確定 -</small></article>
+          <article class="admin-metric"><span>懇親会不参加</span><strong id="metric-reception-non-attendees">-</strong><small>FESTA第一部のみ参加</small></article>
+          <article class="admin-metric"><span>本人・同伴者</span><strong id="metric-applicant-companion">-</strong><small id="metric-attending-applications">参加申込 -</small></article>
+        </div>
+
+        <div class="admin-summary-grid admin-summary-grid--three">
+          <div class="admin-panel">
+            <h3>FESTA参加者の内訳</h3>
+            <div id="participant-chart" class="admin-bar-chart" aria-label="FESTA参加者の内訳"></div>
+          </div>
+          <div class="admin-panel">
+            <h3>懇親会参加者の内訳</h3>
+            <div id="reception-chart" class="admin-bar-chart" aria-label="懇親会参加者の内訳"></div>
+          </div>
+          <div class="admin-panel">
+            <h3>卒部年次構成（申込者本人）</h3>
+            <div id="cohort-chart" class="admin-bar-chart" aria-label="卒部年次構成"></div>
+          </div>
+        </div>
+
+        <div class="admin-subsection-heading">
+          <div>
+            <p class="admin-section-label">Payments</p>
+            <h2>入金・プラン状況</h2>
+          </div>
+        </div>
+
         <div id="summary-metrics" class="admin-metrics" aria-live="polite">
-          <article class="admin-metric"><span>申込件数</span><strong id="metric-applications">-</strong><small id="metric-attendees">参加人数 -</small></article>
+          <article class="admin-metric"><span>全申込件数</span><strong id="metric-applications">-</strong><small>欠席者向け寄付を含む</small></article>
           <article class="admin-metric admin-metric--success"><span>入金済み</span><strong id="metric-paid">-</strong><small id="metric-paid-amount">-</small></article>
           <article class="admin-metric admin-metric--warning"><span>不足入金</span><strong id="metric-partial">-</strong><small id="metric-partial-amount">-</small></article>
           <article class="admin-metric admin-metric--danger"><span>未入金・手続中</span><strong id="metric-pending">-</strong><small id="metric-outstanding">-</small></article>
