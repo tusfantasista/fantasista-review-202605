@@ -1680,8 +1680,13 @@ body {
   }
 
   .site-header__inner {
+    position: relative;
     min-height: 72px;
     padding: 10px 0;
+  }
+
+  .brand__logo {
+    width: min(220px, 30vw);
   }
 
   .site-nav--desktop {
@@ -1696,12 +1701,12 @@ body {
   }
 
   .site-nav--mobile {
-    position: fixed;
-    top: 82px;
-    right: 18px;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
     display: grid !important;
     width: min(360px, calc(100vw - 36px));
-    max-height: calc(100dvh - 102px);
+    max-height: calc(100dvh - 140px);
     margin: 0;
     padding: 12px;
     overflow-y: auto;
