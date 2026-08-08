@@ -46,6 +46,10 @@ body.festa60-crm {
 }
 
 .crm-legal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
   width: min(1120px, calc(100vw - 40px));
   margin: -80px auto 0;
   padding: 0 0 44px;
@@ -58,6 +62,10 @@ body.festa60-crm {
   color: var(--crm-ink);
   font-weight: 800;
   text-underline-offset: 4px;
+}
+
+.crm-legal-footer a + a {
+  margin-left: 0;
 }
 
 .crm-hero {
@@ -640,6 +648,13 @@ body.festa60-crm {
 
 .crm-check input {
   margin-top: 0.45em;
+}
+
+.crm-check a,
+.crm-small a {
+  color: #6f5600;
+  font-weight: 800;
+  text-underline-offset: 3px;
 }
 
 .crm-button {

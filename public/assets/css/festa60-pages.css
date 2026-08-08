@@ -152,8 +152,10 @@ img { max-width: 100%; }
 .subpage-footer { padding: 34px 0; color: var(--f60-muted); font-size: 0.85rem; }
 .subpage-footer__inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 28px; }
 .subpage-footer a { color: var(--f60-cream); text-underline-offset: 4px; }
+.subpage-footer__links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
 .legal-content { max-width: 980px; }
 .legal-content__intro { max-width: 820px; margin: 0 0 28px; color: var(--f60-muted); }
+.legal-content__intro a, .privacy-section a { color: var(--f60-gold); font-weight: 700; text-underline-offset: 4px; }
 .legal-table { margin: 0; border-top: 1px solid var(--f60-line); }
 .legal-table > div { display: grid; grid-template-columns: minmax(180px, 0.34fr) minmax(0, 1fr); border-bottom: 1px solid var(--f60-line); }
 .legal-table dt, .legal-table dd { margin: 0; padding: 20px 18px; }
@@ -162,6 +164,16 @@ img { max-width: 100%; }
 .legal-table a { color: var(--f60-gold); font-weight: 700; text-underline-offset: 4px; }
 .legal-content__disclosure { margin: 18px 0 0; color: var(--f60-muted); font-size: 0.76rem; text-align: right; }
 .legal-content__updated { margin: 22px 0 0; color: var(--f60-muted); font-size: 0.86rem; text-align: right; }
+.privacy-content { max-width: 920px; }
+.privacy-section { padding: 34px 0; border-top: 1px solid var(--f60-line); }
+.privacy-section:first-of-type { padding-top: 0; border-top: 0; }
+.privacy-section h2 { margin: 0 0 16px; color: var(--f60-cream); font-size: clamp(1.3rem, 3vw, 1.8rem); }
+.privacy-section p { max-width: 860px; margin: 0; color: var(--f60-muted); }
+.privacy-section p + p { margin-top: 14px; }
+.privacy-section ul { max-width: 860px; margin: 16px 0 0; padding-left: 1.5em; color: var(--f60-muted); }
+.privacy-section li { padding: 4px 0; }
+.privacy-section li::marker { color: var(--f60-gold); }
+.privacy-section .legal-table { margin-top: 16px; }
 .festa-news-list { border-top: 1px solid var(--f60-line); }
 .festa-news-entry { scroll-margin-top: 96px; border-bottom: 1px solid var(--f60-line); padding: 36px 0; }
 .festa-news-entry__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 12px; }
