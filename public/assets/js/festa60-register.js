@@ -130,9 +130,9 @@
   if (!form) return;
 
   if (checkoutState.get("checkout") === "success") {
-    setMessage(`お支払い手続きを受け付けました。入金確認後に確定メールをお送りします。受付番号: ${checkoutState.get("application") || "確認中"}`, "success");
+    setMessage(`お支払いが完了し、申込が完了しました。参加確定メールをお送りします。受付番号: ${checkoutState.get("application") || "確認中"}`, "success");
   } else if (checkoutState.get("checkout") === "cancelled") {
-    setMessage(`お支払いを中断しました。申込は未入金の状態でFANTASISTAが受け付けています。受付番号: ${checkoutState.get("application") || ""}`, "error");
+    setMessage("お支払いが完了しなかったため、申込は完了していません。内容をご確認のうえ、もう一度お申し込みください。", "error");
   }
 
   fetch("/api/festa60/config")
@@ -608,7 +608,7 @@
       const result = await postApplication(payload);
 
       if (result.payment?.checkoutUrl) {
-        setConfirmationMessage("申込を受け付けました。安全な決済画面へ移動します...", "success");
+        setConfirmationMessage("決済画面を準備しました。お支払い完了後に申込完了となります...", "success");
         window.location.assign(result.payment.checkoutUrl);
         return;
       }
@@ -804,8 +804,8 @@
       confirmApplicationButton.textContent = "振込先を確認する（まだ確定しません）";
     } else {
       confirmationPaymentTitle.textContent = "カード・スマホ決済等でお支払い";
-      confirmationPaymentNote.textContent = "申込を確定した後、安全な外部決済画面へ移動します。利用できる支払い方法は端末やブラウザ等により異なります。";
-      confirmApplicationButton.textContent = "申込を確定して決済画面へ";
+      confirmationPaymentNote.textContent = "安全な外部決済画面へ移動します。お支払い完了後に申込完了となります。利用できる支払い方法は端末やブラウザ等により異なります。";
+      confirmApplicationButton.textContent = "決済画面へ進む（決済後に申込完了）";
     }
   }
 

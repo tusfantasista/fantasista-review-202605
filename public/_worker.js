@@ -1251,37 +1251,6 @@ function numberOrNull(value) {
 __name(numberOrNull, "numberOrNull");
 
 // api/festa60/_lib/email.js
-function renderApplicationReceivedEmail(application, checkoutUrl) {
-  const name = application.full_name || application.name || "";
-  const isAbsentDonation = String(application.ticket_type || "").startsWith("absent_donation_");
-  const ticketSummary = isAbsentDonation ? "" : `
-ダンスタイムチケット：${danceTicketDescription(application.ticket_type)}
-同伴者向けチケット：${companionDanceTicketDescription(application)}`;
-  return {
-    to: application.email,
-    subject: "【60周年FESTA】お申込受付・お支払い手続きのご案内",
-    body: `${name} 様
-
-60周年FESTAへのお申込を受け付けました。
-現時点では未入金のため、参加はまだ確定していません。
-
-受付番号：${application.application_code || application.applicationId}
-お申込者名：${name}
-申込内容：${ticketLabel(application.ticket_type)}
-お支払い予定額：${formatYen(application.amount_total || application.total_amount_jpy)}${ticketSummary}
-
-お支払い手続き：
-${checkoutUrl}
-
-外部決済画面に表示された支払い方法からお選びください。
-利用できる方法は、ご利用環境、端末、ブラウザなどにより異なります。
-
-このメールは参加確定のお知らせではありません。入金確認後に、あらためて参加確定メールと領収書をご案内します。
-
-お支払い手続きのリンクには有効期限があります。開けない場合は、受付番号を添えてFESTA事務局へご連絡ください。`
-  };
-}
-__name(renderApplicationReceivedEmail, "renderApplicationReceivedEmail");
 function renderBankTransferInstructionsEmail(application, hostedInstructionsUrl) {
   const name = application.full_name || application.name || "";
   return {
@@ -1420,21 +1389,6 @@ async function sendPaymentEmailOnce(env, db, application, kind, message) {
   return result;
 }
 __name(sendPaymentEmailOnce, "sendPaymentEmailOnce");
-async function sendApplicationReceivedEmailOnce(env, db, application, checkoutUrl) {
-  const row = await db.prepare("SELECT application_received_email_sent_at FROM applications WHERE id = ? LIMIT 1").bind(application.id).first();
-  if (row?.application_received_email_sent_at) return { sent: false, skipped: true, reason: "already_sent" };
-  const result = await maybeSendEmail(env, {
-    ...renderApplicationReceivedEmail(application, checkoutUrl),
-    message_id: `festa60-application-received-${application.id}`
-  });
-  if (result.sent) {
-    await db.prepare(
-      "UPDATE applications SET application_received_email_sent_at = COALESCE(application_received_email_sent_at, ?), updated_at = ? WHERE id = ?"
-    ).bind(nowIso(), nowIso(), application.id).run();
-  }
-  return result;
-}
-__name(sendApplicationReceivedEmailOnce, "sendApplicationReceivedEmailOnce");
 async function maybeSendEmail(env, message) {
   if (!env.EMAIL_WEBHOOK_URL) {
     return { sent: false, skipped: true, reason: "EMAIL_WEBHOOK_URL is not configured." };
@@ -2585,7 +2539,6 @@ async function onRequestPost6({ request, env }) {
         ).bind(application.id).first();
         if (existingCheckoutPayment?.stripe_checkout_session_id) {
           const existingSession = await retrieveStripeCheckoutSession(requireStripeSecret(env), existingCheckoutPayment.stripe_checkout_session_id);
-          const applicationEmail = await sendApplicationReceivedEmailOnce(env, db, application, existingSession.url).catch((error) => ({ sent: false, skipped: false, error: error.message }));
           return json({
             ok: true,
             application,
@@ -2596,7 +2549,7 @@ async function onRequestPost6({ request, env }) {
               checkoutUrl: existingSession.url,
               checkoutSessionId: existingSession.id
             },
-            application_email: applicationEmail,
+            application_email: { sent: false, skipped: true, reason: "Sent only after payment confirmation." },
             duplicate_submission: true
           });
         }
@@ -2622,13 +2575,6 @@ async function onRequestPost6({ request, env }) {
         });
         application.payment_id = await createPayment(db, application, session, metadata);
         application.external_payment_id = session.id;
-        let applicationEmail;
-        try {
-          applicationEmail = await sendApplicationReceivedEmailOnce(env, db, application, session.url);
-        } catch (emailError) {
-          console.error("Application received email failed after Checkout creation.", emailError);
-          applicationEmail = { sent: false, skipped: false, error: emailError.message || "Email delivery failed." };
-        }
         return json({
           ok: true,
           application,
@@ -2639,7 +2585,7 @@ async function onRequestPost6({ request, env }) {
             checkoutUrl: session.url,
             checkoutSessionId: session.id
           },
-          application_email: applicationEmail,
+          application_email: { sent: false, skipped: true, reason: "Sent only after payment confirmation." },
           receipt_email: { sent: false, skipped: true, reason: "Sent by Stripe after payment confirmation." },
           turnstile_skipped: action === "switch_to_online" ? false : !env.TURNSTILE_SECRET_KEY
         });
@@ -2649,7 +2595,7 @@ async function onRequestPost6({ request, env }) {
           {
             ok: false,
             error: "stripe_checkout_unavailable",
-            message: "\u7533\u8FBC\u306F\u53D7\u3051\u4ED8\u3051\u307E\u3057\u305F\u304C\u3001\u6C7A\u6E08\u753B\u9762\u3092\u958B\u3051\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u53D7\u4ED8\u756A\u53F7\u3092\u63A7\u3048\u3066FESTA\u4E8B\u52D9\u5C40\u3078\u3054\u9023\u7D61\u304F\u3060\u3055\u3044\u3002",
+            message: "\u6C7A\u6E08\u753B\u9762\u3092\u958B\u3051\u306A\u304B\u3063\u305F\u305F\u3081\u3001\u7533\u8FBC\u306F\u5B8C\u4E86\u3057\u3066\u3044\u307E\u305B\u3093\u3002\u518D\u5EA6\u304A\u8A66\u3057\u3044\u305F\u3060\u304F\u304B\u3001\u8868\u793A\u3055\u308C\u305F\u624B\u7D9A\u756A\u53F7\u3092\u6DFB\u3048\u3066FESTA\u4E8B\u52D9\u5C40\u3078\u3054\u9023\u7D61\u304F\u3060\u3055\u3044\u3002",
             application
           },
           { status: 502 }
