@@ -128,7 +128,7 @@
               <label for="ticket_type_display">卒部区分（割引・チケット判定）</label>
               <input id="ticket_type_display" value="所属区分と卒部年度から自動判定" readonly />
               <input id="ticket_type" name="ticket_type" type="hidden" value="obog" />
-              <p class="crm-help">卒部年度から、すべての参加者向けプランに適用する年次割引とチケット枚数を自動判定します。学習院桜友会の方は卒部11年目以上と同じ扱いです。</p>
+              <p class="crm-help">卒部年度から、すべての参加者向けプランに適用する年次割引とチケット枚数を自動判定します。区分は2026年4月1日時点で固定し、年越し後も変わりません。学習院桜友会の方は卒部11年目以上と同じ扱いです。</p>
             </div>
             <div class="crm-field">
               <label for="support_tier">参加プラン <span class="crm-required">必須</span></label>
@@ -153,7 +153,8 @@
             <ul class="crm-help">
               <li>2026年9月30日まで：各プランの基準価格から2,000円引き</li>
               <li>2026年10月1日〜12月31日：各プランの基準価格から1,000円引き</li>
-              <li>卒部6〜10年目：さらに2,000円引き／卒部5年目以下：さらに4,000円引き</li>
+              <li>卒部6〜10年目（2016〜2020年度卒部）：さらに2,000円引き</li>
+              <li>卒部1〜5年目（2021〜2025年度卒部）：さらに4,000円引き</li>
             </ul>
           </div>
 
@@ -493,6 +494,7 @@
           <button id="close-graduation-year-guide" class="crm-dialog__close" type="button" aria-label="早見表を閉じる">×</button>
         </div>
         <p><strong>卒部年度は、冬の全日本学生競技ダンス選手権大会（冬全）で卒部した年の年度</strong>を入力してください。大学の卒業年度ではありません。</p>
+        <p><strong>卒部年次は2026年4月1日時点で固定</strong>します。2026年12月や2027年1月をまたいでも、申込区分は変わりません。</p>
         <p>1年生の4月に入部し、4年生の12月に冬全で卒部した場合は、入部年に3を足した年が卒部年度の目安です。</p>
         <p class="crm-guide-example"><strong>例：</strong>2018年4月入部 → 2021年12月の冬全で卒部 → <strong>2021年度卒部</strong></p>
         <div class="crm-guide-table-wrap" role="region" aria-label="入部年度と卒部年度の早見表" tabindex="0">
@@ -505,12 +507,12 @@
               <tr><td>2015年度</td><td>2018年度</td></tr>
               <tr><td>2016年度</td><td>2019年度</td></tr>
               <tr><td>2017年度</td><td>2020年度</td></tr>
-              <tr><td>2018年度</td><td>2021年度</td><td rowspan="6">卒部5年目以下</td></tr>
+              <tr><td>2018年度</td><td>2021年度</td><td rowspan="5">卒部1〜5年目</td></tr>
               <tr><td>2019年度</td><td>2022年度</td></tr>
               <tr><td>2020年度</td><td>2023年度</td></tr>
               <tr><td>2021年度</td><td>2024年度</td></tr>
               <tr><td>2022年度</td><td>2025年度</td></tr>
-              <tr><td>2023年度</td><td>2026年度</td></tr>
+              <tr><td>2023年度</td><td>2026年度卒部予定</td><td>基準日現在は現役生</td></tr>
             </tbody>
           </table>
         </div>
@@ -518,6 +520,6 @@
       </div>
     </dialog>
     <footer class="crm-legal-footer"><a href="../festa-60th/legal/">特定商取引法に基づく表記</a><a href="../festa-60th/privacy/">プライバシーポリシー</a></footer>
-    <script src="../assets/js/festa60-register.js?v=20260808-8" defer></script>
+    <script src="../assets/js/festa60-register.js?v=20260808-9" defer></script>
   </body>
 </html>

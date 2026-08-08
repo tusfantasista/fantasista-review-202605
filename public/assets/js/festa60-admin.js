@@ -143,7 +143,7 @@
       staff: "役員・お手伝い",
       current_student: "現役",
       absent_donation: value.endsWith("30000") ? "欠席寄付 プレミアム" : value.endsWith("10000") ? "欠席寄付 アドバンス" : "欠席寄付 スタンダード",
-      standard: value === "obog_6_10" ? "通常参加（卒部6〜10年）" : value === "obog_5_under" ? "通常参加（卒部5年以下）" : "通常参加"
+      standard: value === "obog_6_10" ? "通常参加（卒部6〜10年目）" : value === "obog_5_under" ? "通常参加（卒部1〜5年目）" : "通常参加"
     };
     return labels[key];
   }
@@ -287,7 +287,7 @@
     renderBarChart(elements.cohortChart, [
       { label: "卒部11年以上", value: participation.cohort_eleven_over_count, className: "" },
       { label: "卒部6〜10年", value: participation.cohort_six_ten_count, className: "" },
-      { label: "卒部5年以下", value: participation.cohort_five_under_count, className: "" },
+      { label: "卒部1〜5年目（2021〜2025年度）", value: participation.cohort_five_under_count, className: "" },
       { label: "学習院桜友会", value: participation.cohort_gakushuin_count, className: "" },
       { label: "現役", value: participation.cohort_current_student_count, className: "" },
       { label: "年次未確認", value: participation.cohort_unknown_count, className: "pending" }
@@ -368,7 +368,7 @@
       child_companion_reception_count: 0,
       cohort_eleven_over_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage !== "gakushuin_ouyukai" && Number(item.graduation_year) > 0 && Number(item.graduation_year) <= 2015).length,
       cohort_six_ten_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage !== "gakushuin_ouyukai" && Number(item.graduation_year) >= 2016 && Number(item.graduation_year) <= 2020).length,
-      cohort_five_under_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage !== "gakushuin_ouyukai" && Number(item.graduation_year) >= 2021).length,
+      cohort_five_under_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage !== "gakushuin_ouyukai" && Number(item.graduation_year) >= 2021 && Number(item.graduation_year) <= 2025).length,
       cohort_gakushuin_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage === "gakushuin_ouyukai").length,
       cohort_current_student_count: attendees.filter((item) => item.ticket_type === "current_student").length,
       cohort_unknown_count: attendees.filter((item) => item.ticket_type !== "current_student" && item.school_lineage !== "gakushuin_ouyukai" && !Number(item.graduation_year)).length

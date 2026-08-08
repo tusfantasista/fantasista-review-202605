@@ -73,6 +73,7 @@
   const obogSixTenFrom = 2016;
   const obogSixTenTo = 2020;
   const obogFiveUnderFrom = 2021;
+  const obogFiveUnderTo = 2025;
   const obogElevenOverTo = 2015;
   const baseFees = {
     obog: { early: 13000, year_end: 14000, regular: 15000 },
@@ -407,9 +408,12 @@
     } else if (year <= obogSixTenTo) {
       ticketType.value = "obog_6_10";
       ticketTypeDisplay.value = "若手OBOG（6〜10年目）";
+    } else if (year <= obogFiveUnderTo) {
+      ticketType.value = "obog_5_under";
+      ticketTypeDisplay.value = "若手OBOG（1〜5年目）";
     } else {
       ticketType.value = "obog_5_under";
-      ticketTypeDisplay.value = "若手OBOG（5年目以下）";
+      ticketTypeDisplay.value = "基準日現在は現役生（事務局へ確認）";
     }
 
     if (staffMode) {
@@ -956,14 +960,17 @@
     if (graduationYear && (!Number.isInteger(graduationYear) || graduationYear < 1900 || graduationYear > 2026)) {
       errors.push("卒部年度は1900〜2026の西暦4桁で入力してください。");
     }
+    if (!isGakushuin && graduationYear > obogFiveUnderTo) {
+      errors.push("卒部年次区分は2026年4月1日時点を基準としています。2026年度卒部予定の方は現役生区分となるため、FESTA事務局へお問い合わせください。");
+    }
     if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog" && graduationYear > obogElevenOverTo) {
       errors.push(`一般OBOG（11年目以上）は${obogElevenOverTo}年度以前の卒部を対象とします。参加費区分または卒部年度を確認してください。`);
     }
     if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_6_10" && (graduationYear < obogSixTenFrom || graduationYear > obogSixTenTo)) {
       errors.push(`OBOG 6〜10年目は${obogSixTenFrom}〜${obogSixTenTo}年度に卒部した方を想定しています。参加費区分または卒部年度を確認してください。`);
     }
-    if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_5_under" && graduationYear < obogFiveUnderFrom) {
-      errors.push(`OBOG 5年目以下は${obogFiveUnderFrom}年度以降の卒部を想定しています。参加費区分または卒部年度を確認してください。`);
+    if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_5_under" && (graduationYear < obogFiveUnderFrom || graduationYear > obogFiveUnderTo)) {
+      errors.push(`OBOG 1〜5年目は${obogFiveUnderFrom}〜${obogFiveUnderTo}年度に卒部した方を対象とします。参加費区分または卒部年度を確認してください。`);
     }
     if (payload.support_tier && payload.support_tier !== "none" && !["obog", "obog_6_10", "obog_5_under", ...staffTicketTypes].includes(payload.ticket_type)) {
       errors.push("参加者向け支援プランはOBOG区分で選択してください。");

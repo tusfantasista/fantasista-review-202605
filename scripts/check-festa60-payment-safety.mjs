@@ -24,6 +24,7 @@ const checks = [
   ["preview transfer warning", files.register.includes("この画面の口座へは、まだ振り込まないでください")],
   ["bank actions pass payment validation", files.worker.includes('const bankTransferActions = ["preview_bank_transfer", "confirm_bank_transfer", "cancel_bank_preview"]') && files.worker.includes('validateApplication(payload, env, action)')],
   ["validation errors identify fields", files.registerScript.includes("formatApplicationError(result)") && files.registerScript.includes("確認が必要な項目")],
+  ["cohort baseline is fixed", files.worker.includes("OBOG_5_UNDER_GRADUATION_YEAR_TO = 2025") && files.register.includes("2026年4月1日時点で固定")],
   ["preview omits actionable hosted link", !files.register.includes('id="bank-preview-instructions"')],
   ["design covers five issues", [1, 2, 3, 4, 5].every((number) => files.design.includes(`| ${number} |`))]
 ];

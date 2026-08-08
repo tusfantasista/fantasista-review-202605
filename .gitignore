@@ -38,6 +38,9 @@ notes/
 festa60-public/
 fantasista-site/public/
 
+# local package/tool caches
+.npm-cache*/
+
 # local databases and exports
 *.sqlite
 *.sqlite3

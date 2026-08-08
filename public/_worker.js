@@ -175,6 +175,7 @@ var PAYMENT_STATUSES = ["unpaid", "pending", "paid", "cancelled", "refunded"];
 var OBOG_6_10_GRADUATION_YEAR_FROM = 2016;
 var OBOG_6_10_GRADUATION_YEAR_TO = 2020;
 var OBOG_5_UNDER_GRADUATION_YEAR_FROM = 2021;
+var OBOG_5_UNDER_GRADUATION_YEAR_TO = 2025;
 var OBOG_11_OVER_GRADUATION_YEAR_TO = 2015;
 function feePeriodForDate(date = /* @__PURE__ */ new Date()) {
   const instant = date instanceof Date ? date : new Date(date);
@@ -221,7 +222,7 @@ var COMPANION_FEES = {
 var TICKET_LABELS = {
   obog: "60\u5468\u5E74\u8A18\u5FF5FESTA \u4E00\u822COBOG\u53C2\u52A0\u8CBB",
   obog_6_10: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG 6\u301C10\u5E74\u76EE\u53C2\u52A0\u8CBB",
-  obog_5_under: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG 5\u5E74\u76EE\u4EE5\u4E0B\u53C2\u52A0\u8CBB",
+  obog_5_under: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG 1\u301C5\u5E74\u76EE\u53C2\u52A0\u8CBB",
   obog_staff: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG\u5F79\u54E1\u30FB\u5F53\u65E5\u624B\u4F1D\u3044\u53C2\u52A0\u8CBB",
   obog_staff_6_10: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG\u5F79\u54E1\u30FB\u5F53\u65E5\u624B\u4F1D\u3044 6\u301C10\u5E74\u76EE\u53C2\u52A0\u8CBB",
   obog_staff_5_under: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG\u5F79\u54E1\u30FB\u5F53\u65E5\u624B\u4F1D\u3044 5\u5E74\u76EE\u4EE5\u4E0B\u53C2\u52A0\u8CBB",
@@ -1209,7 +1210,7 @@ async function getAdminParticipationSummary(db) {
        COALESCE(SUM(child_companion_reception_count), 0) AS child_companion_reception_count,
        COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND school_lineage <> 'gakushuin_ouyukai' AND graduation_year <= ${OBOG_11_OVER_GRADUATION_YEAR_TO} THEN 1 ELSE 0 END), 0) AS cohort_eleven_over_count,
        COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND school_lineage <> 'gakushuin_ouyukai' AND graduation_year BETWEEN ${OBOG_6_10_GRADUATION_YEAR_FROM} AND ${OBOG_6_10_GRADUATION_YEAR_TO} THEN 1 ELSE 0 END), 0) AS cohort_six_ten_count,
-       COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND school_lineage <> 'gakushuin_ouyukai' AND graduation_year >= ${OBOG_5_UNDER_GRADUATION_YEAR_FROM} THEN 1 ELSE 0 END), 0) AS cohort_five_under_count,
+       COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND school_lineage <> 'gakushuin_ouyukai' AND graduation_year BETWEEN ${OBOG_5_UNDER_GRADUATION_YEAR_FROM} AND ${OBOG_5_UNDER_GRADUATION_YEAR_TO} THEN 1 ELSE 0 END), 0) AS cohort_five_under_count,
        COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND school_lineage = 'gakushuin_ouyukai' THEN 1 ELSE 0 END), 0) AS cohort_gakushuin_count,
        COALESCE(SUM(CASE WHEN ticket_type = 'current_student' THEN 1 ELSE 0 END), 0) AS cohort_current_student_count,
        COALESCE(SUM(CASE WHEN ticket_type <> 'current_student' AND (school_lineage IS NULL OR (school_lineage <> 'gakushuin_ouyukai' AND graduation_year IS NULL)) THEN 1 ELSE 0 END), 0) AS cohort_unknown_count
@@ -2705,8 +2706,8 @@ function validateApplication(payload, env, action = "submit_online") {
       errors.ticket_type = `obog_requires_graduation_year_${OBOG_11_OVER_GRADUATION_YEAR_TO}_or_earlier`;
     } else if (!isGakushuin && identityTicketType === "obog_6_10" && (graduationYear < OBOG_6_10_GRADUATION_YEAR_FROM || graduationYear > OBOG_6_10_GRADUATION_YEAR_TO)) {
       errors.ticket_type = `obog_6_10_requires_graduation_year_${OBOG_6_10_GRADUATION_YEAR_FROM}_${OBOG_6_10_GRADUATION_YEAR_TO}`;
-    } else if (!isGakushuin && identityTicketType === "obog_5_under" && graduationYear < OBOG_5_UNDER_GRADUATION_YEAR_FROM) {
-      errors.ticket_type = `obog_5_under_requires_graduation_year_${OBOG_5_UNDER_GRADUATION_YEAR_FROM}_or_later`;
+    } else if (!isGakushuin && identityTicketType === "obog_5_under" && (graduationYear < OBOG_5_UNDER_GRADUATION_YEAR_FROM || graduationYear > OBOG_5_UNDER_GRADUATION_YEAR_TO)) {
+      errors.ticket_type = `obog_5_under_requires_graduation_year_${OBOG_5_UNDER_GRADUATION_YEAR_FROM}_${OBOG_5_UNDER_GRADUATION_YEAR_TO}`;
     }
   }
   const isDonor = ABSENT_DONATION_TICKET_TYPES.includes(baseTicketType) || supportTier !== "none";
