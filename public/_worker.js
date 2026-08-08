@@ -2370,7 +2370,7 @@ async function onRequestPost6({ request, env }) {
     }
     payload.fee_period = feePeriodForDate();
     payload.ticket_type = normalizeTicketType(payload.ticket_type, payload.support_tier);
-    const validation = validateApplication(payload, env);
+    const validation = validateApplication(payload, env, action);
     if (!validation.ok) return badRequest("\u5165\u529B\u5185\u5BB9\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002", validation.errors);
     const isStaffApplication = STAFF_TICKET_TYPES.includes(splitTicketType(payload.ticket_type).base_ticket_type);
     payload.source = isStaffApplication ? "staff_invite" : "public_form";
@@ -2672,7 +2672,7 @@ async function onRequestGet6() {
   return methodNotAllowed();
 }
 __name(onRequestGet6, "onRequestGet");
-function validateApplication(payload, env) {
+function validateApplication(payload, env, action = "submit_online") {
   const errors = {};
   const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(payload.ticket_type);
   for (const field of ["family_name", "given_name", "family_name_kana", "given_name_kana", "full_name", "full_name_kana", "email", "ticket_type"]) {
@@ -2697,7 +2697,9 @@ function validateApplication(payload, env) {
   if (!payload.cancellation_policy_consent) {
     errors.cancellation_policy_consent = "required";
   }
-  if (payload.payment_method !== "stripe") {
+  const bankTransferActions = ["preview_bank_transfer", "confirm_bank_transfer", "cancel_bank_preview"];
+  const expectedPaymentMethod = bankTransferActions.includes(action) ? "bank_transfer" : "stripe";
+  if (payload.payment_method !== expectedPaymentMethod) {
     errors.payment_method = "invalid";
   }
   const isStaffApplication = STAFF_TICKET_TYPES.includes(baseTicketType);

@@ -650,9 +650,34 @@
       if (result.application?.application_code) {
         throw new Error(`${result.message || "送信に失敗しました。"}\n受付番号: ${result.application.application_code}`);
       }
-      throw new Error(result.message || result.error || "送信に失敗しました。");
+      throw new Error(formatApplicationError(result));
     }
     return result;
+  }
+
+  function formatApplicationError(result) {
+    const fieldLabels = {
+      family_name: "姓",
+      given_name: "名",
+      family_name_kana: "姓（ふりがな）",
+      given_name_kana: "名（ふりがな）",
+      email: "メールアドレス",
+      ticket_type: "参加・寄付プラン",
+      reception_attendance: "懇親会の参加",
+      privacy_consent: "個人情報の取扱いへの同意",
+      photo_consent: "写真撮影・掲載の確認",
+      cancellation_policy_consent: "キャンセル規定への同意",
+      school_lineage: "所属区分",
+      staff_access_code: "役員用アクセスコード",
+    };
+    const invalidFields = Object.keys(result.details || {})
+      .map((field) => fieldLabels[field] || (field.startsWith("companions.") ? "同伴者情報" : ""))
+      .filter(Boolean);
+    const uniqueFields = [...new Set(invalidFields)];
+    if (uniqueFields.length) {
+      return `${result.message || "入力内容を確認してください。"}\n確認が必要な項目: ${uniqueFields.join("、")}`;
+    }
+    return result.message || result.error || "送信に失敗しました。";
   }
 
   function renderConfirmation(payload) {
