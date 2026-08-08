@@ -383,6 +383,7 @@
             ${detailRow("申込時期", feePeriodLabels[application.fee_period] || application.fee_period)}
             ${detailRow("参加人数", `${Number(application.quantity || 1)}名`)}
             ${detailRow("同伴者", `${Number(application.companion_count || 0)}名`)}
+            ${detailRow("同伴者の懇親会", application.companion_summary || "-")}
             ${detailRow("懇親会", application.reception_attendance === "attending" ? "参加" : "不参加")}
             ${detailRow("申込日時", formatDateTime(application.created_at))}
           </dl>

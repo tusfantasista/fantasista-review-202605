@@ -165,6 +165,7 @@
     updateFeePreview();
   });
   receptionAttendance.addEventListener("change", function () {
+    syncCompanionReceptionOptions();
     updatePlanDetails();
     updateFeePreview();
   });
@@ -239,9 +240,17 @@
             <p class="crm-help">大人には300円券を1枚配布します。子供への自動配布はありません。</p>
           </div>
           <div class="crm-field">
+            <label for="companion_${index}_reception_attendance">懇親会 <span class="crm-required">必須</span></label>
+            <select id="companion_${index}_reception_attendance" name="companion_${index}_reception_attendance" required>
+              <option value="attending">参加する</option>
+              <option value="without_reception">参加しない</option>
+            </select>
+            <p class="crm-help" data-companion-reception-help>申込者本人が参加する場合、同伴者は参加・不参加を個別に選べます。</p>
+          </div>
+        </div>
+        <div class="crm-field">
             <label for="companion_${index}_email">メールアドレス <span class="crm-optional">任意</span></label>
             <input id="companion_${index}_email" name="companion_${index}_email" type="email" autocomplete="email" />
-          </div>
         </div>
         <div class="crm-field">
           <label for="companion_${index}_note">補足 <span class="crm-optional">任意</span></label>
@@ -254,10 +263,26 @@
       `;
       companions.appendChild(card);
     }
+    syncCompanionReceptionOptions();
     companions.querySelectorAll("input, select").forEach((control) => {
       control.addEventListener(control.tagName === "SELECT" ? "change" : "input", updateFeePreview);
     });
     updateFeePreview();
+  }
+
+  function syncCompanionReceptionOptions() {
+    const applicantAttends = receptionAttendance.value === "attending";
+    companions.querySelectorAll("select[name$='_reception_attendance']").forEach((select) => {
+      const attendingOption = select.querySelector("option[value='attending']");
+      if (attendingOption) attendingOption.disabled = !applicantAttends;
+      if (!applicantAttends) select.value = "without_reception";
+      const help = select.parentElement?.querySelector("[data-companion-reception-help]");
+      if (help) {
+        help.textContent = applicantAttends
+          ? "申込者本人が参加する場合、同伴者は参加・不参加を個別に選べます。"
+          : "申込者本人が参加しないため、同伴者も懇親会不参加となります。";
+      }
+    });
   }
 
   function formPayload(data) {
@@ -294,6 +319,7 @@
         full_name: fullName,
         relationship: payload[`companion_${index}_relationship`] || "",
         attendee_type: attendeeType,
+        reception_attendance: payload[`companion_${index}_reception_attendance`] || payload.reception_attendance,
         non_obog_confirmed: data.has(`companion_${index}_non_obog_confirmed`),
         email: payload[`companion_${index}_email`] || "",
         note: payload[`companion_${index}_note`] || "",
@@ -304,6 +330,7 @@
       delete payload[`companion_${index}_name`];
       delete payload[`companion_${index}_relationship`];
       delete payload[`companion_${index}_attendee_type`];
+      delete payload[`companion_${index}_reception_attendance`];
       delete payload[`companion_${index}_non_obog_confirmed`];
       delete payload[`companion_${index}_email`];
       delete payload[`companion_${index}_note`];
@@ -569,7 +596,7 @@
       const companionRows = payload.companions.length
         ? payload.companions.map((companion, index) => [
           `同伴者${index + 1}`,
-          `${companion.full_name} / ${companion.relationship} / ${companion.attendee_type === "child" ? "子供（チケット自動配布なし）" : "大人（300円券×1枚）"}${companion.email ? ` / ${companion.email}` : ""}${companion.note ? `\n補足: ${companion.note}` : ""}`,
+          `${companion.full_name} / ${companion.relationship} / ${companion.attendee_type === "child" ? "子供（チケット自動配布なし）" : "大人（300円券×1枚）"} / ${companion.reception_attendance === "attending" ? "懇親会参加" : "懇親会不参加"}${companion.email ? ` / ${companion.email}` : ""}${companion.note ? `\n補足: ${companion.note}` : ""}`,
         ])
         : [["同伴者", "なし"]];
       groups.push({
@@ -760,6 +787,12 @@
       if (!companion.full_name || !companion.relationship || !companion.attendee_type) {
         errors.push(`同伴者${index + 1}の氏名、続柄・関係、同伴者属性を入力してください。`);
       }
+      if (!["attending", "without_reception"].includes(companion.reception_attendance)) {
+        errors.push(`同伴者${index + 1}の懇親会参加有無を選択してください。`);
+      }
+      if (payload.reception_attendance === "without_reception" && companion.reception_attendance === "attending") {
+        errors.push(`申込者本人が懇親会に参加しない場合、同伴者${index + 1}のみの懇親会参加は選べません。`);
+      }
       if (!companion.non_obog_confirmed) {
         errors.push(`同伴者${index + 1}がOBOGではないことを確認してください。`);
       }
@@ -789,7 +822,8 @@
 
     const companionTotal = payload.companions.reduce((sum, companion) => {
       const type = companion.attendee_type === "child" ? "child" : "adult";
-      return sum + companionFees[type][reception];
+      const companionReception = companion.reception_attendance || reception;
+      return sum + companionFees[type][companionReception];
     }, base);
     return companionTotal;
   }

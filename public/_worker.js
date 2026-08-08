@@ -342,7 +342,8 @@ function buildPaymentLineItems(payload, companions = []) {
   }
   if (!isAbsentDonation) companions.forEach((companion, index) => {
     const type = companion.attendee_type === "child" ? "child" : "adult";
-    const amount = COMPANION_FEES[type][normalizedReception];
+    const companionReception = RECEPTION_ATTENDANCE.includes(companion.reception_attendance) ? companion.reception_attendance : normalizedReception;
+    const amount = COMPANION_FEES[type][companionReception];
     const danceTicketCount = type === "adult" ? 1 : 0;
     if (amount <= 0) return;
     items.push({
@@ -354,6 +355,7 @@ function buildPaymentLineItems(payload, companions = []) {
       metadata: {
         attendee_type: type,
         relationship: companion.relationship || "",
+        reception_attendance: companionReception,
         dance_ticket_count: danceTicketCount,
         dance_ticket_unit_amount_jpy: danceTicketCount ? 300 : 0,
         dance_ticket_total_amount_jpy: danceTicketCount * 300
@@ -540,14 +542,15 @@ async function insertApplication(db, payload, requestMeta = {}) {
   for (const companion of companions) {
     await db.prepare(
       `INSERT INTO companions (
-          id, application_id, full_name, relationship, attendee_type, email, note, ticket_type, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          id, application_id, full_name, relationship, attendee_type, reception_attendance, email, note, ticket_type, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       newId("cmp"),
       id,
       companion.full_name,
       companion.relationship || null,
       companion.attendee_type || null,
+      companion.reception_attendance || payload.reception_attendance || "attending",
       companion.email || null,
       companion.note || null,
       "companion",
@@ -925,14 +928,22 @@ async function listApplications(db) {
           SELECT COALESCE(SUM(
             CASE
               WHEN c.attendee_type = 'child' THEN
-                CASE WHEN a.reception_attendance = 'without_reception' THEN 1000 ELSE 3000 END
+                CASE WHEN COALESCE(c.reception_attendance, a.reception_attendance) = 'without_reception' THEN 1000 ELSE 3000 END
               ELSE
-                CASE WHEN a.reception_attendance = 'without_reception' THEN 6000 ELSE 8000 END
+                CASE WHEN COALESCE(c.reception_attendance, a.reception_attendance) = 'without_reception' THEN 6000 ELSE 8000 END
             END
           ), 0)
           FROM companions c
           WHERE c.application_id = a.id
-        ) AS companion_fee_total
+        ) AS companion_fee_total,
+        (
+          SELECT GROUP_CONCAT(
+            c.full_name || '（' || CASE WHEN COALESCE(c.reception_attendance, a.reception_attendance) = 'attending' THEN '懇親会参加' ELSE '懇親会不参加' END || '）',
+            ' / '
+          )
+          FROM companions c
+          WHERE c.application_id = a.id
+        ) AS companion_summary
        FROM applications a
        LEFT JOIN members m ON m.id = a.member_id
        LEFT JOIN payments p ON p.id = (
@@ -1835,6 +1846,10 @@ function validateApplication(payload, env) {
       if (!companion.full_name || String(companion.full_name).trim() === "") errors[`${key}.full_name`] = "required";
       if (!companion.relationship || String(companion.relationship).trim() === "") errors[`${key}.relationship`] = "required";
       if (!["adult", "child"].includes(companion.attendee_type)) errors[`${key}.attendee_type`] = "invalid";
+      if (!RECEPTION_ATTENDANCE.includes(companion.reception_attendance)) errors[`${key}.reception_attendance`] = "invalid";
+      if (payload.reception_attendance === "without_reception" && companion.reception_attendance === "attending") {
+        errors[`${key}.reception_attendance`] = "companion_cannot_attend_without_applicant";
+      }
       if (companion.non_obog_confirmed !== true) errors[`${key}.non_obog_confirmed`] = "required";
       if (companion.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(companion.email)) {
         errors[`${key}.email`] = "invalid";
