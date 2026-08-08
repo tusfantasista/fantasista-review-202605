@@ -15,6 +15,7 @@
   const feePeriod = document.getElementById("fee_period");
   const feePeriodDisplay = document.getElementById("fee_period_display");
   const receptionAttendance = document.getElementById("reception_attendance");
+  const receptionAttendanceHelp = document.getElementById("reception-attendance-help");
   const feePreview = document.getElementById("fee-preview");
   const entryPanel = document.getElementById("entry-panel");
   const confirmationPanel = document.getElementById("confirmation-panel");
@@ -69,6 +70,7 @@
     current_student: { early: 4000, year_end: 4000, regular: 4000 },
   };
   const attendingPlanTotals = { platinum: 100000, gold: 50000, silver: 30000, bronze: 20000 };
+  const staffTicketTypes = ["obog_staff", "obog_staff_6_10", "obog_staff_5_under"];
   const absentDonationTotals = {
     absent_donation_30000: 30000,
     absent_donation_10000: 10000,
@@ -162,7 +164,10 @@
     updatePlanDetails();
     updateFeePreview();
   });
-  receptionAttendance.addEventListener("change", updateFeePreview);
+  receptionAttendance.addEventListener("change", function () {
+    updatePlanDetails();
+    updateFeePreview();
+  });
   postalLookupButton.addEventListener("click", lookupAddressByPostalCode);
   postalCode.addEventListener("input", function () {
     window.clearTimeout(postalLookupTimer);
@@ -249,7 +254,9 @@
       `;
       companions.appendChild(card);
     }
-    companions.querySelectorAll("select").forEach((select) => select.addEventListener("change", updateFeePreview));
+    companions.querySelectorAll("input, select").forEach((control) => {
+      control.addEventListener(control.tagName === "SELECT" ? "change" : "input", updateFeePreview);
+    });
     updateFeePreview();
   }
 
@@ -257,8 +264,6 @@
     const payload = Object.fromEntries(data.entries());
     if (staffMode) {
       payload.application_mode = "attending";
-      payload.ticket_type = "obog_staff";
-      payload.support_tier = "none";
     }
     payload.full_name = [payload.family_name, payload.given_name].filter(Boolean).join(" ");
     payload.full_name_kana = [payload.family_name_kana, payload.given_name_kana].filter(Boolean).join(" ");
@@ -339,8 +344,8 @@
     }
 
     if (staffMode) {
-      ticketType.value = "obog_staff";
-      ticketTypeDisplay.value = "役員・当日お手伝い（専用参加費）";
+      ticketType.value = staffTicketType(ticketType.value);
+      ticketTypeDisplay.value = `${ticketTypeDisplay.value}／役員・当日お手伝い`;
     }
 
     updateSupportTierAvailability();
@@ -349,7 +354,7 @@
   }
 
   function updateSupportTierAvailability() {
-    const supportsPremium = !staffMode && applicationMode.value === "attending" && ["obog", "obog_6_10", "obog_5_under"].includes(ticketType.value);
+    const supportsPremium = applicationMode.value === "attending" && (["obog", "obog_6_10", "obog_5_under"].includes(ticketType.value) || staffTicketTypes.includes(ticketType.value));
     supportTier.disabled = !supportsPremium;
     if (!supportsPremium) supportTier.value = "none";
   }
@@ -358,9 +363,9 @@
     if (staffMode) applicationMode.value = "attending";
     const isAbsentDonation = applicationMode.value === "absent_donation";
     graduationSection.hidden = false;
-    attendancePlanSection.hidden = isAbsentDonation || staffMode;
+    attendancePlanSection.hidden = isAbsentDonation;
     feePeriodSection.hidden = isAbsentDonation;
-    attendanceTicketNotice.hidden = isAbsentDonation || staffMode;
+    attendanceTicketNotice.hidden = isAbsentDonation;
     attendanceOptionsSection.hidden = isAbsentDonation;
     supportPlanDetail.hidden = isAbsentDonation;
     photoConsentSection.hidden = isAbsentDonation;
@@ -428,18 +433,19 @@
   }
 
   function updatePlanDetails() {
-    if (staffMode) {
-      supportPlanDetail.innerHTML = "<h3>役員・当日お手伝い専用参加費</h3><p>事務局から案内を受けた方に適用する専用料金です。一般向けページには掲載していません。</p>";
-      absentPlanDetail.innerHTML = "";
-      return;
-    }
     const support = supportPlanDetails[supportTier.value];
     if (support) {
-      const discountedAmount = attendeePlanAmount(supportTier.value, ticketType.value, feePeriod.value);
-      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>現在の割引適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p><p>申込時期割引と卒部年度割引を併用しています。</p>`;
+      const discountedAmount = attendeePlanAmount(supportTier.value, ticketType.value, feePeriod.value, receptionAttendance.value);
+      const staffExplanation = staffMode
+        ? "<p>役員割引は参加費相当分にのみ適用し、上乗せ寄付相当分は割引しません。申込時期割引と卒部年度割引は一般申込と同額を適用します。</p>"
+        : "<p>申込時期割引と卒部年度割引を併用しています。</p>";
+      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>現在の割引適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p>${staffExplanation}`;
     } else {
-      const standardDanceTicket = ticketType.value === "obog" ? "300円券×3枚" : "300円券×2枚";
-      supportPlanDetail.innerHTML = `<h3>通常参加（基準額15,000円）</h3><p>申込時期割引と卒部年次割引を自動適用します。ダンスタイム用の${standardDanceTicket}が付きます。</p>`;
+      const standardDanceTicket = publicTicketType(ticketType.value) === "obog" ? "300円券×3枚" : "300円券×2枚";
+      const staffAmount = staffMode ? staffParticipationAmount(ticketType.value, feePeriod.value, receptionAttendance.value) : null;
+      supportPlanDetail.innerHTML = staffMode
+        ? `<h3>役員・当日お手伝い 通常参加</h3><p>参加費15,000円（懇親会不参加は懇親会費控除後）の50%を起点に、申込時期割引と卒部年度割引を一般申込と同額で適用します。</p><p><strong>現在の割引適用額：${staffAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。</p>`
+        : `<h3>通常参加（基準額15,000円）</h3><p>申込時期割引と卒部年次割引を自動適用します。ダンスタイム用の${standardDanceTicket}が付きます。</p>`;
     }
     const absent = absentPlanDetails[absentDonationTier.value];
     absentPlanDetail.innerHTML = absent ? planDetailMarkup(absent) : "";
@@ -456,12 +462,11 @@
     staffAccessCode.required = true;
     applicationModeSection.hidden = true;
     applicationMode.value = "attending";
-    attendancePlanSection.hidden = true;
-    attendanceTicketNotice.hidden = true;
-    supportTier.value = "none";
-    supportTier.disabled = true;
+    attendancePlanSection.hidden = false;
+    attendanceTicketNotice.hidden = false;
     ticketType.value = "obog_staff";
-    ticketTypeDisplay.value = "役員・当日お手伝い（専用参加費）";
+    ticketTypeDisplay.value = "一般OBOG（11年目以上）／役員・当日お手伝い";
+    receptionAttendanceHelp.textContent = "役員・当日お手伝いは、懇親会不参加の場合に懇親会費相当額を控除してから参加費部分を50%にします。上乗せ寄付相当分と同伴者料金には役員割引を適用しません。";
   }
 
   function showConfirmation(payload) {
@@ -571,10 +576,10 @@
         title: "参加・寄付内容",
         rows: [
           ["卒部区分（割引・チケット判定）", ticketTypeDisplay.value],
-          ["参加費区分", staffMode ? "役員・当日お手伝い専用参加費" : feePeriodDisplay.value],
-          ["参加プラン", staffMode ? "役員・当日お手伝い専用" : selectedLabel(supportTier)],
-          ...(!staffMode ? [["申込時期割引", applicationPeriodDiscount(payload.fee_period) ? `-${formatYen(applicationPeriodDiscount(payload.fee_period))}` : "割引なし"]] : []),
-          ...(!staffMode ? [["卒部年度割引", graduationDiscount(payload.ticket_type) ? `-${formatYen(graduationDiscount(payload.ticket_type))}` : "割引なし"]] : []),
+          ["参加費区分", staffMode ? "役員・当日お手伝い（参加費部分50%）" : feePeriodDisplay.value],
+          ["参加プラン", selectedLabel(supportTier)],
+          ["申込時期割引", applicationPeriodDiscount(payload.fee_period) ? `-${formatYen(applicationPeriodDiscount(payload.fee_period))}` : "割引なし"],
+          ["卒部年度割引", graduationDiscount(payload.ticket_type) ? `-${formatYen(graduationDiscount(payload.ticket_type))}` : "割引なし"],
           ["懇親会", selectedLabel(receptionAttendance)],
           ...companionRows,
           ["同伴者向けチケット", payload.companion_dance_ticket_count ? `300円券×${payload.companion_dance_ticket_count}枚` : "なし"],
@@ -719,7 +724,7 @@
     const graduationYear = Number(payload.graduation_year || 0);
     const isAbsentDonation = Object.hasOwn(absentDonationTotals, payload.ticket_type);
     const isGakushuin = payload.school_lineage === "gakushuin_ouyukai";
-    const isStaffApplication = staffMode && payload.ticket_type === "obog_staff";
+    const isStaffApplication = staffMode && staffTicketTypes.includes(payload.ticket_type);
     if (isStaffApplication && !String(payload.staff_access_code || "").trim()) {
       errors.push("役員・お手伝い用アクセスコードを入力してください。");
     }
@@ -741,7 +746,7 @@
     if (!isStaffApplication && !isGakushuin && !isAbsentDonation && payload.ticket_type === "obog_5_under" && graduationYear < obogFiveUnderFrom) {
       errors.push(`OBOG 5年目以下は${obogFiveUnderFrom}年度以降の卒部生を想定しています。参加費区分または卒部年度を確認してください。`);
     }
-    if (payload.support_tier && payload.support_tier !== "none" && !["obog", "obog_6_10", "obog_5_under"].includes(payload.ticket_type)) {
+    if (payload.support_tier && payload.support_tier !== "none" && !["obog", "obog_6_10", "obog_5_under", ...staffTicketTypes].includes(payload.ticket_type)) {
       errors.push("参加者向け支援プランはOBOG区分で選択してください。");
     }
     const isDonor = isAbsentDonation || payload.support_tier !== "none";
@@ -772,12 +777,14 @@
       return absentDonationTotals[payload.ticket_type];
     }
     let base = baseFees[payload.ticket_type]?.[period] ?? baseFees.obog[period];
-    if (payload.ticket_type === "obog_staff") {
-      base = Math.round((baseFees.obog[period] - noReceptionDiscount(reception)) * 0.5);
+    if (staffTicketTypes.includes(payload.ticket_type)) {
+      base = payload.support_tier && payload.support_tier !== "none"
+        ? attendeePlanAmount(payload.support_tier, payload.ticket_type, period, reception)
+        : staffParticipationAmount(payload.ticket_type, period, reception);
     } else if (payload.ticket_type === "current_student") {
       base = reception === "attending" ? baseFees.current_student[period] : 0;
     } else if (payload.support_tier && payload.support_tier !== "none") {
-      base = attendeePlanAmount(payload.support_tier, payload.ticket_type, period);
+      base = attendeePlanAmount(payload.support_tier, payload.ticket_type, period, reception);
     }
 
     const companionTotal = payload.companions.reduce((sum, companion) => {
@@ -787,9 +794,13 @@
     return companionTotal;
   }
 
-  function attendeePlanAmount(plan, attendeeType, period) {
+  function attendeePlanAmount(plan, attendeeType, period, reception = "attending") {
     const planBase = attendingPlanTotals[plan];
     if (!planBase) return baseFees[attendeeType]?.[period] ?? baseFees.obog[period];
+    if (staffTicketTypes.includes(attendeeType)) {
+      const donationAddOn = Math.max(0, planBase - baseFees.obog.regular);
+      return donationAddOn + staffParticipationAmount(attendeeType, period, reception);
+    }
     const discountedStandardFee = baseFees[attendeeType]?.[period] ?? baseFees.obog[period];
     const combinedDiscount = Math.max(0, baseFees.obog.regular - discountedStandardFee);
     return Math.max(0, planBase - combinedDiscount);
@@ -802,9 +813,28 @@
   }
 
   function graduationDiscount(attendeeType) {
-    if (attendeeType === "obog_6_10") return 2000;
-    if (attendeeType === "obog_5_under") return 4000;
+    const publicType = publicTicketType(attendeeType);
+    if (publicType === "obog_6_10") return 2000;
+    if (publicType === "obog_5_under") return 4000;
     return 0;
+  }
+
+  function staffParticipationAmount(attendeeType, period, reception) {
+    const staffBase = Math.round((baseFees.obog.regular - noReceptionDiscount(reception)) * 0.5);
+    return Math.max(0, staffBase - applicationPeriodDiscount(period) - graduationDiscount(attendeeType));
+  }
+
+  function publicTicketType(attendeeType) {
+    if (attendeeType === "obog_staff_6_10") return "obog_6_10";
+    if (attendeeType === "obog_staff_5_under") return "obog_5_under";
+    if (attendeeType === "obog_staff") return "obog";
+    return attendeeType;
+  }
+
+  function staffTicketType(attendeeType) {
+    if (attendeeType === "obog_6_10") return "obog_staff_6_10";
+    if (attendeeType === "obog_5_under") return "obog_staff_5_under";
+    return "obog_staff";
   }
 
   function noReceptionDiscount(reception) {

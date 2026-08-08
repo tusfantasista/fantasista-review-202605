@@ -109,7 +109,7 @@
     if (value.includes("__silver")) return "silver";
     if (value.includes("__bronze")) return "bronze";
     if (value.startsWith("absent_donation_")) return "absent_donation";
-    if (value === "obog_staff") return "staff";
+    if (value.startsWith("obog_staff")) return "staff";
     if (value === "current_student") return "current_student";
     return "standard";
   }
@@ -117,6 +117,10 @@
   function planLabel(ticketType) {
     const value = String(ticketType || "");
     const key = planKey(value);
+    if (value.startsWith("obog_staff__")) {
+      const tier = value.includes("__platinum") ? "プラチナ" : value.includes("__gold") ? "ゴールド" : value.includes("__silver") ? "シルバー" : "ブロンズ";
+      return `役員・お手伝い／${tier}`;
+    }
     const labels = {
       platinum: "プラチナ",
       gold: "ゴールド",

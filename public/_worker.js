@@ -197,6 +197,7 @@ var ATTENDING_PLAN_TOTALS = {
   silver: 3e4,
   bronze: 2e4
 };
+var STAFF_TICKET_TYPES = ["obog_staff", "obog_staff_6_10", "obog_staff_5_under"];
 var ABSENT_DONATION_TOTALS = {
   absent_donation_30000: 3e4,
   absent_donation_10000: 1e4,
@@ -222,6 +223,8 @@ var TICKET_LABELS = {
   obog_6_10: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG 6\u301C10\u5E74\u76EE\u53C2\u52A0\u8CBB",
   obog_5_under: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG 5\u5E74\u76EE\u4EE5\u4E0B\u53C2\u52A0\u8CBB",
   obog_staff: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG\u5F79\u54E1\u30FB\u5F53\u65E5\u624B\u4F1D\u3044\u53C2\u52A0\u8CBB",
+  obog_staff_6_10: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG\u5F79\u54E1\u30FB\u5F53\u65E5\u624B\u4F1D\u3044 6\u301C10\u5E74\u76EE\u53C2\u52A0\u8CBB",
+  obog_staff_5_under: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG\u5F79\u54E1\u30FB\u5F53\u65E5\u624B\u4F1D\u3044 5\u5E74\u76EE\u4EE5\u4E0B\u53C2\u52A0\u8CBB",
   current_student: "60\u5468\u5E74\u8A18\u5FF5FESTA \u73FE\u5F79\u90E8\u54E1\u53C2\u52A0\u8CBB",
   absent_donation_30000: "60\u5468\u5E74\u8A18\u5FF5FESTA \u6B20\u5E2D\u8005\u5BC4\u4ED8 \u30D7\u30EC\u30DF\u30A2\u30E0\uFF0830,000\u5186\uFF09",
   absent_donation_10000: "60\u5468\u5E74\u8A18\u5FF5FESTA \u6B20\u5E2D\u8005\u5BC4\u4ED8 \u30A2\u30C9\u30D0\u30F3\u30B9\uFF0810,000\u5186\uFF09",
@@ -259,7 +262,7 @@ var DONATION_PLAN_DETAILS = {
 };
 function danceTicketBenefit(ticketType) {
   const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(ticketType);
-  const benefit = SUPPORT_TIER_BENEFITS[supportTier] || STANDARD_DANCE_TICKET_BENEFITS[baseTicketType] || { count: 0, unit_amount_jpy: 0 };
+  const benefit = SUPPORT_TIER_BENEFITS[supportTier] || STANDARD_DANCE_TICKET_BENEFITS[publicBaseTicketType(baseTicketType)] || { count: 0, unit_amount_jpy: 0 };
   return {
     count: benefit.count,
     unit_amount_jpy: benefit.unit_amount_jpy,
@@ -293,7 +296,8 @@ function ticketLabel(ticketType) {
   const baseLabel = TICKET_LABELS[baseTicketType] || TICKET_LABELS.obog;
   if (supportTier === "none") return baseLabel;
   const tierLabel = supportTier === "platinum" ? "\u30D7\u30E9\u30C1\u30CA" : supportTier === "gold" ? "\u30B4\u30FC\u30EB\u30C9" : supportTier === "silver" ? "\u30B7\u30EB\u30D0\u30FC" : "\u30D6\u30ED\u30F3\u30BA";
-  return `60\u5468\u5E74\u8A18\u5FF5FESTA \u53C2\u52A0\u30D7\u30E9\u30F3 ${tierLabel}`;
+  const staffLabel = isStaffTicketType(baseTicketType) ? " OBOG\u5F79\u54E1\u30FB\u5F53\u65E5\u624B\u4F1D\u3044" : "";
+  return `60\u5468\u5E74\u8A18\u5FF5FESTA${staffLabel} \u53C2\u52A0\u30D7\u30E9\u30F3 ${tierLabel}`;
 }
 __name(ticketLabel, "ticketLabel");
 function donationPlanDetails(ticketType) {
@@ -314,7 +318,7 @@ function buildPaymentLineItems(payload, companions = []) {
   const items = [];
   const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(normalizedTicket);
   const isAbsentDonation = Object.hasOwn(ABSENT_DONATION_TOTALS, baseTicketType);
-  const ticketAmountJpy = !isAbsentDonation && supportTier !== "none" ? attendingPlanAmount(supportTier, baseTicketType, normalizedPeriod) : ticketLineAmount(baseTicketType, normalizedPeriod, normalizedReception);
+  const ticketAmountJpy = !isAbsentDonation && supportTier !== "none" ? attendingPlanAmount(supportTier, baseTicketType, normalizedPeriod, normalizedReception) : ticketLineAmount(baseTicketType, normalizedPeriod, normalizedReception);
   if (ticketAmountJpy > 0) {
     const danceTicket = danceTicketBenefit(normalizedTicket);
     const plan = donationPlanDetails(normalizedTicket);
@@ -369,8 +373,8 @@ function ticketLineAmount(ticketType, feePeriod, receptionAttendance) {
     return ABSENT_DONATION_TOTALS[baseTicketType];
   }
   let base = BASE_FEES[baseTicketType]?.[feePeriod] ?? BASE_FEES.obog[feePeriod];
-  if (baseTicketType === "obog_staff") {
-    return Math.round((BASE_FEES.obog[feePeriod] - noReceptionDiscount(receptionAttendance)) * 0.5);
+  if (isStaffTicketType(baseTicketType)) {
+    return staffParticipationAmount(baseTicketType, feePeriod, receptionAttendance);
   }
   if (baseTicketType === "current_student") {
     return receptionAttendance === "attending" ? BASE_FEES.current_student[feePeriod] : 0;
@@ -378,14 +382,47 @@ function ticketLineAmount(ticketType, feePeriod, receptionAttendance) {
   return base;
 }
 __name(ticketLineAmount, "ticketLineAmount");
-function attendingPlanAmount(supportTier, baseTicketType, feePeriod) {
+function attendingPlanAmount(supportTier, baseTicketType, feePeriod, receptionAttendance = "attending") {
   const planBase = ATTENDING_PLAN_TOTALS[supportTier];
   if (!planBase) return ticketLineAmount(baseTicketType, feePeriod, "attending");
+  if (isStaffTicketType(baseTicketType)) {
+    const donationAddOn = Math.max(0, planBase - BASE_FEES.obog.regular);
+    return donationAddOn + staffParticipationAmount(baseTicketType, feePeriod, receptionAttendance);
+  }
   const discountedStandardFee = BASE_FEES[baseTicketType]?.[feePeriod] ?? BASE_FEES.obog[feePeriod];
   const combinedDiscount = Math.max(0, BASE_FEES.obog.regular - discountedStandardFee);
   return Math.max(0, planBase - combinedDiscount);
 }
 __name(attendingPlanAmount, "attendingPlanAmount");
+function publicBaseTicketType(baseTicketType) {
+  if (baseTicketType === "obog_staff_6_10") return "obog_6_10";
+  if (baseTicketType === "obog_staff_5_under") return "obog_5_under";
+  if (baseTicketType === "obog_staff") return "obog";
+  return baseTicketType;
+}
+__name(publicBaseTicketType, "publicBaseTicketType");
+function isStaffTicketType(baseTicketType) {
+  return STAFF_TICKET_TYPES.includes(baseTicketType);
+}
+__name(isStaffTicketType, "isStaffTicketType");
+function staffApplicationPeriodDiscount(feePeriod) {
+  if (feePeriod === "early") return 2e3;
+  if (feePeriod === "year_end") return 1e3;
+  return 0;
+}
+__name(staffApplicationPeriodDiscount, "staffApplicationPeriodDiscount");
+function staffGraduationDiscount(baseTicketType) {
+  const publicType = publicBaseTicketType(baseTicketType);
+  if (publicType === "obog_6_10") return 2e3;
+  if (publicType === "obog_5_under") return 4e3;
+  return 0;
+}
+__name(staffGraduationDiscount, "staffGraduationDiscount");
+function staffParticipationAmount(baseTicketType, feePeriod, receptionAttendance) {
+  const discountedBase = Math.round((BASE_FEES.obog.regular - noReceptionDiscount(receptionAttendance)) * 0.5);
+  return Math.max(0, discountedBase - staffApplicationPeriodDiscount(feePeriod) - staffGraduationDiscount(baseTicketType));
+}
+__name(staffParticipationAmount, "staffParticipationAmount");
 function noReceptionDiscount(receptionAttendance) {
   return receptionAttendance === "without_reception" ? 2e3 : 0;
 }
@@ -1456,7 +1493,7 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   params.set("payment_method_options[customer_balance][bank_transfer][type]", "jp_bank_transfer");
   params.set("locale", "ja");
   params.set("submit_type", "book");
-  const staffQuery = splitTicketType(application.ticket_type).base_ticket_type === "obog_staff" ? "staff=1&" : "";
+  const staffQuery = isStaffTicketType(splitTicketType(application.ticket_type).base_ticket_type) ? "staff=1&" : "";
   params.set("success_url", `${baseUrl}/festa60-register/?${staffQuery}checkout=success&application=${application.application_code}`);
   params.set("cancel_url", `${baseUrl}/festa60-register/?${staffQuery}checkout=cancelled&application=${application.application_code}`);
   params.set("client_reference_id", application.id);
@@ -1650,7 +1687,6 @@ __name(verifyTurnstile, "verifyTurnstile");
 
 // api/festa60/applications.js
 var PUBLIC_OBOG_TICKET_TYPES = ["obog", "obog_6_10", "obog_5_under"];
-var STAFF_TICKET_TYPES = ["obog_staff"];
 var ABSENT_DONATION_TICKET_TYPES = ["absent_donation_30000", "absent_donation_10000", "absent_donation_5000"];
 var SCHOOL_LINEAGES = ["tus_obog", "gakushuin_ouyukai"];
 async function onRequestPost6({ request, env }) {
@@ -1781,7 +1817,7 @@ function validateApplication(payload, env) {
   if (!SCHOOL_LINEAGES.includes(payload.school_lineage)) {
     errors.school_lineage = "required";
   }
-  if (supportTier !== "none" && !PUBLIC_OBOG_TICKET_TYPES.includes(baseTicketType)) {
+  if (supportTier !== "none" && ![...PUBLIC_OBOG_TICKET_TYPES, ...STAFF_TICKET_TYPES].includes(baseTicketType)) {
     errors.support_tier = "premium_support_requires_obog_ticket";
   }
   if (payload.expected_transfer_name && String(payload.expected_transfer_name).length > 120) {
@@ -1812,14 +1848,15 @@ function validateApplication(payload, env) {
   }
   const isGakushuin = payload.school_lineage === "gakushuin_ouyukai";
   const graduationYear = Number(payload.graduation_year);
+  const identityTicketType = publicBaseTicketType(baseTicketType);
   if (!isGakushuin || payload.graduation_year) {
     if (!Number.isInteger(graduationYear) || graduationYear < 1900 || graduationYear > 2026) {
       errors.graduation_year = "required";
-    } else if (!isGakushuin && baseTicketType === "obog" && graduationYear > OBOG_11_OVER_GRADUATION_YEAR_TO) {
+    } else if (!isGakushuin && identityTicketType === "obog" && graduationYear > OBOG_11_OVER_GRADUATION_YEAR_TO) {
       errors.ticket_type = `obog_requires_graduation_year_${OBOG_11_OVER_GRADUATION_YEAR_TO}_or_earlier`;
-    } else if (!isGakushuin && baseTicketType === "obog_6_10" && (graduationYear < OBOG_6_10_GRADUATION_YEAR_FROM || graduationYear > OBOG_6_10_GRADUATION_YEAR_TO)) {
+    } else if (!isGakushuin && identityTicketType === "obog_6_10" && (graduationYear < OBOG_6_10_GRADUATION_YEAR_FROM || graduationYear > OBOG_6_10_GRADUATION_YEAR_TO)) {
       errors.ticket_type = `obog_6_10_requires_graduation_year_${OBOG_6_10_GRADUATION_YEAR_FROM}_${OBOG_6_10_GRADUATION_YEAR_TO}`;
-    } else if (!isGakushuin && baseTicketType === "obog_5_under" && graduationYear < OBOG_5_UNDER_GRADUATION_YEAR_FROM) {
+    } else if (!isGakushuin && identityTicketType === "obog_5_under" && graduationYear < OBOG_5_UNDER_GRADUATION_YEAR_FROM) {
       errors.ticket_type = `obog_5_under_requires_graduation_year_${OBOG_5_UNDER_GRADUATION_YEAR_FROM}_or_later`;
     }
   }
