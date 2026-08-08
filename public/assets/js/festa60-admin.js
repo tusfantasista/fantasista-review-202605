@@ -7,6 +7,7 @@
   const state = {
     applications: [],
     filtered: [],
+    bankTransferAlerts: [],
     participationSummary: null,
     config: null,
     actor: "",
@@ -37,6 +38,8 @@
     participantChart: document.querySelector("#participant-chart"),
     receptionChart: document.querySelector("#reception-chart"),
     cohortChart: document.querySelector("#cohort-chart"),
+    bankTransferAlertPanel: document.querySelector("#bank-transfer-alert-panel"),
+    bankTransferAlerts: document.querySelector("#bank-transfer-alerts"),
     dialog: document.querySelector("#application-dialog"),
     dialogTitle: document.querySelector("#dialog-title"),
     dialogContent: document.querySelector("#dialog-content")
@@ -59,7 +62,8 @@
     outstanding: document.querySelector("#metric-outstanding"),
     expectedTotal: document.querySelector("#metric-expected-total"),
     receivedTotal: document.querySelector("#metric-received-total"),
-    collectionRate: document.querySelector("#metric-collection-rate")
+    collectionRate: document.querySelector("#metric-collection-rate"),
+    bankAlerts: document.querySelector("#metric-bank-alerts")
   };
 
   const paymentLabels = {
@@ -207,11 +211,13 @@
       ]);
       state.applications = applicationResult.applications || [];
       state.participationSummary = applicationResult.participation_summary || null;
+      state.bankTransferAlerts = applicationResult.bank_transfer_alerts || [];
       state.actor = applicationResult.actor || "Cloudflare Access user";
       state.config = configResult;
       elements.actor.textContent = state.actor;
       elements.environmentBanner.hidden = Boolean(configResult?.is_production);
       renderSummary();
+      renderBankTransferAlerts();
       applyFilters();
       elements.lastUpdated.textContent = `最終更新 ${formatDateTime(new Date().toISOString())}`;
     } catch (error) {
@@ -255,6 +261,7 @@
     metricElements.expectedTotal.textContent = formatYen(applications.reduce((sum, item) => sum + expectedAmount(item), 0));
     metricElements.receivedTotal.textContent = formatYen(receivedTotal);
     metricElements.collectionRate.textContent = `入金率 ${collectionRate}%`;
+    metricElements.bankAlerts.textContent = `${state.bankTransferAlerts.length}件`;
 
     renderBarChart(elements.paymentChart, [
       { label: "入金済み", value: paid.length, className: "paid" },
@@ -304,6 +311,31 @@
         className: ""
       }));
     renderBarChart(elements.planChart, planCounts);
+  }
+
+  function renderBankTransferAlerts() {
+    const alerts = state.bankTransferAlerts;
+    elements.bankTransferAlertPanel.hidden = alerts.length === 0;
+    if (!alerts.length) {
+      elements.bankTransferAlerts.replaceChildren();
+      return;
+    }
+    elements.bankTransferAlerts.innerHTML = alerts.map((alert) => {
+      const stripeUrl = stripePaymentUrl(alert.stripe_payment_intent_id);
+      const statusLabels = {
+        funds_received_before_confirmation: "申込確定前の一部入金",
+        paid_before_confirmation: "申込確定前の全額入金",
+        unreconciled_funds_received: "未消込残高",
+        previewed: "確認期限切れ",
+        confirming: "確定処理の停滞",
+        application_created: "決済連携の停滞"
+      };
+      return `<article class="admin-bank-alert">
+        <div><strong>${escapeHtml(statusLabels[alert.status] || alert.status)}</strong><span>${escapeHtml(alert.applicant_name || "氏名未確認")} / ${escapeHtml(alert.applicant_email || "-")}</span></div>
+        <div><span>入金 ${escapeHtml(formatYen(alert.amount_received_jpy))} / 残額 ${escapeHtml(formatYen(alert.amount_remaining_jpy))}</span><small>${escapeHtml(formatDateTime(alert.updated_at))}</small></div>
+        ${stripeUrl ? `<a class="admin-button" href="${escapeHtml(stripeUrl)}" target="_blank" rel="noopener noreferrer">決済詳細</a>` : ""}
+      </article>`;
+    }).join("");
   }
 
   function fallbackParticipationSummary(applications) {
@@ -474,6 +506,11 @@
             ${detailRow("入金状態", paymentLabels[paymentStatus] || paymentStatus)}
             ${detailRow("入金確認日", formatDateTime(application.paid_at))}
             ${detailRow("不足入金通知", formatDateTime(application.partial_payment_email_sent_at))}
+            ${detailRow("振込案内メール", formatDateTime(application.instructions_email_sent_at))}
+            ${detailRow("申込受付メール", formatDateTime(application.application_received_email_sent_at))}
+            ${detailRow("参加確定メール", formatDateTime(application.payment_confirmed_email_sent_at))}
+            ${detailRow("未消込残高", formatYen(application.unreconciled_amount_jpy))}
+            ${detailRow("未消込検知日時", formatDateTime(application.cash_balance_attention_at))}
             ${detailRow("決済手段", application.latest_payment_method || application.payment_method)}
           </dl>
         </section>

@@ -6,8 +6,8 @@
     <meta name="robots" content="noindex,nofollow,noarchive" />
     <meta name="referrer" content="same-origin" />
     <title>FESTA 60 申込管理</title>
-    <link rel="stylesheet" href="../assets/css/festa60-admin.css?v=20260808-1" />
-    <script src="../assets/js/festa60-admin.js?v=20260808-1" defer></script>
+    <link rel="stylesheet" href="../assets/css/festa60-admin.css?v=20260808-2" />
+    <script src="../assets/js/festa60-admin.js?v=20260808-2" defer></script>
   </head>
   <body class="admin-page">
     <div id="environment-banner" class="admin-environment" hidden>TEST環境 / Cloudflare Pages Preview / 本番データではありません</div>
@@ -71,6 +71,7 @@
           <article class="admin-metric admin-metric--danger"><span>未入金・手続中</span><strong id="metric-pending">-</strong><small id="metric-outstanding">-</small></article>
           <article class="admin-metric"><span>申込総額</span><strong id="metric-expected-total">-</strong><small>取消・返金を含む</small></article>
           <article class="admin-metric admin-metric--accent"><span>確認済み入金額</span><strong id="metric-received-total">-</strong><small id="metric-collection-rate">入金率 -</small></article>
+          <article class="admin-metric admin-metric--danger"><span>銀行振込・要確認</span><strong id="metric-bank-alerts">-</strong><small>未確定入金・未消込等</small></article>
         </div>
 
         <div class="admin-summary-grid">
@@ -82,6 +83,12 @@
             <h3>参加プラン</h3>
             <div id="plan-chart" class="admin-bar-chart" aria-label="参加プラン別の件数"></div>
           </div>
+        </div>
+
+        <div id="bank-transfer-alert-panel" class="admin-panel admin-bank-alert-panel" hidden>
+          <h3>銀行振込の要確認事項</h3>
+          <p>申込確定前の入金、未消込残高、確定処理の停滞です。決済管理画面と照合して対応してください。</p>
+          <div id="bank-transfer-alerts" class="admin-bank-alert-list"></div>
         </div>
       </section>
 

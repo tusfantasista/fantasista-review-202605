@@ -198,6 +198,7 @@
     event.preventDefault();
     try {
       const payload = formPayload(new FormData(form));
+      payload.client_submission_id = crypto.randomUUID();
       const clientErrors = validatePayload(payload);
       if (clientErrors.length) {
         throw new Error(clientErrors.join("\n"));
@@ -562,6 +563,7 @@
       payload.payment_method = "bank_transfer";
       payload.turnstile_token = turnstileToken;
       const result = await postApplication(payload);
+      applicationSaved = true;
       bankPreviewToken = result.bank_preview_token;
       bankPreviewDetails = result.bank_transfer_preview;
       renderBankTransferPreview(bankPreviewDetails);
@@ -789,9 +791,6 @@
     document.getElementById("bank-preview-account-type").textContent = bankAccountTypeLabel(details.account_type);
     document.getElementById("bank-preview-account-number").textContent = details.account_number;
     document.getElementById("bank-preview-account-holder").textContent = details.account_holder_name;
-    const instructionsLink = document.getElementById("bank-preview-instructions");
-    instructionsLink.href = details.hosted_instructions_url || "#";
-    instructionsLink.hidden = !details.hosted_instructions_url;
   }
 
   function bankAccountTypeLabel(value) {

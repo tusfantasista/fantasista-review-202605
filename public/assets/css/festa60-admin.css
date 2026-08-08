@@ -248,6 +248,41 @@ select:focus-visible {
   font-size: 1rem;
 }
 
+.admin-bank-alert-panel {
+  margin-top: 16px;
+  border-color: #d74b4b;
+}
+
+.admin-bank-alert-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.admin-bank-alert {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #edc9c9;
+  border-radius: 4px;
+  background: #fff8f8;
+}
+
+.admin-bank-alert div,
+.admin-bank-alert span,
+.admin-bank-alert small {
+  display: block;
+}
+
+.admin-bank-alert span,
+.admin-bank-alert small {
+  margin-top: 3px;
+  color: var(--admin-muted);
+  font-size: 0.75rem;
+}
+
 .admin-bar-chart {
   display: grid;
   gap: 10px;
@@ -628,6 +663,7 @@ select:focus-visible {
   .admin-row-action { width: 100%; margin-top: 4px; }
   .admin-detail-grid { grid-template-columns: 1fr; }
   .admin-detail-list { grid-template-columns: 94px minmax(0, 1fr); }
+  .admin-bank-alert { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 430px) {

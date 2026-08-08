@@ -6,7 +6,7 @@
 - 60周年特設の本番成果物は `scripts/build-festa60-production.sh` で `festa60-public/` に生成します。
 - FANTASISTA本体の本番成果物は `scripts/build-fantasista-production.sh` で `fantasista-site/public/` に生成します。
 - 生成物、秘密情報、フォーム回答、名簿、管理用CSVはGitHubへ保存しません。
-- GitHub管理先は `https://github.com/tusfantasista/fantasista-review-202605` です。
+- GitHub管理先は `https://github.com/tusfantasista/tus-fantasista` です。
 - 「レビュー」はCloudflareテスト環境 `https://fantasista-review-202605-staging.pages.dev/` で行います。
 - 本番反映は、テスト環境でのレビュー後、サイト管理者が明示的に許可した場合だけ実施します。
 

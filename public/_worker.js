@@ -485,9 +485,9 @@ async function insertApplication(db, payload, requestMeta = {}) {
         full_name, full_name_kana, family_name, given_name, family_name_kana, given_name_kana, maiden_name,
         email, phone, graduation_year, generation, school_lineage, dance_role,
         postal_code, address, prefecture, city, street_address, building,
-        companion_count, expected_transfer_name, actual_transfer_name, message, source,
+        companion_count, expected_transfer_name, actual_transfer_name, message, source, client_submission_id,
         paid_at, cancelled_at, refunded_at, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
     id,
     applicationCode,
@@ -529,6 +529,7 @@ async function insertApplication(db, payload, requestMeta = {}) {
     payload.actual_transfer_name || null,
     payload.message || null,
     payload.source || "public_form",
+    payload.client_submission_id || null,
     paidAt,
     null,
     null,
@@ -840,7 +841,36 @@ async function markPaymentPartiallyFunded(db, paymentIntent, stripeEventId) {
        LIMIT 1`
   ).bind(paymentIntent.id).first();
   if (!payment?.application_id) {
-    throw new Error("Stripe partially funded PaymentIntent is not linked to a Festa 60 payment.");
+    const preview = await db.prepare(
+      `SELECT id, applicant_email, applicant_name
+         FROM bank_transfer_previews
+         WHERE stripe_payment_intent_id = ?
+         LIMIT 1`
+    ).bind(paymentIntent.id).first();
+    if (!preview) throw new Error("Stripe partially funded PaymentIntent is not linked to a Festa 60 payment or preview.");
+    await db.prepare(
+      `UPDATE bank_transfer_previews
+          SET status = 'funds_received_before_confirmation', amount_received_jpy = ?,
+              amount_remaining_jpy = ?, updated_at = ?
+        WHERE id = ?`
+    ).bind(amountReceived, amountRemaining, now, preview.id).run();
+    await audit(db, {
+      actor: "stripe",
+      action: "bank_preview.partially_funded_before_confirmation",
+      target_type: "bank_transfer_preview",
+      target_id: preview.id,
+      details_json: JSON.stringify({ payment_intent_id: paymentIntent.id, amount_received_jpy: amountReceived, amount_remaining_jpy: amountRemaining })
+    });
+    return {
+      application_id: null,
+      preview_id: preview.id,
+      applicant_email: preview.applicant_email,
+      applicant_name: preview.applicant_name,
+      amount_total_jpy: amountTotal,
+      amount_received_jpy: amountReceived,
+      amount_remaining_jpy: amountRemaining,
+      hosted_instructions_url: bankTransferInstructionsUrl(paymentIntent)
+    };
   }
   await db.prepare(
     `UPDATE payments
@@ -881,7 +911,36 @@ async function markBankTransferPaymentSucceeded(db, paymentIntent, stripeEventId
        WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe'
        LIMIT 1`
   ).bind(paymentIntent.id).first();
-  if (!payment?.application_id) throw new Error("Stripe bank transfer PaymentIntent is not linked to a Festa 60 payment.");
+  if (!payment?.application_id) {
+    const preview = await db.prepare(
+      `SELECT id, applicant_email, applicant_name
+         FROM bank_transfer_previews
+         WHERE stripe_payment_intent_id = ?
+         LIMIT 1`
+    ).bind(paymentIntent.id).first();
+    if (!preview) throw new Error("Stripe bank transfer PaymentIntent is not linked to a Festa 60 payment or preview.");
+    await db.prepare(
+      `UPDATE bank_transfer_previews
+          SET status = 'paid_before_confirmation', amount_received_jpy = ?,
+              amount_remaining_jpy = 0, updated_at = ?
+        WHERE id = ?`
+    ).bind(Number(paymentIntent.amount_received || paymentIntent.amount || 0), now, preview.id).run();
+    await audit(db, {
+      actor: "stripe",
+      action: "bank_preview.paid_before_confirmation",
+      target_type: "bank_transfer_preview",
+      target_id: preview.id,
+      details_json: JSON.stringify({ payment_intent_id: paymentIntent.id, amount_received_jpy: Number(paymentIntent.amount_received || paymentIntent.amount || 0) })
+    });
+    return {
+      application_id: null,
+      preview_id: preview.id,
+      applicant_email: preview.applicant_email,
+      applicant_name: preview.applicant_name,
+      amount_total_jpy: Number(paymentIntent.amount || 0),
+      amount_received_jpy: Number(paymentIntent.amount_received || paymentIntent.amount || 0)
+    };
+  }
   if (Number(paymentIntent.amount || 0) !== Number(payment.amount_total || 0)) throw new Error("Stripe bank transfer amount mismatch.");
   if (String(paymentIntent.currency || "").toLowerCase() !== String(payment.currency || "").toLowerCase()) {
     throw new Error("Stripe bank transfer currency mismatch.");
@@ -905,7 +964,7 @@ async function markBankTransferPaymentSucceeded(db, paymentIntent, stripeEventId
     target_id: payment.application_id,
     details_json: JSON.stringify({ payment_intent_id: paymentIntent.id })
   });
-  return payment.application_id;
+  return { application_id: payment.application_id };
 }
 __name(markBankTransferPaymentSucceeded, "markBankTransferPaymentSucceeded");
 async function markPartialPaymentEmailSent(db, paymentIntentId) {
@@ -925,6 +984,7 @@ async function getApplicationById(db, applicationId) {
         a.payment_status, a.payment_method, a.payment_provider, a.external_payment_id,
         a.expected_transfer_name, a.actual_transfer_name, a.admin_note, a.total_amount_jpy,
         a.status, a.attendance_status, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at,
+        a.application_received_email_sent_at,
         (SELECT COUNT(*) FROM companions c WHERE c.application_id = a.id AND c.attendee_type <> 'child') AS adult_companion_count
        FROM applications a
        WHERE a.id = ? OR a.application_code = ?
@@ -936,6 +996,22 @@ async function getApplicationById(db, applicationId) {
   return application;
 }
 __name(getApplicationById, "getApplicationById");
+async function hydrateApplicationLineItems(db, application) {
+  if (!application) return null;
+  const result = await db.prepare(
+    `SELECT item_type, label, quantity, unit_amount_jpy, amount_jpy, metadata_json
+       FROM payment_line_items
+       WHERE application_id = ?
+       ORDER BY created_at, id`
+  ).bind(application.id).all();
+  application.line_items = (result.results || []).map((item) => ({
+    ...item,
+    metadata: item.metadata_json ? JSON.parse(item.metadata_json) : {}
+  }));
+  application.amount_total = application.total_amount_jpy;
+  return application;
+}
+__name(hydrateApplicationLineItems, "hydrateApplicationLineItems");
 async function updateApplicationPaymentStatus(db, applicationId, update, requestMeta = {}) {
   const nextStatus = normalizePaymentStatus(update.payment_status || update.paymentStatus);
   const now = nowIso();
@@ -1010,10 +1086,13 @@ async function listApplications(db) {
         a.quantity, a.expected_transfer_name, a.actual_transfer_name,
         a.match_confidence, a.status, a.payment_status, a.payment_method, a.payment_provider, a.external_payment_id,
         a.admin_note, a.attendance_status, a.total_amount_jpy, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at,
+        a.application_received_email_sent_at,
         m.member_code, m.full_name AS matched_member_name,
         p.stripe_checkout_session_id, p.stripe_payment_intent_id, p.stripe_customer_id, p.stripe_event_id,
         p.status AS latest_payment_status, p.amount_total,
         p.amount_received_jpy, p.amount_remaining_jpy, p.partial_payment_at, p.partial_payment_email_sent_at,
+        p.instructions_email_sent_at, p.payment_confirmed_email_sent_at,
+        p.unreconciled_amount_jpy, p.cash_balance_attention_at, p.cash_balance_alert_email_sent_at,
         p.payment_method AS latest_payment_method, p.payment_provider AS latest_payment_provider,
         (
           SELECT COALESCE(SUM(
@@ -1064,6 +1143,20 @@ async function listApplications(db) {
   }));
 }
 __name(listApplications, "listApplications");
+async function listBankTransferAlerts(db) {
+  const result = await db.prepare(
+    `SELECT id, stripe_payment_intent_id, stripe_customer_id, amount_total_jpy,
+            amount_received_jpy, amount_remaining_jpy, status, application_id,
+            applicant_email, applicant_name, hosted_instructions_url, expires_at, created_at, updated_at
+       FROM bank_transfer_previews
+       WHERE status IN ('funds_received_before_confirmation', 'paid_before_confirmation', 'unreconciled_funds_received')
+          OR (status IN ('confirming', 'application_created') AND expires_at < ?)
+       ORDER BY updated_at DESC
+       LIMIT 100`
+  ).bind(nowIso()).all();
+  return result.results || [];
+}
+__name(listBankTransferAlerts, "listBankTransferAlerts");
 async function getAdminParticipationSummary(db) {
   const row = await db.prepare(
     `WITH attendee_applications AS (
@@ -1233,6 +1326,27 @@ FESTAの受付番号を振込名義へ付ける必要はありません。案内
   };
 }
 __name(renderPartialPaymentEmail, "renderPartialPaymentEmail");
+function renderBankFundsBeforeConfirmationEmail(preview, fullyPaid = false) {
+  return {
+    to: preview.applicant_email,
+    subject: fullyPaid
+      ? "【60周年FESTA】銀行振込を確認しました（申込確定が必要です）"
+      : "【60周年FESTA】銀行振込の一部入金を確認しました（申込確定が必要です）",
+    body: `${preview.applicant_name || "お申込者"} 様
+
+60周年FESTAのお支払い用口座への${fullyPaid ? "入金" : "一部入金"}を確認しましたが、申込の最終確定が完了していません。
+
+お支払い予定額：${formatYen(preview.amount_total_jpy)}
+確認済み入金額：${formatYen(preview.amount_received_jpy)}${fullyPaid ? "" : `
+不足額：${formatYen(preview.amount_remaining_jpy)}`}
+
+振込先を表示した申込画面が開いている場合は、「この銀行振込で申込を確定する」を押してください。
+画面を閉じた場合や確定できない場合は、このメールへ返信し、お名前と振込日をFESTA事務局へお知らせください。
+
+申込が確定して受付番号が発行されるまでは、参加確定とはなりません。`
+  };
+}
+__name(renderBankFundsBeforeConfirmationEmail, "renderBankFundsBeforeConfirmationEmail");
 function renderPaymentConfirmedEmail(application) {
   const name = application.full_name || application.name || "";
   const quantity = application.quantity || 1;
@@ -1284,6 +1398,43 @@ ${donationPlan ? `\u5BC4\u4ED8\u30D7\u30E9\u30F3\uFF1A${donationPlan.name}
   };
 }
 __name(renderPaymentConfirmedEmail, "renderPaymentConfirmedEmail");
+async function paymentEmailSentAt(db, applicationId, kind) {
+  const column = kind === "instructions" ? "instructions_email_sent_at" : kind === "partial" ? "partial_payment_email_sent_at" : "payment_confirmed_email_sent_at";
+  const payment = await db.prepare(`SELECT ${column} AS sent_at FROM payments WHERE application_id = ? ORDER BY created_at DESC LIMIT 1`).bind(applicationId).first();
+  return payment?.sent_at || null;
+}
+__name(paymentEmailSentAt, "paymentEmailSentAt");
+async function markPaymentEmailSent(db, applicationId, kind) {
+  const column = kind === "instructions" ? "instructions_email_sent_at" : kind === "partial" ? "partial_payment_email_sent_at" : "payment_confirmed_email_sent_at";
+  await db.prepare(`UPDATE payments SET ${column} = COALESCE(${column}, ?), updated_at = ? WHERE application_id = ?`).bind(nowIso(), nowIso(), applicationId).run();
+}
+__name(markPaymentEmailSent, "markPaymentEmailSent");
+async function sendPaymentEmailOnce(env, db, application, kind, message) {
+  if (await paymentEmailSentAt(db, application.id, kind)) return { sent: false, skipped: true, reason: "already_sent" };
+  const result = await maybeSendEmail(env, {
+    ...message,
+    message_id: `festa60-${kind}-${application.id}`
+  });
+  if (!result.sent) throw new Error(`${kind} email was not sent: ${result.error || result.reason || "unknown error"}`);
+  await markPaymentEmailSent(db, application.id, kind);
+  return result;
+}
+__name(sendPaymentEmailOnce, "sendPaymentEmailOnce");
+async function sendApplicationReceivedEmailOnce(env, db, application, checkoutUrl) {
+  const row = await db.prepare("SELECT application_received_email_sent_at FROM applications WHERE id = ? LIMIT 1").bind(application.id).first();
+  if (row?.application_received_email_sent_at) return { sent: false, skipped: true, reason: "already_sent" };
+  const result = await maybeSendEmail(env, {
+    ...renderApplicationReceivedEmail(application, checkoutUrl),
+    message_id: `festa60-application-received-${application.id}`
+  });
+  if (result.sent) {
+    await db.prepare(
+      "UPDATE applications SET application_received_email_sent_at = COALESCE(application_received_email_sent_at, ?), updated_at = ? WHERE id = ?"
+    ).bind(nowIso(), nowIso(), application.id).run();
+  }
+  return result;
+}
+__name(sendApplicationReceivedEmailOnce, "sendApplicationReceivedEmailOnce");
 async function maybeSendEmail(env, message) {
   if (!env.EMAIL_WEBHOOK_URL) {
     return { sent: false, skipped: true, reason: "EMAIL_WEBHOOK_URL is not configured." };
@@ -1404,11 +1555,12 @@ async function onRequestGet2({ request, env }) {
   if (!auth.ok) return auth.response;
   try {
     const db = requireDb(env);
-    const [rows, summary] = await Promise.all([
+    const [rows, summary, bankTransferAlerts] = await Promise.all([
       listApplications(db),
-      getAdminParticipationSummary(db)
+      getAdminParticipationSummary(db),
+      listBankTransferAlerts(db)
     ]);
-    return json({ ok: true, actor: auth.actor, applications: rows, participation_summary: summary });
+    return json({ ok: true, actor: auth.actor, applications: rows, participation_summary: summary, bank_transfer_alerts: bankTransferAlerts });
   } catch (error) {
     return serverError(error);
   }
@@ -1709,6 +1861,16 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   return { session: result, metadata };
 }
 __name(createCheckoutSession, "createCheckoutSession");
+async function retrieveStripeCheckoutSession(stripeSecret, sessionId) {
+  if (!sessionId) return null;
+  const response = await fetch(`https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(sessionId)}`, {
+    headers: { authorization: `Bearer ${stripeSecret}` }
+  });
+  const result = await response.json();
+  if (!response.ok) throw new Error(`Stripe Checkout session retrieval failed: ${result.error?.message || response.status}`);
+  return result;
+}
+__name(retrieveStripeCheckoutSession, "retrieveStripeCheckoutSession");
 async function createBankTransferPreviewCustomer(stripeSecret, payload, previewId) {
   const params = new URLSearchParams();
   params.set("email", payload.email);
@@ -1762,6 +1924,61 @@ async function createBankTransferPreview({ env, payload, amount }) {
   return { previewId, customer, paymentIntent };
 }
 __name(createBankTransferPreview, "createBankTransferPreview");
+async function persistBankTransferPreview(db, payload, preview, amount, payloadHash, expiresAt) {
+  const now = nowIso();
+  const details = bankTransferDetails(preview.paymentIntent);
+  await db.prepare(
+    `INSERT INTO bank_transfer_previews (
+        id, stripe_payment_intent_id, stripe_customer_id, amount_total_jpy,
+        amount_received_jpy, amount_remaining_jpy, currency, payload_hash, status,
+        applicant_email, applicant_name, hosted_instructions_url, expires_at, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, 0, ?, 'jpy', ?, 'previewed', ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    preview.previewId,
+    preview.paymentIntent.id,
+    preview.customer.id,
+    amount,
+    details.amount,
+    payloadHash,
+    payload.email,
+    payload.full_name || "",
+    details.hosted_instructions_url || null,
+    new Date(expiresAt).toISOString(),
+    now,
+    now
+  ).run();
+  return details;
+}
+__name(persistBankTransferPreview, "persistBankTransferPreview");
+async function getBankTransferPreview(db, previewId) {
+  if (!previewId) return null;
+  return db.prepare(
+    `SELECT id, stripe_payment_intent_id, stripe_customer_id, amount_total_jpy,
+            amount_received_jpy, amount_remaining_jpy, currency, payload_hash, status,
+            application_id, applicant_email, applicant_name, hosted_instructions_url, expires_at
+       FROM bank_transfer_previews
+       WHERE id = ?
+       LIMIT 1`
+  ).bind(previewId).first();
+}
+__name(getBankTransferPreview, "getBankTransferPreview");
+async function updateBankTransferPreview(db, previewId, update) {
+  await db.prepare(
+    `UPDATE bank_transfer_previews
+        SET status = COALESCE(?, status), application_id = COALESCE(?, application_id),
+            amount_received_jpy = COALESCE(?, amount_received_jpy),
+            amount_remaining_jpy = COALESCE(?, amount_remaining_jpy), updated_at = ?
+      WHERE id = ?`
+  ).bind(
+    update.status || null,
+    update.application_id || null,
+    numberOrNull(update.amount_received_jpy),
+    numberOrNull(update.amount_remaining_jpy),
+    nowIso(),
+    previewId
+  ).run();
+}
+__name(updateBankTransferPreview, "updateBankTransferPreview");
 function bankTransferDetails(paymentIntent) {
   const instructions = paymentIntent?.next_action?.display_bank_transfer_instructions;
   const financialAddress = (instructions?.financial_addresses || []).find((item) => item.type === "zengin");
@@ -1898,6 +2115,7 @@ function bankTransferInstructionsUrl(paymentIntent) {
 }
 __name(bankTransferInstructionsUrl, "bankTransferInstructionsUrl");
 function bankTransferAmountRemaining(paymentIntent) {
+  if (paymentIntent?.status === "succeeded") return 0;
   const amountRemaining = Number(paymentIntent?.next_action?.display_bank_transfer_instructions?.amount_remaining);
   if (!Number.isFinite(amountRemaining) || amountRemaining < 0) {
     throw new Error("Stripe bank transfer amount remaining is unavailable.");
@@ -1905,6 +2123,67 @@ function bankTransferAmountRemaining(paymentIntent) {
   return amountRemaining;
 }
 __name(bankTransferAmountRemaining, "bankTransferAmountRemaining");
+function bankTransferAmountReceived(paymentIntent) {
+  const amount = Number(paymentIntent?.amount || 0);
+  const remaining = bankTransferAmountRemaining(paymentIntent);
+  return Math.max(0, amount - remaining);
+}
+__name(bankTransferAmountReceived, "bankTransferAmountReceived");
+async function markUnreconciledCashBalance(db, cashBalance, stripeEventId) {
+  const customerId = cashBalance?.customer;
+  const amount = Number(cashBalance?.available?.jpy || 0);
+  if (!customerId || amount <= 0) return null;
+  const now = nowIso();
+  const payment = await db.prepare(
+    `SELECT id, application_id
+       FROM payments
+       WHERE stripe_customer_id = ? AND payment_provider = 'stripe'
+       ORDER BY created_at DESC
+       LIMIT 1`
+  ).bind(customerId).first();
+  if (payment) {
+    await db.prepare(
+      `UPDATE payments
+          SET unreconciled_amount_jpy = ?, cash_balance_attention_at = ?, stripe_event_id = ?, updated_at = ?
+        WHERE id = ?`
+    ).bind(amount, now, stripeEventId || null, now, payment.id).run();
+    await audit(db, {
+      actor: "stripe",
+      action: "payment.unreconciled_cash_balance",
+      target_type: "application",
+      target_id: payment.application_id,
+      details_json: JSON.stringify({ stripe_customer_id: customerId, amount_jpy: amount })
+    });
+    return { application_id: payment.application_id, stripe_customer_id: customerId, amount_jpy: amount };
+  }
+  const preview = await db.prepare(
+    `SELECT id, applicant_email, applicant_name
+       FROM bank_transfer_previews
+       WHERE stripe_customer_id = ?
+       ORDER BY created_at DESC
+       LIMIT 1`
+  ).bind(customerId).first();
+  if (preview) {
+    await updateBankTransferPreview(db, preview.id, { status: "unreconciled_funds_received", amount_received_jpy: amount });
+    await audit(db, {
+      actor: "stripe",
+      action: "bank_preview.unreconciled_cash_balance",
+      target_type: "bank_transfer_preview",
+      target_id: preview.id,
+      details_json: JSON.stringify({ stripe_customer_id: customerId, amount_jpy: amount })
+    });
+    return { preview_id: preview.id, applicant_email: preview.applicant_email, applicant_name: preview.applicant_name, stripe_customer_id: customerId, amount_jpy: amount };
+  }
+  await audit(db, {
+    actor: "stripe",
+    action: "payment.unmatched_cash_balance",
+    target_type: "stripe_customer",
+    target_id: customerId,
+    details_json: JSON.stringify({ amount_jpy: amount })
+  });
+  return { stripe_customer_id: customerId, amount_jpy: amount };
+}
+__name(markUnreconciledCashBalance, "markUnreconciledCashBalance");
 async function verifyStripeSignature(payload, signatureHeader, webhookSecret) {
   if (!signatureHeader) return false;
   const parts = signatureHeader.split(",").reduce((result, part) => {
@@ -1973,31 +2252,67 @@ async function onRequestPost5({ request, env }) {
         await markCheckoutCompleted(db, event.data.object, event.id);
         if (event.data.object.payment_status === "paid" && event.data.object.metadata?.application_id) {
           const application = await getApplicationById(db, event.data.object.metadata.application_id);
-          if (application) await maybeSendEmail(env, renderPaymentConfirmedEmail(application));
+          if (application) await sendPaymentEmailOnce(env, db, application, "confirmed", renderPaymentConfirmedEmail(application));
         } else if (event.type === "checkout.session.completed" && event.data.object.metadata?.application_id) {
           const paymentIntent = await retrieveStripePaymentIntent(requireStripeSecret(env), event.data.object.payment_intent);
           const instructionsUrl = bankTransferInstructionsUrl(paymentIntent);
           if (instructionsUrl) {
             const application = await getApplicationById(db, event.data.object.metadata.application_id);
-            if (application) await maybeSendEmail(env, renderBankTransferInstructionsEmail(application, instructionsUrl));
+            if (application) await sendPaymentEmailOnce(env, db, application, "instructions", renderBankTransferInstructionsEmail(application, instructionsUrl));
           }
         }
       } else if (event.type === "payment_intent.succeeded" && event.data.object.payment_method_types?.includes("customer_balance")) {
-        const applicationId = await markBankTransferPaymentSucceeded(db, event.data.object, event.id);
-        const application = await getApplicationById(db, applicationId);
-        if (application) await maybeSendEmail(env, renderPaymentConfirmedEmail(application));
+        const paidPayment = await markBankTransferPaymentSucceeded(db, event.data.object, event.id);
+        if (paidPayment.application_id) {
+          const application = await getApplicationById(db, paidPayment.application_id);
+          if (application) await sendPaymentEmailOnce(env, db, application, "confirmed", renderPaymentConfirmedEmail(application));
+        } else {
+          const emailResult = await maybeSendEmail(env, {
+            ...renderBankFundsBeforeConfirmationEmail(paidPayment, true),
+            message_id: `festa60-bank-paid-before-confirmation-${paidPayment.preview_id}`
+          });
+          if (!emailResult.sent) throw new Error(`Pre-confirmation payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
+        }
       } else if (event.type === "payment_intent.partially_funded") {
         const partialPayment = await markPaymentPartiallyFunded(db, event.data.object, event.id);
         if (!partialPayment.hosted_instructions_url) {
           throw new Error("Stripe bank transfer instructions URL is unavailable for a partially funded payment.");
         }
-        const application = await getApplicationById(db, partialPayment.application_id);
-        if (!application) throw new Error("Festa 60 application was not found for a partially funded payment.");
-        const emailResult = await maybeSendEmail(env, renderPartialPaymentEmail(application, partialPayment));
-        if (!emailResult.sent) {
-          throw new Error(`Partial payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
+        if (partialPayment.application_id) {
+          const application = await getApplicationById(db, partialPayment.application_id);
+          if (!application) throw new Error("Festa 60 application was not found for a partially funded payment.");
+          const emailResult = await maybeSendEmail(env, {
+            ...renderPartialPaymentEmail(application, partialPayment),
+            message_id: `festa60-partial-${application.id}-${event.id}`
+          });
+          if (!emailResult.sent) throw new Error(`Partial payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
+          await markPartialPaymentEmailSent(db, event.data.object.id);
+        } else {
+          const emailResult = await maybeSendEmail(env, {
+            ...renderBankFundsBeforeConfirmationEmail(partialPayment, false),
+            message_id: `festa60-bank-partial-before-confirmation-${partialPayment.preview_id}`
+          });
+          if (!emailResult.sent) throw new Error(`Pre-confirmation partial payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
         }
-        await markPartialPaymentEmailSent(db, event.data.object.id);
+      } else if (event.type === "cash_balance.funds_available") {
+        const attention = await markUnreconciledCashBalance(db, event.data.object, event.id);
+        if (attention && env.CONTACT_EMAIL) {
+          const emailResult = await maybeSendEmail(env, {
+            to: env.CONTACT_EMAIL,
+            subject: "【60周年FESTA・要確認】銀行振込の未消込残高があります",
+            body: `銀行振込の自動消込後に未割当残高が残っています。\n\n金額：${formatYen(attention.amount_jpy)}\nStripe顧客ID：${attention.stripe_customer_id}\n受付番号または申込ID：${attention.application_id || attention.preview_id || "照合なし"}\n\n決済管理画面とFESTA管理画面で内容を確認し、返金または手動対応を判断してください。`,
+            message_id: `festa60-cash-balance-${event.id}`
+          });
+          if (!emailResult.sent) throw new Error(`Cash balance alert email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
+          if (attention.application_id) {
+            const now = nowIso();
+            await db.prepare(
+              `UPDATE payments
+                  SET cash_balance_alert_email_sent_at = COALESCE(cash_balance_alert_email_sent_at, ?), updated_at = ?
+                WHERE application_id = ? AND payment_provider = 'stripe'`
+            ).bind(now, now, attention.application_id).run();
+          }
+        }
       } else if (event.type === "checkout.session.async_payment_failed") {
         await markCheckoutFailed(db, event.data.object, event.id);
       } else if (event.type === "checkout.session.expired") {
@@ -2050,6 +2365,9 @@ async function onRequestPost6({ request, env }) {
     payload.full_name = [payload.family_name, payload.given_name].filter(Boolean).join(" ").trim();
     payload.full_name_kana = [payload.family_name_kana, payload.given_name_kana].filter(Boolean).join(" ").trim();
     payload.address = [payload.prefecture, payload.city, payload.street_address, payload.building].filter((value) => String(value || "").trim()).join(" ");
+    if (!/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(String(payload.client_submission_id || ""))) {
+      payload.client_submission_id = crypto.randomUUID();
+    }
     payload.fee_period = feePeriodForDate();
     payload.ticket_type = normalizeTicketType(payload.ticket_type, payload.support_tier);
     const validation = validateApplication(payload, env);
@@ -2067,18 +2385,28 @@ async function onRequestPost6({ request, env }) {
       const turnstile = await verifyTurnstile(payload.turnstile_token, env, request);
       if (!turnstile.ok) return badRequest("Turnstile verification failed.", turnstile.result || turnstile.message);
       const preview = await createBankTransferPreview({ env, payload, amount });
+      const payloadHash = await bankPreviewPayloadHash(payload);
+      const expiresAt = Date.now() + 30 * 60 * 1e3;
+      let previewDetails;
+      try {
+        previewDetails = await persistBankTransferPreview(db, payload, preview, amount, payloadHash, expiresAt);
+      } catch (error) {
+        await cancelStripePaymentIntent(requireStripeSecret(env), preview.paymentIntent.id).catch(() => null);
+        throw error;
+      }
       const token = await createBankPreviewToken(env, {
+        preview_id: preview.previewId,
         payment_intent_id: preview.paymentIntent.id,
         customer_id: preview.customer.id,
         amount,
-        payload_hash: await bankPreviewPayloadHash(payload),
-        expires_at: Date.now() + 30 * 60 * 1e3
+        payload_hash: payloadHash,
+        expires_at: expiresAt
       });
       return json({
         ok: true,
-        bank_transfer_preview: bankTransferDetails(preview.paymentIntent),
+        bank_transfer_preview: previewDetails,
         bank_preview_token: token,
-        expires_at: new Date(Date.now() + 30 * 60 * 1e3).toISOString(),
+        expires_at: new Date(expiresAt).toISOString(),
         turnstile_skipped: Boolean(turnstile.skipped)
       });
     }
@@ -2091,6 +2419,14 @@ async function onRequestPost6({ request, env }) {
       } catch (error) {
         return badRequest(error.message);
       }
+      const previewRecord = await getBankTransferPreview(db, bankPreview.preview_id);
+      if (!previewRecord || previewRecord.stripe_payment_intent_id !== bankPreview.payment_intent_id || previewRecord.stripe_customer_id !== bankPreview.customer_id) {
+        return badRequest("銀行振込の確認記録が見つかりません。振込先をもう一度確認してください。");
+      }
+      if (previewRecord.payload_hash !== bankPreview.payload_hash || Number(previewRecord.amount_total_jpy) !== amount) {
+        return badRequest("申込内容が変更されています。振込先をもう一度確認してください。");
+      }
+      bankPreview.record = previewRecord;
       if (Number(bankPreview.amount) !== amount) return badRequest("お支払い金額が変更されています。振込先をもう一度確認してください。");
       bankPaymentIntent = await retrieveStripePaymentIntent(requireStripeSecret(env), bankPreview.payment_intent_id);
       if (bankPaymentIntent.customer !== bankPreview.customer_id || Number(bankPaymentIntent.amount) !== amount || bankPaymentIntent.currency !== "jpy") {
@@ -2105,9 +2441,19 @@ async function onRequestPost6({ request, env }) {
       const linkedPayment = await db.prepare(
         "SELECT application_id FROM payments WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe' LIMIT 1"
       ).bind(bankPreview.payment_intent_id).first();
-      if (linkedPayment?.application_id) return badRequest("この銀行振込はすでに申込へ確定されています。");
+      if (linkedPayment?.application_id || bankPreview.record.application_id) return badRequest("この銀行振込はすでに申込へ確定されています。");
+      const amountReceived = bankTransferAmountReceived(bankPaymentIntent);
+      if (amountReceived > 0 || bankPaymentIntent.status === "succeeded") {
+        await updateBankTransferPreview(db, bankPreview.preview_id, {
+          status: "funds_received_before_confirmation",
+          amount_received_jpy: amountReceived || bankPaymentIntent.amount,
+          amount_remaining_jpy: bankTransferAmountRemaining(bankPaymentIntent)
+        });
+        return json({ ok: false, error: "bank_transfer_already_funded", message: "すでに入金が確認されているため、この振込先を取り消せません。FESTA事務局へご連絡ください。" }, { status: 409 });
+      }
       if (bankPaymentIntent.status === "canceled") return json({ ok: true, cancelled: true });
       await cancelStripePaymentIntent(requireStripeSecret(env), bankPreview.payment_intent_id);
+      await updateBankTransferPreview(db, bankPreview.preview_id, { status: "cancelled" });
       return json({ ok: true, cancelled: true });
     }
 
@@ -2131,9 +2477,38 @@ async function onRequestPost6({ request, env }) {
       const stripeSecret = requireStripeSecret(env);
       const paymentIntent = bankPaymentIntent;
       if (paymentIntent.status === "canceled") return badRequest("この振込先は使用できません。振込先をもう一度確認してください。");
-      const application = await insertApplication(db, { ...payload, ticket_type: payload.ticket_type || "obog" }, getClientMeta(request));
+      let application = bankPreview.record.application_id
+        ? await getApplicationById(db, bankPreview.record.application_id)
+        : null;
+      if (!application) {
+        const claim = await db.prepare(
+          `UPDATE bank_transfer_previews
+              SET status = 'confirming', updated_at = ?
+            WHERE id = ? AND status IN ('previewed', 'funds_received_before_confirmation', 'paid_before_confirmation', 'unreconciled_funds_received')
+            RETURNING id`
+        ).bind(nowIso(), bankPreview.preview_id).first();
+        if (!claim) {
+          const currentPreview = await getBankTransferPreview(db, bankPreview.preview_id);
+          if (currentPreview?.application_id) application = await getApplicationById(db, currentPreview.application_id);
+          if (!application) {
+            return json({ ok: false, error: "bank_transfer_confirmation_in_progress", message: "銀行振込の申込確定処理を実行中です。少し待ってからもう一度お試しください。" }, { status: 409 });
+          }
+        }
+      }
+      if (!application) {
+        try {
+          application = await insertApplication(db, { ...payload, ticket_type: payload.ticket_type || "obog" }, getClientMeta(request));
+          await updateBankTransferPreview(db, bankPreview.preview_id, { status: "application_created", application_id: application.id });
+        } catch (error) {
+          await updateBankTransferPreview(db, bankPreview.preview_id, { status: "previewed" });
+          throw error;
+        }
+      }
       const linkedPaymentIntent = await updateStripePaymentIntentForApplication(stripeSecret, paymentIntent.id, application);
-      application.payment_id = await createBankTransferPayment(db, application, linkedPaymentIntent, bankPreview.customer_id);
+      const recoveredPayment = await db.prepare(
+        "SELECT id FROM payments WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe' LIMIT 1"
+      ).bind(linkedPaymentIntent.id).first();
+      application.payment_id = recoveredPayment?.id || await createBankTransferPayment(db, application, linkedPaymentIntent, bankPreview.customer_id);
       application.external_payment_id = linkedPaymentIntent.id;
       application.payment_method = "bank_transfer";
       application.paymentMethod = "bank_transfer";
@@ -2143,11 +2518,21 @@ async function onRequestPost6({ request, env }) {
         await markBankTransferPaymentSucceeded(db, linkedPaymentIntent, null);
       }
       const instructionsUrl = bankTransferInstructionsUrl(linkedPaymentIntent);
+      if (!instructionsUrl) throw new Error("Stripe bank transfer instructions URL is unavailable.");
+      await updateBankTransferPreview(db, bankPreview.preview_id, {
+        status: linkedPaymentIntent.status === "succeeded" ? "paid" : "linked",
+        application_id: application.id,
+        amount_received_jpy: bankTransferAmountReceived(linkedPaymentIntent),
+        amount_remaining_jpy: bankTransferAmountRemaining(linkedPaymentIntent)
+      });
       let applicationEmail;
       try {
-        applicationEmail = linkedPaymentIntent.status === "succeeded"
-          ? await maybeSendEmail(env, renderPaymentConfirmedEmail(await getApplicationById(db, application.id)))
-          : await maybeSendEmail(env, renderBankTransferInstructionsEmail(application, instructionsUrl));
+        if (linkedPaymentIntent.status === "succeeded") {
+          const confirmedApplication = await getApplicationById(db, application.id);
+          applicationEmail = await sendPaymentEmailOnce(env, db, confirmedApplication, "confirmed", renderPaymentConfirmedEmail(confirmedApplication));
+        } else {
+          applicationEmail = await sendPaymentEmailOnce(env, db, application, "instructions", renderBankTransferInstructionsEmail(application, instructionsUrl));
+        }
       } catch (emailError) {
         console.error("Bank transfer application email failed.", emailError);
         applicationEmail = { sent: false, skipped: false, error: emailError.message || "Email delivery failed." };
@@ -2170,18 +2555,63 @@ async function onRequestPost6({ request, env }) {
       const linkedPayment = await db.prepare(
         "SELECT application_id FROM payments WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe' LIMIT 1"
       ).bind(bankPreview.payment_intent_id).first();
-      if (linkedPayment?.application_id) return badRequest("この銀行振込はすでに申込へ確定されています。");
+      if (linkedPayment?.application_id || bankPreview.record.application_id) return badRequest("この銀行振込はすでに申込へ確定されています。");
       if (bankPaymentIntent.status === "canceled") return badRequest("この確認情報はすでに使用されています。入力画面からやり直してください。");
+      const amountReceived = bankTransferAmountReceived(bankPaymentIntent);
+      if (amountReceived > 0 || bankPaymentIntent.status === "succeeded") {
+        await updateBankTransferPreview(db, bankPreview.preview_id, {
+          status: "funds_received_before_confirmation",
+          amount_received_jpy: amountReceived || bankPaymentIntent.amount,
+          amount_remaining_jpy: bankTransferAmountRemaining(bankPaymentIntent)
+        });
+        return json({ ok: false, error: "bank_transfer_already_funded", message: "すでに入金が確認されているため、カード等へ変更できません。銀行振込で申込を確定するか、FESTA事務局へご連絡ください。" }, { status: 409 });
+      }
       await cancelStripePaymentIntent(requireStripeSecret(env), bankPreview.payment_intent_id);
+      await updateBankTransferPreview(db, bankPreview.preview_id, { status: "switched_to_online" });
     }
-    const application = await insertApplication(
-      db,
-      {
-        ...payload,
-        ticket_type: payload.ticket_type || "obog"
-      },
-      getClientMeta(request)
-    );
+    let application = null;
+    if (payload.client_submission_id) {
+      const existingApplication = await db.prepare(
+        "SELECT id FROM applications WHERE client_submission_id = ? LIMIT 1"
+      ).bind(payload.client_submission_id).first();
+      if (existingApplication?.id) {
+        application = await hydrateApplicationLineItems(db, await getApplicationById(db, existingApplication.id));
+        const existingCheckoutPayment = await db.prepare(
+          `SELECT stripe_checkout_session_id
+             FROM payments
+             WHERE application_id = ? AND stripe_checkout_session_id IS NOT NULL
+             ORDER BY created_at DESC
+             LIMIT 1`
+        ).bind(application.id).first();
+        if (existingCheckoutPayment?.stripe_checkout_session_id) {
+          const existingSession = await retrieveStripeCheckoutSession(requireStripeSecret(env), existingCheckoutPayment.stripe_checkout_session_id);
+          const applicationEmail = await sendApplicationReceivedEmailOnce(env, db, application, existingSession.url).catch((error) => ({ sent: false, skipped: false, error: error.message }));
+          return json({
+            ok: true,
+            application,
+            payment: {
+              paymentMethod: "stripe_checkout",
+              paymentProvider: "stripe",
+              paymentStatus: application.payment_status || "unpaid",
+              checkoutUrl: existingSession.url,
+              checkoutSessionId: existingSession.id
+            },
+            application_email: applicationEmail,
+            duplicate_submission: true
+          });
+        }
+      }
+    }
+    if (!application) {
+      application = await insertApplication(
+        db,
+        {
+          ...payload,
+          ticket_type: payload.ticket_type || "obog"
+        },
+        getClientMeta(request)
+      );
+    }
     if (application.payment_provider === "stripe") {
       try {
         const { session, metadata } = await createCheckoutSession({
@@ -2194,7 +2624,7 @@ async function onRequestPost6({ request, env }) {
         application.external_payment_id = session.id;
         let applicationEmail;
         try {
-          applicationEmail = await maybeSendEmail(env, renderApplicationReceivedEmail(application, session.url));
+          applicationEmail = await sendApplicationReceivedEmailOnce(env, db, application, session.url);
         } catch (emailError) {
           console.error("Application received email failed after Checkout creation.", emailError);
           applicationEmail = { sent: false, skipped: false, error: emailError.message || "Email delivery failed." };

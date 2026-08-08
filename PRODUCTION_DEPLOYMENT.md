@@ -32,8 +32,11 @@ Subscribe it to:
 - `checkout.session.expired`
 - `payment_intent.succeeded`
 - `payment_intent.partially_funded`
+- `cash_balance.funds_available`
 
 In Stripe Dashboard, enable cards and bank transfer for the account. Apple Pay and Google Pay are displayed by Stripe Checkout only when the device, browser, wallet, and card are eligible. The staff menu is available only at `/festa60-register/?staff=1`; never add a public navigation link or commit its access code.
+
+Before deploying code that enables the hardened bank-transfer flow, apply `migrations/20260808_harden_bank_transfer_flow.sql` to the production D1 database. Confirm the same migration and flow in staging first. See `docs/FESTA60_REGISTRATION_PAYMENT_DESIGN.md` for the state model, email timing, and incident handling.
 
 Create a Cloudflare Access application that protects both `/festa60-admin/*` and `/api/festa60/admin/*`. Allow only approved FESTA office members. Verify that an unauthenticated request cannot retrieve the dashboard HTML, JSON API, or CSV export before accepting production applications.
 
