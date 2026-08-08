@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex,nofollow" />
     <title>60周年記念FESTA 参加申込</title>
     <link rel="canonical" href="https://tus-fantasista-festa60.pages.dev/festa60-register/" />
-    <link rel="stylesheet" href="../assets/css/festa60-crm.css?v=20260808-1" />
+    <link rel="stylesheet" href="../assets/css/festa60-crm.css?v=20260808-2" />
   </head>
   <body class="festa60-crm">
     <div id="environment-banner" class="crm-test-banner" hidden>TEST環境 / Cloudflare Pages Preview / 本番申込ではありません</div>
@@ -39,7 +39,7 @@
               <li>クレジットカード</li>
               <li>Apple Pay・Google Pay（対応端末・ブラウザで表示）</li>
               <li>PayPay（現在準備中）</li>
-              <li>銀行振込（現在準備中）</li>
+              <li>銀行振込（確認画面で振込先を確認してから確定）</li>
             </ul>
             <ul>
               <li>カード情報は外部決済サービスの安全な画面で入力し、FANTASISTAでは取得・保存しません。</li>
@@ -405,7 +405,8 @@
             <li>申込完了後に受付番号を発行します。</li>
             <li>申込直後に、受付番号・申込内容・お支払い手続きに戻るリンクをメールでお送りします。</li>
             <li>カード情報や各支払い方法の認証情報は外部決済サービスが取り扱い、FANTASISTAでは取得・保存しません。</li>
-            <li>銀行振込の提供開始後は、振込先・期限を再確認できる案内ページへのリンクもメールでお送りします。</li>
+            <li>銀行振込は、確認画面で実際の振込先を確認した後に、申込を確定するかカード等へ変更できます。</li>
+            <li>銀行振込で申込を確定した方には、振込先を再確認できる案内ページへのリンクもメールでお送りします。</li>
             <li>寄付をお申し込みの方は、お礼状・返礼品の送付先住所をご入力ください。</li>
           </ul>
         </aside>
@@ -422,7 +423,38 @@
           <h3 id="confirmation-payment-title">確定後のお支払い</h3>
           <p id="confirmation-payment-note"></p>
         </div>
-        <div class="crm-confirmation-actions">
+        <fieldset id="payment-choice" class="crm-payment-choice">
+          <legend>お支払い方法を選択してください</legend>
+          <label>
+            <input type="radio" name="confirmation_payment_method" value="online" checked />
+            <span><strong>カード・スマホ決済等</strong><small>安全な外部決済画面で、利用可能な方法を選択します。</small></span>
+          </label>
+          <label>
+            <input type="radio" name="confirmation_payment_method" value="bank_transfer" />
+            <span><strong>銀行振込</strong><small>実際の振込先を確認してから、申込を確定するか選び直せます。</small></span>
+          </label>
+        </fieldset>
+        <section id="bank-transfer-preview" class="crm-bank-preview" hidden aria-labelledby="bank-transfer-preview-title">
+          <div>
+            <span class="crm-kicker">Bank Transfer Preview</span>
+            <h3 id="bank-transfer-preview-title" tabindex="-1">銀行振込先をご確認ください</h3>
+            <p><strong>この時点では申込も振込も確定していません。</strong>内容を確認し、銀行振込で申し込むか、カード等へ選び直してください。</p>
+          </div>
+          <dl class="crm-summary">
+            <div><dt>お支払い金額</dt><dd id="bank-preview-amount"></dd></div>
+            <div><dt>金融機関</dt><dd id="bank-preview-bank"></dd></div>
+            <div><dt>支店</dt><dd id="bank-preview-branch"></dd></div>
+            <div><dt>口座種別</dt><dd id="bank-preview-account-type"></dd></div>
+            <div><dt>口座番号</dt><dd id="bank-preview-account-number"></dd></div>
+            <div><dt>口座名義</dt><dd id="bank-preview-account-holder"></dd></div>
+          </dl>
+          <p class="crm-small"><a id="bank-preview-instructions" href="#" target="_blank" rel="noopener">振込案内ページを別画面で確認する</a></p>
+          <div class="crm-confirmation-actions">
+            <button id="change-to-online-payment" class="crm-button crm-button--ghost" type="button">カード等へ選び直す</button>
+            <button id="confirm-bank-transfer" class="crm-button" type="button">この銀行振込で申込を確定する</button>
+          </div>
+        </section>
+        <div id="confirmation-actions" class="crm-confirmation-actions">
           <button id="edit-application" class="crm-button crm-button--ghost" type="button">入力内容を修正する</button>
           <button id="confirm-application" class="crm-button" type="button">この内容で申し込む</button>
         </div>
@@ -433,6 +465,7 @@
         <h2 id="completion-title">お申し込みありがとうございます。</h2>
         <p id="completion-guide">受付番号を発行しました。お支払い状況はFANTASISTA事務局で確認します。</p>
         <p id="completion-status">決済完了後に参加確定メールをお送りします。</p>
+        <p id="completion-payment-link" hidden><a id="complete-bank-instructions" href="#" target="_blank" rel="noopener">銀行振込の案内をもう一度確認する</a></p>
         <dl class="crm-summary">
           <div>
             <dt>受付番号</dt>
@@ -450,6 +483,6 @@
       </section>
     </main>
     <footer class="crm-legal-footer"><a href="../festa-60th/legal/">特定商取引法に基づく表記</a></footer>
-    <script src="../assets/js/festa60-register.js?v=20260808-3" defer></script>
+    <script src="../assets/js/festa60-register.js?v=20260808-4" defer></script>
   </body>
 </html>

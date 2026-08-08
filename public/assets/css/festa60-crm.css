@@ -568,6 +568,69 @@ body.festa60-crm {
   gap: 10px;
 }
 
+.crm-payment-choice {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  border: 1px solid var(--crm-line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.crm-payment-choice legend {
+  padding: 0 8px;
+  font-weight: 900;
+}
+
+.crm-payment-choice label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  border: 1px solid var(--crm-line);
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+}
+
+.crm-payment-choice label:has(input:checked) {
+  border-color: #c69a18;
+  background: #fff9df;
+}
+
+.crm-payment-choice input {
+  margin-top: 0.3em;
+}
+
+.crm-payment-choice span,
+.crm-payment-choice small {
+  display: block;
+}
+
+.crm-payment-choice small {
+  margin-top: 4px;
+  color: var(--crm-muted);
+  line-height: 1.6;
+}
+
+.crm-bank-preview {
+  display: grid;
+  gap: 18px;
+  border: 2px solid #c69a18;
+  border-radius: 8px;
+  padding: 20px;
+  background: #fffdf4;
+}
+
+.crm-bank-preview[hidden] {
+  display: none;
+}
+
+.crm-bank-preview h3,
+.crm-bank-preview p {
+  margin: 0;
+}
+
 .crm-check {
   display: flex;
   gap: 10px;
@@ -602,6 +665,23 @@ body.festa60-crm {
 .crm-button:disabled {
   opacity: 0.56;
   cursor: wait;
+}
+
+@media (max-width: 640px) {
+  .crm-confirmation-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .crm-confirmation-actions .crm-button {
+    width: 100%;
+  }
+
+  .crm-summary div,
+  .crm-confirmation-list div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
 }
 
 .crm-message {

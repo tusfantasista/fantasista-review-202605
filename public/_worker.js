@@ -677,6 +677,43 @@ async function createPayment(db, application, session, metadata) {
   return paymentId;
 }
 __name(createPayment, "createPayment");
+async function createBankTransferPayment(db, application, paymentIntent, customerId) {
+  const now = nowIso();
+  const paymentId = newId("pay");
+  await db.prepare(
+    `INSERT INTO payments (
+        id, application_id, member_id, stripe_checkout_session_id, stripe_payment_intent_id,
+        stripe_customer_id, amount_total, currency, status, payment_method, payment_provider,
+        external_payment_id, ticket_type, metadata_json, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    paymentId,
+    application.id,
+    application.member_id || null,
+    null,
+    paymentIntent.id,
+    customerId || paymentIntent.customer || null,
+    paymentIntent.amount || application.amount_total || 0,
+    paymentIntent.currency || "jpy",
+    paymentIntent.status || "requires_action",
+    "bank_transfer",
+    "stripe",
+    paymentIntent.id,
+    application.ticket_type,
+    JSON.stringify({ application_id: application.id, ticket_type: application.ticket_type }),
+    now,
+    now
+  ).run();
+  await db.prepare("UPDATE payment_line_items SET payment_id = ? WHERE application_id = ?").bind(paymentId, application.id).run();
+  await db.prepare(
+    `UPDATE applications
+       SET status = 'payment_pending', payment_status = 'unpaid', payment_method = 'bank_transfer',
+           payment_provider = 'stripe', external_payment_id = ?, updated_at = ?
+       WHERE id = ?`
+  ).bind(paymentIntent.id, now, application.id).run();
+  return paymentId;
+}
+__name(createBankTransferPayment, "createBankTransferPayment");
 async function recordStripeEvent(db, event, payloadJson) {
   const now = nowIso();
   const existing = await db.prepare("SELECT status FROM stripe_events WHERE id = ?").bind(event.id).first();
@@ -836,6 +873,41 @@ async function markPaymentPartiallyFunded(db, paymentIntent, stripeEventId) {
   };
 }
 __name(markPaymentPartiallyFunded, "markPaymentPartiallyFunded");
+async function markBankTransferPaymentSucceeded(db, paymentIntent, stripeEventId) {
+  const now = nowIso();
+  const payment = await db.prepare(
+    `SELECT application_id, amount_total, currency
+       FROM payments
+       WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe'
+       LIMIT 1`
+  ).bind(paymentIntent.id).first();
+  if (!payment?.application_id) throw new Error("Stripe bank transfer PaymentIntent is not linked to a Festa 60 payment.");
+  if (Number(paymentIntent.amount || 0) !== Number(payment.amount_total || 0)) throw new Error("Stripe bank transfer amount mismatch.");
+  if (String(paymentIntent.currency || "").toLowerCase() !== String(payment.currency || "").toLowerCase()) {
+    throw new Error("Stripe bank transfer currency mismatch.");
+  }
+  await db.prepare(
+    `UPDATE payments
+       SET status = 'paid', amount_received_jpy = ?, amount_remaining_jpy = 0,
+           stripe_event_id = ?, paid_at = COALESCE(paid_at, ?), updated_at = ?
+       WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe'`
+  ).bind(Number(paymentIntent.amount_received || paymentIntent.amount || 0), stripeEventId || null, now, now, paymentIntent.id).run();
+  await db.prepare(
+    `UPDATE applications
+       SET payment_status = 'paid', status = 'confirmed', attendance_status = 'confirmed',
+           paid_at = COALESCE(paid_at, ?), updated_at = ?
+       WHERE id = ?`
+  ).bind(now, now, payment.application_id).run();
+  await audit(db, {
+    actor: "stripe",
+    action: "payment.bank_transfer_succeeded",
+    target_type: "application",
+    target_id: payment.application_id,
+    details_json: JSON.stringify({ payment_intent_id: paymentIntent.id })
+  });
+  return payment.application_id;
+}
+__name(markBankTransferPaymentSucceeded, "markBankTransferPaymentSucceeded");
 async function markPartialPaymentEmailSent(db, paymentIntentId) {
   const now = nowIso();
   await db.prepare(
@@ -1592,9 +1664,11 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   };
   const params = new URLSearchParams();
   params.set("mode", "payment");
-  // Omitting payment_method_types lets Stripe present enabled, eligible methods.
+  // Bank transfer is handled by the site's two-step confirmation flow.
+  // Other enabled and eligible methods are presented by Checkout.
+  params.set("excluded_payment_method_types[0]", "customer_balance");
   params.set("locale", "ja");
-  params.set("submit_type", "book");
+  params.set("submit_type", "pay");
   const staffQuery = isStaffTicketType(splitTicketType(application.ticket_type).base_ticket_type) ? "staff=1&" : "";
   params.set("success_url", `${baseUrl}/festa60-register/?${staffQuery}checkout=success&application=${application.application_code}`);
   params.set("cancel_url", `${baseUrl}/festa60-register/?${staffQuery}checkout=cancelled&application=${application.application_code}`);
@@ -1635,6 +1709,177 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   return { session: result, metadata };
 }
 __name(createCheckoutSession, "createCheckoutSession");
+async function createBankTransferPreviewCustomer(stripeSecret, payload, previewId) {
+  const params = new URLSearchParams();
+  params.set("email", payload.email);
+  params.set("name", payload.full_name || "");
+  params.set("metadata[festa60_bank_preview_id]", previewId);
+  const response = await fetch("https://api.stripe.com/v1/customers", {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${stripeSecret}`,
+      "content-type": "application/x-www-form-urlencoded",
+      "idempotency-key": `festa60-bank-preview-customer-${previewId}`
+    },
+    body: params
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(`Stripe bank transfer customer creation failed: ${result.error?.message || response.status}`);
+  }
+  return result;
+}
+__name(createBankTransferPreviewCustomer, "createBankTransferPreviewCustomer");
+async function createBankTransferPreview({ env, payload, amount }) {
+  const stripeSecret = requireStripeSecret(env);
+  const previewId = crypto.randomUUID();
+  const customer = await createBankTransferPreviewCustomer(stripeSecret, payload, previewId);
+  const params = new URLSearchParams();
+  params.set("amount", String(amount));
+  params.set("currency", "jpy");
+  params.set("customer", customer.id);
+  params.set("confirm", "true");
+  params.set("payment_method_types[0]", "customer_balance");
+  params.set("payment_method_options[customer_balance][funding_type]", "bank_transfer");
+  params.set("payment_method_options[customer_balance][bank_transfer][type]", "jp_bank_transfer");
+  params.set("payment_method_options[customer_balance][bank_transfer][requested_address_types][0]", "zengin");
+  params.set("receipt_email", payload.email);
+  params.set("description", "FANTASISTA 60周年記念FESTA");
+  params.set("metadata[festa60_bank_preview_id]", previewId);
+  const response = await fetch("https://api.stripe.com/v1/payment_intents", {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${stripeSecret}`,
+      "content-type": "application/x-www-form-urlencoded",
+      "idempotency-key": `festa60-bank-preview-intent-${previewId}`
+    },
+    body: params
+  });
+  const paymentIntent = await response.json();
+  if (!response.ok) {
+    throw new Error(`Stripe bank transfer preview failed: ${paymentIntent.error?.message || response.status}`);
+  }
+  return { previewId, customer, paymentIntent };
+}
+__name(createBankTransferPreview, "createBankTransferPreview");
+function bankTransferDetails(paymentIntent) {
+  const instructions = paymentIntent?.next_action?.display_bank_transfer_instructions;
+  const financialAddress = (instructions?.financial_addresses || []).find((item) => item.type === "zengin");
+  const zengin = financialAddress?.zengin;
+  if (!zengin) throw new Error("Stripe bank transfer details are unavailable.");
+  return {
+    amount: bankTransferAmountRemaining(paymentIntent),
+    bank_name: zengin.bank_name || "",
+    bank_code: zengin.bank_code || "",
+    branch_name: zengin.branch_name || "",
+    branch_code: zengin.branch_code || "",
+    account_type: zengin.account_type || "",
+    account_number: zengin.account_number || "",
+    account_holder_name: zengin.account_holder_name || "",
+    hosted_instructions_url: instructions.hosted_instructions_url || ""
+  };
+}
+__name(bankTransferDetails, "bankTransferDetails");
+function stableStringify(value) {
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
+__name(stableStringify, "stableStringify");
+function bankDecisionPayload(payload) {
+  const ignored = new Set(["action", "bank_preview_token", "turnstile_token", "pay_now", "payment_method"]);
+  return Object.fromEntries(Object.entries(payload).filter(([key]) => !ignored.has(key)));
+}
+__name(bankDecisionPayload, "bankDecisionPayload");
+function bytesToBase64Url(bytes) {
+  let binary = "";
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+__name(bytesToBase64Url, "bytesToBase64Url");
+function base64UrlToBytes(value) {
+  const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+  const binary = atob(normalized + "=".repeat((4 - normalized.length % 4) % 4));
+  return Uint8Array.from(binary, (character) => character.charCodeAt(0));
+}
+__name(base64UrlToBytes, "base64UrlToBytes");
+async function sha256Hex(value) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+__name(sha256Hex, "sha256Hex");
+async function bankPreviewPayloadHash(payload) {
+  return sha256Hex(stableStringify(bankDecisionPayload(payload)));
+}
+__name(bankPreviewPayloadHash, "bankPreviewPayloadHash");
+async function bankPreviewSigningKey(env) {
+  return crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(requireStripeSecret(env)),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign", "verify"]
+  );
+}
+__name(bankPreviewSigningKey, "bankPreviewSigningKey");
+async function createBankPreviewToken(env, data) {
+  const encodedPayload = bytesToBase64Url(new TextEncoder().encode(JSON.stringify(data)));
+  const key = await bankPreviewSigningKey(env);
+  const signature = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(encodedPayload));
+  return `${encodedPayload}.${bytesToBase64Url(new Uint8Array(signature))}`;
+}
+__name(createBankPreviewToken, "createBankPreviewToken");
+async function verifyBankPreviewToken(env, token, payload) {
+  const [encodedPayload, encodedSignature, extra] = String(token || "").split(".");
+  if (!encodedPayload || !encodedSignature || extra) throw new Error("銀行振込の確認情報が無効です。振込先をもう一度確認してください。");
+  const key = await bankPreviewSigningKey(env);
+  const valid = await crypto.subtle.verify(
+    "HMAC",
+    key,
+    base64UrlToBytes(encodedSignature),
+    new TextEncoder().encode(encodedPayload)
+  );
+  if (!valid) throw new Error("銀行振込の確認情報が無効です。振込先をもう一度確認してください。");
+  const data = JSON.parse(new TextDecoder().decode(base64UrlToBytes(encodedPayload)));
+  if (!data.expires_at || Date.now() > data.expires_at) throw new Error("振込先の確認期限が切れました。振込先をもう一度確認してください。");
+  if (data.payload_hash !== await bankPreviewPayloadHash(payload)) throw new Error("申込内容が変更されています。振込先をもう一度確認してください。");
+  return data;
+}
+__name(verifyBankPreviewToken, "verifyBankPreviewToken");
+async function updateStripePaymentIntentForApplication(stripeSecret, paymentIntentId, application) {
+  const params = new URLSearchParams();
+  params.set("metadata[application_id]", application.id);
+  params.set("metadata[application_code]", application.application_code);
+  params.set("metadata[ticket_type]", application.ticket_type);
+  const response = await fetch(`https://api.stripe.com/v1/payment_intents/${encodeURIComponent(paymentIntentId)}`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${stripeSecret}`,
+      "content-type": "application/x-www-form-urlencoded"
+    },
+    body: params
+  });
+  const result = await response.json();
+  if (!response.ok) throw new Error(`Stripe PaymentIntent update failed: ${result.error?.message || response.status}`);
+  return result;
+}
+__name(updateStripePaymentIntentForApplication, "updateStripePaymentIntentForApplication");
+async function cancelStripePaymentIntent(stripeSecret, paymentIntentId) {
+  const response = await fetch(`https://api.stripe.com/v1/payment_intents/${encodeURIComponent(paymentIntentId)}/cancel`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${stripeSecret}` }
+  });
+  const result = await response.json();
+  if (!response.ok && result.error?.code !== "payment_intent_unexpected_state") {
+    throw new Error(`Stripe PaymentIntent cancellation failed: ${result.error?.message || response.status}`);
+  }
+  return result;
+}
+__name(cancelStripePaymentIntent, "cancelStripePaymentIntent");
 async function retrieveStripePaymentIntent(stripeSecret, paymentIntent) {
   const paymentIntentId = typeof paymentIntent === "string" ? paymentIntent : paymentIntent?.id;
   if (!paymentIntentId) return null;
@@ -1737,6 +1982,10 @@ async function onRequestPost5({ request, env }) {
             if (application) await maybeSendEmail(env, renderBankTransferInstructionsEmail(application, instructionsUrl));
           }
         }
+      } else if (event.type === "payment_intent.succeeded" && event.data.object.payment_method_types?.includes("customer_balance")) {
+        const applicationId = await markBankTransferPaymentSucceeded(db, event.data.object, event.id);
+        const application = await getApplicationById(db, applicationId);
+        if (application) await maybeSendEmail(env, renderPaymentConfirmedEmail(application));
       } else if (event.type === "payment_intent.partially_funded") {
         const partialPayment = await markPaymentPartiallyFunded(db, event.data.object, event.id);
         if (!partialPayment.hosted_instructions_url) {
@@ -1795,6 +2044,9 @@ async function onRequestPost6({ request, env }) {
   try {
     const payload = await readJson(request);
     if (!payload) return badRequest("Invalid JSON payload.");
+    const action = payload.action || "submit_online";
+    const allowedActions = ["submit_online", "preview_bank_transfer", "confirm_bank_transfer", "switch_to_online", "cancel_bank_preview"];
+    if (!allowedActions.includes(action)) return badRequest("Invalid application action.");
     payload.full_name = [payload.family_name, payload.given_name].filter(Boolean).join(" ").trim();
     payload.full_name_kana = [payload.family_name_kana, payload.given_name_kana].filter(Boolean).join(" ").trim();
     payload.address = [payload.prefecture, payload.city, payload.street_address, payload.building].filter((value) => String(value || "").trim()).join(" ");
@@ -1805,10 +2057,123 @@ async function onRequestPost6({ request, env }) {
     const isStaffApplication = STAFF_TICKET_TYPES.includes(splitTicketType(payload.ticket_type).base_ticket_type);
     payload.source = isStaffApplication ? "staff_invite" : "public_form";
     delete payload.staff_access_code;
-    const turnstile = await verifyTurnstile(payload.turnstile_token, env, request);
-    if (!turnstile.ok) return badRequest("Turnstile verification failed.", turnstile.result || turnstile.message);
     const db = requireDb(env);
     payload.ticket_type = normalizeTicketType(payload.ticket_type);
+    const companions = Array.isArray(payload.companions) ? payload.companions.filter((item) => item.full_name) : [];
+    const amount = lineItemsTotal(buildPaymentLineItems(payload, companions));
+
+    if (action === "preview_bank_transfer") {
+      if (amount <= 0) return badRequest("銀行振込が必要なお支払い金額ではありません。");
+      const turnstile = await verifyTurnstile(payload.turnstile_token, env, request);
+      if (!turnstile.ok) return badRequest("Turnstile verification failed.", turnstile.result || turnstile.message);
+      const preview = await createBankTransferPreview({ env, payload, amount });
+      const token = await createBankPreviewToken(env, {
+        payment_intent_id: preview.paymentIntent.id,
+        customer_id: preview.customer.id,
+        amount,
+        payload_hash: await bankPreviewPayloadHash(payload),
+        expires_at: Date.now() + 30 * 60 * 1e3
+      });
+      return json({
+        ok: true,
+        bank_transfer_preview: bankTransferDetails(preview.paymentIntent),
+        bank_preview_token: token,
+        expires_at: new Date(Date.now() + 30 * 60 * 1e3).toISOString(),
+        turnstile_skipped: Boolean(turnstile.skipped)
+      });
+    }
+
+    let bankPreview = null;
+    let bankPaymentIntent = null;
+    if (action === "confirm_bank_transfer" || action === "switch_to_online" || action === "cancel_bank_preview") {
+      try {
+        bankPreview = await verifyBankPreviewToken(env, payload.bank_preview_token, payload);
+      } catch (error) {
+        return badRequest(error.message);
+      }
+      if (Number(bankPreview.amount) !== amount) return badRequest("お支払い金額が変更されています。振込先をもう一度確認してください。");
+      bankPaymentIntent = await retrieveStripePaymentIntent(requireStripeSecret(env), bankPreview.payment_intent_id);
+      if (bankPaymentIntent.customer !== bankPreview.customer_id || Number(bankPaymentIntent.amount) !== amount || bankPaymentIntent.currency !== "jpy") {
+        return badRequest("銀行振込の確認情報とお支払い内容が一致しません。振込先をもう一度確認してください。");
+      }
+    } else {
+      const turnstile = await verifyTurnstile(payload.turnstile_token, env, request);
+      if (!turnstile.ok) return badRequest("Turnstile verification failed.", turnstile.result || turnstile.message);
+    }
+
+    if (action === "cancel_bank_preview") {
+      const linkedPayment = await db.prepare(
+        "SELECT application_id FROM payments WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe' LIMIT 1"
+      ).bind(bankPreview.payment_intent_id).first();
+      if (linkedPayment?.application_id) return badRequest("この銀行振込はすでに申込へ確定されています。");
+      if (bankPaymentIntent.status === "canceled") return json({ ok: true, cancelled: true });
+      await cancelStripePaymentIntent(requireStripeSecret(env), bankPreview.payment_intent_id);
+      return json({ ok: true, cancelled: true });
+    }
+
+    if (action === "confirm_bank_transfer") {
+      const existingPayment = await db.prepare(
+        "SELECT application_id FROM payments WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe' LIMIT 1"
+      ).bind(bankPreview.payment_intent_id).first();
+      if (existingPayment?.application_id) {
+        const existingApplication = await getApplicationById(db, existingPayment.application_id);
+        return json({
+          ok: true,
+          application: existingApplication,
+          payment: {
+            paymentMethod: "bank_transfer",
+            paymentProvider: "stripe",
+            paymentStatus: existingApplication?.payment_status || "unpaid"
+          },
+          duplicate_confirmation: true
+        });
+      }
+      const stripeSecret = requireStripeSecret(env);
+      const paymentIntent = bankPaymentIntent;
+      if (paymentIntent.status === "canceled") return badRequest("この振込先は使用できません。振込先をもう一度確認してください。");
+      const application = await insertApplication(db, { ...payload, ticket_type: payload.ticket_type || "obog" }, getClientMeta(request));
+      const linkedPaymentIntent = await updateStripePaymentIntentForApplication(stripeSecret, paymentIntent.id, application);
+      application.payment_id = await createBankTransferPayment(db, application, linkedPaymentIntent, bankPreview.customer_id);
+      application.external_payment_id = linkedPaymentIntent.id;
+      application.payment_method = "bank_transfer";
+      application.paymentMethod = "bank_transfer";
+      application.payment_status = linkedPaymentIntent.status === "succeeded" ? "paid" : "unpaid";
+      application.paymentStatus = application.payment_status;
+      if (linkedPaymentIntent.status === "succeeded") {
+        await markBankTransferPaymentSucceeded(db, linkedPaymentIntent, null);
+      }
+      const instructionsUrl = bankTransferInstructionsUrl(linkedPaymentIntent);
+      let applicationEmail;
+      try {
+        applicationEmail = linkedPaymentIntent.status === "succeeded"
+          ? await maybeSendEmail(env, renderPaymentConfirmedEmail(await getApplicationById(db, application.id)))
+          : await maybeSendEmail(env, renderBankTransferInstructionsEmail(application, instructionsUrl));
+      } catch (emailError) {
+        console.error("Bank transfer application email failed.", emailError);
+        applicationEmail = { sent: false, skipped: false, error: emailError.message || "Email delivery failed." };
+      }
+      return json({
+        ok: true,
+        application,
+        payment: {
+          paymentMethod: "bank_transfer",
+          paymentProvider: "stripe",
+          paymentStatus: application.payment_status,
+          hostedInstructionsUrl: instructionsUrl
+        },
+        application_email: applicationEmail,
+        receipt_email: { sent: false, skipped: true, reason: "Sent after payment confirmation." }
+      });
+    }
+
+    if (action === "switch_to_online" && bankPreview?.payment_intent_id) {
+      const linkedPayment = await db.prepare(
+        "SELECT application_id FROM payments WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe' LIMIT 1"
+      ).bind(bankPreview.payment_intent_id).first();
+      if (linkedPayment?.application_id) return badRequest("この銀行振込はすでに申込へ確定されています。");
+      if (bankPaymentIntent.status === "canceled") return badRequest("この確認情報はすでに使用されています。入力画面からやり直してください。");
+      await cancelStripePaymentIntent(requireStripeSecret(env), bankPreview.payment_intent_id);
+    }
     const application = await insertApplication(
       db,
       {
@@ -1846,7 +2211,7 @@ async function onRequestPost6({ request, env }) {
           },
           application_email: applicationEmail,
           receipt_email: { sent: false, skipped: true, reason: "Sent by Stripe after payment confirmation." },
-          turnstile_skipped: Boolean(turnstile.skipped)
+          turnstile_skipped: action === "switch_to_online" ? false : !env.TURNSTILE_SECRET_KEY
         });
       } catch (stripeError) {
         console.error("Stripe Checkout setup failed after application creation.", stripeError);
@@ -1866,7 +2231,7 @@ async function onRequestPost6({ request, env }) {
       application,
       payment: { paymentMethod: "not_required", paymentProvider: "none", paymentStatus: "paid" },
       receipt_email: { sent: false, skipped: true, reason: "No payment required." },
-      turnstile_skipped: Boolean(turnstile.skipped)
+      turnstile_skipped: action === "switch_to_online" ? false : !env.TURNSTILE_SECRET_KEY
     });
   } catch (error) {
     return serverError(error);

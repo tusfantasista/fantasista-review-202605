@@ -25,6 +25,12 @@
   const confirmationPaymentNote = document.getElementById("confirmation-payment-note");
   const editApplicationButton = document.getElementById("edit-application");
   const confirmApplicationButton = document.getElementById("confirm-application");
+  const confirmationActions = document.getElementById("confirmation-actions");
+  const paymentChoice = document.getElementById("payment-choice");
+  const paymentChoiceInputs = Array.from(document.querySelectorAll("input[name='confirmation_payment_method']"));
+  const bankTransferPreview = document.getElementById("bank-transfer-preview");
+  const confirmBankTransferButton = document.getElementById("confirm-bank-transfer");
+  const changeToOnlinePaymentButton = document.getElementById("change-to-online-payment");
   const completionPanel = document.getElementById("completion-panel");
   const stripePaymentMethod = document.getElementById("stripe-payment-method");
   const stripePaymentHelp = document.getElementById("stripe-payment-help");
@@ -56,6 +62,8 @@
   const staffMode = checkoutState.get("staff") === "1";
   let turnstileToken = "";
   let pendingPayload = null;
+  let bankPreviewToken = "";
+  let bankPreviewDetails = null;
   let postalLookupTimer = null;
   let lastLookedUpPostalCode = "";
   let stripeAvailable = false;
@@ -201,8 +209,11 @@
     }
   });
 
-  editApplicationButton.addEventListener("click", function () {
+  editApplicationButton.addEventListener("click", async function () {
+    await cancelBankPreview();
     pendingPayload = null;
+    clearBankTransferPreview();
+    resetTurnstile();
     confirmationPanel.hidden = true;
     entryPanel.hidden = false;
     setStep("entry");
@@ -211,6 +222,19 @@
   });
 
   confirmApplicationButton.addEventListener("click", submitConfirmedApplication);
+  confirmBankTransferButton.addEventListener("click", function () {
+    submitApplication("confirm_bank_transfer");
+  });
+  changeToOnlinePaymentButton.addEventListener("click", function () {
+    const onlineChoice = paymentChoiceInputs.find((input) => input.value === "online");
+    if (onlineChoice) onlineChoice.checked = true;
+    bankTransferPreview.hidden = true;
+    paymentChoice.hidden = false;
+    confirmationActions.hidden = false;
+    updateConfirmationPaymentChoice();
+    confirmationPaymentTitle.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  paymentChoiceInputs.forEach((input) => input.addEventListener("change", updateConfirmationPaymentChoice));
 
   function renderCompanions() {
     const count = Math.max(0, Math.min(5, Number(companionCount.value || 0)));
@@ -503,6 +527,7 @@
   function showConfirmation(payload) {
     message.hidden = true;
     confirmationMessage.hidden = true;
+    clearBankTransferPreview();
     renderConfirmation(payload);
     entryPanel.hidden = true;
     confirmationPanel.hidden = false;
@@ -517,33 +542,68 @@
       return;
     }
 
+    if (selectedConfirmationPaymentMethod() === "bank_transfer") {
+      await previewBankTransfer();
+      return;
+    }
+
+    await submitApplication(bankPreviewToken ? "switch_to_online" : "submit_online");
+  }
+
+  async function previewBankTransfer() {
+    confirmApplicationButton.disabled = true;
+    editApplicationButton.disabled = true;
+    setConfirmationMessage("振込先を確認しています。まだ申込は確定しません...", "");
+
+    try {
+      if (!stripeAvailable) throw new Error("銀行振込は現在利用できません。時間をおいて再度お試しください。");
+      const payload = clonePendingPayload();
+      payload.action = "preview_bank_transfer";
+      payload.payment_method = "bank_transfer";
+      payload.turnstile_token = turnstileToken;
+      const result = await postApplication(payload);
+      bankPreviewToken = result.bank_preview_token;
+      bankPreviewDetails = result.bank_transfer_preview;
+      renderBankTransferPreview(bankPreviewDetails);
+      paymentChoice.hidden = true;
+      confirmationActions.hidden = true;
+      bankTransferPreview.hidden = false;
+      confirmationMessage.hidden = true;
+      bankTransferPreview.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("bank-transfer-preview-title")?.focus({ preventScroll: true });
+    } catch (error) {
+      resetTurnstile();
+      setConfirmationMessage(error.message, "error");
+    } finally {
+      confirmApplicationButton.disabled = false;
+      editApplicationButton.disabled = false;
+    }
+  }
+
+  async function submitApplication(action) {
+    if (!pendingPayload) {
+      setConfirmationMessage("入力内容を再度確認してください。", "error");
+      return;
+    }
+
     let applicationSaved = false;
     confirmApplicationButton.disabled = true;
     editApplicationButton.disabled = true;
+    confirmBankTransferButton.disabled = true;
+    changeToOnlinePaymentButton.disabled = true;
     setConfirmationMessage("申込内容を送信しています...", "");
 
     try {
-      const payload = { ...pendingPayload };
-      payload.companions = pendingPayload.companions.map((companion) => ({ ...companion }));
-      payload.turnstile_token = turnstileToken;
+      const payload = clonePendingPayload();
+      payload.action = action;
+      payload.payment_method = action === "confirm_bank_transfer" ? "bank_transfer" : "stripe";
+      if (action === "submit_online") payload.turnstile_token = turnstileToken;
+      if (action === "confirm_bank_transfer" || action === "switch_to_online") payload.bank_preview_token = bankPreviewToken;
       if (!stripeAvailable) {
         throw new Error("オンライン決済は現在準備中です。時間をおいて再度お試しいただくか、事務局へお問い合わせください。");
       }
       payload.pay_now = true;
-
-      const response = await fetch("/api/festa60/applications", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const result = await response.json();
-      if (!response.ok || !result.ok) {
-        if (result.application?.application_code) {
-          applicationSaved = true;
-          throw new Error(`${result.message || "送信に失敗しました。"}\n受付番号: ${result.application.application_code}`);
-        }
-        throw new Error(result.message || result.error || "送信に失敗しました。");
-      }
+      const result = await postApplication(payload);
 
       if (result.payment?.checkoutUrl) {
         setConfirmationMessage("申込を受け付けました。安全な決済画面へ移動します...", "success");
@@ -553,6 +613,7 @@
 
       renderCompletion(result, payload);
       pendingPayload = null;
+      clearBankTransferPreview();
       form.reset();
       updateApplicationMode();
       renderCompanions();
@@ -565,7 +626,31 @@
     } finally {
       confirmApplicationButton.disabled = applicationSaved;
       editApplicationButton.disabled = applicationSaved;
+      confirmBankTransferButton.disabled = applicationSaved;
+      changeToOnlinePaymentButton.disabled = applicationSaved;
     }
+  }
+
+  function clonePendingPayload() {
+    const payload = { ...pendingPayload };
+    payload.companions = (pendingPayload?.companions || []).map((companion) => ({ ...companion }));
+    return payload;
+  }
+
+  async function postApplication(payload) {
+    const response = await fetch("/api/festa60/applications", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      if (result.application?.application_code) {
+        throw new Error(`${result.message || "送信に失敗しました。"}\n受付番号: ${result.application.application_code}`);
+      }
+      throw new Error(result.message || result.error || "送信に失敗しました。");
+    }
+    return result;
   }
 
   function renderConfirmation(payload) {
@@ -634,7 +719,7 @@
     groups.push({
       title: "お支払い・同意内容",
       rows: [
-        ["お支払い方法", paymentMethodLabel(payload.payment_method)],
+        ["お支払い方法", "この画面で選択"],
         ["連絡事項", payload.message || "なし"],
         ["個人情報の利用", payload.privacy_consent ? "同意する" : "同意しない"],
         ["事務局からの連絡", payload.contact_consent ? "受け取る" : "受け取らない"],
@@ -644,9 +729,11 @@
     });
 
     confirmationSummary.replaceChildren(...groups.map(createConfirmationGroup));
-    confirmationPaymentTitle.textContent = "確定後、安全な決済画面へ進みます";
-    confirmationPaymentNote.textContent = "「この内容で申し込む」を押すとFANTASISTAが申込を受け付け、外部決済画面へ移動します。画面に表示された支払い方法から選択してください。";
-    confirmApplicationButton.textContent = "この内容で申し込み、お支払いへ";
+    const onlineChoice = paymentChoiceInputs.find((input) => input.value === "online");
+    if (onlineChoice) onlineChoice.checked = true;
+    paymentChoice.hidden = false;
+    confirmationActions.hidden = false;
+    updateConfirmationPaymentChoice();
   }
 
   function createConfirmationGroup(group) {
@@ -675,7 +762,67 @@
 
   function paymentMethodLabel(method) {
     if (method === "stripe") return "オンライン決済（画面に表示された支払い方法）";
+    if (method === "bank_transfer") return "銀行振込";
     return "オンライン決済";
+  }
+
+  function selectedConfirmationPaymentMethod() {
+    return paymentChoiceInputs.find((input) => input.checked)?.value || "online";
+  }
+
+  function updateConfirmationPaymentChoice() {
+    if (selectedConfirmationPaymentMethod() === "bank_transfer") {
+      confirmationPaymentTitle.textContent = "振込先を確認してから最終確定できます";
+      confirmationPaymentNote.textContent = "次の操作では実際の振込先を表示するだけで、申込はまだ確定しません。表示後に銀行振込で確定するか、カード等へ選び直せます。";
+      confirmApplicationButton.textContent = "振込先を確認する（まだ確定しません）";
+    } else {
+      confirmationPaymentTitle.textContent = "カード・スマホ決済等でお支払い";
+      confirmationPaymentNote.textContent = "申込を確定した後、安全な外部決済画面へ移動します。利用できる支払い方法は端末やブラウザ等により異なります。";
+      confirmApplicationButton.textContent = "申込を確定して決済画面へ";
+    }
+  }
+
+  function renderBankTransferPreview(details) {
+    document.getElementById("bank-preview-amount").textContent = formatYen(details.amount);
+    document.getElementById("bank-preview-bank").textContent = [details.bank_name, details.bank_code ? `（銀行コード ${details.bank_code}）` : ""].filter(Boolean).join(" ");
+    document.getElementById("bank-preview-branch").textContent = [details.branch_name, details.branch_code ? `（支店コード ${details.branch_code}）` : ""].filter(Boolean).join(" ");
+    document.getElementById("bank-preview-account-type").textContent = bankAccountTypeLabel(details.account_type);
+    document.getElementById("bank-preview-account-number").textContent = details.account_number;
+    document.getElementById("bank-preview-account-holder").textContent = details.account_holder_name;
+    const instructionsLink = document.getElementById("bank-preview-instructions");
+    instructionsLink.href = details.hosted_instructions_url || "#";
+    instructionsLink.hidden = !details.hosted_instructions_url;
+  }
+
+  function bankAccountTypeLabel(value) {
+    const labels = { futsu: "普通", toza: "当座", savings: "貯蓄" };
+    return labels[value] || value || "普通";
+  }
+
+  function clearBankTransferPreview() {
+    bankPreviewToken = "";
+    bankPreviewDetails = null;
+    bankTransferPreview.hidden = true;
+    paymentChoice.hidden = false;
+    confirmationActions.hidden = false;
+  }
+
+  async function cancelBankPreview() {
+    if (!bankPreviewToken || !pendingPayload) return;
+    try {
+      const payload = clonePendingPayload();
+      payload.action = "cancel_bank_preview";
+      payload.payment_method = "bank_transfer";
+      payload.bank_preview_token = bankPreviewToken;
+      await postApplication(payload);
+    } catch (error) {
+      console.warn("Bank transfer preview cancellation failed.", error);
+    }
+  }
+
+  function resetTurnstile() {
+    turnstileToken = "";
+    if (window.turnstile?.reset) window.turnstile.reset();
   }
 
   function formatYen(amount) {
@@ -911,5 +1058,14 @@
     document.getElementById("complete-application-id").textContent = applicationId;
     document.getElementById("complete-amount").textContent = `${amount.toLocaleString("ja-JP")}円`;
     document.getElementById("complete-payment-method").textContent = paymentMethodLabel(payload.payment_method);
+    const paymentLink = document.getElementById("completion-payment-link");
+    const bankInstructions = document.getElementById("complete-bank-instructions");
+    if (payload.payment_method === "bank_transfer" && payment.hostedInstructionsUrl) {
+      bankInstructions.href = payment.hostedInstructionsUrl;
+      paymentLink.hidden = false;
+      document.getElementById("completion-guide").textContent = "受付番号を発行しました。表示した振込先へお支払いください。振込案内はメールでもお送りします。";
+    } else {
+      paymentLink.hidden = true;
+    }
   }
 })();
