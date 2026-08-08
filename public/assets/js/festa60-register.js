@@ -639,7 +639,7 @@
 
     confirmationSummary.replaceChildren(...groups.map(createConfirmationGroup));
     confirmationPaymentTitle.textContent = "確定後、Stripeの決済画面へ進みます";
-    confirmationPaymentNote.textContent = "「この内容で申し込む」を押すと申込情報を登録し、Stripeへ移動します。Stripeの画面で表示された支払い方法から選択してください。銀行振込を選んだ場合は、Stripeが発行する振込先と期限に従ってお支払いください。";
+    confirmationPaymentNote.textContent = "「この内容で申し込む」を押すと申込情報を登録し、Stripeへ移動します。Stripeの画面に表示された支払い方法から選択してください。";
     confirmApplicationButton.textContent = "この内容で登録してStripeへ";
   }
 
@@ -668,7 +668,7 @@
   }
 
   function paymentMethodLabel(method) {
-    if (method === "stripe") return "Stripe（カード・Apple Pay・Google Pay・PayPay・銀行振込）";
+    if (method === "stripe") return "Stripe（画面に表示された支払い方法）";
     return "Stripe";
   }
 

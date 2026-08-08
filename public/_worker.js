@@ -1085,8 +1085,8 @@ function renderApplicationReceivedEmail(application, checkoutUrl) {
 お支払い手続き：
 ${checkoutUrl}
 
-Stripeの画面で、カード、Apple Pay・Google Pay、PayPay、銀行振込から表示された方法をお選びください。
-銀行振込を選択すると、Stripeが振込先口座と支払期限を表示します。振込先を控え忘れた場合に備え、銀行振込選択後にも案内ページへのリンクをメールでお送りします。
+Stripeの画面に表示された支払い方法からお選びください。
+利用できる方法は、Stripeの審査状況、ご利用環境、端末、ブラウザなどにより異なります。
 
 このメールは参加確定のお知らせではありません。入金確認後に、あらためて参加確定メールと領収書をご案内します。
 
@@ -1562,11 +1562,8 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   };
   const params = new URLSearchParams();
   params.set("mode", "payment");
-  params.set("payment_method_types[0]", "card");
-  params.set("payment_method_types[1]", "paypay");
-  params.set("payment_method_types[2]", "customer_balance");
-  params.set("payment_method_options[customer_balance][funding_type]", "bank_transfer");
-  params.set("payment_method_options[customer_balance][bank_transfer][type]", "jp_bank_transfer");
+  // Stripe presents only payment methods that are enabled and eligible for this payment.
+  params.set("automatic_payment_methods[enabled]", "true");
   params.set("locale", "ja");
   params.set("submit_type", "book");
   const staffQuery = isStaffTicketType(splitTicketType(application.ticket_type).base_ticket_type) ? "staff=1&" : "";
