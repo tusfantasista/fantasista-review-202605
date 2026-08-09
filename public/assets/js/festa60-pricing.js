@@ -89,7 +89,7 @@ export const FUNDRAISING_CONFIG = {
     { key: "second", label: "第2目標", amount_jpy: 1000000, active_support_jpy: 670000, festa_enhancement_jpy: 330000 },
     { key: "fm_dress", label: "FMドレス目標", amount_jpy: 1350000, active_support_jpy: 900000, festa_enhancement_jpy: 450000, note: "ドレス更新費を約90万円とした場合の到達点。正式見積もり後に調整します。" },
     { key: "final", label: "最終目標", amount_jpy: 1500000, active_support_jpy: 1000000, festa_enhancement_jpy: 500000, note: "ドレス更新額が90万円の場合、約10万円を現役支援基金へ積み立てます。" },
-    { key: "stretch", label: "ストレッチ目標", amount_jpy: 1800000, active_support_jpy: 1200000, festa_enhancement_jpy: 600000, note: "基金を積み増し、神楽坂体育館で使用する三面鏡などを検討します。" },
+    { key: "stretch", label: "ストレッチ目標", amount_jpy: 1800000, active_support_jpy: 1200000, festa_enhancement_jpy: 600000, note: "基金を積み増し、部で使う三面鏡・音響機器などの備品購入や修繕を検討します。" },
   ],
 };
 

@@ -548,7 +548,7 @@ import {
       const staffExplanation = staffMode
         ? "<p>参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。上乗せ寄付相当分は割引しません。第一部のみの場合は、半額後に4,000円を控除します。</p>"
         : "<p>申込時期割引と卒部年度割引を併用しています。</p>";
-      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>寄付相当額：約${donationEquivalent.toLocaleString("ja-JP")}円</strong></p><p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p><p>通常参加分の300円券は別途配布しません。有料の大人同伴者には${ticketUnitAmount}円券を1枚配布し、当日の追加購入も原則として${ticketUnitAmount}円券です。</p>${staffExplanation}`;
+      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>寄付相当額：約${donationEquivalent.toLocaleString("ja-JP")}円</strong><br><small>基本参加費とダンスタイムチケットの券面相当額を除いた金額です。</small></p><p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p><p>通常参加分の300円券は別途配布しません。有料の大人同伴者には${ticketUnitAmount}円券を1枚配布し、当日の追加購入も原則として${ticketUnitAmount}円券です。</p>${staffExplanation}`;
     } else {
       const standardDanceTicket = publicTicketType(ticketType.value) === "obog" ? "300円券×3枚" : "300円券×2枚";
       const staffAmount = staffMode ? staffParticipationAmount(ticketType.value, feePeriod.value, receptionAttendance.value) : null;
