@@ -92,6 +92,7 @@ img { max-width: 100%; }
 .fee-table th { color: var(--f60-cream); background: rgba(255, 210, 28, 0.06); }
 .fee-table td { color: var(--f60-muted); }
 .support-block + .support-block { margin-top: 54px; }
+.support-block[id] { scroll-margin-top: 92px; }
 .support-block h2 { margin: 0 0 10px; color: var(--f60-cream); }
 .support-block > p { color: var(--f60-muted); }
 .support-purpose {
@@ -99,13 +100,27 @@ img { max-width: 100%; }
   border-block: 1px solid rgba(214, 177, 91, 0.35);
   padding: 30px 0;
 }
-.support-purpose h2 { margin: 6px 0 16px; color: var(--f60-cream); }
-.support-purpose h3 { margin: 24px 0 8px; color: var(--f60-cream); font-size: 1.1rem; }
-.support-purpose p { max-width: 900px; color: var(--f60-muted); }
-.support-purpose__message { margin-bottom: 0; color: var(--f60-gold) !important; font-size: 1.05rem; }
-.support-use-list { max-width: 920px; margin: 12px 0 0; padding-left: 1.8em; color: var(--f60-muted); }
-.support-use-list li { padding: 5px 0 5px 4px; line-height: 1.9; }
-.support-use-list li::marker { color: var(--f60-gold); font-weight: 800; }
+.support-purpose h2 { max-width: 900px; margin: 6px 0 16px; color: var(--f60-cream); font-size: clamp(1.8rem, 4vw, 3rem); }
+.support-purpose h3 { color: var(--f60-cream); }
+.support-purpose p { color: var(--f60-muted); }
+.support-purpose__lead { max-width: 960px; margin: 0; color: var(--f60-cream) !important; font-size: clamp(1rem, 2vw, 1.18rem); line-height: 1.95; }
+.support-impact-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 28px; }
+.support-impact-card { min-width: 0; border: 1px solid var(--f60-line); border-radius: 4px; padding: 22px; background: rgba(255, 255, 255, 0.035); }
+.support-impact-card > span { display: block; color: var(--f60-gold); font-family: "Oswald", sans-serif; font-size: 0.76rem; font-weight: 700; }
+.support-impact-card h3 { margin: 8px 0 10px; font-size: 1.08rem; line-height: 1.55; }
+.support-impact-card p { margin: 0; line-height: 1.85; }
+.support-purpose__use { margin-top: 30px; border-left: 4px solid var(--f60-gold); padding: 20px 22px; background: rgba(255, 210, 28, 0.055); }
+.support-purpose__use h3 { margin: 0 0 8px; font-size: 1.18rem; }
+.support-purpose__use > p { margin: 0; }
+.support-use-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 18px 0 0; padding: 0; list-style: none; counter-reset: support-use; }
+.support-use-list li { position: relative; min-width: 0; padding-left: 42px; color: var(--f60-muted); line-height: 1.8; counter-increment: support-use; }
+.support-use-list li::before { content: counter(support-use, decimal-leading-zero); position: absolute; top: 0; left: 0; color: var(--f60-gold); font-family: "Oswald", sans-serif; font-size: 1rem; font-weight: 700; }
+.support-use-list strong, .support-use-list span { display: block; }
+.support-use-list strong { margin-bottom: 4px; color: var(--f60-cream); }
+.support-purpose__closing { margin-top: 30px; border-top: 1px solid var(--f60-line); padding-top: 26px; }
+.support-purpose__closing h3 { margin: 0 0 8px; color: var(--f60-gold); font-size: clamp(1.2rem, 2.4vw, 1.55rem); }
+.support-purpose__closing p { max-width: 960px; margin: 0; font-size: 1rem; line-height: 1.9; }
+.support-purpose__actions { margin-top: 20px; }
 .fee-table th small { color: inherit; font-size: 0.72rem; font-weight: 500; }
 .standard-inclusions { margin: 26px 0; border-block: 1px solid var(--f60-line); padding: 24px 0; }
 .standard-inclusions h3 { margin: 0 0 14px; color: var(--f60-cream); font-size: 1.25rem; }
@@ -218,6 +233,7 @@ img { max-width: 100%; }
   .program-item p { grid-column: 2; }
   .faq-jump { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .social-links { grid-template-columns: 1fr; }
+  .support-impact-grid, .support-use-list { grid-template-columns: 1fr; }
   .standard-inclusions ul { grid-template-columns: 1fr; }
 }
 
@@ -227,6 +243,8 @@ img { max-width: 100%; }
   .subpage-hero { min-height: 360px; }
   .subpage-hero__inner { padding: 72px 0 44px; }
   .festa-band { padding: 54px 0; }
+  .support-impact-card { padding: 18px; }
+  .support-purpose__use { padding: 18px 16px; }
   .program-item { grid-template-columns: 1fr; gap: 8px; }
   .program-item p { grid-column: 1; }
   .faq-jump { grid-template-columns: 1fr; }
