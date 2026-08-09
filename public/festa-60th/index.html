@@ -1138,6 +1138,54 @@
         height: 100%;
       }
 
+      .photo-contribute-panel .festa-callout__copy,
+      .founding-photo-gallery {
+        grid-column: 1 / -1;
+      }
+
+      .founding-photo-gallery {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 8px;
+      }
+
+      .founding-photo {
+        position: relative;
+        min-width: 0;
+        margin: 0;
+        overflow: hidden;
+        border: 1px solid rgba(255, 210, 28, 0.2);
+        border-radius: 6px;
+        background: #080705;
+      }
+
+      .founding-photo--wide {
+        grid-column: span 2;
+      }
+
+      .founding-photo img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+      }
+
+      .founding-photo--wide img {
+        aspect-ratio: 16 / 9;
+      }
+
+      .founding-photo figcaption {
+        position: absolute;
+        inset: auto 0 0;
+        padding: 28px 12px 10px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
+        color: #fff4cf;
+        font-size: 0.78rem;
+        font-weight: 700;
+        line-height: 1.5;
+      }
+
       .festa-updates p + p {
         margin-top: 14px;
       }
@@ -1200,6 +1248,9 @@
       @media (max-width: 720px) {
         .latest-news__list { grid-template-columns: 1fr; }
         .latest-news__item, .latest-news__item + .latest-news__item { border-left: 0; padding-inline: 0; }
+        .founding-photo-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        .founding-photo--wide { grid-column: span 2; }
+        .founding-photo figcaption { padding: 24px 9px 8px; font-size: 0.72rem; }
         .memory-photo-placeholder--wide {
           aspect-ratio: 4 / 3;
           min-height: 220px;
@@ -2389,20 +2440,7 @@
 
               <p class="fee-guide-note"><strong>返礼と住所について：</strong>寄付を含むプランでは住所入力が必須です。返礼を含め、開催前に郵送するものはありません。掲載内容は現時点の予定で、写真・記念品の仕様、配送方法、開催後の発送時期は制作状況により変更する場合があります。</p>
 
-              <div class="stripe-payment-grid" aria-label="お支払い方法">
-                <article class="stripe-payment-card">
-                  <h3>カード・ウォレット</h3>
-                  <p>申込内容の確認後、安全な外部決済画面へ移動します。クレジットカード、対応端末でのApple Pay・Google Payなど、画面に表示された方法から選択できます。</p>
-                </article>
-                <article class="stripe-payment-card">
-                  <h3>銀行振込</h3>
-                  <p>内容確認画面で、実際の振込先と金額を確認できます。確認しただけでは申込は確定せず、銀行振込で確定するか、カード等へ選び直せます。確定後に表示される正式な案内に従ってお振り込みください。受付番号を振込名義に付ける必要はありません。</p>
-                </article>
-                <article class="stripe-payment-card">
-                  <h3>決済情報の保護</h3>
-                  <p>カード番号や各支払いサービスの認証情報は外部決済サービスが取り扱い、FANTASISTAでは取得・保存しません。</p>
-                </article>
-              </div>
+              <p class="fee-guide-note"><strong>お支払い：</strong>申込内容と金額を確認した後、カード・スマホ決済等または銀行振込を選べます。入金確認後、参加確定メールと領収書メールをお送りします。詳しい手順は申込画面とFAQでご案内します。</p>
 
               <div class="fee-guide-actions">
                 <a class="btn btn--primary" href="../festa60-register/">参加申込へ進む</a>
@@ -2436,7 +2474,7 @@
 
         <section id="support">
           <div class="wrap">
-            <div class="panel festa-callout">
+            <div class="panel festa-callout photo-contribute-panel">
               <div class="festa-callout__copy">
                 <div class="section-head" style="margin-bottom: 0;">
                   <p class="eyebrow"><span class="label-ja">協賛・寄付・支援</span><span class="label-en">Support</span></p>
@@ -2520,8 +2558,8 @@
                   <p class="eyebrow"><span class="label-ja">Photo Archive</span><span class="label-en">Contribute</span></p>
                   <h2>写真・記録をお持ちのOBOGへ</h2>
                 </div>
-                <p>60周年記念FESTAに向けて、競技会、練習風景、フォーメーション、集合写真、背番号が分かる写真などを掲載・展示できるよう準備しています。</p>
-                <p>写真や資料をお持ちの方は、FANTASISTA会までお知らせください。</p>
+                <p>60周年記念FESTAに向けて、競技会、練習風景、フォーメーション、集合写真などを掲載・展示できるよう準備しています。</p>
+                <p>こちらは創部1年目から10周年まで、1966〜1976年の記録です。ほかの年代の写真や資料も順次紹介します。お持ちの方は、FANTASISTA会までお知らせください。</p>
 
                 <div class="festa-callout__actions">
                   <a class="btn btn--ghost" href="./chronicle/">60年のクロニクルを見る</a>
@@ -2529,15 +2567,15 @@
                 </div>
               </div>
 
-              <div class="festa-callout__media">
-                <figure class="memory-photo-card">
-                  <!-- ここに画像を追加可能 -->
-                  <div class="memory-photo-placeholder" role="img" aria-label="写真募集中">
-                    <span class="memory-photo-label">写真募集中</span>
-                  </div>
-                  <figcaption class="memory-photo-caption">展示・掲載用の写真を順次募集しています</figcaption>
-                  <p class="memory-photo-note">競技会、練習場、集合写真、フォーメーションなど、世代を超えて共有できる写真を歓迎します。</p>
-                </figure>
+              <div class="founding-photo-gallery" aria-label="創部1年目から10周年までの写真">
+                <figure class="founding-photo founding-photo--wide"><img src="../assets/img/festa60/founding-decade/1960s-training.webp" alt="創部初期に男女の組がダンスを練習する様子" width="1400" height="927" loading="lazy" decoding="async"><figcaption>創部初期の練習風景</figcaption></figure>
+                <figure class="founding-photo founding-photo--wide"><img src="../assets/img/festa60/founding-decade/1976-anniversary-group.webp" alt="東京理科大学舞踏研究会10周年記念祝賀会の集合写真" width="1400" height="957" loading="lazy" decoding="async"><figcaption>1976年 10周年記念祝賀会</figcaption></figure>
+                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/founding-members.webp" alt="創部初期の部員たちの記念写真" width="1400" height="907" loading="lazy" decoding="async"><figcaption>創部初期の部員たち</figcaption></figure>
+                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/early-dance-party-group.webp" alt="創部初期のダンスパーティーでの集合写真" width="1400" height="976" loading="lazy" decoding="async"><figcaption>初期のダンスパーティー</figcaption></figure>
+                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/early-demonstration.webp" alt="創部から10周年までの時期に舞台でダンスを披露する部員" width="1400" height="957" loading="lazy" decoding="async"><figcaption>舞台でのダンス</figcaption></figure>
+                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/1976-anniversary-dance-floor.webp" alt="10周年記念祝賀会の会場で参加者がダンスを楽しむ様子" width="1400" height="957" loading="lazy" decoding="async"><figcaption>10周年記念祝賀会のダンス</figcaption></figure>
+                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/1976-anniversary-demonstration.webp" alt="10周年記念祝賀会でドレス姿の組がダンスを披露する様子" width="1400" height="949" loading="lazy" decoding="async"><figcaption>祝賀会でのダンス披露</figcaption></figure>
+                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/1976-anniversary-members.webp" alt="10周年記念祝賀会に参加した部員たちの記念写真" width="1400" height="958" loading="lazy" decoding="async"><figcaption>10周年を迎えた部員たち</figcaption></figure>
               </div>
             </div>
           </div>
