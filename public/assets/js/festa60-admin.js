@@ -156,8 +156,13 @@
 
   function receivedAmount(application) {
     const status = effectivePaymentStatus(application);
-    if (status === "paid") return Number(application.amount_total ?? application.total_amount_jpy ?? application.amount ?? 0);
-    if (status === "partially_funded") return Number(application.amount_received_jpy || 0);
+    const recordedAmount = Number(application.amount_received_jpy || 0);
+    if (status === "refunded") return 0;
+    if (status === "partially_funded") return recordedAmount;
+    if (status === "paid") return recordedAmount || expectedAmount(application);
+    if (status === "cancelled" && (recordedAmount > 0 || application.paid_at)) {
+      return recordedAmount || expectedAmount(application);
+    }
     return 0;
   }
 
@@ -169,6 +174,13 @@
     const status = effectivePaymentStatus(application);
     if (["cancelled", "refunded"].includes(status)) return 0;
     return Math.max(0, expectedAmount(application) - receivedAmount(application));
+  }
+
+  function countedApplicationAmount(application) {
+    const status = effectivePaymentStatus(application);
+    if (status === "refunded") return 0;
+    if (status === "cancelled") return receivedAmount(application);
+    return expectedAmount(application);
   }
 
   function statusBadge(status) {
@@ -258,8 +270,8 @@
     const paid = applications.filter((item) => effectivePaymentStatus(item) === "paid");
     const partial = applications.filter((item) => effectivePaymentStatus(item) === "partially_funded");
     const pending = applications.filter((item) => ["unpaid", "pending", "failed", "expired"].includes(effectivePaymentStatus(item)));
-    const expectedTotal = active.reduce((sum, item) => sum + expectedAmount(item), 0);
-    const receivedTotal = active.reduce((sum, item) => sum + receivedAmount(item), 0);
+    const expectedTotal = applications.reduce((sum, item) => sum + countedApplicationAmount(item), 0);
+    const receivedTotal = applications.reduce((sum, item) => sum + receivedAmount(item), 0);
     const outstandingTotal = active.reduce((sum, item) => sum + outstandingAmount(item), 0);
     const collectionRate = expectedTotal > 0 ? Math.round((receivedTotal / expectedTotal) * 100) : 0;
     const participation = state.participationSummary || fallbackParticipationSummary(applications);
@@ -278,7 +290,7 @@
     metricElements.partialAmount.textContent = `不足 ${formatYen(partial.reduce((sum, item) => sum + outstandingAmount(item), 0))}`;
     metricElements.pending.textContent = `${pending.length}件`;
     metricElements.outstanding.textContent = `未収 ${formatYen(outstandingTotal)}`;
-    metricElements.expectedTotal.textContent = formatYen(applications.reduce((sum, item) => sum + expectedAmount(item), 0));
+    metricElements.expectedTotal.textContent = formatYen(expectedTotal);
     metricElements.receivedTotal.textContent = formatYen(receivedTotal);
     metricElements.collectionRate.textContent = `入金率 ${collectionRate}%`;
     metricElements.bankAlerts.textContent = `${state.bankTransferAlerts.length}件`;
@@ -451,7 +463,13 @@
       const received = receivedAmount(application);
       const paymentDetail = paymentStatus === "partially_funded"
         ? `入金 ${formatYen(received)} / 不足 ${formatYen(outstandingAmount(application))}`
-        : paymentStatus === "paid" ? formatYen(received) : "";
+        : paymentStatus === "paid"
+          ? formatYen(received)
+          : paymentStatus === "cancelled" && received > 0
+            ? `返金なし ${formatYen(received)}`
+            : paymentStatus === "refunded"
+              ? "返金済み・0円計上"
+              : "";
       return `
         <tr>
           <td data-label="受付番号"><span class="admin-table__code">${escapeHtml(application.application_code)}</span><small>${escapeHtml(formatDateTime(application.created_at))}</small></td>

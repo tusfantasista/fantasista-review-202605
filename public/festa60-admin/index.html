@@ -33,7 +33,7 @@
           <p id="last-updated" class="admin-updated">取得中</p>
         </div>
 
-        <p class="admin-definition">取消・返金と欠席者向け寄付を除く申込を「参加予定」、そのうち入金済みを「参加確定」として集計します。卒部年次構成は申込者本人のみの集計です。</p>
+        <p class="admin-definition">取消・返金と欠席者向け寄付を除く申込を「参加予定」、そのうち入金済みを「参加確定」として集計します。申込総額では未入金取消と返金済みを0円とし、入金後取消（返金なし）は実入金額を残します。卒部年次構成は申込者本人のみの集計です。</p>
 
         <div class="admin-metrics admin-metrics--participation" aria-live="polite">
           <article class="admin-metric admin-metric--accent"><span>FESTA参加予定</span><strong id="metric-festa-attendees">-</strong><small id="metric-confirmed-festa">参加確定 -</small></article>
@@ -69,7 +69,7 @@
           <article class="admin-metric admin-metric--success"><span>入金済み</span><strong id="metric-paid">-</strong><small id="metric-paid-amount">-</small></article>
           <article class="admin-metric admin-metric--warning"><span>不足入金</span><strong id="metric-partial">-</strong><small id="metric-partial-amount">-</small></article>
           <article class="admin-metric admin-metric--danger"><span>未入金・手続中</span><strong id="metric-pending">-</strong><small id="metric-outstanding">-</small></article>
-          <article class="admin-metric"><span>申込総額</span><strong id="metric-expected-total">-</strong><small>取消・返金を含む</small></article>
+          <article class="admin-metric"><span>申込総額</span><strong id="metric-expected-total">-</strong><small>未入金取消・返金済みは0円</small></article>
           <article class="admin-metric admin-metric--accent"><span>確認済み入金額</span><strong id="metric-received-total">-</strong><small id="metric-collection-rate">入金率 -</small></article>
           <article class="admin-metric admin-metric--danger"><span>銀行振込・要確認</span><strong id="metric-bank-alerts">-</strong><small>未確定入金・未消込等</small></article>
         </div>
