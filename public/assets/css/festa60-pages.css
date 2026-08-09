@@ -122,17 +122,13 @@ img { max-width: 100%; }
 .support-purpose__closing p { max-width: 960px; margin: 0; font-size: 1rem; line-height: 1.9; }
 .support-purpose__actions { margin-top: 20px; }
 .fee-table th small { color: inherit; font-size: 0.72rem; font-weight: 500; }
-.plan-choice-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin: 24px 0 34px; padding: 0; list-style: none; }
-.plan-choice-flow li { position: relative; min-width: 0; border-block: 1px solid var(--f60-line); padding: 18px 38px 18px 54px; }
-.plan-choice-flow li + li::before { content: ""; position: absolute; top: 50%; left: -7px; width: 12px; height: 12px; border-top: 2px solid var(--f60-gold); border-right: 2px solid var(--f60-gold); transform: translateY(-50%) rotate(45deg); }
-.plan-choice-flow li > span { position: absolute; top: 18px; left: 14px; color: var(--f60-gold); font-family: "Oswald", sans-serif; font-weight: 700; }
-.plan-choice-flow strong, .plan-choice-flow small { display: block; }
-.plan-choice-flow strong { color: var(--f60-cream); }
-.plan-choice-flow small { margin-top: 4px; color: var(--f60-muted); font-size: 0.78rem; line-height: 1.55; }
 .section-heading-row { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 14px; }
 .section-heading-row h3, .section-heading-row p { margin: 0; }
 .section-heading-row h3 { color: var(--f60-cream); font-size: 1.25rem; }
 .section-heading-row p { color: var(--f60-muted); font-size: 0.8rem; }
+.participant-plan-types { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.participant-plan-types p { display: flex; align-items: center; gap: 8px; margin: 0; border: 1px solid var(--f60-line); padding: 7px 10px; color: var(--f60-muted); font-size: 0.78rem; }
+.participant-plan-types strong { color: var(--f60-cream); }
 .participant-plan-rail { --plan-width: 204px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(var(--plan-width), 1fr); gap: 12px; overflow-x: auto; padding: 2px 2px 12px; scroll-snap-type: x proximity; scrollbar-color: var(--f60-gold) rgba(255, 255, 255, 0.08); }
 .participant-plan-card { --plan-accent: var(--f60-gold); position: relative; min-height: 214px; border: 1px solid var(--f60-line); border-top: 4px solid var(--plan-accent); border-radius: 4px; padding: 20px 18px 18px; background: var(--f60-panel); scroll-snap-align: start; }
 .participant-plan-card--platinum { --plan-accent: #e6e8ec; }
@@ -288,10 +284,6 @@ img { max-width: 100%; }
   .support-impact-grid, .support-use-list { grid-template-columns: 1fr; }
   .standard-inclusions ul { grid-template-columns: 1fr; }
   .companion-fees__grid { grid-template-columns: 1fr; }
-  .plan-choice-flow { grid-template-columns: 1fr; }
-  .plan-choice-flow li { border-top: 1px solid var(--f60-line); border-bottom: 0; padding-left: 50px; }
-  .plan-choice-flow li:last-child { border-bottom: 1px solid var(--f60-line); }
-  .plan-choice-flow li + li::before { top: -7px; left: 50%; transform: translateX(-50%) rotate(135deg); }
   .participant-plan-essentials { grid-template-columns: 1fr; }
 }
 
