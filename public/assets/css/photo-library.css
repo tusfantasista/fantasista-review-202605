@@ -196,6 +196,132 @@
   line-height: 1.55;
 }
 
+.photo-flow {
+  position: relative;
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding-top: 54px;
+}
+
+.photo-flow-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 210, 28, 0.48);
+  border-radius: 50%;
+  background: #17140f;
+  color: #ffd21c;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.photo-flow-toggle:hover,
+.photo-flow-toggle:focus-visible {
+  background: #ffd21c;
+  color: #080705;
+}
+
+.photo-flow-toggle:focus-visible,
+.photo-flow-card:focus-visible {
+  outline: 3px solid #ffd21c;
+  outline-offset: 3px;
+}
+
+.photo-flow-viewport {
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+
+.photo-flow-track {
+  display: flex;
+  width: max-content;
+  animation: photo-flow-scroll 72s linear infinite;
+  will-change: transform;
+}
+
+.photo-flow-sequence {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 14px;
+  padding-right: 14px;
+}
+
+.photo-flow-card {
+  display: block;
+  flex: 0 0 292px;
+  width: 292px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 210, 28, 0.2);
+  border-radius: 6px;
+  background: #17140f;
+  color: #fff8df;
+  text-decoration: none;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.28);
+}
+
+.photo-flow-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 180ms ease;
+}
+
+.photo-flow-card:hover img {
+  transform: scale(1.025);
+}
+
+.photo-flow-card__copy {
+  display: grid;
+  gap: 5px;
+  min-height: 82px;
+  padding: 12px 14px 14px;
+}
+
+.photo-flow-card__era {
+  color: #ffd21c;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.photo-flow-card__caption {
+  color: #fff8df;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.photo-flow:hover .photo-flow-track,
+.photo-flow:focus-within .photo-flow-track,
+.photo-flow.is-paused .photo-flow-track {
+  animation-play-state: paused;
+}
+
+.photo-flow-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes photo-flow-scroll {
+  to { transform: translateX(-50%); }
+}
+
 .photo-library-status {
   margin: 20px 0 0;
   color: #5a574f;
@@ -261,10 +387,39 @@
     grid-auto-columns: minmax(240px, 82vw);
     gap: 10px;
   }
+
+  .photo-flow {
+    padding-top: 50px;
+  }
+
+  .photo-flow-card {
+    flex-basis: 76vw;
+    width: 76vw;
+    max-width: 292px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .archive-photo-card img {
+  .archive-photo-card img,
+  .photo-flow-card img {
     transition: none;
+  }
+
+  .photo-flow-viewport {
+    overflow-x: auto;
+    mask-image: none;
+    scrollbar-color: #9c771b #17140f;
+  }
+
+  .photo-flow-track {
+    animation: none;
+  }
+
+  .photo-flow-sequence[aria-hidden="true"] {
+    display: none;
+  }
+
+  .photo-flow-toggle {
+    display: none;
   }
 }

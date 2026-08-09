@@ -1138,54 +1138,6 @@
         height: 100%;
       }
 
-      .photo-contribute-panel .festa-callout__copy,
-      .founding-photo-gallery {
-        grid-column: 1 / -1;
-      }
-
-      .founding-photo-gallery {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 8px;
-      }
-
-      .founding-photo {
-        position: relative;
-        min-width: 0;
-        margin: 0;
-        overflow: hidden;
-        border: 1px solid rgba(255, 210, 28, 0.2);
-        border-radius: 6px;
-        background: #080705;
-      }
-
-      .founding-photo--wide {
-        grid-column: span 2;
-      }
-
-      .founding-photo img {
-        display: block;
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        object-fit: cover;
-      }
-
-      .founding-photo--wide img {
-        aspect-ratio: 16 / 9;
-      }
-
-      .founding-photo figcaption {
-        position: absolute;
-        inset: auto 0 0;
-        padding: 28px 12px 10px;
-        background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
-        color: #fff4cf;
-        font-size: 0.78rem;
-        font-weight: 700;
-        line-height: 1.5;
-      }
-
       .festa-updates p + p {
         margin-top: 14px;
       }
@@ -1248,9 +1200,6 @@
       @media (max-width: 720px) {
         .latest-news__list { grid-template-columns: 1fr; }
         .latest-news__item, .latest-news__item + .latest-news__item { border-left: 0; padding-inline: 0; }
-        .founding-photo-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-        .founding-photo--wide { grid-column: span 2; }
-        .founding-photo figcaption { padding: 24px 9px 8px; font-size: 0.72rem; }
         .memory-photo-placeholder--wide {
           aspect-ratio: 4 / 3;
           min-height: 220px;
@@ -2559,7 +2508,7 @@
                   <h2>写真・記録をお持ちのOBOGへ</h2>
                 </div>
                 <p>60周年記念FESTAに向けて、競技会、練習風景、フォーメーション、集合写真などを掲載・展示できるよう準備しています。</p>
-                <p>こちらは創部1年目から10周年まで、1966〜1976年の記録です。ほかの年代の写真や資料も順次紹介します。お持ちの方は、FANTASISTA会までお知らせください。</p>
+                <p>60年のクロニクルに収めた写真を、年代を越えて紹介しています。ほかにも写真や資料をお持ちの方は、FANTASISTA会までお知らせください。</p>
 
                 <div class="festa-callout__actions">
                   <a class="btn btn--ghost" href="./chronicle/">60年のクロニクルを見る</a>
@@ -2567,16 +2516,8 @@
                 </div>
               </div>
 
-              <div class="founding-photo-gallery" aria-label="創部1年目から10周年までの写真">
-                <figure class="founding-photo founding-photo--wide"><img src="../assets/img/festa60/founding-decade/1960s-training.webp" alt="創部初期に男女の組がダンスを練習する様子" width="1400" height="927" loading="lazy" decoding="async"><figcaption>創部初期の練習風景</figcaption></figure>
-                <figure class="founding-photo founding-photo--wide"><img src="../assets/img/festa60/founding-decade/1976-anniversary-group.webp" alt="東京理科大学舞踏研究会10周年記念祝賀会の集合写真" width="1400" height="957" loading="lazy" decoding="async"><figcaption>1976年 10周年記念祝賀会</figcaption></figure>
-                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/founding-members.webp" alt="創部初期の部員たちの記念写真" width="1400" height="907" loading="lazy" decoding="async"><figcaption>創部初期の部員たち</figcaption></figure>
-                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/early-dance-party-group.webp" alt="創部初期のダンスパーティーでの集合写真" width="1400" height="976" loading="lazy" decoding="async"><figcaption>初期のダンスパーティー</figcaption></figure>
-                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/early-demonstration.webp" alt="創部から10周年までの時期に舞台でダンスを披露する部員" width="1400" height="957" loading="lazy" decoding="async"><figcaption>舞台でのダンス</figcaption></figure>
-                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/1976-anniversary-dance-floor.webp" alt="10周年記念祝賀会の会場で参加者がダンスを楽しむ様子" width="1400" height="957" loading="lazy" decoding="async"><figcaption>10周年記念祝賀会のダンス</figcaption></figure>
-                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/1976-anniversary-demonstration.webp" alt="10周年記念祝賀会でドレス姿の組がダンスを披露する様子" width="1400" height="949" loading="lazy" decoding="async"><figcaption>祝賀会でのダンス披露</figcaption></figure>
-                <figure class="founding-photo"><img src="../assets/img/festa60/founding-decade/1976-anniversary-members.webp" alt="10周年記念祝賀会に参加した部員たちの記念写真" width="1400" height="958" loading="lazy" decoding="async"><figcaption>10周年を迎えた部員たち</figcaption></figure>
-              </div>
+              <div data-photo-library data-layout="flow" data-role="gallery" data-random-count="18" data-source="../assets/data/public-photo-library.json?v=20260809-2" aria-live="polite"></div>
+              <p class="photo-library-status photo-flow-status" data-photo-library-status role="status">クロニクルから写真を選んでいます。</p>
             </div>
           </div>
         </section>
@@ -2787,6 +2728,7 @@
       </footer>
     </div>
     <script src="../assets/js/site.js?v=20260720-1" defer=""></script>
+    <script src="../assets/js/photo-library.js?v=20260809-3" defer=""></script>
 
 
 

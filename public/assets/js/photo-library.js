@@ -46,6 +46,103 @@
     return link;
   }
 
+  function shuffle(items) {
+    const result = items.slice();
+    for (let index = result.length - 1; index > 0; index -= 1) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      const current = result[index];
+      result[index] = result[randomIndex];
+      result[randomIndex] = current;
+    }
+    return result;
+  }
+
+  function selectFlowPhotos(photos, count) {
+    const groups = Object.keys(albumMeta).map(function (albumSlug) {
+      return shuffle(photos.filter(function (photo) { return photo.album_slug === albumSlug; }));
+    }).filter(function (group) { return group.length; });
+    if (!groups.length) return shuffle(photos).slice(0, count);
+
+    const selected = [];
+    const selectedIds = new Set();
+    let groupIndex = 0;
+    while (selected.length < count && groups.some(function (group) { return group.length; })) {
+      const group = groups[groupIndex % groups.length];
+      const photo = group.shift();
+      if (photo && !selectedIds.has(photo.photo_id)) {
+        selected.push(photo);
+        selectedIds.add(photo.photo_id);
+      }
+      groupIndex += 1;
+    }
+    return shuffle(selected);
+  }
+
+  function createFlowCard(photo, siteRootUrl, isDuplicate) {
+    const link = document.createElement("a");
+    link.className = "photo-flow-card";
+    link.href = resolvePhotoUrl(photo.image, siteRootUrl);
+    link.setAttribute("aria-label", photo.alt + "を拡大表示");
+    if (isDuplicate) link.tabIndex = -1;
+
+    const image = document.createElement("img");
+    image.src = resolvePhotoUrl(photo.thumbnail, siteRootUrl);
+    image.alt = isDuplicate ? "" : photo.alt;
+    image.loading = "lazy";
+    image.decoding = "async";
+
+    const copy = document.createElement("span");
+    copy.className = "photo-flow-card__copy";
+    const era = document.createElement("span");
+    era.className = "photo-flow-card__era";
+    era.textContent = albumLabels[photo.album_slug] || photo.album_name;
+    const caption = document.createElement("span");
+    caption.className = "photo-flow-card__caption";
+    caption.textContent = photo.caption;
+    copy.append(era, caption);
+    link.append(image, copy);
+    return link;
+  }
+
+  function renderFlow(container, photos, siteRootUrl) {
+    const count = Number(container.dataset.randomCount || 18);
+    const selected = selectFlowPhotos(photos, Math.min(count, photos.length));
+    container.classList.add("photo-flow");
+    const viewport = document.createElement("div");
+    viewport.className = "photo-flow-viewport";
+    viewport.setAttribute("aria-label", "60年のクロニクルから選んだ写真");
+    const track = document.createElement("div");
+    track.className = "photo-flow-track";
+
+    [false, true].forEach(function (isDuplicate) {
+      const sequence = document.createElement("div");
+      sequence.className = "photo-flow-sequence";
+      if (isDuplicate) sequence.setAttribute("aria-hidden", "true");
+      sequence.append.apply(sequence, selected.map(function (photo) {
+        return createFlowCard(photo, siteRootUrl, isDuplicate);
+      }));
+      track.append(sequence);
+    });
+    viewport.append(track);
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "photo-flow-toggle";
+    toggle.textContent = "Ⅱ";
+    toggle.title = "写真の自動送りを停止";
+    toggle.setAttribute("aria-label", "写真の自動送りを停止");
+    toggle.setAttribute("aria-pressed", "false");
+    toggle.addEventListener("click", function () {
+      const paused = container.classList.toggle("is-paused");
+      toggle.textContent = paused ? "▶" : "Ⅱ";
+      toggle.title = paused ? "写真の自動送りを再開" : "写真の自動送りを停止";
+      toggle.setAttribute("aria-label", toggle.title);
+      toggle.setAttribute("aria-pressed", String(paused));
+    });
+    container.replaceChildren(toggle, viewport);
+    return selected.length;
+  }
+
   function setupFilters(container, status) {
     const toolbar = container.parentElement.querySelector("[data-photo-library-filters]");
     if (!toolbar) return;
@@ -147,15 +244,18 @@
       const roleIds = data[role + "_photo_ids"] || data.gallery_photo_ids || [];
       const photoMap = new Map(data.photos.map(function (photo) { return [photo.photo_id, photo]; }));
       const photos = roleIds.map(function (id) { return photoMap.get(id); }).filter(Boolean);
-      const visiblePhotos = limit ? photos.slice(0, limit) : photos;
+      const visiblePhotos = limit && container.dataset.layout !== "flow" ? photos.slice(0, limit) : photos;
       if (container.dataset.layout === "shelves") {
         renderShelves(container, visiblePhotos, siteRootUrl);
+      } else if (container.dataset.layout === "flow") {
+        const flowCount = renderFlow(container, visiblePhotos, siteRootUrl);
+        if (status) status.textContent = "クロニクルから" + flowCount + "枚の写真を紹介しています。";
       } else {
         container.replaceChildren.apply(container, visiblePhotos.map(function (photo) {
           return createPhotoCard(photo, siteRootUrl);
         }));
       }
-      if (status) status.textContent = visiblePhotos.length + "枚の写真を表示しています。";
+      if (status && container.dataset.layout !== "flow") status.textContent = visiblePhotos.length + "枚の写真を表示しています。";
       const countLabel = container.parentElement.querySelector("[data-photo-library-count]");
       if (countLabel) countLabel.textContent = visiblePhotos.length + "枚掲載";
       if (container.dataset.layout !== "shelves") setupFilters(container, status);
