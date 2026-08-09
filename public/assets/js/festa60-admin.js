@@ -191,7 +191,10 @@
     return `<span class="admin-status admin-status--${escapeHtml(className)}">${escapeHtml(label)}</span>`;
   }
 
-  function attendanceBadge(status) {
+  function attendanceBadge(status, ticketType = "") {
+    if (String(ticketType).startsWith("absent_donation_")) {
+      return '<span class="admin-status admin-status--confirmed">欠席寄付</span>';
+    }
     const normalized = status || "pending";
     const label = attendanceLabels[normalized] || normalized;
     return `<span class="admin-status admin-status--${escapeHtml(normalized)}">${escapeHtml(label)}</span>`;
@@ -528,7 +531,7 @@
           <td data-label="プラン"><span>${escapeHtml(planLabel(application.ticket_type))}</span><small>${escapeHtml(feePeriodLabels[application.fee_period] || application.fee_period || "-")}・${Number(application.quantity || 1)}名</small></td>
           <td data-label="金額"><span class="admin-table__amount">${escapeHtml(formatYen(amount))}</span><small>${escapeHtml(paymentDetail)}</small></td>
           <td data-label="入金状態">${statusBadge(paymentStatus)}</td>
-          <td data-label="参加状態">${attendanceBadge(application.attendance_status)}</td>
+          <td data-label="参加状態">${attendanceBadge(application.attendance_status, application.ticket_type)}</td>
           <td data-label="操作"><button class="admin-row-action" type="button" data-application-id="${escapeHtml(application.id)}">詳細</button></td>
         </tr>`;
     }).join("");
@@ -566,7 +569,7 @@
     elements.dialogContent.innerHTML = `
       <div class="admin-detail-summary">
         ${statusBadge(paymentStatus)}
-        ${attendanceBadge(application.attendance_status)}
+        ${attendanceBadge(application.attendance_status, application.ticket_type)}
         <span class="admin-status">${escapeHtml(planLabel(application.ticket_type))}</span>
       </div>
       <div class="admin-detail-grid">
