@@ -57,6 +57,98 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.photo-library-shelves {
+  display: grid;
+  gap: 44px;
+  margin-top: 28px;
+}
+
+.photo-decade-shelf {
+  min-width: 0;
+}
+
+.photo-decade-shelf__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(140, 104, 18, 0.32);
+}
+
+.photo-decade-shelf__period {
+  margin: 0 0 3px;
+  color: #8c6812;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.photo-decade-shelf__header h3 {
+  display: inline;
+  margin: 0;
+  color: #fff2cf;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
+.photo-decade-shelf__count {
+  margin-left: 10px;
+  color: #c7b98e;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.photo-decade-shelf__controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.photo-decade-shelf__button {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #9c771b;
+  border-radius: 50%;
+  background: #fff;
+  color: #5f470d;
+  font: inherit;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.photo-decade-shelf__button:hover,
+.photo-decade-shelf__button:focus-visible {
+  background: #8c6812;
+  color: #fff;
+}
+
+.photo-decade-shelf__button:focus-visible,
+.photo-decade-rail:focus-visible {
+  outline: 3px solid #fec000;
+  outline-offset: 3px;
+}
+
+.photo-decade-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(240px, 27vw, 340px);
+  gap: 14px;
+  padding: 2px 2px 14px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline mandatory;
+  scrollbar-color: #9c771b #e5dfd2;
+  scrollbar-width: thin;
+}
+
+.photo-decade-rail .archive-photo-card {
+  scroll-snap-align: start;
+}
+
 .archive-photo-card {
   display: block;
   min-width: 0;
@@ -151,6 +243,23 @@
 
   .archive-photo-card__caption {
     font-size: 0.82rem;
+  }
+
+  .photo-library-shelves {
+    gap: 36px;
+  }
+
+  .photo-decade-shelf__header {
+    align-items: center;
+  }
+
+  .photo-decade-shelf__controls {
+    display: none;
+  }
+
+  .photo-decade-rail {
+    grid-auto-columns: minmax(240px, 82vw);
+    gap: 10px;
   }
 }
 
