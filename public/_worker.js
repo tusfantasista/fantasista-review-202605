@@ -1100,32 +1100,45 @@ async function adjustUnfundedBankTransferAmount({
   ) {
     throw new Error("Stripe PaymentIntent is not an adjustable JPY bank transfer.");
   }
-  if (bankTransferAmountReceived(paymentIntent) !== 0 || Number(paymentIntent.amount_received || 0) !== 0) {
+  const cashBalanceTransactions = await listStripeCashBalanceTransactions(
+    stripeSecret,
+    current.stripe_customer_id,
+    1
+  );
+  if (cashBalanceTransactions.length || Number(paymentIntent.amount_received || 0) !== 0) {
     throw new Error("Stripe has already received funds for this PaymentIntent.");
   }
   if (![previousAmount, calculatedAmount].includes(Number(paymentIntent.amount || 0))) {
     throw new Error("Stripe and FANTASISTA amounts are inconsistent.");
   }
   let stripeChanged = false;
-  if (Number(paymentIntent.amount) !== calculatedAmount) {
-    paymentIntent = await updateStripePaymentIntentAmount(
-      stripeSecret,
-      current.stripe_payment_intent_id,
-      calculatedAmount,
-      `festa60-bank-adjust-${current.id}-${calculatedAmount}`
-    );
-    stripeChanged = true;
-  }
-  if (Number(paymentIntent.amount) !== calculatedAmount || bankTransferAmountReceived(paymentIntent) !== 0) {
-    throw new Error("Stripe did not accept the corrected bank transfer amount safely.");
-  }
-  const amountRemaining = bankTransferAmountRemaining(paymentIntent);
-  if (amountRemaining !== calculatedAmount) {
-    throw new Error("Stripe returned an unexpected remaining amount after correction.");
-  }
+  const amountRemaining = calculatedAmount;
   const now = nowIso();
   const expectedTicketItem = expectedTicketItems[0];
   try {
+    if (Number(paymentIntent.amount) !== calculatedAmount) {
+      paymentIntent = await updateStripePaymentIntentAmount(
+        stripeSecret,
+        current.stripe_payment_intent_id,
+        calculatedAmount,
+        `festa60-bank-adjust-${current.id}-${calculatedAmount}`
+      );
+      stripeChanged = true;
+    }
+    const cashBalanceTransactionsAfterUpdate = await listStripeCashBalanceTransactions(
+      stripeSecret,
+      current.stripe_customer_id,
+      1
+    );
+    if (
+      Number(paymentIntent.amount) !== calculatedAmount ||
+      Number(paymentIntent.amount_received || 0) !== 0 ||
+      cashBalanceTransactionsAfterUpdate.length
+    ) {
+      throw new Error("Stripe did not accept the corrected bank transfer amount safely.");
+    }
+    // Stripe can briefly retain the pre-update amount in hosted bank instructions.
+    // With no cash-balance transactions, the corrected intent amount is the source of truth.
     await db.batch([
       db.prepare(
         `UPDATE applications
@@ -2355,6 +2368,20 @@ async function retrieveStripePaymentIntent(stripeSecret, paymentIntent) {
   return result;
 }
 __name(retrieveStripePaymentIntent, "retrieveStripePaymentIntent");
+async function listStripeCashBalanceTransactions(stripeSecret, customerId, limit = 1) {
+  if (!customerId) throw new Error("Stripe customer is required for cash balance verification.");
+  const params = new URLSearchParams({ limit: String(limit) });
+  const response = await fetch(
+    `https://api.stripe.com/v1/customers/${encodeURIComponent(customerId)}/cash_balance_transactions?${params}`,
+    { headers: { authorization: `Bearer ${stripeSecret}` } }
+  );
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(`Stripe cash balance transaction retrieval failed: ${result.error?.message || response.status}`);
+  }
+  return Array.isArray(result.data) ? result.data : [];
+}
+__name(listStripeCashBalanceTransactions, "listStripeCashBalanceTransactions");
 function bankTransferInstructionsUrl(paymentIntent) {
   return paymentIntent?.next_action?.display_bank_transfer_instructions?.hosted_instructions_url || "";
 }
