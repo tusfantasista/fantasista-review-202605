@@ -1668,6 +1668,54 @@
         line-height: 1.8;
       }
 
+      .chair-message-section {
+        border-block: 1px solid rgba(255, 210, 28, 0.2);
+        background: #0b0a07;
+      }
+
+      .chair-message {
+        display: grid;
+        grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
+        gap: clamp(32px, 6vw, 84px);
+        align-items: start;
+      }
+
+      .chair-message__heading h2 {
+        margin-top: 10px;
+        color: #fff3ca;
+        font-size: clamp(1.8rem, 4vw, 3.1rem);
+        line-height: 1.35;
+      }
+
+      .chair-message__body {
+        border-left: 3px solid var(--gold);
+        padding-left: clamp(20px, 4vw, 42px);
+      }
+
+      .chair-message__body p {
+        color: var(--muted);
+        line-height: 2;
+      }
+
+      .chair-message__body p + p {
+        margin-top: 16px;
+      }
+
+      .chair-message__signature {
+        margin-top: 24px;
+        color: #fff3ca;
+        font-weight: 800;
+        line-height: 1.8;
+        text-align: right;
+      }
+
+      .chair-message__signature small {
+        display: block;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 500;
+      }
+
       .home-support-plans {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1905,7 +1953,8 @@
         .fee-summary-grid,
         .home-support-impact,
         .home-support-plans,
-        .home-discount-grid {
+        .home-discount-grid,
+        .chair-message {
           grid-template-columns: 1fr;
         }
 
@@ -1920,6 +1969,10 @@
 
         .home-early-entry .btn {
           width: 100%;
+        }
+
+        .chair-message__body {
+          padding-left: 20px;
         }
 
         .crm-form-block {
@@ -2099,6 +2152,7 @@
             <a href="./chronicle/"><span class="nav-copy"><span class="nav-ja">クロニクル</span><span class="nav-en">Chronicle</span></span></a>
             <a href="./faq/"><span class="nav-copy"><span class="nav-ja">FAQ</span><span class="nav-en">FAQ</span></span></a>
             <a href="../festa60-register/"><span class="nav-copy"><span class="nav-ja">参加申込</span><span class="nav-en">Register</span></span></a>
+            <a href="https://tus-fantasista.pages.dev/"><span class="nav-copy"><span class="nav-ja">FANTASISTA会サイトへ</span><span class="nav-en">Main Site</span></span></a>
           </nav>
         </div>
       </header>
@@ -2658,6 +2712,21 @@
                 <strong>ANNIVERSARY MESSAGE</strong>
                 <p>華やかなフロアの奥にあった時間も、夏合宿の踊り込みも、あと一チェックの悔しさも。今なら笑って語り合える。そんな再会のきっかけになる一日を目指します。</p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="chair-message" class="chair-message-section">
+          <div class="wrap chair-message">
+            <div class="chair-message__heading">
+              <p class="eyebrow"><span class="label-ja">会長メッセージ</span><span class="label-en">Chair Message</span></p>
+              <h2>60周年に<br>かける想い</h2>
+            </div>
+            <div class="chair-message__body">
+              <p>1966年、私たちの前には整った環境も伝統も実績もありませんでした。あったのは、踊りたい、うまくなりたい、仲間と前へ進みたいという思いだけでした。その熱こそが、東京理科大学舞踏研究部の最初の一歩であり、60年を越えて受け継がれてきた原点です。</p>
+              <p>60周年は、過去を懐かしむためだけの節目ではありません。それぞれの世代が持つ記憶と誇りを持ち寄り、現役の挑戦を応援し、受け継がれてきたものを次の世代へ手渡すための節目です。</p>
+              <p>長く舞研の集まりから離れていた方も、今は踊っていない方も、どうかもう一度、この部の歴史の中に集ってください。2027年2月11日、浅草で皆さまと再会できることを心から願っています。</p>
+              <p class="chair-message__signature"><small>FANTASISTA会 会長／東京理科大学舞踏研究部 創部者</small>吉澤 幸男（1968）</p>
             </div>
           </div>
         </section>
