@@ -8,7 +8,7 @@
     <link rel="canonical" href="https://tus-fantasista-festa60.pages.dev/festa-60th/support/">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/css/festa60-pages.css?v=20260811-2">
+    <link rel="stylesheet" href="../../assets/css/festa60-pages.css?v=20260811-3">
   </head>
   <body>
     <header class="header"><div class="wrap header__inner">
@@ -45,20 +45,41 @@
             <div class="cta-row support-purpose__actions"><a class="btn btn--primary" href="#participant-plans">参加者向けプランを見る</a><a class="btn btn--ghost" href="#absent-support">欠席者向け寄付を見る</a></div>
           </div>
         </section>
-        <div id="participant-plans" class="support-block"><h2>FESTA参加者向けプラン</h2><p>表示額は、参加費・寄付・寄付特典を含む支払総額です。内訳を分けず、一体価格でご案内します。</p>
-          <div class="table-wrap" role="region" aria-label="参加者向けプラン一覧（基準一体価格の高い順）" tabindex="0"><table class="fee-table"><thead><tr><th>プラン</th><th>基準一体価格<br><small>参加費・寄付を含む</small></th><th>ダンスタイムチケット</th></tr></thead><tbody><tr><th>プラチナ</th><td>100,000円</td><td>600円券×25枚</td></tr><tr><th>ゴールド</th><td>50,000円</td><td>500円券×20枚</td></tr><tr><th>シルバー</th><td>30,000円</td><td>400円券×12枚</td></tr><tr><th>ブロンズ</th><td>20,000円</td><td>300円券×5枚</td></tr><tr><th>通常参加</th><td>15,000円</td><td>卒部11年目以上は300円券×3枚<br>卒部10年目以下は300円券×2枚</td></tr></tbody></table></div>
+        <div id="participant-plans" class="support-block"><h2>FESTA参加者向けプラン</h2><p>すべてのプランにFESTA・懇親会の参加費が含まれます。応援したい方は、寄付を含む4つのプランからお選びいただけます。</p>
+          <ol class="plan-choice-flow" aria-label="参加プランと支払額を決める3つの手順">
+            <li><span>01</span><strong>参加プランを選ぶ</strong><small>通常参加、または寄付を含む4プラン</small></li>
+            <li><span>02</span><strong>共通割引を確認</strong><small>申込時期と卒部年数の割引を併用</small></li>
+            <li><span>03</span><strong>支払予定額を確認</strong><small>申込画面で自動計算してから確定</small></li>
+          </ol>
+
+          <section class="participant-plan-comparison" aria-labelledby="participant-plan-comparison-title">
+            <div class="section-heading-row">
+              <h3 id="participant-plan-comparison-title">5つの参加プラン</h3>
+              <p>価格の高い順</p>
+            </div>
+            <div class="participant-plan-rail" role="list" aria-label="参加者向けプラン一覧">
+              <article class="participant-plan-card participant-plan-card--platinum" role="listitem"><p class="participant-plan-card__name">プラチナ</p><p class="participant-plan-card__price">100,000<small>円</small></p><dl><div><dt>ダンスタイムチケット</dt><dd>600円券 × 25枚</dd></div></dl><span class="participant-plan-card__support">寄付を含む</span></article>
+              <article class="participant-plan-card participant-plan-card--gold" role="listitem"><p class="participant-plan-card__name">ゴールド</p><p class="participant-plan-card__price">50,000<small>円</small></p><dl><div><dt>ダンスタイムチケット</dt><dd>500円券 × 20枚</dd></div></dl><span class="participant-plan-card__support">寄付を含む</span></article>
+              <article class="participant-plan-card participant-plan-card--silver" role="listitem"><p class="participant-plan-card__name">シルバー</p><p class="participant-plan-card__price">30,000<small>円</small></p><dl><div><dt>ダンスタイムチケット</dt><dd>400円券 × 12枚</dd></div></dl><span class="participant-plan-card__support">寄付を含む</span></article>
+              <article class="participant-plan-card participant-plan-card--bronze" role="listitem"><p class="participant-plan-card__name">ブロンズ</p><p class="participant-plan-card__price">20,000<small>円</small></p><dl><div><dt>ダンスタイムチケット</dt><dd>300円券 × 5枚</dd></div></dl><span class="participant-plan-card__support">寄付を含む</span></article>
+              <article class="participant-plan-card participant-plan-card--standard" role="listitem"><p class="participant-plan-card__name">通常参加</p><p class="participant-plan-card__price">15,000<small>円</small></p><dl><div><dt>ダンスタイムチケット</dt><dd>300円券 × 2〜3枚</dd></div></dl><span class="participant-plan-card__support">基本プラン</span></article>
+            </div>
+            <p class="participant-plan-scroll-hint">横にスクロールして全プランを比較できます。</p>
+          </section>
+
           <section class="standard-inclusions" aria-labelledby="standard-inclusions-title">
-            <h3 id="standard-inclusions-title">通常参加15,000円に含まれるもの</h3>
+            <h3 id="standard-inclusions-title">どの参加プランにも含まれます</h3>
             <ul>
-              <li><strong>第一部・60周年記念FESTAへの参加</strong><span>記念展示、デモンストレーション、トライアル、現役生とのダンスタイムなどを予定しています。</span></li>
-              <li><strong>第二部・懇親会への参加</strong><span>18:00〜20:00の2時間、ビュッフェ形式・飲み放題付きでの開催を予定しています。</span></li>
-              <li><strong>ダンスタイムチケット</strong><span>卒部11年目以上は300円券×3枚、卒部10年目以下は300円券×2枚をお渡しします。</span></li>
+              <li><strong>第一部 FESTA</strong><span>記念展示、デモ、トライアル、ダンスタイム</span></li>
+              <li><strong>第二部 懇親会</strong><span>2時間のビュッフェ・飲み放題付き</span></li>
+              <li><strong>現役支援チケット</strong><span>選んだプランに応じた券種と枚数</span></li>
             </ul>
-            <p>プラチナ、ゴールド、シルバー、ブロンズにも上記の参加内容が含まれ、寄付特典が加わります。ダンスタイムチケットは通常参加券に追加するのではなく、選択したプランの券種と枚数に置き換わります。懇親会へ参加しない場合は、通常参加を含むすべての参加プラン料金から2,000円を控除します。</p>
+            <p class="standard-inclusions__exception"><strong>懇親会へ参加しない場合</strong><span>すべての参加プランから2,000円を控除します。</span></p>
           </section>
           <section class="discount-guide" aria-labelledby="discount-guide-title">
             <h3 id="discount-guide-title">全プラン共通の割引・控除早見表</h3>
-            <p>申込時期割引と卒部年数割引は併用できます。卒部年次は2026年4月1日時点で固定し、2026年12月や2027年1月をまたいでも変わりません。懇親会へ参加しない場合は、表の割引額に加えて2,000円を控除します。上の基準一体価格から、該当する割引・控除の合計額を差し引いた金額がお支払い額です。</p>
+            <div class="pricing-formula" aria-label="支払予定額の計算方法"><span><small>選んだプラン</small>基準一体価格</span><b aria-hidden="true">−</b><span><small>時期・卒部年数</small>共通割引</span><b aria-hidden="true">−</b><span><small>懇親会不参加のみ</small>2,000円</span><b aria-hidden="true">＝</b><span class="pricing-formula__result"><small>申込画面に表示</small>支払予定額</span></div>
+            <p>申込時期と卒部年数の割引は併用できます。卒部年次は2026年4月1日時点を基準とします。</p>
             <div class="table-wrap table-wrap--compact" role="region" aria-label="申込時期と卒部年数による合計割引額" tabindex="0">
               <table class="fee-table discount-table">
                 <thead><tr><th scope="col">卒部からの年数</th><th scope="col">9月30日まで<br><small>早期申込</small></th><th scope="col">10月1日〜12月31日<br><small>年内申込</small></th><th scope="col">1月1日〜1月31日<br><small>通常申込</small></th></tr></thead>
@@ -69,16 +90,19 @@
                 </tbody>
               </table>
             </div>
-            <p class="discount-example"><strong>例：</strong>9月30日までに申し込む卒部1〜5年目の方は、通常参加 15,000円 → <strong>9,000円</strong>、プラチナ 100,000円 → <strong>94,000円</strong>です。</p>
-            <p class="discount-example"><strong>懇親会不参加の場合：</strong>上記の例からさらに2,000円を控除し、通常参加は<strong>7,000円</strong>、プラチナは<strong>92,000円</strong>です。</p>
+            <p class="discount-example"><strong>若手・早期申込の例：</strong>卒部1〜5年目の方が9月30日までに申し込むと、通常参加は<strong>9,000円</strong>。懇親会不参加なら<strong>7,000円</strong>です。</p>
             <p class="discount-guide__link"><a href="../../festa60-register/#fee-preview">申込画面で自分の支払予定額を確認する</a></p>
           </section>
-          <p class="note"><strong>申込締切：2027年1月31日（日）</strong></p>
-          <p class="note">プラチナ、ゴールド、シルバー、ブロンズには、当日の集合写真をプリントしたもの、現役からのお礼のメッセージ、60周年記念オリジナルステッカーを開催後に郵送する予定です。返礼品を目的としたプランではないため、土産品類は設けません。各プランのチケットは当日会場で配布し、通常参加分を含むため通常参加券を重複して配布しません。特にプラチナ・ゴールド・シルバーの方へ300円券は別途配布せず、それぞれ600円券・500円券・400円券のみをお渡しします。ブロンズの300円券×5枚にも通常参加分の2〜3枚を含みます。</p>
-          <p class="note"><strong>現役への還元：</strong>ダンスタイムチケットは当日のダンスタイムやトライアルで現役部員へ直接お渡しいただけます。チケットの券面相当額はすべて、そのチケットで踊った現役本人へ還元します。</p>
-          <p class="note"><strong>チケットの利用：</strong>ダンスタイムとトライアルで、原則として1曲につき1枚を現役部員へお渡しください。同じ現役部員と続けて踊る場合は、1曲ごとにもう1枚の使用を推奨します。使用しない場合は、踊る前に現役部員へ伝え、双方で確認してください。</p>
-          <p class="note"><strong>同伴者料金とチケット：</strong>大人は中学生以上、子供は小学生以下です。未就学児は無料ですが、人数把握のため申込時の同伴者人数に含めてください。予定が未確定の場合も、現時点の見込みでのお申し込みをおすすめします。有料の大人同伴者には、申込者本人の参加プランと同じ金額のダンスタイムチケットをお一人につき1枚配布します。小学生・未就学児への自動配布はありません。同一申込・同一世帯（夫婦ともに理科大OBOGとして参加する場合など）内では共有できますが、換金・第三者への転売はできません。</p>
-          <p class="note"><strong>当日の追加購入：</strong>原則として、ご自身の参加プランに対応する金額のダンスタイムチケットをご購入いただきます。プラチナは600円券、ゴールドは500円券、シルバーは400円券、ブロンズ・通常参加は300円券です。売上はすべて現役支援に充てます。</p>
+          <div class="participant-plan-essentials">
+            <p><strong>申込締切</strong><span>2027年1月31日（日）</span></p>
+            <p><strong>寄付プラン共通の返礼</strong><span>集合写真、現役からのお礼、60周年記念品を開催後に郵送予定</span></p>
+          </div>
+          <div class="support-detail-list">
+            <details><summary>チケットの配布と現役への還元</summary><div><p>チケットは当日会場で配布します。寄付を含むプランでは、通常参加分と重複せず、選択したプランの券種・枚数をお渡しします。</p><p>ダンスタイムやトライアルで渡されたチケットの券面相当額は、すべてそのチケットで踊った現役本人へ還元します。</p></div></details>
+            <details><summary>チケットの使い方・当日の追加購入</summary><div><p>原則として1曲につき1枚です。続けて踊る場合も1曲ごとの使用を推奨します。使用しない場合は、事前に現役部員へお伝えください。</p><p>追加購入は、ご自身の参加プランと同じ券種が基本です。売上はすべて現役支援に充てます。</p></div></details>
+            <details><summary>同伴者の料金とチケット</summary><div><p>大人は中学生以上、子供は小学生以下です。未就学児は無料ですが、人数把握のため申込人数に含めてください。</p><p>有料の大人同伴者には、申込者と同じ金額のダンスタイムチケットを1枚配布します。小学生・未就学児への自動配布はありません。詳しい料金は申込画面で確認できます。</p></div></details>
+            <details><summary>寄付プランの返礼について</summary><div><p>プラチナ・ゴールド・シルバー・ブロンズには、当日の集合写真、現役からのお礼、60周年記念オリジナルステッカーを開催後に郵送する予定です。返礼を目的としたプランではないため、土産品類は設けません。</p></div></details>
+          </div>
         </div>
         <div id="absent-support" class="support-block"><h2>欠席者向け寄付パッケージ</h2><p>当日欠席される方も現役支援と60周年記念事業にご参加いただけます。参加費と現役支援チケットは含まれません。</p>
           <div class="table-wrap" role="region" aria-label="欠席者向け寄付と返礼一覧（寄付額の高い順）" tabindex="0"><table class="fee-table"><thead><tr><th>プラン</th><th>寄付額</th><th>返礼の予定</th><th>配送予定</th></tr></thead><tbody><tr><th>プレミアム</th><td>30,000円</td><td>当日の集合写真、現役からのお礼のメッセージ、60周年記念オリジナルステッカー、写真盾、記念品</td><td>宅急便コンパクト</td></tr><tr><th>アドバンス</th><td>10,000円</td><td>当日の集合写真、現役からのお礼のメッセージ、60周年記念オリジナルステッカー、写真スタンド</td><td>レターパック</td></tr><tr><th>スタンダード</th><td>5,000円</td><td>当日の集合写真、現役からのお礼のメッセージ、60周年記念オリジナルステッカー</td><td>定形郵便等</td></tr></tbody></table></div>
