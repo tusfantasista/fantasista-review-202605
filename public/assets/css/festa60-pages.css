@@ -155,10 +155,21 @@ img { max-width: 100%; }
 
 .chronicle-intro { display: grid; grid-template-columns: 1fr auto; gap: 30px; align-items: end; }
 .photo-library-filters { position: sticky; top: 74px; z-index: 10; background: rgba(8, 8, 6, 0.94); padding: 14px 0; }
-.social-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.social-link { border: 1px solid var(--f60-line); border-radius: 4px; padding: 20px; text-decoration: none; }
+.social-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.social-link { display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: 16px; min-height: 92px; border: 1px solid var(--f60-line); border-radius: 4px; padding: 20px; text-decoration: none; transition: border-color 160ms ease, background 160ms ease; }
+.social-link:hover, .social-link:focus-visible { border-color: var(--f60-gold); background: rgba(255, 210, 28, 0.055); }
+.social-link:focus-visible { outline: 3px solid var(--f60-gold); outline-offset: 3px; }
+.social-link__icon { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 8px; color: #fff; }
+.social-link__icon svg { width: 25px; height: 25px; }
+.social-link--x .social-link__icon { border: 1px solid rgba(255, 255, 255, 0.22); background: #050505; }
+.social-link--x .social-link__icon svg { fill: currentColor; }
+.social-link--instagram .social-link__icon { background: radial-gradient(circle at 30% 105%, #ffd600 0 22%, #ff7a00 42%, #ff0169 62%, #d300c5 78%, #7638fa 100%); }
+.social-link--instagram .social-link__icon svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.social-link--instagram .social-link__icon svg circle:last-child { fill: currentColor; stroke: none; }
+.social-link__copy { display: grid; gap: 5px; min-width: 0; }
 .social-link strong { display: block; color: var(--f60-cream); }
 .social-link span { color: var(--f60-muted); }
+.social-link > .social-link__icon { color: #fff; }
 
 .subpage-footer { padding: 34px 0; color: var(--f60-muted); font-size: 0.85rem; }
 .subpage-footer__inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 28px; }
