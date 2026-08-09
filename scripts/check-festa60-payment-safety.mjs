@@ -35,6 +35,10 @@ const checks = [
   ["bank amount correction confirms application code", files.worker.includes("Application code confirmation does not match.")],
   ["bank amount correction recalculates stored application", files.worker.includes("requestedAmount !== calculatedAmount") && files.worker.includes("payment.bank_transfer_amount_adjusted")],
   ["bank amount correction rolls back Stripe on D1 failure", files.worker.includes("festa60-bank-adjust-rollback-")],
+  ["bank amount correction reconfirms PaymentIntent", files.worker.includes("festa60-bank-adjust-confirm-") && files.worker.includes("confirmStripePaymentIntent")],
+  ["bank instructions URL refreshed in D1", files.worker.includes("hosted_instructions_url = ?, updated_at = ?")],
+  ["admin can refresh bank instructions", files.worker.includes('payload.action === "refresh_bank_transfer_instructions"') && files.worker.includes("payment.bank_transfer_instructions_refreshed")],
+  ["refreshed bank instructions can be resent", files.worker.includes("renderBankTransferInstructionsRefreshedEmail") && files.worker.includes("銀行振込先・お支払い手順（再発行）")],
   ["preview omits actionable hosted link", !files.register.includes('id="bank-preview-instructions"')],
   ["design covers five issues", [1, 2, 3, 4, 5].every((number) => files.design.includes(`| ${number} |`))]
 ];

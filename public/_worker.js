@@ -1096,7 +1096,7 @@ async function adjustUnfundedBankTransferAmount({
     paymentIntent.currency !== "jpy" ||
     paymentIntent.customer !== current.stripe_customer_id ||
     !paymentIntent.payment_method_types?.includes("customer_balance") ||
-    !["requires_action", "requires_payment_method"].includes(paymentIntent.status)
+    !["requires_action", "requires_payment_method", "requires_confirmation"].includes(paymentIntent.status)
   ) {
     throw new Error("Stripe PaymentIntent is not an adjustable JPY bank transfer.");
   }
@@ -1125,6 +1125,13 @@ async function adjustUnfundedBankTransferAmount({
       );
       stripeChanged = true;
     }
+    if (paymentIntent.status === "requires_confirmation") {
+      paymentIntent = await confirmStripePaymentIntent(
+        stripeSecret,
+        current.stripe_payment_intent_id,
+        `festa60-bank-adjust-confirm-${current.id}-${calculatedAmount}`
+      );
+    }
     const cashBalanceTransactionsAfterUpdate = await listStripeCashBalanceTransactions(
       stripeSecret,
       current.stripe_customer_id,
@@ -1133,12 +1140,14 @@ async function adjustUnfundedBankTransferAmount({
     if (
       Number(paymentIntent.amount) !== calculatedAmount ||
       Number(paymentIntent.amount_received || 0) !== 0 ||
-      cashBalanceTransactionsAfterUpdate.length
+      cashBalanceTransactionsAfterUpdate.length ||
+      paymentIntent.status !== "requires_action" ||
+      bankTransferAmountRemaining(paymentIntent) !== calculatedAmount ||
+      !bankTransferInstructionsUrl(paymentIntent)
     ) {
       throw new Error("Stripe did not accept the corrected bank transfer amount safely.");
     }
-    // Stripe can briefly retain the pre-update amount in hosted bank instructions.
-    // With no cash-balance transactions, the corrected intent amount is the source of truth.
+    const hostedInstructionsUrl = bankTransferInstructionsUrl(paymentIntent);
     await db.batch([
       db.prepare(
         `UPDATE applications
@@ -1165,18 +1174,31 @@ async function adjustUnfundedBankTransferAmount({
       db.prepare(
         `UPDATE bank_transfer_previews
             SET amount_total_jpy = ?, amount_received_jpy = 0,
-                amount_remaining_jpy = ?, updated_at = ?
+                amount_remaining_jpy = ?, hosted_instructions_url = ?, updated_at = ?
           WHERE stripe_payment_intent_id = ?`
-      ).bind(calculatedAmount, amountRemaining, now, current.stripe_payment_intent_id)
+      ).bind(calculatedAmount, amountRemaining, hostedInstructionsUrl, now, current.stripe_payment_intent_id)
     ]);
   } catch (error) {
     if (stripeChanged) {
-      await updateStripePaymentIntentAmount(
+      const rolledBackIntent = await updateStripePaymentIntentAmount(
         stripeSecret,
         current.stripe_payment_intent_id,
         previousAmount,
         `festa60-bank-adjust-rollback-${current.id}-${previousAmount}-${Date.now()}`
-      ).catch((rollbackError) => console.error("Stripe amount rollback failed", rollbackError));
+      ).then(async (intent) => intent.status === "requires_confirmation"
+        ? confirmStripePaymentIntent(
+            stripeSecret,
+            current.stripe_payment_intent_id,
+            `festa60-bank-adjust-rollback-confirm-${current.id}-${previousAmount}-${Date.now()}`
+          )
+        : intent
+      ).catch((rollbackError) => {
+        console.error("Stripe amount rollback failed", rollbackError);
+        return null;
+      });
+      if (rolledBackIntent?.status !== "requires_action") {
+        console.error("Stripe amount rollback did not restore bank transfer instructions.");
+      }
     }
     throw error;
   }
@@ -1206,6 +1228,120 @@ async function adjustUnfundedBankTransferAmount({
   };
 }
 __name(adjustUnfundedBankTransferAmount, "adjustUnfundedBankTransferAmount");
+async function refreshBankTransferInstructions({
+  db,
+  env,
+  applicationId,
+  confirmedApplicationCode,
+  actor,
+  requestMeta = {}
+}) {
+  const current = await db.prepare(
+    `SELECT
+        a.id, a.application_code, a.full_name, a.email, a.payment_status,
+        a.payment_method, a.total_amount_jpy,
+        p.id AS payment_id, p.stripe_payment_intent_id, p.stripe_customer_id,
+        p.amount_total AS payment_amount_total, p.amount_received_jpy,
+        p.amount_remaining_jpy, p.status AS stripe_payment_status
+       FROM applications a
+       INNER JOIN payments p ON p.id = (
+         SELECT id FROM payments
+         WHERE application_id = a.id
+         ORDER BY created_at DESC
+         LIMIT 1
+       )
+       WHERE (a.id = ? OR a.application_code = ?)
+       LIMIT 1`
+  ).bind(applicationId, applicationId).first();
+  if (!current) throw new Error("Festa 60 application was not found.");
+  if (!confirmedApplicationCode || confirmedApplicationCode !== current.application_code) {
+    throw new Error("Application code confirmation does not match.");
+  }
+  if (current.payment_method !== "bank_transfer" || !current.stripe_payment_intent_id) {
+    throw new Error("The application is not linked to a bank transfer PaymentIntent.");
+  }
+  if (["paid", "cancelled", "refunded"].includes(current.payment_status)) {
+    throw new Error("Bank transfer instructions cannot be refreshed for a completed or cancelled application.");
+  }
+
+  const stripeSecret = requireStripeSecret(env);
+  let paymentIntent = await retrieveStripePaymentIntent(stripeSecret, current.stripe_payment_intent_id);
+  if (
+    paymentIntent.currency !== "jpy" ||
+    paymentIntent.customer !== current.stripe_customer_id ||
+    !paymentIntent.payment_method_types?.includes("customer_balance") ||
+    !["requires_action", "requires_confirmation"].includes(paymentIntent.status)
+  ) {
+    throw new Error("Stripe PaymentIntent is not an active JPY bank transfer.");
+  }
+  if (Number(paymentIntent.amount || 0) !== Number(current.total_amount_jpy || 0)) {
+    throw new Error("Stripe and FANTASISTA amounts are inconsistent.");
+  }
+
+  let reconfirmed = false;
+  if (paymentIntent.status === "requires_confirmation") {
+    paymentIntent = await confirmStripePaymentIntent(
+      stripeSecret,
+      current.stripe_payment_intent_id,
+      `festa60-bank-instructions-refresh-${current.id}-${paymentIntent.amount}`
+    );
+    reconfirmed = true;
+  }
+  if (paymentIntent.status !== "requires_action") {
+    throw new Error("Stripe did not restore the bank transfer instructions.");
+  }
+
+  const hostedInstructionsUrl = bankTransferInstructionsUrl(paymentIntent);
+  if (!hostedInstructionsUrl) throw new Error("Stripe bank transfer instructions URL is unavailable.");
+  const amountRemaining = bankTransferAmountRemaining(paymentIntent);
+  const amountReceived = bankTransferAmountReceived(paymentIntent);
+  const now = nowIso();
+  await db.batch([
+    db.prepare(
+      `UPDATE payments
+          SET status = ?, amount_total = ?, amount_received_jpy = ?,
+              amount_remaining_jpy = ?, updated_at = ?
+        WHERE id = ?`
+    ).bind(paymentIntent.status, paymentIntent.amount, amountReceived, amountRemaining, now, current.payment_id),
+    db.prepare(
+      `UPDATE bank_transfer_previews
+          SET amount_total_jpy = ?, amount_received_jpy = ?, amount_remaining_jpy = ?,
+              hosted_instructions_url = ?, updated_at = ?
+        WHERE stripe_payment_intent_id = ?`
+    ).bind(
+      paymentIntent.amount,
+      amountReceived,
+      amountRemaining,
+      hostedInstructionsUrl,
+      now,
+      current.stripe_payment_intent_id
+    )
+  ]);
+  await audit(db, {
+    actor,
+    action: "payment.bank_transfer_instructions_refreshed",
+    target_type: "application",
+    target_id: current.id,
+    details_json: JSON.stringify({
+      application_code: current.application_code,
+      stripe_payment_intent_id: current.stripe_payment_intent_id,
+      amount_total_jpy: Number(paymentIntent.amount || 0),
+      amount_received_jpy: amountReceived,
+      amount_remaining_jpy: amountRemaining,
+      reconfirmed
+    }),
+    ...requestMeta
+  });
+  return {
+    application: await getApplicationById(db, current.id),
+    hosted_instructions_url: hostedInstructionsUrl,
+    amount_total_jpy: Number(paymentIntent.amount || 0),
+    amount_received_jpy: amountReceived,
+    amount_remaining_jpy: amountRemaining,
+    reconfirmed
+  };
+}
+__name(refreshBankTransferInstructions, "refreshBankTransferInstructions");
 async function hydrateApplicationLineItems(db, application) {
   if (!application) return null;
   const result = await db.prepare(
@@ -1681,6 +1817,31 @@ FANTASISTA 60周年FESTA事務局`
   };
 }
 __name(renderBankTransferAmountAdjustedEmail, "renderBankTransferAmountAdjustedEmail");
+function renderBankTransferInstructionsRefreshedEmail(application, payment) {
+  const name = application.full_name || application.name || "";
+  return {
+    to: application.email,
+    subject: "【60周年FESTA】銀行振込先・お支払い手順（再発行）",
+    body: `${name} 様
+
+60周年FESTAへのお申し込みありがとうございます。
+銀行振込の案内ページを再発行しました。以前の案内リンクは使用せず、次の新しいリンクから振込先とお支払い状況をご確認ください。
+
+受付番号：${application.application_code || application.applicationId}
+お支払い予定額：${formatYen(payment.amount_total_jpy)}
+確認済み入金額：${formatYen(payment.amount_received_jpy)}
+現在の不足額：${formatYen(payment.amount_remaining_jpy)}
+
+新しい振込案内ページ：
+${payment.hosted_instructions_url}
+
+すでに振込手続きをされた場合は、着金確認までお待ちください。重複して振り込まないようお願いいたします。
+全額の入金確認後に、FESTA事務局から参加確定メールをお送りします。
+
+FANTASISTA 60周年FESTA事務局`
+  };
+}
+__name(renderBankTransferInstructionsRefreshedEmail, "renderBankTransferInstructionsRefreshedEmail");
 // api/festa60/admin/applications/[id].js
 async function onRequestPatch({ request, env, params }) {
   const auth = assertAdmin(request, env);
@@ -1712,6 +1873,32 @@ async function onRequestPatch({ request, env, params }) {
             message_id: `festa60-bank-amount-adjust-${result.application.id}-${result.adjusted_amount_jpy}`
           }
         );
+      }
+      return json({
+        ok: true,
+        ...result,
+        email_delivery: emailDelivery ? {
+          sent: Boolean(emailDelivery.sent),
+          skipped: Boolean(emailDelivery.skipped),
+          reason: emailDelivery.reason || emailDelivery.error || null
+        } : null
+      });
+    }
+    if (payload.action === "refresh_bank_transfer_instructions") {
+      const result = await refreshBankTransferInstructions({
+        db: requireDb(env),
+        env,
+        applicationId: params.id,
+        confirmedApplicationCode: payload.confirm_application_code,
+        actor: auth.actor,
+        requestMeta: getClientMeta(request)
+      });
+      let emailDelivery = null;
+      if (payload.sendEmail === true) {
+        emailDelivery = await maybeSendEmail(env, {
+          ...renderBankTransferInstructionsRefreshedEmail(result.application, result),
+          message_id: `festa60-bank-instructions-refresh-${result.application.id}-${Date.now()}`
+        });
       }
       return json({
         ok: true,
@@ -2343,6 +2530,23 @@ async function updateStripePaymentIntentAmount(stripeSecret, paymentIntentId, am
   return result;
 }
 __name(updateStripePaymentIntentAmount, "updateStripePaymentIntentAmount");
+async function confirmStripePaymentIntent(stripeSecret, paymentIntentId, idempotencyKey) {
+  const response = await fetch(`https://api.stripe.com/v1/payment_intents/${encodeURIComponent(paymentIntentId)}/confirm`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${stripeSecret}`,
+      "content-type": "application/x-www-form-urlencoded",
+      "idempotency-key": idempotencyKey
+    },
+    body: new URLSearchParams()
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(`Stripe PaymentIntent confirmation failed: ${result.error?.message || response.status}`);
+  }
+  return result;
+}
+__name(confirmStripePaymentIntent, "confirmStripePaymentIntent");
 async function cancelStripePaymentIntent(stripeSecret, paymentIntentId) {
   const response = await fetch(`https://api.stripe.com/v1/payment_intents/${encodeURIComponent(paymentIntentId)}/cancel`, {
     method: "POST",

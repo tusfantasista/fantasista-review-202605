@@ -556,6 +556,13 @@
       && ["bank_transfer", "customer_balance"].includes(paymentMethod);
   }
 
+  function canRefreshBankTransferInstructions(application) {
+    const paymentMethod = application.latest_payment_method || application.payment_method;
+    return !["paid", "cancelled", "refunded"].includes(effectivePaymentStatus(application))
+      && Boolean(application.stripe_payment_intent_id)
+      && ["bank_transfer", "customer_balance"].includes(paymentMethod);
+  }
+
   function openApplicationDetail(applicationId) {
     const application = state.applications.find((item) => item.id === applicationId);
     if (!application) return;
@@ -643,6 +650,13 @@
             <button class="admin-button admin-button--primary" type="button" data-adjust-bank-amount="${escapeHtml(application.id)}">金額を確認して訂正</button>
           </div>
           <p class="admin-amount-adjustment__message" data-adjust-bank-message="${escapeHtml(application.id)}" role="status" aria-live="polite"></p>
+        </section>` : ""}
+      ${canRefreshBankTransferInstructions(application) ? `
+        <section class="admin-amount-adjustment" aria-labelledby="bank-instructions-refresh-title">
+          <h3 id="bank-instructions-refresh-title">銀行振込案内の再発行</h3>
+          <p>決済情報を再確認し、有効な振込案内ページを取得して申込者へ再送します。既に振込済みの場合は、二重入金を避ける注意書きも送ります。</p>
+          <button class="admin-button admin-button--primary" type="button" data-refresh-bank-instructions="${escapeHtml(application.id)}">振込案内を再発行・再送</button>
+          <p class="admin-amount-adjustment__message" data-refresh-bank-message="${escapeHtml(application.id)}" role="status" aria-live="polite"></p>
         </section>` : ""}`;
     elements.dialog.showModal();
   }
@@ -681,6 +695,33 @@
     }
   }
 
+  async function refreshBankTransferInstructions(applicationId, button) {
+    const application = state.applications.find((item) => item.id === applicationId);
+    const message = elements.dialogContent.querySelector(`[data-refresh-bank-message="${CSS.escape(applicationId)}"]`);
+    if (!application) return;
+    if (!window.confirm(`${application.application_code} の振込案内を再発行し、${application.email} へ再送します。よろしいですか？`)) return;
+
+    button.disabled = true;
+    if (message) message.textContent = "決済情報を確認し、振込案内を再発行しています。";
+    try {
+      const result = await patchJson(`${API_URL}/${encodeURIComponent(application.application_code)}`, {
+        action: "refresh_bank_transfer_instructions",
+        confirm_application_code: application.application_code,
+        sendEmail: true
+      });
+      if (message) {
+        const emailStatus = result.email_delivery?.sent
+          ? "申込者へ新しい案内を送信しました。"
+          : `案内は再発行しましたが、メール送信結果を確認してください${result.email_delivery?.reason ? `（${result.email_delivery.reason}）` : ""}。`;
+        message.textContent = `${formatYen(result.amount_remaining_jpy)}の振込案内を再発行しました。${emailStatus}`;
+      }
+      await loadApplications();
+    } catch (error) {
+      if (message) message.textContent = `再発行できませんでした: ${error.message}`;
+      button.disabled = false;
+    }
+  }
+
   function bindEvents() {
     elements.searchInput.addEventListener("input", (event) => {
       state.filters.search = event.target.value;
@@ -712,6 +753,11 @@
       if (button) openApplicationDetail(button.dataset.applicationId);
     });
     elements.dialogContent.addEventListener("click", async (event) => {
+      const refreshButton = event.target.closest("[data-refresh-bank-instructions]");
+      if (refreshButton) {
+        await refreshBankTransferInstructions(refreshButton.dataset.refreshBankInstructions, refreshButton);
+        return;
+      }
       const adjustmentButton = event.target.closest("[data-adjust-bank-amount]");
       if (adjustmentButton) {
         await adjustBankTransferAmount(adjustmentButton.dataset.adjustBankAmount, adjustmentButton);
