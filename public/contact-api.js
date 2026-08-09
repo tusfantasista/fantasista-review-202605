@@ -45,7 +45,6 @@ function normalizePayload(input) {
     phone: singleLine(input?.phone, 40),
     inquiry_type: singleLine(input?.inquiry_type, 32),
     message: multiLine(input?.message, 5000),
-    contact_permission: singleLine(input?.contact_permission, 8),
     privacy_consent: singleLine(input?.privacy_consent, 16),
   };
 }
@@ -59,7 +58,6 @@ function validatePayload(payload) {
   }
   if (!CONTACT_TYPES[payload.inquiry_type]) errors.inquiry_type = "invalid";
   if (!payload.message) errors.message = "required";
-  if (!['yes', 'no'].includes(payload.contact_permission)) errors.contact_permission = "invalid";
   if (payload.privacy_consent !== "agree") errors.privacy_consent = "required";
   return errors;
 }
@@ -99,8 +97,6 @@ Webサイトからお問い合わせを受け付けました。
 卒部年度：${payload.graduation_year ? `${payload.graduation_year}年度` : "未入力"}
 メールアドレス：${payload.email}
 電話番号：${payload.phone || "未入力"}
-事務局からの連絡：${payload.contact_permission === "yes" ? "可" : "不可"}
-
 ---- お問い合わせ内容 ----
 ${payload.message}`;
 }
@@ -117,9 +113,7 @@ FANTASISTA会へお問い合わせいただき、ありがとうございます�
 ---- お問い合わせ内容 ----
 ${payload.message}
 
-${payload.contact_permission === "yes"
-    ? "内容を確認のうえ、必要に応じて事務局よりご連絡します。返信は原則1〜2週間程度を目安としています。"
-    : "事務局からの連絡は「不可」として受け付けました。"}
+内容を確認のうえ、必要に応じて事務局よりご連絡します。
 
 このメールはお問い合わせ受付時に自動送信しています。
 お心当たりがない場合は、${OFFICE_EMAIL} までお知らせください。`;

@@ -267,14 +267,40 @@ html {
   font-size: 0.9rem;
 }
 
-.mailto-preview__body {
-  width: 100%;
-  min-height: 220px;
+.mailto-preview__summary {
+  margin: 0;
   border: 1px solid rgba(32, 33, 36, 0.16);
   border-radius: 12px;
-  padding: 12px;
-  font: inherit;
+  background: #fff;
+  overflow: hidden;
+}
+
+.mailto-preview__summary-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.32fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 12px 14px;
+}
+
+.mailto-preview__summary-row + .mailto-preview__summary-row {
+  border-top: 1px solid rgba(32, 33, 36, 0.1);
+}
+
+.mailto-preview__summary-row dt {
+  color: #76664d;
+  font-weight: 800;
+}
+
+.mailto-preview__summary-row dd {
+  margin: 0;
+  color: #26211a;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.mailto-preview__summary-row--message {
+  grid-template-columns: 1fr;
+  gap: 6px;
 }
 
 .mailto-preview__actions {
@@ -348,8 +374,16 @@ html {
     grid-template-columns: 1fr;
   }
 
+  .mailto-preview__summary-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
   .form-choice-row {
     display: grid;
     grid-template-columns: 1fr;
   }
+}
+.hero__lead-line {
+  display: block;
 }

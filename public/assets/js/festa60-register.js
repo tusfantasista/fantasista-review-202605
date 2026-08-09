@@ -929,7 +929,7 @@
     const isAvailable = stripeMode === "live" || stripeMode === "sandbox";
     const isSandbox = stripeMode === "sandbox";
     stripeAvailable = isAvailable;
-    if (stripePaymentStatus) stripePaymentStatus.textContent = isSandbox ? "テスト環境" : isAvailable ? "利用できます" : "準備中";
+    if (stripePaymentStatus) stripePaymentStatus.textContent = isSandbox ? "テスト環境" : isAvailable ? "支払い方法を見る" : "準備中";
     if (stripePaymentHelp) {
       stripePaymentHelp.textContent = isAvailable
         ? "確認後、安全な外部決済画面へ移動します。表示された支払い方法から選択してください。"

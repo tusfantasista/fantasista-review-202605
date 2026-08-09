@@ -15,7 +15,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/pages.css?v=20260809-1" />
     <link rel="stylesheet" href="../assets/css/enhancements.css" />
     <style>
       :root {
@@ -1521,7 +1521,7 @@
         @media (max-width: 760px) {
           .history-cta-card,
           .history-context-cta {
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(0, 1fr);
             gap: 14px;
           }
 
@@ -1530,6 +1530,10 @@
             width: 100%;
             min-height: 46px;
             justify-content: center;
+            padding-block: 10px;
+            text-align: center;
+            white-space: normal;
+            overflow-wrap: anywhere;
           }
 
           .history-jump-details summary {
@@ -1808,7 +1812,7 @@
         <img class="page-hero__seal" src="../assets/img/university-seal.png" alt="" aria-hidden="true" />
         <div class="container page-hero__inner">
           <p class="page-hero__eyebrow"><span class="label-ja">歩み</span><span class="label-en">History</span></p>
-          <h1 class="page-hero__title">東京理科大学舞踏研究部 HISTORY</h1>
+          <h1 class="page-hero__title"><span class="title-break-unit">東京理科大学</span><wbr><span class="title-break-unit">舞踏研究部</span><wbr><span class="title-break-unit">HISTORY</span></h1>
           <p class="page-hero__lead">
             1966年の創部から、世代を超えて受け継がれてきたダンスとつながりの記録。
           </p>
@@ -2706,8 +2710,6 @@
 <!-- REVIEW_HISTORY_MOTION_SCRIPT_END -->
 </body>
 </html>
-
-
 
 
 

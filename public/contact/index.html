@@ -13,16 +13,14 @@
     <link rel="stylesheet" href="../assets/css/pages.css" />
     <link rel="stylesheet" href="../assets/css/enhancements.css?v=20260803-1" />    <!-- REVIEW_CONTACT_PREPUBLISH_STYLE_START -->
     <style>
-      .contact-list,
-      .contact-example-list {
+      .contact-list {
         margin: 16px 0 0;
         padding-left: 1.2em;
         color: #59606b;
         line-height: 1.85;
       }
 
-      .contact-list li + li,
-      .contact-example-list li + li {
+      .contact-list li + li {
         margin-top: 8px;
       }
 
@@ -87,21 +85,6 @@
                         <section class="page-section">
         <div class="container contact-grid">
           <div class="contact-card">
-            <p class="panel__eyebrow">Mail</p>
-            <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z" /><path d="M4 8l8 6 8-6" /></svg></span>
-            <h2>お問い合わせ窓口</h2>
-            <p>FANTASISTA会へのご連絡は、下記メールアドレスで受け付けています。内容に応じて事務局より順次ご返信します。</p>
-            <p class="contact-card__mail">
-              <a href="mailto:tus.festa.office@gmail.com">tus.festa.office@gmail.com</a>
-            </p>
-            <div class="contact-actions">
-              <a class="button button--primary" href="mailto:tus.festa.office@gmail.com">
-                メールを送る
-              </a>
-            </div>
-          </div>
-
-          <div class="contact-card">
             <p class="panel__eyebrow"><span class="label-ja">お問い合わせ内容</span><span class="label-en">Contact Menu</span></p>
             <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h11M8 12h11M8 17h11" /><circle cx="5" cy="7" r="1" /><circle cx="5" cy="12" r="1" /><circle cx="5" cy="17" r="1" /></svg></span>
             <h2>受け付けているご連絡</h2>
@@ -113,26 +96,14 @@
               <li>現役支援・連携に関するご連絡</li>
             </ul>
             <p class="contact-subnote">差し支えない範囲で、お名前と卒部年度、用件を本文にご記載ください。</p>
-          </div>
-
-          <div class="contact-card">
-            <p class="panel__eyebrow"><span class="label-ja">件名例</span><span class="label-en">Guide</span></p>
-            <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z" /><path d="M14 3v5h5" /><path d="M9 13h6M9 17h6" /></svg></span>
-            <h2>件名例と返信目安</h2>
-            <ul class="contact-example-list">
-              <li>【近況連絡】氏名・卒部年度</li>
-              <li>【写真提供】FESTA・舞研記録について</li>
-              <li>【60周年FESTA】問い合わせ</li>
-              <li>【協賛相談】企業名・氏名</li>
-            </ul>
-            <p class="contact-subnote">返信は原則1〜2週間程度を目安にしています。内容確認に時間を要する場合は、さらにお時間をいただくことがあります。</p>
+            <p class="contact-card__mail"><a href="mailto:tus.festa.office@gmail.com">tus.festa.office@gmail.com</a></p>
           </div>
 
           <div id="contact-form" class="contact-card contact-form-card">
             <p class="panel__eyebrow"><span class="label-ja">参加・問い合わせフォーム</span><span class="label-en">Contact Form</span></p>
             <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z" /><path d="M4 8l8 6 8-6" /></svg></span>
             <h2>メールで問い合わせる</h2>
-            <p>必要事項を入力すると、送信内容の確認後にFANTASISTA会事務局へ直接送信できます。入力内容がこのサイト上に保存されることはありません。</p>
+            <p>必要事項を入力し、内容を確認して送信すると、FANTASISTA会事務局へ直接届きます。ご自身でメール本文を作成したり、コピーしたりする必要はありません。</p>
             <form class="static-contact-form" method="post" data-mailto-form="general-contact" data-contact-api="/api/contact" data-mailto-recipient="tus.festa.office@gmail.com" data-mailto-subject-prefix="【FANTASISTA会お問い合わせ】">
               <div class="form-honeypot" aria-hidden="true">
                 <label>この欄は入力しないでください
@@ -169,20 +140,12 @@
                 </label>
               </div>
 
-              <fieldset>
-                <legend>事務局からの連絡可否<span class="form-required">必須</span></legend>
-                <div class="form-choice-row">
-                  <label class="form-choice"><input type="radio" name="contact_permission" value="yes" required />連絡可</label>
-                  <label class="form-choice"><input type="radio" name="contact_permission" value="no" />連絡不可</label>
-                </div>
-              </fieldset>
-
               <label class="form-choice">
                 <input type="checkbox" name="privacy_consent" value="agree" required />
-                個人情報が問い合わせ対応、60周年FESTA運営、会員情報の確認、FANTASISTA会からの関連連絡の目的に使用されることに同意します。
+                <span><a href="https://tus-fantasista-festa60.pages.dev/festa-60th/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>を確認し、問い合わせ対応のために入力情報を利用することに同意します。</span>
               </label>
 
-              <p class="form-note">入力内容はFANTASISTA事務局が問い合わせ対応に必要な範囲で取り扱い、公開サイトやGitHubには保存しません。送信後、入力したメールアドレスへ自動受付メールをお送りします。</p>
+              <p class="form-note">送信後、入力したメールアドレスへ自動受付メールをお送りします。</p>
               <div class="contact-actions">
                 <button class="button button--primary" type="submit">入力内容を確認する</button>
                 <a class="button button--ghost" href="mailto:tus.festa.office@gmail.com?subject=%E3%80%9060%E5%91%A8%E5%B9%B4FESTA%E3%80%91%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">60周年FESTAについてメールする</a>
@@ -198,6 +161,6 @@
         <p>&copy; All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</p>
       </div>
     </footer>
-    <script src="../assets/js/site.js?v=20260809-1" defer></script>
+    <script src="../assets/js/site.js?v=20260809-2" defer></script>
   </body>
 </html>

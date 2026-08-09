@@ -242,7 +242,6 @@
       dance_role: "当時の役割",
       email: "メールアドレス",
       phone: "電話番号",
-      contact_permission: "事務局からの連絡可否",
       preferred_contact_method: "主な連絡希望手段",
       attendance_intent: "参加意向",
       companion_status: "同伴者の有無",
@@ -313,6 +312,27 @@
       return lines.join("\n");
     }
 
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function buildSummary(form) {
+      return getOrderedNames(form)
+        .filter((name) => name !== "privacy_consent")
+        .map((name) => {
+          const value = getFieldValue(form, name);
+          if (!value) return "";
+          const className = name === "message" ? " mailto-preview__summary-row--message" : "";
+          return `<div class="mailto-preview__summary-row${className}"><dt>${escapeHtml(fieldLabels[name] || name)}</dt><dd>${escapeHtml(value)}</dd></div>`;
+        })
+        .join("");
+    }
+
     function buildPayload(form) {
       const payload = {};
       Array.from(form.elements).forEach((field) => {
@@ -340,7 +360,7 @@
       preview.setAttribute("aria-labelledby", "contact-confirm-title");
       preview.hidden = true;
       preview.innerHTML =
-        '<p class="panel__eyebrow">Confirm</p><h2 id="contact-confirm-title" tabindex="-1">入力内容の確認</h2><p class="mailto-preview__notice"><strong>まだ送信は完了していません。</strong><br>内容を確認し、「この内容で送信する」を押してください。</p><textarea class="mailto-preview__body" readonly aria-label="送信するお問い合わせ内容"></textarea><div class="mailto-preview__actions"><button class="button button--ghost mailto-preview__edit" type="button">入力内容を修正する</button><button class="button button--primary mailto-preview__send" type="button">この内容で送信する</button><button class="button button--ghost mailto-preview__copy" type="button">本文をコピーする</button></div><p class="mailto-preview__fallback" hidden>直接送信できない場合は、<a class="mailto-preview__open" href="#">メールソフトを開く</a>か、本文をコピーしてお送りください。</p><p class="mailto-preview__status" role="status" aria-live="polite"></p>';
+        '<p class="panel__eyebrow">Confirm</p><h2 id="contact-confirm-title" tabindex="-1">入力内容の確認</h2><p class="mailto-preview__notice"><strong>まだ送信は完了していません。</strong><br>「FANTASISTA会事務局へ送信する」を押すと、この内容が事務局へ直接送信されます。</p><dl class="mailto-preview__summary" aria-label="送信するお問い合わせ内容"></dl><div class="mailto-preview__actions"><button class="button button--ghost mailto-preview__edit" type="button">入力内容を修正する</button><button class="button button--primary mailto-preview__send" type="button">FANTASISTA会事務局へ送信する</button></div><p class="mailto-preview__fallback" hidden>送信できませんでした。時間をおいて再度お試しいただくか、<a class="mailto-preview__open" href="#">メールソフトからお問い合わせください</a>。</p><p class="mailto-preview__status" role="status" aria-live="polite"></p>';
       form.insertAdjacentElement("afterend", preview);
       return preview;
     }
@@ -370,17 +390,16 @@
         const href = "mailto:" + recipient + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
         const payload = buildPayload(form);
         const preview = ensurePreview(form);
-        const textarea = preview.querySelector(".mailto-preview__body");
+        const summary = preview.querySelector(".mailto-preview__summary");
         const sendButton = preview.querySelector(".mailto-preview__send");
         const fallback = preview.querySelector(".mailto-preview__fallback");
         const fallbackLink = preview.querySelector(".mailto-preview__open");
         const editButton = preview.querySelector(".mailto-preview__edit");
-        const copyButton = preview.querySelector(".mailto-preview__copy");
         const status = preview.querySelector(".mailto-preview__status");
         const title = preview.querySelector("#contact-confirm-title");
         const notice = preview.querySelector(".mailto-preview__notice");
 
-        textarea.value = body;
+        summary.innerHTML = buildSummary(form);
         fallbackLink.href = href;
         fallback.hidden = true;
         form.hidden = true;
@@ -415,7 +434,7 @@
             fallback.hidden = true;
           } catch (error) {
             console.error("Contact form submission failed.", error);
-            status.textContent = "直接送信できませんでした。メールソフトまたは本文コピーをご利用ください。";
+            status.textContent = "送信できませんでした。入力内容は送信されていません。時間をおいて再度お試しいただくか、メールソフトをご利用ください。";
             fallback.hidden = false;
             sendButton.disabled = false;
             editButton.disabled = false;
@@ -431,21 +450,6 @@
           form.querySelector("[name='full_name']").focus();
         };
 
-        copyButton.onclick = function () {
-          const copy = navigator.clipboard
-            ? navigator.clipboard.writeText(body)
-            : Promise.reject(new Error("clipboard unavailable"));
-          copy
-            .then(() => {
-              status.textContent = "本文をコピーしました。";
-            })
-            .catch(() => {
-              textarea.focus();
-              textarea.select();
-              document.execCommand("copy");
-              status.textContent = "本文を選択しました。コピーしてメールに貼り付けてください。";
-            });
-        };
       });
     });
   }

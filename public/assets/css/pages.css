@@ -35,6 +35,12 @@
   padding-bottom: 88px;
 }
 
+@media (min-width: 1321px) {
+  .page-hero__inner {
+    padding-top: 210px;
+  }
+}
+
 .page-hero__eyebrow {
   margin: 0 0 16px;
   color: var(--gold);
@@ -50,6 +56,10 @@
   font-size: clamp(3rem, 7vw, 5.8rem);
   font-weight: 700;
   line-height: 0.98;
+}
+
+.title-break-unit {
+  white-space: nowrap;
 }
 
 .page-hero__lead {

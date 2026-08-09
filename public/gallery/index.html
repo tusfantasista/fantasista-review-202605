@@ -15,7 +15,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/pages.css?v=20260809-1" />
     <link rel="stylesheet" href="../assets/css/enhancements.css" />
     <link rel="stylesheet" href="../assets/css/photos.css" />
       
@@ -531,7 +531,7 @@
         }
 
         .gallery-submit-card {
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(0, 1fr);
         }
       }
 
@@ -549,6 +549,26 @@
         .gallery-action-link,
         .gallery-submit-card__button {
           width: 100%;
+        }
+
+        .gallery-submit-card,
+        .gallery-submit-card__copy,
+        .gallery-submit-card__actions,
+        .gallery-submit-card__button,
+        .gallery-submit-card__media {
+          min-width: 0;
+        }
+
+        .gallery-submit-card__button {
+          padding-block: 10px;
+          text-align: center;
+          white-space: normal;
+          overflow-wrap: anywhere;
+        }
+
+        .gallery-submit-placeholder {
+          width: 100%;
+          min-height: 0;
         }
 
         .gallery-strip {
@@ -612,7 +632,7 @@
         <img class="page-hero__seal" src="../assets/img/university-seal.png" alt="" aria-hidden="true" />
         <div class="container page-hero__inner">
           <p class="page-hero__eyebrow"><span class="label-ja">写真・ギャラリー</span><span class="label-en">Gallery</span></p>
-          <h1 class="page-hero__title">FANTASISTAの活動風景</h1>
+          <h1 class="page-hero__title"><span class="title-break-unit">FANTASISTAの</span><wbr><span class="title-break-unit">活動風景</span></h1>
           <p class="page-hero__lead">
             FANTASISTA FESTA の記録写真を、年度ごとに整理して掲載しています。まずは年度別アルバムから、当日の雰囲気やダンスシーン、交流の様子をご覧ください。
           </p>

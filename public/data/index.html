@@ -17,7 +17,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/pages.css" />
+    <link rel="stylesheet" href="../assets/css/pages.css?v=20260809-1" />
     <link rel="stylesheet" href="../assets/css/enhancements.css" /><style>
       .nav-copy {
         display: block;
@@ -2931,7 +2931,7 @@
         <img class="page-hero__seal" src="../assets/img/university-seal.png" alt="" aria-hidden="true" />
         <div class="container page-hero__inner">
           <p class="page-hero__eyebrow"><span class="label-ja">データで見るFANTASISTA</span><span class="label-en">FANTASISTA in Numbers</span></p>
-          <h1 class="page-hero__title">数字で見るFANTASISTA</h1>
+          <h1 class="page-hero__title"><span class="title-break-unit">数字で見る</span><wbr><span class="title-break-unit">FANTASISTA</span></h1>
                     <p class="page-hero__lead">
             登録者数だけでなく、世代の厚み、人数の山、男女・専攻・所属系統のバランスから、
             FANTASISTA会の広がりを数字で読み解きます。
@@ -3891,42 +3891,6 @@
       };
 
       (function () {
-        const toggle = document.querySelector(".menu-toggle");
-        const header = document.querySelector(".site-header, .header");
-        const nav = document.getElementById(toggle ? toggle.getAttribute("aria-controls") : "site-nav");
-
-        if (header && toggle && nav) {
-          function setMenuOpen(open) {
-            header.classList.toggle("is-open", open);
-            document.body.classList.toggle("menu-open", open);
-            toggle.setAttribute("aria-expanded", String(open));
-          }
-
-          toggle.addEventListener("click", function () {
-            const isOpen = toggle.getAttribute("aria-expanded") === "true";
-            setMenuOpen(!isOpen);
-          });
-
-          nav.addEventListener("click", function (event) {
-            const link = event.target.closest("a");
-            if (link) {
-              setMenuOpen(false);
-            }
-          });
-
-          document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") {
-              setMenuOpen(false);
-            }
-          });
-
-          window.addEventListener("resize", function () {
-            if (window.matchMedia("(min-width: 861px)").matches) {
-              setMenuOpen(false);
-            }
-          });
-        }
-
         renderDecadeHeatmap();
         renderRollingChart();
         renderRollingStrip();
@@ -4255,7 +4219,4 @@
     <script src="../assets/js/site.js" defer></script>
   </body>
 </html>
-
-
-
 

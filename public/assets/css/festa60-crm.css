@@ -93,6 +93,10 @@ body.festa60-crm {
   font-size: clamp(2rem, 5vw, 4rem);
 }
 
+.crm-title-line {
+  display: block;
+}
+
 .crm-hero p {
   max-width: 720px;
   margin: 16px 0 0;

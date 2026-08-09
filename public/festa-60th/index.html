@@ -569,6 +569,8 @@
 
         .menu-toggle {
           display: inline-flex;
+          position: relative;
+          z-index: 1002;
           width: 44px;
           height: 44px;
           flex: 0 0 auto;
@@ -699,8 +701,22 @@
           gap: 26px;
         }
 
+        .hero__grid > div:first-child {
+          width: 100%;
+        }
+
         .eyebrow {
           justify-content: center;
+        }
+
+        .hero h1 {
+          font-size: clamp(24px, 7.4vw, 34px);
+          letter-spacing: 0;
+        }
+
+        .hero-title-line {
+          display: block;
+          white-space: nowrap;
         }
 
         .hero h1,
@@ -714,6 +730,11 @@
           margin-right: auto;
         }
 
+        .hero__copy {
+          margin-left: auto;
+          margin-right: auto;
+        }
+
         .hero__facts {
           width: 100%;
           max-width: 420px;
@@ -721,6 +742,7 @@
 
         .cta-row {
           width: 100%;
+          align-items: center;
           justify-content: center;
           gap: 10px;
         }
@@ -2162,7 +2184,7 @@
           <div class="wrap hero__grid">
             <div>
               <p class="eyebrow"><span class="label-ja">開催決定</span><span class="label-en">Save the Date</span></p>
-              <h1>東京理科大学舞踏研究部 60周年記念FESTA</h1>
+              <h1><span class="hero-title-line">東京理科大学舞踏研究部</span><span class="hero-title-line">60周年記念FESTA</span></h1>
               <p class="hero__copy">2027年2月11日、浅草で。60周年を祝う一日をともに。</p>
               <p class="hero__lead">
                 OBOG、現役生、関係者が世代を超えて集い、記念企画、交流、デモンストレーション、トライアル、ダンスタイムを楽しむ特別なFESTAです。
