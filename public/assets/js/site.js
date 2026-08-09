@@ -183,14 +183,36 @@
     });
   }
 
-  function initFestaQuickLink() {
-    if (location.pathname.includes("/festa-60th/")) return;
-    const link = document.createElement("a");
-    link.className = "festa-quick-link";
+  function getFestaSiteUrl() {
+    const isLocalEnvironment = ["127.0.0.1", "localhost"].includes(location.hostname);
     const isReviewEnvironment = location.hostname.includes("fantasista-review-202605-staging.pages.dev");
-    link.href = isReviewEnvironment
+    return isLocalEnvironment || isReviewEnvironment
       ? assetPrefix + "festa-60th/"
       : "https://tus-fantasista-festa60.pages.dev/festa-60th/";
+  }
+
+  function initFestaNavLinks() {
+    if (location.pathname.includes("/festa-60th/") || location.pathname.includes("/festa60-")) return;
+
+    document.querySelectorAll(".site-nav").forEach((nav) => {
+      if (nav.querySelector(".nav-festa60")) return;
+
+      const link = document.createElement("a");
+      link.className = "nav-festa60";
+      link.href = getFestaSiteUrl();
+      link.innerHTML = '<span class="nav-copy"><span class="nav-ja">60周年FESTA</span><span class="nav-en">Special Site</span></span>';
+
+      const contactLink = Array.from(nav.querySelectorAll("a")).find((item) => item.href.includes("/contact/"));
+      if (contactLink) nav.insertBefore(link, contactLink);
+      else nav.appendChild(link);
+    });
+  }
+
+  function initFestaQuickLink() {
+    if (location.pathname.includes("/festa-60th/") || location.pathname.includes("/festa60-")) return;
+    const link = document.createElement("a");
+    link.className = "festa-quick-link";
+    link.href = getFestaSiteUrl();
     link.textContent = "60周年FESTA 特設ページ";
     document.body.appendChild(link);
   }
@@ -428,6 +450,7 @@
     });
   }
 
+  initFestaNavLinks();
   initMobileMenu();
   initTopButton();
   initSmoothScroll();

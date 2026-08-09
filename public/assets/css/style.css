@@ -1348,6 +1348,48 @@ body {
     margin-top: 8px;
   }
 }
+
+/* Keep the home hero actions separated and easy to scan. */
+.hero__actions--home {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(100%, 980px);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.hero__actions--home .button {
+  min-width: 0;
+  width: 100%;
+  padding-inline: 22px;
+}
+
+@media (min-width: 1321px) {
+  .site-header__inner {
+    width: min(1760px, calc(100vw - 48px));
+  }
+
+  .site-nav--desktop {
+    gap: clamp(14px, 1.15vw, 24px);
+  }
+
+  .site-nav--desktop a {
+    font-size: clamp(0.78rem, 0.76vw, 0.96rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero__actions--home {
+    grid-template-columns: 1fr;
+    width: min(100%, 380px);
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .hero__actions--home .button {
+    max-width: none;
+  }
+}
 /* REVIEW_LANDSCAPE_HEADER_END */
 
 /* REVIEW_MOBILE_HEADER_TIGHT_START */
