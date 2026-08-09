@@ -79,6 +79,7 @@ const VERSION_CONFIG = {
 export const FUNDRAISING_CONFIG = {
   primary_target_jpy: 600000,
   final_target_jpy: 1500000,
+  participant_target_count: 120,
   participant_count_public_threshold: 20,
   allocation: { active_support: 2 / 3, festa_enhancement: 1 / 3 },
   fm_dress_estimate_min_jpy: 900000,

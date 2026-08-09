@@ -92,6 +92,7 @@ equal(attendingPlanAmount("gold", "obog_staff", "early", "without_reception", CU
 
 equal(FUNDRAISING_CONFIG.primary_target_jpy, 600000, "first fundraising target");
 equal(FUNDRAISING_CONFIG.final_target_jpy, 1500000, "final fundraising target");
+equal(FUNDRAISING_CONFIG.participant_target_count, 120, "participant target");
 equal(FUNDRAISING_CONFIG.goals.find((goal) => goal.key === "fm_dress")?.amount_jpy, 1350000, "FM dress target is centralized");
 equal(FUNDRAISING_CONFIG.participant_count_public_threshold, 20, "participant count visibility threshold");
 

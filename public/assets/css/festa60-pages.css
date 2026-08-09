@@ -102,9 +102,18 @@ img { max-width: 100%; }
   padding: 30px 0;
 }
 .support-purpose h2 { max-width: 1100px; margin: 6px 0 16px; color: var(--f60-cream); font-size: clamp(1.8rem, 3.6vw, 2.6rem); }
+.support-purpose h2 span { display: block; }
 .support-purpose h3 { color: var(--f60-cream); }
 .support-purpose p { color: var(--f60-muted); }
 .support-purpose__lead { max-width: 960px; margin: 0; color: var(--f60-cream) !important; font-size: clamp(1rem, 2vw, 1.18rem); line-height: 1.95; }
+.support-manifesto { max-width: 1040px; margin-top: 28px; border-left: 4px solid var(--f60-gold); padding: 24px 26px; background: rgba(255, 210, 28, 0.045); }
+.support-manifesto h3 { margin: 0 0 18px; font-size: clamp(1.25rem, 2.4vw, 1.65rem); }
+.support-manifesto p { max-width: 920px; margin: 0; line-height: 1.9; }
+.support-manifesto p + p { margin-top: 14px; }
+.support-movement-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 22px 0; padding: 0; list-style: none; }
+.support-movement-actions li { min-width: 0; border: 1px solid var(--f60-line); padding: 12px 10px; color: var(--f60-cream); font-weight: 800; text-align: center; }
+.support-manifesto__closing strong { color: var(--f60-gold); font-size: clamp(1.05rem, 2vw, 1.3rem); line-height: 1.75; }
+.support-manifesto__invitation { color: var(--f60-cream) !important; font-weight: 800; }
 .support-impact-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 28px; }
 .support-impact-card { min-width: 0; border: 1px solid var(--f60-line); border-radius: 4px; padding: 22px; background: rgba(255, 255, 255, 0.035); }
 .support-impact-card > span { display: block; color: var(--f60-gold); font-family: "Oswald", sans-serif; font-size: 0.76rem; font-weight: 700; }
@@ -283,6 +292,7 @@ img { max-width: 100%; }
   .faq-jump { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .social-links { grid-template-columns: 1fr; }
   .support-impact-grid, .support-use-list { grid-template-columns: 1fr; }
+  .support-movement-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .standard-inclusions ul { grid-template-columns: 1fr; }
   .companion-fees__grid { grid-template-columns: 1fr; }
   .participant-plan-essentials { grid-template-columns: 1fr; }
@@ -296,6 +306,7 @@ img { max-width: 100%; }
   .subpage-hero h1 { font-size: clamp(1.9rem, 9.5vw, 2.3rem); }
   .festa-band { padding: 54px 0; }
   .support-impact-card { padding: 18px; }
+  .support-manifesto { padding: 20px 16px; }
   .support-purpose__use { padding: 18px 16px; }
   .participant-plan-rail { --plan-width: min(78vw, 260px); margin-right: -14px; padding-right: 14px; }
   .participant-plan-scroll-hint { display: block; }

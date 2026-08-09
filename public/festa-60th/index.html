@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/festa60-fundraising.css?v=20260810-1">
+    <link rel="stylesheet" href="../assets/css/festa60-fundraising.css?v=20260810-2">
     <style>
       :root {
         --bg: #070707;
@@ -210,6 +210,10 @@
         font-size: clamp(22px, 3vw, 34px);
         font-weight: 800;
         line-height: 1.35;
+      }
+
+      .hero__copy span {
+        display: block;
       }
 
       .hero__lead {
@@ -2186,15 +2190,14 @@
             <div>
               <p class="eyebrow"><span class="label-ja">開催決定</span><span class="label-en">Save the Date</span></p>
               <h1><span class="hero-title-line">東京理科大学舞踏研究部</span><span class="hero-title-line">60周年記念FESTA</span></h1>
-              <p class="hero__copy">2027年2月11日、浅草で。60周年を祝う一日をともに。</p>
+              <p class="hero__copy"><span>もう一度、集まろう。</span><span>もう一度、歴史を動かそう。</span></p>
               <p class="hero__lead">
-                OBOG、現役生、関係者が世代を超えて集い、記念企画、交流、デモンストレーション、トライアル、ダンスタイムを楽しむ特別なFESTAです。
+                会いたかった仲間との再会が、現役の次の挑戦を動かす。創部60周年を、懐かしむだけで終わらせません。
               </p>
 
               <div class="cta-row">
-                <a class="btn btn--primary" href="../festa60-register/">60周年FESTAに参加申込する</a>
-                <a class="btn btn--ghost" href="./program/">当日の内容を見る</a>
-                <a class="btn btn--ghost" href="./support/">参加費・寄付を見る</a>
+                <a class="btn btn--primary" href="../festa60-register/">60周年FESTAに参加する</a>
+                <a class="btn btn--ghost" href="./support/#support-purpose-title">次の挑戦を応援する</a>
               </div>
             </div>
 
@@ -2609,39 +2612,48 @@
           <div class="wrap">
             <div class="section-head">
               <p class="eyebrow"><span class="label-ja">参加費・寄付・返礼</span><span class="label-en">Fees &amp; Support</span></p>
-              <h2 id="fees-support-heading">この60周年を、次の舞研を動かす力へ。</h2>
-              <p>懐かしい仲間と再会し、世代を超えて踊り、現役の挑戦を応援する。参加と寄付の一つひとつが、FESTAをより豊かにし、舞研のこれからを強くします。</p>
+              <h2 id="fees-support-heading">もう一度、集まろう。<br>もう一度、歴史を動かそう。</h2>
+              <p>会いたかった仲間との再会から生まれる力を、現役の次の挑戦へ。参加すること、仲間を誘うこと、寄付で支えること、当日現役と踊ること。そのすべてが、次のムーブメントをつくります。</p>
             </div>
 
-            <div class="home-support-impact" aria-label="参加と寄付によって生まれる3つの価値">
-              <article><span>YOUR FESTA</span><h3>再会の一日を、もっと記憶に残る時間へ</h3><p>記念展示、写真や映像、プロデモ、トライアル、懇親会。皆さまの参加と応援が、世代を超えて楽しめるFESTAをつくります。</p></article>
-              <article><span>DIRECT SUPPORT</span><h3>応援を、踊った現役本人へ届ける</h3><p>ダンスタイムやトライアルで渡されたチケットは、券面相当額のすべてを、そのチケットで踊った現役本人へ還元します。</p></article>
-              <article><span>NEXT BUKEN</span><h3>現役の挑戦と、舞研の次の10年を支える</h3><p>寄付相当分の約3分の2を現役支援へ。FMドレス更新を最優先に、舞研の未来へつなげます。</p></article>
-            </div>
-
-            <div class="home-support-message">
-              <h3>一人の参加から、OBOG全体のムーブメントへ。</h3>
-              <p>60周年を懐かしむだけでなく、私たち自身の手でFESTAを盛り上げ、次の世代へ渡していく機会です。会場に来ること、仲間を誘うこと、寄付プランを選ぶこと。それぞれの形で、この輪に加わってください。</p>
-            </div>
-
-            <section class="fundraising-summary" data-festa60-public-summary aria-labelledby="home-fundraising-summary-title">
+            <section class="fundraising-summary movement-summary" data-festa60-public-summary aria-labelledby="home-fundraising-summary-title">
               <div class="fundraising-summary__heading">
-                <div><p class="eyebrow">Current Support</p><h3 id="home-fundraising-summary-title">現在の参加・応援状況</h3></div>
+                <div><p class="eyebrow">Our Movement</p><h3 id="home-fundraising-summary-title">現在の参加・応援状況</h3></div>
                 <p data-summary-updated>集計中</p>
               </div>
-              <div class="fundraising-summary__metrics">
-                <p><span>OBOG参加申込</span><strong data-summary-participants>参加申込受付中</strong></p>
-                <p><span>同伴者</span><strong data-summary-companions>0名</strong></p>
-                <p><span>サポーター</span><strong data-summary-supporters>0名</strong></p>
-                <p><span>寄付相当額</span><strong data-summary-donation>0円</strong></p>
+              <div class="movement-summary__grid">
+                <article class="movement-summary__panel movement-summary__panel--reunion">
+                  <p class="movement-summary__label">REUNION</p><h4>再会のムーブメント</h4>
+                  <div class="fundraising-summary__metrics">
+                    <p><span>OBOG参加申込</span><strong data-summary-participants>参加申込受付中</strong></p>
+                    <p><span>ご家族・ご友人の参加</span><strong data-summary-companions>集計中</strong></p>
+                  </div>
+                  <p class="movement-summary__decades" data-summary-decades>参加している卒部年代は、申込が一定数に達してから表示します。</p>
+                  <div class="attendance-progress" role="progressbar" aria-label="OBOG参加目標120名の進捗" aria-valuemin="0" aria-valuemax="120" aria-valuenow="0"><span data-summary-attendance-progress-bar></span></div>
+                  <p class="movement-summary__status" data-summary-attendance-status>参加目標120名／参加申込受付中</p>
+                </article>
+                <article class="movement-summary__panel movement-summary__panel--support">
+                  <p class="movement-summary__label">NEXT CHALLENGE</p><h4>次の挑戦へのムーブメント</h4>
+                  <div class="fundraising-summary__metrics">
+                    <p><span>寄付で応援した方</span><strong data-summary-supporters>0名</strong></p>
+                    <p><span>寄付相当額</span><strong data-summary-donation>0円</strong></p>
+                  </div>
+                  <div class="fundraising-progress" aria-label="寄付目標の進捗">
+                    <div class="fundraising-progress__bar" role="progressbar" aria-label="寄付相当額の進捗" aria-valuemin="0" aria-valuemax="1500000" aria-valuenow="0"><span data-summary-progress-bar></span></div>
+                    <div class="fundraising-progress__milestones" data-summary-milestones aria-hidden="true"></div>
+                    <p data-summary-next-goal>まずは第1目標へ</p>
+                  </div>
+                  <p class="fundraising-summary__plans" data-summary-plan-counts>入金確認済みの寄付プランを集計します。</p>
+                </article>
               </div>
-              <div class="fundraising-progress" aria-label="寄付目標の進捗">
-                <div class="fundraising-progress__bar"><span data-summary-progress-bar></span></div>
-                <div class="fundraising-progress__milestones" data-summary-milestones aria-hidden="true"></div>
-                <p data-summary-next-goal>まずは第1目標へ</p>
-              </div>
-              <p class="fundraising-summary__plans" data-summary-plan-counts>入金確認済みの寄付プランを集計します。</p>
+              <p class="note">ご家族・ご友人は通常の参加者です。「寄付で応援した方」には数えず、その参加料金も寄付相当額に含めません。</p>
             </section>
+
+            <div class="home-movement-story">
+              <p>2017年、FANTASISTAと現役は双方の工夫と負担でFMドレスをつなぎました。その翌年、現役は創部52年目にして初めて、冬の全日本学生競技ダンス選手権大会・フォーメーション部門の舞台に立ちました。</p>
+              <p><strong>50周年でつないだドレスは、52年目の史上初を見届けました。</strong> 60周年の再会を、現役の次の挑戦につなげます。</p>
+              <a href="./support/#support-purpose-title">60周年から始める次の挑戦を読む</a>
+            </div>
 
             <section class="home-early-entry" aria-labelledby="home-early-entry-title">
               <div>
@@ -2668,7 +2680,7 @@
               <article class="home-support-plan"><span>SUPPORT FROM AFAR</span><h3>欠席者向け寄付</h3><strong>5,000円〜</strong><p>当日参加できない方も、現役支援と60周年記念事業に加わることができます。</p><small>スタンダード、アドバンス、プレミアムをご用意しています。</small></article>
             </div>
 
-            <p class="home-support-direct"><strong>参加者向け寄付プランのダンスタイムチケットは、券面相当額をすべて踊った現役本人へ還元します。</strong> 寄付の活用、返礼、割引、同伴者料金などの詳細は、参加費・寄付ページでご確認ください。</p>
+            <p class="home-support-direct"><strong>参加者向け寄付プランのダンスタイムチケットは、券面相当額をすべて踊った現役本人へ還元します。</strong> 寄付の活用、返礼、割引、ご家族・ご友人の参加料金などの詳細は、参加費・寄付ページでご確認ください。</p>
 
             <div class="fee-guide-actions">
               <a class="btn btn--primary" href="../festa60-register/">60周年FESTAに参加申込する</a>
@@ -3022,7 +3034,7 @@
     </div>
     <script src="../assets/js/site.js?v=20260720-1" defer=""></script>
     <script src="../assets/js/photo-library.js?v=20260809-3" defer=""></script>
-    <script type="module" src="../assets/js/festa60-public-summary.js?v=20260810-2"></script>
+    <script type="module" src="../assets/js/festa60-public-summary.js?v=20260810-3"></script>
 
 
 

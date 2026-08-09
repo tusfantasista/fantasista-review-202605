@@ -55,14 +55,71 @@
 .fundraising-progress { margin-top: 26px; }
 .fundraising-progress__bar { height: 16px; overflow: hidden; border: 1px solid rgba(255, 210, 28, .42); background: #080806; }
 .fundraising-progress__bar span { display: block; width: 0; height: 100%; background: #ffd21c; transition: width .5s ease; }
-.fundraising-progress__milestones { position: relative; height: 34px; margin: 6px 0 0; border-top: 1px solid rgba(255, 255, 255, .14); }
+.fundraising-progress__milestones { position: relative; height: 48px; margin: 6px 0 0; border-top: 1px solid rgba(255, 255, 255, .14); }
 .fundraising-progress__milestones span { position: absolute; left: var(--position); top: 5px; translate: -50% 0; color: var(--f60-muted, #c6b995); font-size: .68rem; white-space: nowrap; }
 .fundraising-progress__milestones span::before { content: ""; position: absolute; left: 50%; top: -12px; width: 1px; height: 8px; background: rgba(255, 210, 28, .7); }
+.fundraising-progress__milestones span:nth-child(4) { top: 21px; }
+.fundraising-progress__milestones span:nth-child(4)::before { top: -28px; height: 24px; }
 .fundraising-progress > p { margin: 6px 0 0; color: var(--f60-cream, #fff4d0); font-weight: 800; }
 .fundraising-summary__plans { margin: 16px 0 0; }
 
+.movement-summary__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.movement-summary__panel {
+  min-width: 0;
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid rgba(255, 210, 28, .2);
+  background: rgba(255, 255, 255, .025);
+}
+
+.movement-summary__panel--reunion { border-top: 4px solid #fff4d0; }
+.movement-summary__panel--support { border-top: 4px solid var(--f60-gold, #ffd21c); }
+.movement-summary__panel h4 { margin: 3px 0 0; color: var(--f60-cream, #fff4d0); font-size: clamp(1.05rem, 2vw, 1.35rem); }
+.movement-summary__label { margin: 0; color: var(--f60-gold, #ffd21c); font-size: .7rem; font-weight: 800; letter-spacing: .08em; }
+.movement-summary__panel .fundraising-summary__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 16px; }
+.movement-summary__decades,
+.movement-summary__status,
+.movement-summary__panel .fundraising-summary__plans { color: var(--f60-muted, #c6b995); font-size: .84rem; line-height: 1.7; }
+.movement-summary__decades { min-height: 2.9em; margin: 16px 0 0; }
+.movement-summary__status { margin: 8px 0 0; color: var(--f60-cream, #fff4d0); font-weight: 800; }
+
+.attendance-progress {
+  height: 12px;
+  margin-top: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 244, 208, .36);
+  background: #080806;
+}
+
+.attendance-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #fff4d0;
+  transition: width .5s ease;
+}
+
+.home-movement-story {
+  margin-top: 18px;
+  padding: clamp(18px, 3vw, 26px);
+  border-left: 4px solid var(--f60-gold, #ffd21c);
+  background: rgba(255, 210, 28, .045);
+}
+
+.home-movement-story p { margin: 0; color: var(--f60-muted, #c6b995); line-height: 1.85; }
+.home-movement-story p + p { margin-top: 8px; }
+.home-movement-story strong { color: var(--f60-cream, #fff4d0); }
+.home-movement-story a { display: inline-block; margin-top: 12px; color: var(--f60-gold, #ffd21c); font-weight: 800; }
+
 .fundraising-story p { margin: 14px 0 0; }
 .fundraising-story strong { color: var(--f60-gold, #ffd21c); }
+.fundraising-story__purpose { display: grid; gap: 8px; margin: 18px 0 0; padding-left: 1.25rem; }
+.fundraising-story__purpose li { color: var(--f60-cream, #fff4d0); }
 
 .fundraising-goals__list { grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 0; list-style: none; }
 .fundraising-goals__list li { padding: 16px; border-top: 3px solid var(--f60-gold, #ffd21c); background: rgba(255, 255, 255, .035); }
@@ -109,6 +166,7 @@
 .public-supporter-list span { color: var(--f60-muted, #d2c9ad); font-size: 0.88rem; }
 
 @media (max-width: 820px) {
+  .movement-summary__grid { grid-template-columns: 1fr; }
   .fundraising-summary__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .fundraising-goals__list { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
   .fundraising-goals__list li { flex: 0 0 min(78vw, 270px); scroll-snap-align: start; }
@@ -118,6 +176,7 @@
   .public-supporter-list { grid-template-columns: 1fr; }
   .fundraising-summary__heading { grid-template-columns: 1fr; }
   .fundraising-summary__metrics,
+  .movement-summary__panel .fundraising-summary__metrics,
   .festa-enhancement__compare { grid-template-columns: 1fr; }
   .supporter-recognition__tiers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .fundraising-progress__milestones span { font-size: .6rem; }

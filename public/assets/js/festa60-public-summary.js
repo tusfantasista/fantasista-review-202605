@@ -50,6 +50,9 @@ function renderSummary(root, summary) {
   if (absentPlans.some(([, value]) => Number(value) > 0)) {
     parts.push(`欠席者向け ${absentPlans.map(([label, value]) => `${label}${formatNumber(value)}名`).join("・")}`);
   }
+  if (Number(planCounts.additional_donation) > 0) {
+    parts.push(`追加寄付 ${formatNumber(planCounts.additional_donation)}名`);
+  }
 
   setText(root, "[data-summary-participants]", participantText);
   setText(root, "[data-summary-companions]", summary.participant_count_visible ? `${formatNumber(summary.companion_count)}名` : "集計中");
@@ -57,6 +60,7 @@ function renderSummary(root, summary) {
   setText(root, "[data-summary-donation]", formatCurrency(summary.donation_equivalent_jpy));
   setText(root, "[data-summary-plan-counts]", parts.length ? parts.join(" / ") : "寄付プランのお申し込みを受付中です。");
   setText(root, "[data-summary-updated]", summary.last_updated_at ? `${formatDate(summary.last_updated_at)}更新` : "受付開始");
+  renderAttendanceProgress(root, summary);
   renderSupporterList(root, summary.supporters || []);
 
   const current = Math.max(0, Number(summary.donation_equivalent_jpy || 0));
@@ -65,12 +69,39 @@ function renderSummary(root, summary) {
   const scaleMax = Number(goals.at(-1)?.amount_jpy || FUNDRAISING_CONFIG.goals.at(-1).amount_jpy);
   const remaining = Math.max(0, primary - current);
   const progressBar = root.querySelector("[data-summary-progress-bar]");
-  if (progressBar) progressBar.style.width = `${Math.min(100, current / scaleMax * 100)}%`;
+  if (progressBar) {
+    progressBar.style.width = `${Math.min(100, current / scaleMax * 100)}%`;
+    const progress = progressBar.parentElement;
+    progress?.setAttribute("aria-valuemax", String(FUNDRAISING_CONFIG.final_target_jpy));
+    progress?.setAttribute("aria-valuenow", String(Math.min(current, FUNDRAISING_CONFIG.final_target_jpy)));
+  }
   renderMilestones(root, goals);
   setText(root, "[data-summary-next-goal]", current < primary
     ? `まずは${goals[0]?.label || "第1目標"}${formatCompactCurrency(primary)}まで、あと${formatCurrency(remaining)}`
     : nextGoalText(current, goals));
   root.dataset.summaryState = "ready";
+}
+
+function renderAttendanceProgress(root, summary) {
+  const isVisible = Boolean(summary.participant_count_visible);
+  const current = Math.max(0, Number(summary.obog_participant_count || 0));
+  const target = Math.max(1, Number(summary.participant_target_count || FUNDRAISING_CONFIG.participant_target_count));
+  const threshold = Math.max(0, Number(summary.participant_count_threshold || FUNDRAISING_CONFIG.participant_count_public_threshold));
+  const remaining = Math.max(0, Number(summary.participant_target_remaining_count ?? target - current));
+  const decades = Array.isArray(summary.participating_decades) ? summary.participating_decades : [];
+  const bar = root.querySelector("[data-summary-attendance-progress-bar]");
+  if (bar) {
+    bar.style.width = `${isVisible ? Math.min(100, current / target * 100) : 0}%`;
+    const progress = bar.parentElement;
+    progress?.setAttribute("aria-valuemax", String(target));
+    progress?.setAttribute("aria-valuenow", String(isVisible ? Math.min(current, target) : 0));
+  }
+  setText(root, "[data-summary-decades]", isVisible && decades.length
+    ? `参加している卒部年代：${decades.join("・")}`
+    : `参加申込が${formatNumber(threshold)}名以上になった時点で、卒部年代の広がりを表示します。`);
+  setText(root, "[data-summary-attendance-status]", isVisible
+    ? `参加目標${formatNumber(target)}名まで、あと${formatNumber(remaining)}名`
+    : `参加目標${formatNumber(target)}名／現在は参加申込受付中`);
 }
 
 function renderMilestones(root, goals) {
@@ -102,7 +133,8 @@ function renderSupporterList(root, supporters) {
     bronze: "ブロンズ",
     absent_donation_30000: "プレミアム（欠席者向け）",
     absent_donation_10000: "アドバンス（欠席者向け）",
-    absent_donation_5000: "スタンダード（欠席者向け）"
+    absent_donation_5000: "スタンダード（欠席者向け）",
+    additional_donation: "追加寄付"
   };
   list.innerHTML = Object.keys(planLabels).map((plan) => {
     const entries = supporters.filter((supporter) => supporter.plan === plan);

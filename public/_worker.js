@@ -3346,7 +3346,14 @@ async function getPublicFundraisingSummary(db, env) {
   const rows = await db.prepare(
     `SELECT
         a.ticket_type,
+        a.graduation_year,
         COALESCE(a.companion_count, 0) AS companion_count,
+        COALESCE((
+          SELECT SUM(pli.amount_jpy)
+            FROM payment_line_items pli
+           WHERE pli.application_id = a.id
+             AND pli.item_type = 'additional_donation'
+        ), 0) AS additional_donation_jpy,
         COALESCE(
           a.donation_equivalent_jpy,
           CASE
@@ -3387,16 +3394,6 @@ async function getPublicFundraisingSummary(db, env) {
         AND a.refunded_at IS NULL
         AND COALESCE(a.status, '') NOT IN ('cancelled', 'refunded')`
   ).all();
-  const additionalDonation = await db.prepare(
-    `SELECT COALESCE(SUM(pli.amount_jpy), 0) AS amount_jpy
-       FROM payment_line_items pli
-       JOIN applications a ON a.id = pli.application_id
-      WHERE pli.item_type = 'additional_donation'
-        AND a.payment_status = 'paid'
-        AND a.cancelled_at IS NULL
-        AND a.refunded_at IS NULL
-        AND COALESCE(a.status, '') NOT IN ('cancelled', 'refunded')`
-  ).first();
   const paidRows = rows.results || [];
   const planCounts = {
     platinum: 0,
@@ -3405,14 +3402,16 @@ async function getPublicFundraisingSummary(db, env) {
     bronze: 0,
     absent_donation_30000: 0,
     absent_donation_10000: 0,
-    absent_donation_5000: 0
+    absent_donation_5000: 0,
+    additional_donation: 0
   };
   let obogParticipants = 0;
   let companionCount = 0;
   let supporterCount = 0;
-  let donationEquivalentJpy = Number(additionalDonation?.amount_jpy || 0);
+  let donationEquivalentJpy = 0;
   let lastUpdatedAt = null;
   const supporters = [];
+  const participatingDecades = new Set();
   for (const row of paidRows) {
     const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(row.ticket_type);
     const isAbsentDonation = ABSENT_DONATION_TICKET_TYPES.includes(baseTicketType);
@@ -3421,16 +3420,23 @@ async function getPublicFundraisingSummary(db, env) {
     if (isObogParticipant) {
       obogParticipants += 1;
       companionCount += Number(row.companion_count || 0);
+      const graduationYear = Number(row.graduation_year || 0);
+      if (Number.isInteger(graduationYear) && graduationYear >= 1900) {
+        participatingDecades.add(`${Math.floor(graduationYear / 10) * 10}年代`);
+      }
     }
-    if (Object.hasOwn(planCounts, planKey)) {
+    const additionalDonationJpy = Number(row.additional_donation_jpy || 0);
+    const hasPlanSupport = Object.hasOwn(planCounts, planKey) && planKey !== 'additional_donation';
+    if (hasPlanSupport) {
       planCounts[planKey] += 1;
-      supporterCount += 1;
     }
-    donationEquivalentJpy += Number(row.donation_equivalent_jpy || 0);
+    if (additionalDonationJpy > 0) planCounts.additional_donation += 1;
+    if (hasPlanSupport || additionalDonationJpy > 0) supporterCount += 1;
+    donationEquivalentJpy += Number(row.donation_equivalent_jpy || 0) + additionalDonationJpy;
     if (!lastUpdatedAt || String(row.updated_at || '') > lastUpdatedAt) lastUpdatedAt = row.updated_at || lastUpdatedAt;
-    if (row.public_supporter_name && Object.hasOwn(planCounts, planKey)) {
+    if (row.public_supporter_name && (hasPlanSupport || additionalDonationJpy > 0)) {
       supporters.push({
-        plan: planKey,
+        plan: hasPlanSupport ? planKey : 'additional_donation',
         display_name: row.public_supporter_name,
         message: row.public_supporter_message || null
       });
@@ -3441,11 +3447,16 @@ async function getPublicFundraisingSummary(db, env) {
     ? configuredThreshold
     : FUNDRAISING_CONFIG.participant_count_public_threshold;
   const primaryTarget = FUNDRAISING_CONFIG.primary_target_jpy;
+  const participantTarget = FUNDRAISING_CONFIG.participant_target_count;
+  const participantCountVisible = obogParticipants >= participantThreshold;
   return {
-    participant_count_visible: obogParticipants >= participantThreshold,
+    participant_count_visible: participantCountVisible,
     participant_count_threshold: participantThreshold,
-    obog_participant_count: obogParticipants >= participantThreshold ? obogParticipants : null,
-    companion_count: obogParticipants >= participantThreshold ? companionCount : null,
+    participant_target_count: participantTarget,
+    participant_target_remaining_count: participantCountVisible ? Math.max(0, participantTarget - obogParticipants) : null,
+    obog_participant_count: participantCountVisible ? obogParticipants : null,
+    companion_count: participantCountVisible ? companionCount : null,
+    participating_decades: participantCountVisible ? [...participatingDecades].sort() : [],
     supporter_count: supporterCount,
     plan_counts: planCounts,
     donation_equivalent_jpy: donationEquivalentJpy,
