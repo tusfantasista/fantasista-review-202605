@@ -198,6 +198,26 @@
     return result;
   }
 
+  async function patchJson(url, payload) {
+    const response = await fetch(url, {
+      method: "PATCH",
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json().catch(() => null);
+    if (!response.ok || !result?.ok) {
+      const error = new Error(result?.message || result?.error || `HTTP ${response.status}`);
+      error.status = response.status;
+      throw error;
+    }
+    return result;
+  }
+
   async function loadApplications() {
     elements.refreshButton.disabled = true;
     elements.message.hidden = false;
@@ -455,6 +475,15 @@
     return `https://dashboard.stripe.com/${prefix}payments/${encodeURIComponent(paymentIntentId)}`;
   }
 
+  function canAdjustBankTransferAmount(application) {
+    const paymentMethod = application.latest_payment_method || application.payment_method;
+    return String(application.ticket_type || "").startsWith("obog_staff")
+      && effectivePaymentStatus(application) === "unpaid"
+      && Number(application.amount_received_jpy || 0) === 0
+      && Boolean(application.stripe_payment_intent_id)
+      && ["bank_transfer", "customer_balance"].includes(paymentMethod);
+  }
+
   function openApplicationDetail(applicationId) {
     const application = state.applications.find((item) => item.id === applicationId);
     if (!application) return;
@@ -530,8 +559,54 @@
         ${stripeUrl ? `<a class="admin-button admin-button--primary" href="${escapeHtml(stripeUrl)}" target="_blank" rel="noopener noreferrer">Stripe決済詳細を開く</a>` : ""}
         <button class="admin-button" type="button" data-copy-value="${escapeHtml(application.application_code)}">受付番号をコピー</button>
         <a class="admin-button" href="mailto:${escapeHtml(application.email || "")}">メールを作成</a>
-      </div>`;
+      </div>
+      ${canAdjustBankTransferAmount(application) ? `
+        <section class="admin-amount-adjustment" aria-labelledby="amount-adjustment-title">
+          <h3 id="amount-adjustment-title">未入金の銀行振込額を訂正</h3>
+          <p>Stripeへの着金がない役員・当日お手伝い申込だけが対象です。入力額はサーバー側の料金計算と一致する場合に限り反映されます。</p>
+          <div class="admin-amount-adjustment__controls">
+            <label>訂正後の支払予定額
+              <input type="number" min="1" step="1" value="${escapeHtml(expectedAmount(application))}" data-adjusted-amount-input="${escapeHtml(application.id)}" />
+            </label>
+            <button class="admin-button admin-button--primary" type="button" data-adjust-bank-amount="${escapeHtml(application.id)}">金額を確認して訂正</button>
+          </div>
+          <p class="admin-amount-adjustment__message" data-adjust-bank-message="${escapeHtml(application.id)}" role="status" aria-live="polite"></p>
+        </section>` : ""}`;
     elements.dialog.showModal();
+  }
+
+  async function adjustBankTransferAmount(applicationId, button) {
+    const application = state.applications.find((item) => item.id === applicationId);
+    const input = elements.dialogContent.querySelector(`[data-adjusted-amount-input="${CSS.escape(applicationId)}"]`);
+    const message = elements.dialogContent.querySelector(`[data-adjust-bank-message="${CSS.escape(applicationId)}"]`);
+    const expectedAmountJpy = Number(input?.value);
+    if (!application || !Number.isSafeInteger(expectedAmountJpy) || expectedAmountJpy <= 0) {
+      if (message) message.textContent = "訂正後の金額を正しく入力してください。";
+      return;
+    }
+
+    button.disabled = true;
+    if (input) input.disabled = true;
+    if (message) message.textContent = "Stripeの着金状況と料金計算を確認しています。";
+    try {
+      const result = await patchJson(`${API_URL}/${encodeURIComponent(application.application_code)}`, {
+        action: "adjust_unfunded_bank_transfer_amount",
+        expected_amount_jpy: expectedAmountJpy,
+        confirm_application_code: application.application_code,
+        sendEmail: true
+      });
+      if (message) {
+        const emailStatus = result.email_delivery?.sent ? "訂正メールも送信しました。" : "訂正メールは送信結果を確認してください。";
+        message.textContent = `${formatYen(result.previous_amount_jpy)}から${formatYen(result.adjusted_amount_jpy)}へ訂正しました。${emailStatus}`;
+      }
+      elements.dialog.close();
+      await loadApplications();
+      openApplicationDetail(application.id);
+    } catch (error) {
+      if (message) message.textContent = `訂正できませんでした: ${error.message}`;
+      button.disabled = false;
+      if (input) input.disabled = false;
+    }
   }
 
   function bindEvents() {
@@ -565,6 +640,11 @@
       if (button) openApplicationDetail(button.dataset.applicationId);
     });
     elements.dialogContent.addEventListener("click", async (event) => {
+      const adjustmentButton = event.target.closest("[data-adjust-bank-amount]");
+      if (adjustmentButton) {
+        await adjustBankTransferAmount(adjustmentButton.dataset.adjustBankAmount, adjustmentButton);
+        return;
+      }
       const button = event.target.closest("[data-copy-value]");
       if (!button) return;
       await navigator.clipboard.writeText(button.dataset.copyValue);

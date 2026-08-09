@@ -586,6 +586,43 @@ select:focus-visible {
   text-align: center;
 }
 
+.admin-amount-adjustment {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #d5a000;
+  border-radius: 6px;
+  background: #fff9df;
+}
+
+.admin-amount-adjustment h3,
+.admin-amount-adjustment p { margin: 0; }
+.admin-amount-adjustment p { margin-top: 8px; color: var(--admin-muted); }
+
+.admin-amount-adjustment__controls {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.admin-amount-adjustment__controls label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.admin-amount-adjustment__controls input {
+  width: 180px;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid var(--admin-line);
+  border-radius: 5px;
+  font: inherit;
+}
+
+.admin-amount-adjustment__message { min-height: 1.5em; font-weight: 700; }
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -664,6 +701,8 @@ select:focus-visible {
   .admin-detail-grid { grid-template-columns: 1fr; }
   .admin-detail-list { grid-template-columns: 94px minmax(0, 1fr); }
   .admin-bank-alert { grid-template-columns: 1fr; }
+  .admin-amount-adjustment__controls { align-items: stretch; flex-direction: column; }
+  .admin-amount-adjustment__controls input { width: 100%; }
 }
 
 @media (max-width: 430px) {
