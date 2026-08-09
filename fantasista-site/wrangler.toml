@@ -5,3 +5,4 @@ compatibility_date = "2026-08-02"
 [vars]
 ENVIRONMENT = "production"
 CONTACT_EMAIL = "tus.festa.office@gmail.com"
+CONTACT_EMAIL_SENDER_NAME = "東京理科大学舞研OBOG会 FANTASISTA"

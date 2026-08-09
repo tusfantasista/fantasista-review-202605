@@ -233,7 +233,7 @@
       privacy_consent: "個人情報の取り扱いへの同意",
     };
 
-    const hiddenFields = new Set(["form-name", "website", "form_started_at"]);
+    const hiddenFields = new Set(["form-name", "website", "form_started_at", "submission_id"]);
 
     function getFieldValue(form, name) {
       const fields = Array.from(form.elements).filter((field) => field.name === name);
@@ -326,6 +326,12 @@
     forms.forEach((form) => {
       const startedAt = form.querySelector("[name='form_started_at']");
       if (startedAt) startedAt.value = String(Date.now());
+      const submissionId = form.querySelector("[name='submission_id']");
+      if (submissionId) {
+        submissionId.value = crypto.randomUUID
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      }
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();

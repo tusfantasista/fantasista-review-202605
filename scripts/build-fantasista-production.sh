@@ -23,6 +23,9 @@ cp "$root_dir/production/fantasista-404.html" "$output_dir/404.html"
 cp "$root_dir/production/fantasista-robots.txt" "$output_dir/robots.txt"
 cp "$root_dir/production/fantasista-sitemap.xml" "$output_dir/sitemap.xml"
 cp "$root_dir/production/fantasista-headers.txt" "$output_dir/_headers"
+cp "$root_dir/production/fantasista-worker.js" "$output_dir/_worker.js"
+cp "$root_dir/production/fantasista-routes.json" "$output_dir/_routes.json"
+cp "$source_dir/contact-api.js" "$output_dir/contact-api.js"
 
 # Internal review-phase labels are not part of the public production artifact.
 find "$output_dir" -type f \( -name "*.html" -o -name "*.css" -o -name "*.js" \) \

@@ -20,6 +20,11 @@ Set these as encrypted Pages secrets. Never commit their values.
 - `EMAIL_WEBHOOK_URL`: mail delivery endpoint
 - `EMAIL_API_TOKEN`: token used by the mail delivery endpoint
 
+The `tus-fantasista` Pages project also requires `EMAIL_WEBHOOK_URL` and
+`EMAIL_API_TOKEN` so `/api/contact` can deliver website inquiries directly to
+`tus.festa.office@gmail.com`. Use the same approved FESTA office delivery
+endpoint; do not commit either value to Git.
+
 The Stripe production webhook URL is:
 
 `https://tus-fantasista-festa60.pages.dev/api/festa60/stripe/webhook`

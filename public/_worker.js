@@ -1,3 +1,4 @@
+import { handleContactRequest } from "./contact-api.js";
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
@@ -3927,6 +3928,14 @@ var cloneResponse = /* @__PURE__ */ __name((response) => (
     response
   )
 ), "cloneResponse");
+var fantasista_worker_default = {
+  async fetch(request, env, workerContext) {
+    if (new URL(request.url).pathname === "/api/contact") {
+      return handleContactRequest(request, env);
+    }
+    return pages_template_worker_default.fetch(request, env, workerContext);
+  }
+};
 export {
-  pages_template_worker_default as default
+  fantasista_worker_default as default
 };
