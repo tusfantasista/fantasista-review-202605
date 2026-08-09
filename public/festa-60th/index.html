@@ -1576,6 +1576,98 @@
         line-height: 1.9;
       }
 
+      .home-early-entry {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 28px;
+        align-items: center;
+        margin: 32px 0 0;
+        border-block: 1px solid rgba(255, 210, 28, 0.3);
+        padding: 26px 0;
+      }
+
+      .home-early-entry__label {
+        color: var(--gold);
+        font-family: "Oswald", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .home-early-entry h3 {
+        margin: 8px 0 10px;
+        color: #fff3ca;
+        font-size: clamp(1.35rem, 3vw, 2rem);
+        line-height: 1.45;
+      }
+
+      .home-early-entry h3 strong {
+        color: var(--gold);
+        font-size: 1.18em;
+      }
+
+      .home-early-entry p:last-child {
+        max-width: 820px;
+        color: var(--muted);
+        line-height: 1.85;
+      }
+
+      .home-discount-details {
+        margin: 0 0 32px;
+        border-bottom: 1px solid rgba(255, 210, 28, 0.22);
+        padding: 0 0 22px;
+      }
+
+      .home-discount-details summary {
+        cursor: pointer;
+        padding: 18px 0;
+        color: #fff3ca;
+        font-weight: 800;
+      }
+
+      .home-discount-details summary::marker {
+        color: var(--gold);
+      }
+
+      .home-discount-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin: 0;
+      }
+
+      .home-discount-grid > div {
+        min-width: 0;
+        border-left: 3px solid var(--gold);
+        padding: 4px 14px;
+      }
+
+      .home-discount-grid dt {
+        color: #fff3ca;
+        font-weight: 800;
+        line-height: 1.6;
+      }
+
+      .home-discount-grid dd {
+        margin: 8px 0 0;
+        color: var(--gold);
+        font-size: 1.2rem;
+        font-weight: 800;
+      }
+
+      .home-discount-grid small {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 500;
+      }
+
+      .home-discount-details > p {
+        margin-top: 18px;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
       .home-support-plans {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1812,12 +1904,22 @@
         .stripe-payment-grid,
         .fee-summary-grid,
         .home-support-impact,
-        .home-support-plans {
+        .home-support-plans,
+        .home-discount-grid {
           grid-template-columns: 1fr;
         }
 
         .home-support-message {
           padding: 20px 18px;
+        }
+
+        .home-early-entry {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+
+        .home-early-entry .btn {
+          width: 100%;
         }
 
         .crm-form-block {
@@ -2444,6 +2546,25 @@
               <h3>一人の参加から、OBOG全体のムーブメントへ。</h3>
               <p>60周年を懐かしむだけでなく、私たち自身の手でFESTAを盛り上げ、次の世代へ渡していく機会です。会場に来ること、仲間を誘うこと、寄付プランを選ぶこと。それぞれの形で、この輪に加わってください。</p>
             </div>
+
+            <section class="home-early-entry" aria-labelledby="home-early-entry-title">
+              <div>
+                <p class="home-early-entry__label">EARLY ENTRY / 9月30日まで</p>
+                <h3 id="home-early-entry-title">若手OBOGは、今なら通常参加<strong>9,000円</strong>から。</h3>
+                <p>2021〜2025年度卒部（OBOG1〜5年目）の方は、早期申込2,000円と卒部年次4,000円の合計6,000円引き。参加者向け寄付プランにも、同じ割引を適用します。</p>
+              </div>
+              <a class="btn btn--primary" href="../festa60-register/">割引額を確認して申し込む</a>
+            </section>
+
+            <details class="home-discount-details">
+              <summary>9月30日までの早期申込・卒部年次割引を見る</summary>
+              <dl class="home-discount-grid">
+                <div><dt>卒部1〜5年目<small>OBOG1〜5年目／2021〜2025年度</small></dt><dd>6,000円引き<small>通常参加 15,000円 → 9,000円</small></dd></div>
+                <div><dt>卒部6〜10年目<small>OBOG6〜10年目／2016〜2020年度</small></dt><dd>4,000円引き<small>通常参加 15,000円 → 11,000円</small></dd></div>
+                <div><dt>卒部11年目以上<small>OBOG11年目以上／2015年度以前</small></dt><dd>2,000円引き<small>通常参加 15,000円 → 13,000円</small></dd></div>
+              </dl>
+              <p>割引額は通常参加からプラチナまで共通です。懇親会へ参加しない場合は、割引後の金額からさらに2,000円を控除します。卒部年次は2026年4月1日時点を基準とします。</p>
+            </details>
 
             <div class="home-support-plans" aria-label="参加と寄付の選択肢">
               <article class="home-support-plan"><span>STANDARD ENTRY</span><h3>通常参加</h3><strong>15,000円</strong><p>第一部と、2時間のビュッフェ・飲み放題を予定する第二部懇親会を含みます。</p><small>早期申込・卒部年次による割引、懇親会不参加時の控除があります。</small></article>
