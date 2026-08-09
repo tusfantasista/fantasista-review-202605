@@ -101,7 +101,7 @@ img { max-width: 100%; }
   border-block: 1px solid rgba(214, 177, 91, 0.35);
   padding: 30px 0;
 }
-.support-purpose h2 { max-width: 900px; margin: 6px 0 16px; color: var(--f60-cream); font-size: clamp(1.8rem, 4vw, 3rem); }
+.support-purpose h2 { max-width: 1100px; margin: 6px 0 16px; color: var(--f60-cream); font-size: clamp(1.8rem, 3.6vw, 2.6rem); }
 .support-purpose h3 { color: var(--f60-cream); }
 .support-purpose p { color: var(--f60-muted); }
 .support-purpose__lead { max-width: 960px; margin: 0; color: var(--f60-cream) !important; font-size: clamp(1rem, 2vw, 1.18rem); line-height: 1.95; }

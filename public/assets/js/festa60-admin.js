@@ -65,6 +65,8 @@
     expectedTotal: document.querySelector("#metric-expected-total"),
     receivedTotal: document.querySelector("#metric-received-total"),
     collectionRate: document.querySelector("#metric-collection-rate"),
+    donationEquivalent: document.querySelector("#metric-donation-equivalent"),
+    supporters: document.querySelector("#metric-supporters"),
     bankAlerts: document.querySelector("#metric-bank-alerts")
   };
 
@@ -298,6 +300,9 @@
     metricElements.expectedTotal.textContent = formatYen(expectedTotal);
     metricElements.receivedTotal.textContent = formatYen(receivedTotal);
     metricElements.collectionRate.textContent = `入金率 ${collectionRate}%`;
+    const paidSupporters = paid.filter((item) => Number(item.donation_equivalent_jpy || 0) > 0);
+    metricElements.donationEquivalent.textContent = formatYen(paidSupporters.reduce((sum, item) => sum + Number(item.donation_equivalent_jpy || 0), 0));
+    metricElements.supporters.textContent = `${paidSupporters.length}名`;
     metricElements.bankAlerts.textContent = `${state.bankTransferAlerts.length}件`;
 
     renderBarChart(elements.paymentChart, [
@@ -597,12 +602,26 @@
           <dl class="admin-detail-list">
             ${detailRow("受付番号", application.application_code)}
             ${detailRow("プラン", planLabel(application.ticket_type))}
+            ${detailRow("寄付相当額", formatYen(application.donation_equivalent_jpy))}
+            ${detailRow("料金ルール", application.pricing_version || "旧料金・未記録")}
             ${detailRow("申込時期", feePeriodLabels[application.fee_period] || application.fee_period)}
             ${detailRow("参加人数", `${Number(application.quantity || 1)}名`)}
             ${detailRow("同伴者", `${Number(application.companion_count || 0)}名`)}
             ${detailRow("同伴者の懇親会", application.companion_summary || "-")}
             ${detailRow("懇親会", application.reception_attendance === "attending" ? "参加" : "不参加")}
             ${detailRow("申込日時", formatDateTime(application.created_at))}
+          </dl>
+        </section>
+        <section class="admin-detail-section">
+          <h3>サポーター掲載・当日表示</h3>
+          <dl class="admin-detail-list">
+            ${detailRow("氏名掲載への同意", Number(application.supporter_publication_consent) === 1 ? "同意" : "非掲載")}
+            ${detailRow("掲載名", application.supporter_publication_name)}
+            ${detailRow("旧姓併記", Number(application.supporter_include_maiden_name) === 1 ? "希望" : "希望なし")}
+            ${detailRow("夫妻・連名等", application.supporter_joint_name)}
+            ${detailRow("匿名希望", Number(application.supporter_anonymous) === 1 ? "匿名" : "実名掲載")}
+            ${detailRow("当日表示", application.supporter_badge_preference === "decline" ? "辞退" : "希望")}
+            ${detailRow("応援メッセージ", application.supporter_message)}
           </dl>
         </section>
         <section class="admin-detail-section">
@@ -639,6 +658,27 @@
         <button class="admin-button" type="button" data-copy-value="${escapeHtml(application.application_code)}">受付番号をコピー</button>
         <a class="admin-button" href="mailto:${escapeHtml(application.email || "")}">メールを作成</a>
       </div>
+      ${Number(application.donation_equivalent_jpy || 0) > 0 ? `
+        <section class="admin-amount-adjustment" aria-labelledby="supporter-publication-title">
+          <h3 id="supporter-publication-title">寄付者名掲載・当日表示を更新</h3>
+          <p>既存申込は初期状態では非掲載です。申込者の明示的な希望を確認した場合だけ更新してください。</p>
+          <div class="admin-amount-adjustment__controls admin-supporter-editor" data-supporter-editor="${escapeHtml(application.id)}">
+            <label><input type="checkbox" data-supporter-field="supporter_publication_consent" ${Number(application.supporter_publication_consent) === 1 ? "checked" : ""}> 公式サイト・記念パンフレットへの掲載に同意</label>
+            <label>掲載名<input type="text" maxlength="100" value="${escapeHtml(application.supporter_publication_name || application.full_name || "")}" data-supporter-field="supporter_publication_name"></label>
+            <label><input type="checkbox" data-supporter-field="supporter_include_maiden_name" ${Number(application.supporter_include_maiden_name) === 1 ? "checked" : ""}> 旧姓を併記</label>
+            <label>夫妻・連名等<input type="text" maxlength="100" value="${escapeHtml(application.supporter_joint_name || "")}" data-supporter-field="supporter_joint_name"></label>
+            <label><input type="checkbox" data-supporter-field="supporter_anonymous" ${Number(application.supporter_anonymous) !== 0 ? "checked" : ""}> 匿名希望</label>
+            <label>当日のサポーター表示
+              <select data-supporter-field="supporter_badge_preference">
+                <option value="display" ${application.supporter_badge_preference === "display" ? "selected" : ""}>希望</option>
+                <option value="decline" ${application.supporter_badge_preference !== "display" ? "selected" : ""}>辞退</option>
+              </select>
+            </label>
+            ${String(application.ticket_type || "").includes("__platinum") ? `<label>応援メッセージ（50字以内）<textarea maxlength="50" data-supporter-field="supporter_message">${escapeHtml(application.supporter_message || "")}</textarea></label>` : ""}
+            <button class="admin-button admin-button--primary" type="button" data-save-supporter-publication="${escapeHtml(application.id)}">掲載設定を保存</button>
+          </div>
+          <p class="admin-amount-adjustment__message" data-supporter-message="${escapeHtml(application.id)}" role="status" aria-live="polite"></p>
+        </section>` : ""}
       ${canAdjustBankTransferAmount(application) ? `
         <section class="admin-amount-adjustment" aria-labelledby="amount-adjustment-title">
           <h3 id="amount-adjustment-title">未入金の銀行振込額を訂正</h3>
@@ -722,6 +762,38 @@
     }
   }
 
+  async function saveSupporterPublication(applicationId, button) {
+    const editor = elements.dialogContent.querySelector(`[data-supporter-editor="${CSS.escape(applicationId)}"]`);
+    const message = elements.dialogContent.querySelector(`[data-supporter-message="${CSS.escape(applicationId)}"]`);
+    if (!editor) return;
+    const field = (name) => editor.querySelector(`[data-supporter-field="${name}"]`);
+    const payload = {
+      action: "update_supporter_publication",
+      supporter_publication_consent: Boolean(field("supporter_publication_consent")?.checked),
+      supporter_publication_name: field("supporter_publication_name")?.value.trim() || "",
+      supporter_include_maiden_name: Boolean(field("supporter_include_maiden_name")?.checked),
+      supporter_joint_name: field("supporter_joint_name")?.value.trim() || "",
+      supporter_anonymous: Boolean(field("supporter_anonymous")?.checked),
+      supporter_badge_preference: field("supporter_badge_preference")?.value || "decline",
+      supporter_message: field("supporter_message")?.value.trim() || ""
+    };
+    if (payload.supporter_publication_consent && !payload.supporter_anonymous && !payload.supporter_publication_name && !payload.supporter_joint_name) {
+      if (message) message.textContent = "実名掲載する場合は掲載名または連名表記を入力してください。";
+      return;
+    }
+    button.disabled = true;
+    if (message) message.textContent = "掲載設定を保存しています。";
+    try {
+      await patchJson(`${API_URL}/${encodeURIComponent(applicationId)}`, payload);
+      if (message) message.textContent = "掲載設定を保存しました。";
+      await loadApplications();
+      openApplicationDetail(applicationId);
+    } catch (error) {
+      if (message) message.textContent = `保存できませんでした: ${error.message}`;
+      button.disabled = false;
+    }
+  }
+
   function bindEvents() {
     elements.searchInput.addEventListener("input", (event) => {
       state.filters.search = event.target.value;
@@ -753,6 +825,11 @@
       if (button) openApplicationDetail(button.dataset.applicationId);
     });
     elements.dialogContent.addEventListener("click", async (event) => {
+      const supporterButton = event.target.closest("[data-save-supporter-publication]");
+      if (supporterButton) {
+        await saveSupporterPublication(supporterButton.dataset.saveSupporterPublication, supporterButton);
+        return;
+      }
       const refreshButton = event.target.closest("[data-refresh-bank-instructions]");
       if (refreshButton) {
         await refreshBankTransferInstructions(refreshButton.dataset.refreshBankInstructions, refreshButton);

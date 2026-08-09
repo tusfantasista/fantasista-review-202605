@@ -41,7 +41,9 @@ Subscribe it to:
 
 In Stripe Dashboard, enable cards and bank transfer for the account. Apple Pay and Google Pay are displayed by Stripe Checkout only when the device, browser, wallet, and card are eligible. The staff menu is available only at `/festa60-register/?staff=1`; never add a public navigation link or commit its access code.
 
-Before deploying code that enables the hardened bank-transfer flow, apply `migrations/20260808_harden_bank_transfer_flow.sql` to the production D1 database. Confirm the same migration and flow in staging first. See `docs/FESTA60_REGISTRATION_PAYMENT_DESIGN.md` for the state model, email timing, and incident handling.
+Before deploying code that enables the hardened bank-transfer flow, apply `migrations/20260808_harden_bank_transfer_flow.sql` to the production D1 database. Before deploying the versioned pricing and supporter-publication update, also apply `migrations/20260810_add_pricing_supporter_publication.sql`. Confirm both migrations and flows in staging first. See `docs/FESTA60_REGISTRATION_PAYMENT_DESIGN.md` for the payment state model and `docs/FESTA60_PRICING_DONATION_DESIGN.md` for pricing compatibility, public aggregation, and the required release order.
+
+Set `PRICING_RULE_EFFECTIVE_AT` to the approved JST changeover instant and `PUBLIC_PARTICIPANT_COUNT_THRESHOLD` to the approved public-count threshold (default `20`). Back up D1 before each migration. Do not deploy Worker code that reads the new columns before the pricing migration succeeds.
 
 Create a Cloudflare Access application that protects both `/festa60-admin/*` and `/api/festa60/admin/*`. Allow only approved FESTA office members. Verify that an unauthenticated request cannot retrieve the dashboard HTML, JSON API, or CSV export before accepting production applications.
 
@@ -55,3 +57,4 @@ npx wrangler pages deploy festa60-public \
 
 Before accepting applications, verify that `/api/festa60/config` reports
 `"stripe_mode": "live"` and complete one low-value live end-to-end test.
+Also verify that the response reports the approved `pricing_version`, and that `/api/festa60/public-summary` contains no email address, phone number, address, application code, or internal identifier.

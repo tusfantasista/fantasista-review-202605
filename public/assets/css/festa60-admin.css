@@ -651,13 +651,38 @@ select:focus-visible {
   font-weight: 800;
 }
 
-.admin-amount-adjustment__controls input {
+.admin-amount-adjustment__controls input,
+.admin-amount-adjustment__controls select,
+.admin-amount-adjustment__controls textarea {
   width: 180px;
   min-height: 42px;
   padding: 8px 10px;
   border: 1px solid var(--admin-line);
   border-radius: 5px;
   font: inherit;
+}
+
+.admin-supporter-editor {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+.admin-supporter-editor label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+}
+
+.admin-supporter-editor input[type="checkbox"] {
+  width: auto;
+  min-height: auto;
+}
+
+.admin-supporter-editor textarea {
+  width: 100%;
+  min-height: 82px;
+  resize: vertical;
 }
 
 .admin-amount-adjustment__message { min-height: 1.5em; font-weight: 700; }
@@ -746,7 +771,11 @@ select:focus-visible {
   .admin-panel-heading { flex-direction: column; gap: 8px; }
   .admin-panel-heading > strong { white-space: normal; }
   .admin-amount-adjustment__controls { align-items: stretch; flex-direction: column; }
-  .admin-amount-adjustment__controls input { width: 100%; }
+  .admin-amount-adjustment__controls input,
+  .admin-amount-adjustment__controls select,
+  .admin-amount-adjustment__controls textarea { width: 100%; }
+  .admin-supporter-editor { display: grid; grid-template-columns: 1fr; }
+  .admin-supporter-editor input[type="checkbox"] { width: auto; }
 }
 
 @media (max-width: 430px) {

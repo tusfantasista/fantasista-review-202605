@@ -54,6 +54,9 @@ npx wrangler pages deploy public \
 - StripeサンドボックスのWebhook送信先は `/api/festa60/stripe/webhook` とし、`checkout.session.completed`、`checkout.session.async_payment_succeeded`、`checkout.session.async_payment_failed`、`checkout.session.expired`、`payment_intent.succeeded`、`payment_intent.partially_funded`、`cash_balance.funds_available` の7イベントを購読する。
 - 銀行振込の不足入金テストでは、D1の支払状態が `partially_funded`、申込状態が未確定のままとなり、確認済み入金額・不足額・メール送信時刻が記録されることを確認する。
 - `migrations/20260808_harden_bank_transfer_flow.sql` をレビューD1へ適用し、申込確定前入金、入金後の支払方法変更拒否、二重確定防止、未消込残高の管理画面表示を確認する。
+- `migrations/20260810_add_pricing_supporter_publication.sql` をレビューD1へ適用し、新料金版、寄付相当額、掲載同意項目、銀行振込プレビューの料金スナップショットを確認する。旧申込の確定金額を再計算しない。
+- `/api/festa60/config` が承認済みの `pricing_version` を返し、カードと銀行振込のサーバー計算額が同一になることを確認する。
+- `/api/festa60/public-summary` は入金済みかつ未キャンセル・未返金だけを集計し、メール、電話、住所、受付番号、内部IDを返さないことを確認する。人数20名未満ではOBOG参加人数を表示しない。
 - `/festa60-admin/` と `/api/festa60/admin/*` はCloudflare Access認証後だけ表示でき、未認証では申込者の個人情報を返さない。
 - 管理画面の集計、検索、入金状態・プラン絞り込み、詳細表示、Stripe決済リンク、CSV出力を確認する。
 - `/festa60-register/?staff=1` だけに役員・当日お手伝い専用申込が表示され、一般申込には専用料金へのリンクがない。

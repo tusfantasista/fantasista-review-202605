@@ -5,8 +5,11 @@ const files = {
   festaHome: await readFile(new URL("../public/festa-60th/index.html", import.meta.url), "utf8"),
   register: await readFile(new URL("../public/festa60-register/index.html", import.meta.url), "utf8"),
   registerScript: await readFile(new URL("../public/assets/js/festa60-register.js", import.meta.url), "utf8"),
+  pricing: await readFile(new URL("../public/assets/js/festa60-pricing.js", import.meta.url), "utf8"),
+  pricingMigration: await readFile(new URL("../migrations/20260810_add_pricing_supporter_publication.sql", import.meta.url), "utf8"),
   migration: await readFile(new URL("../migrations/20260808_harden_bank_transfer_flow.sql", import.meta.url), "utf8"),
-  design: await readFile(new URL("../docs/FESTA60_REGISTRATION_PAYMENT_DESIGN.md", import.meta.url), "utf8")
+  design: await readFile(new URL("../docs/FESTA60_REGISTRATION_PAYMENT_DESIGN.md", import.meta.url), "utf8"),
+  pricingDesign: await readFile(new URL("../docs/FESTA60_PRICING_DONATION_DESIGN.md", import.meta.url), "utf8")
 };
 
 const checks = [
@@ -30,9 +33,20 @@ const checks = [
   ["preview transfer warning", files.register.includes("この画面の口座へは、まだ振り込まないでください")],
   ["bank actions pass payment validation", files.worker.includes('const bankTransferActions = ["preview_bank_transfer", "confirm_bank_transfer", "cancel_bank_preview"]') && files.worker.includes('validateApplication(payload, env, action)')],
   ["validation errors identify fields", files.registerScript.includes("formatApplicationError(result)") && files.registerScript.includes("確認が必要な項目")],
-  ["cohort baseline is fixed", files.worker.includes("OBOG_5_UNDER_GRADUATION_YEAR_TO = 2025") && files.register.includes("2026年4月1日時点で固定")],
-  ["staff discounts applied before half", files.worker.includes("BASE_FEES.obog.regular - staffApplicationPeriodDiscount(feePeriod) - staffGraduationDiscount(baseTicketType)") && files.registerScript.includes("baseFees.obog.regular - applicationPeriodDiscount(period) - graduationDiscount(attendeeType)")],
-  ["staff no-reception deduction applied after half", files.worker.includes("staffParticipationFee - noReceptionDiscount(receptionAttendance)") && files.registerScript.includes("staffParticipationFee - noReceptionDiscount(reception)")],
+  ["cohort baseline is fixed", files.pricing.includes("graduation_year_from: 2021, graduation_year_to: 2025") && files.register.includes("2026年4月1日時点で固定")],
+  ["staff discounts applied before half", files.pricing.includes("BASE_FEES.obog.regular - staffApplicationPeriodDiscount(feePeriod) - staffGraduationDiscount(baseTicketType)") && files.registerScript.includes("staffParticipationAmount(")],
+  ["staff no-reception deduction applied after half", files.pricing.includes("Math.round(discountedParticipationFee * 0.5) - noReceptionDiscount") && files.registerScript.includes("staffParticipationAmount(")],
+  ["worker and browser share pricing module", files.worker.includes('from "./assets/js/festa60-pricing.js"') && files.registerScript.includes('from "./festa60-pricing.js"')],
+  ["new pricing is versioned", files.pricing.includes('CURRENT_PRICING_VERSION = "festa60-2026-v2"') && files.pricing.includes("no_reception_discount_jpy: 4000")],
+  ["legacy pricing remains available", files.pricing.includes('LEGACY_PRICING_VERSION = "festa60-2026-v1"') && files.pricing.includes("no_reception_discount_jpy: 2000")],
+  ["pricing version is stored", files.pricingMigration.includes("pricing_version TEXT") && files.worker.includes("pricing_version")],
+  ["donation equivalent is stored", files.pricingMigration.includes("donation_equivalent_jpy INTEGER") && files.worker.includes("donationEquivalentForTicket")],
+  ["public summary excludes unpaid and cancelled records", files.worker.includes("payment_status = 'paid'") && files.worker.includes("cancelled_at IS NULL") && files.worker.includes("refunded_at IS NULL")],
+  ["public summary exposes no direct identifiers", files.worker.includes("participant_count_visible") && !files.worker.includes("publicSummary.email") && !files.worker.includes("publicSummary.address")],
+  ["public count threshold is configurable", files.worker.includes("PUBLIC_PARTICIPANT_COUNT_THRESHOLD") && files.pricing.includes("participant_count_public_threshold: 20")],
+  ["supporter publication defaults to private", files.pricingMigration.includes("supporter_publication_consent INTEGER NOT NULL DEFAULT 0") && files.pricingMigration.includes("supporter_anonymous INTEGER NOT NULL DEFAULT 1")],
+  ["older applications can receive a consent row", files.worker.includes("INSERT INTO consents") && files.worker.includes("consent_type = 'supporter_publication'")],
+  ["pricing release order is documented", files.pricingDesign.includes("Do not deploy code that reads the new columns before the migration is applied") && files.pricingDesign.includes("Existing confirmed applications are never recalculated in bulk")],
   ["bank amount correction requires staff application", files.worker.includes("Only staff applications can use this amount correction.")],
   ["bank amount correction rejects received funds", files.worker.includes("Only an unpaid bank transfer with no received funds can be adjusted.") && files.worker.includes("Stripe has already received funds for this PaymentIntent.")],
   ["bank amount correction confirms application code", files.worker.includes("Application code confirmation does not match.")],

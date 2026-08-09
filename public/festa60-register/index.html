@@ -148,7 +148,7 @@
                 <option value="none" selected>通常参加（基準額 15,000円・各種割引あり）</option>
               </select>
               <p class="crm-help"><strong>通常参加は、60周年記念FESTAと懇親会を含む基本の参加プランです。</strong>プラチナ・ゴールド・シルバー・ブロンズは、参加費に寄付と寄付特典を組み合わせた参加者向け寄付プランで、表示額が支払総額です。</p>
-              <p class="crm-help">寄付は、FESTAの交流企画・記念コンテンツの充実と、FMドレスや必要備品などを通じた現役支援に活用します。各プランのダンスタイムチケットは、券面相当額を踊った現役本人へ還元します。参加費相当額と寄付相当額の内訳は表示しません。</p>
+              <p class="crm-help">寄付相当分は、原則として約3分の2を現役支援、約3分の1をFESTAの充実に活用します。現役支援はFMドレス更新を最優先とします。各プランのダンスタイムチケットはこの配分とは別に、券面相当額を踊った現役本人へ100％還元します。</p>
             </div>
           </div>
 
@@ -195,12 +195,12 @@
           <div id="attendance-options-section">
           <div class="crm-two">
             <div class="crm-field">
-              <label for="reception_attendance">懇親会 <span class="crm-required">必須</span></label>
+              <label for="reception_attendance">参加形態 <span class="crm-required">必須</span></label>
               <select id="reception_attendance" name="reception_attendance" required>
-                <option value="attending">参加する</option>
-                <option value="without_reception">参加しない（2,000円控除）</option>
+                <option value="attending">第一部FESTA＋第二部懇親会</option>
+                <option value="without_reception">第一部FESTAのみ（4,000円控除）</option>
               </select>
-              <p id="reception-attendance-help" class="crm-help">懇親会へ参加しない場合は、すべての参加プラン料金から2,000円を控除します。申込時期割引・卒部年度割引とも併用します。</p>
+              <p id="reception-attendance-help" class="crm-help">第一部のみの場合は、すべての参加プラン料金から4,000円を控除します。申込時期割引・卒部年度割引とも併用します。</p>
             </div>
             <div class="crm-field">
               <label for="companion_count">OBOG以外の同伴者人数 <span class="crm-required">必須</span></label>
@@ -209,7 +209,7 @@
               <details class="crm-inline-disclosure">
                 <summary>同伴者の年齢区分・料金を見る</summary>
                 <ul class="crm-small">
-                  <li><strong>大人（中学生以上）：</strong>第一部＋懇親会 8,000円／第一部のみ 6,000円</li>
+                  <li><strong>大人（中学生以上）：</strong>第一部＋懇親会 8,000円／第一部のみ 4,000円</li>
                   <li><strong>小学生：</strong>第一部＋懇親会 3,000円／第一部のみ 1,000円</li>
                   <li><strong>未就学児：</strong>第一部・懇親会の参加内容にかかわらず無料</li>
                 </ul>
@@ -250,7 +250,7 @@
               <div class="crm-benefit-note">
                 <strong>寄付が現役支援につながります</strong>
                 <p>各プランに含まれるダンスタイムチケットは、当日のダンスタイムやトライアルで現役部員へ直接お渡しいただけます。チケットの券面相当額はすべて、そのチケットで踊った現役本人へ還元します。</p>
-                <p>基本参加費とダンスタイムチケットの券面相当額を除く寄付相当分は、FESTAの交流企画や記念コンテンツの充実と、FMドレス・必要備品などを通じた現役部員の継続的な活動支援に活用します。</p>
+                <p>基本参加費とダンスタイムチケットの券面相当額を除く寄付相当分は、原則として約3分の2を現役支援、約3分の1を60周年FESTAの充実に活用します。現役支援はFMドレス更新を最優先とし、更新後の残額は現役支援基金へ積み立てます。</p>
               </div>
               <p>プラチナ、ゴールド、シルバー、ブロンズには、当日の集合写真をプリントしたもの、現役からのお礼のメッセージ、60周年記念オリジナルステッカーを開催後に郵送する予定です。開催前の郵送物はありません。土産品類は設けません。</p>
               <div class="crm-benefit-table-wrap" tabindex="0" role="region" aria-label="FESTA参加者向けプランの比較表">
@@ -259,6 +259,7 @@
                     <tr>
                       <th scope="col">プラン</th>
                       <th scope="col">基準一体価格<br /><small>参加費・寄付を含む</small></th>
+                      <th scope="col">寄付相当額</th>
                       <th scope="col">ダンスタイム券</th>
                     </tr>
                   </thead>
@@ -266,26 +267,31 @@
                     <tr>
                       <th scope="row">プラチナ</th>
                       <td>100,000円</td>
+                      <td>約70,000円</td>
                       <td>600円券×25枚</td>
                     </tr>
                     <tr>
                       <th scope="row">ゴールド</th>
                       <td>50,000円</td>
+                      <td>約25,000円</td>
                       <td>500円券×20枚</td>
                     </tr>
                     <tr>
                       <th scope="row">シルバー</th>
                       <td>30,000円</td>
+                      <td>約10,200円</td>
                       <td>400円券×12枚</td>
                     </tr>
                     <tr>
                       <th scope="row">ブロンズ</th>
                       <td>20,000円</td>
+                      <td>約3,500円</td>
                       <td>300円券×5枚</td>
                     </tr>
                     <tr>
                       <th scope="row">通常参加</th>
                       <td>15,000円</td>
+                      <td>なし</td>
                       <td>卒部11年目以上：300円券×3枚<br />卒部10年目以下：300円券×2枚</td>
                     </tr>
                   </tbody>
@@ -336,6 +342,50 @@
             </div>
             </div>
           </details>
+
+          <section id="supporter-recognition-section" class="crm-notice crm-notice--plain crm-stack" aria-labelledby="supporter-recognition-title" hidden>
+            <div>
+              <h3 id="supporter-recognition-title">サポーター掲載・当日表示</h3>
+              <p>寄付プランを選択した方には、当日、プランが分かるサポーター帯またはバッジをご用意する予定です。大きさは原則共通とし、プラチナ・ゴールド・シルバー・ブロンズの色とプラン名で区別します。</p>
+              <p>ご同意いただいた方は、公式サイトと記念パンフレットへプラン別にお名前を掲載します。匿名のまま寄付することもできます。</p>
+            </div>
+            <label class="crm-check">
+              <input id="supporter_publication_consent" type="checkbox" name="supporter_publication_consent" />
+              <span>公式サイト・記念パンフレットへの氏名掲載に同意します。</span>
+            </label>
+            <div class="crm-two">
+              <div class="crm-field">
+                <label for="supporter_publication_name">掲載名 <span class="crm-optional">掲載同意時は必須</span></label>
+                <input id="supporter_publication_name" name="supporter_publication_name" maxlength="80" placeholder="例：山田 太郎" />
+              </div>
+              <div class="crm-field">
+                <label for="supporter_joint_name">夫妻・連名等の希望 <span class="crm-optional">任意</span></label>
+                <input id="supporter_joint_name" name="supporter_joint_name" maxlength="80" placeholder="例：山田 太郎・花子" />
+              </div>
+            </div>
+            <div class="crm-two">
+              <label class="crm-check">
+                <input id="supporter_include_maiden_name" type="checkbox" name="supporter_include_maiden_name" />
+                <span>掲載名に旧姓を併記したい</span>
+              </label>
+              <label class="crm-check">
+                <input id="supporter_anonymous" type="checkbox" name="supporter_anonymous" />
+                <span>匿名を希望する（氏名を掲載しない）</span>
+              </label>
+            </div>
+            <div class="crm-field">
+              <label for="supporter_badge_preference">当日のサポーター帯・バッジ</label>
+              <select id="supporter_badge_preference" name="supporter_badge_preference">
+                <option value="display">表示を希望する</option>
+                <option value="decline">表示を辞退する</option>
+              </select>
+            </div>
+            <div id="supporter-message-section" class="crm-field" hidden>
+              <label for="supporter_message">プラチナサポーター応援メッセージ <span class="crm-optional">任意・50字以内</span></label>
+              <textarea id="supporter_message" name="supporter_message" maxlength="50" rows="3" placeholder="舞研と60周年FESTAへの応援メッセージ"></textarea>
+            </div>
+            <p class="crm-help">掲載はプラチナを最大、ゴールドを大、シルバーを中、ブロンズを標準の扱いとします。欠席者向けは、プレミアムをゴールド相当、アドバンスをシルバー相当、スタンダードをブロンズ相当として別枠に掲載します。</p>
+          </section>
 
           <section id="return-address-section" class="crm-notice crm-return-address" aria-labelledby="return-address-title" hidden>
             <div>
@@ -566,6 +616,6 @@
       </div>
     </dialog>
     <footer class="crm-legal-footer"><a href="../festa-60th/legal/">特定商取引法に基づく表記</a><a href="../festa-60th/privacy/">プライバシーポリシー</a></footer>
-    <script src="../assets/js/festa60-register.js?v=20260809-2" defer></script>
+    <script type="module" src="../assets/js/festa60-register.js?v=20260810-1"></script>
   </body>
 </html>

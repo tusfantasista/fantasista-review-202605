@@ -1,4 +1,43 @@
 import { handleContactRequest } from "./contact-api.js";
+import {
+  ABSENT_DONATION_TOTALS as SHARED_ABSENT_DONATION_TOTALS,
+  APPLICATION_DEADLINE_ISO as SHARED_APPLICATION_DEADLINE_ISO,
+  ATTENDING_PLAN_TOTALS as SHARED_ATTENDING_PLAN_TOTALS,
+  BASE_FEES as SHARED_BASE_FEES,
+  COHORTS,
+  CURRENT_PRICING_VERSION,
+  DEFAULT_PRICING_EFFECTIVE_AT,
+  FEE_PERIODS as SHARED_FEE_PERIODS,
+  FUNDRAISING_CONFIG,
+  LEGACY_PRICING_VERSION,
+  PAYMENT_STATUSES as SHARED_PAYMENT_STATUSES,
+  RECEPTION_ATTENDANCE as SHARED_RECEPTION_ATTENDANCE,
+  STAFF_TICKET_TYPES as SHARED_STAFF_TICKET_TYPES,
+  STANDARD_DANCE_TICKET_BENEFITS as SHARED_STANDARD_DANCE_TICKET_BENEFITS,
+  SUPPORT_TIER_BENEFITS as SHARED_SUPPORT_TIER_BENEFITS,
+  attendingPlanAmount as sharedAttendingPlanAmount,
+  buildPaymentLineItems as sharedBuildPaymentLineItems,
+  companionDanceTicketBenefit as sharedCompanionDanceTicketBenefit,
+  danceTicketBenefit as sharedDanceTicketBenefit,
+  donationEquivalentForTicket,
+  feePeriodForDate as sharedFeePeriodForDate,
+  isApplicationOpen as sharedIsApplicationOpen,
+  isStaffTicketType as sharedIsStaffTicketType,
+  lineItemsTotal as sharedLineItemsTotal,
+  noReceptionDiscount as sharedNoReceptionDiscount,
+  normalizePricingVersion,
+  normalizeTicketType as sharedNormalizeTicketType,
+  pricingConfig,
+  pricingVersionForDate,
+  publicBaseTicketType as sharedPublicBaseTicketType,
+  splitTicketType as sharedSplitTicketType,
+  staffApplicationPeriodDiscount as sharedStaffApplicationPeriodDiscount,
+  staffGraduationDiscount as sharedStaffGraduationDiscount,
+  staffParticipationAmount as sharedStaffParticipationAmount,
+  ticketAmount as sharedTicketAmount,
+  ticketLabel as sharedTicketLabel,
+  ticketLineAmount as sharedTicketLineAmount
+} from "./assets/js/festa60-pricing.js";
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
@@ -158,6 +197,14 @@ function adminActor(request, env) {
   return request.headers.get("cf-access-authenticated-user-email") || request.headers.get("x-admin-actor") || env.ADMIN_DEFAULT_ACTOR || "admin";
 }
 __name(adminActor, "adminActor");
+function pricingEffectiveAt(env) {
+  return env.PRICING_RULE_EFFECTIVE_AT || DEFAULT_PRICING_EFFECTIVE_AT;
+}
+__name(pricingEffectiveAt, "pricingEffectiveAt");
+function activePricingVersion(env, date = /* @__PURE__ */ new Date()) {
+  return pricingVersionForDate(date, pricingEffectiveAt(env));
+}
+__name(activePricingVersion, "activePricingVersion");
 
 // api/festa60/_lib/ids.js
 function newId(prefix) {
@@ -170,63 +217,29 @@ function nowIso() {
 __name(nowIso, "nowIso");
 
 // api/festa60/_lib/db.js
-var FEE_PERIODS = ["early", "year_end", "regular"];
-var RECEPTION_ATTENDANCE = ["attending", "without_reception"];
-var PAYMENT_STATUSES = ["unpaid", "pending", "paid", "cancelled", "refunded"];
-var OBOG_6_10_GRADUATION_YEAR_FROM = 2016;
-var OBOG_6_10_GRADUATION_YEAR_TO = 2020;
-var OBOG_5_UNDER_GRADUATION_YEAR_FROM = 2021;
-var OBOG_5_UNDER_GRADUATION_YEAR_TO = 2025;
-var OBOG_11_OVER_GRADUATION_YEAR_TO = 2015;
-var APPLICATION_DEADLINE_ISO = "2027-01-31T23:59:59+09:00";
+var FEE_PERIODS = SHARED_FEE_PERIODS;
+var RECEPTION_ATTENDANCE = SHARED_RECEPTION_ATTENDANCE;
+var PAYMENT_STATUSES = SHARED_PAYMENT_STATUSES;
+var OBOG_6_10_GRADUATION_YEAR_FROM = COHORTS.six_ten.graduation_year_from;
+var OBOG_6_10_GRADUATION_YEAR_TO = COHORTS.six_ten.graduation_year_to;
+var OBOG_5_UNDER_GRADUATION_YEAR_FROM = COHORTS.five_under.graduation_year_from;
+var OBOG_5_UNDER_GRADUATION_YEAR_TO = COHORTS.five_under.graduation_year_to;
+var OBOG_11_OVER_GRADUATION_YEAR_TO = COHORTS.eleven_over.graduation_year_to;
+var APPLICATION_DEADLINE_ISO = SHARED_APPLICATION_DEADLINE_ISO;
 function isApplicationOpen(date = /* @__PURE__ */ new Date()) {
-  const instant = date instanceof Date ? date : new Date(date);
-  return !Number.isNaN(instant.getTime()) && instant.getTime() <= new Date(APPLICATION_DEADLINE_ISO).getTime();
+  return sharedIsApplicationOpen(date);
 }
 __name(isApplicationOpen, "isApplicationOpen");
 function feePeriodForDate(date = /* @__PURE__ */ new Date()) {
-  const instant = date instanceof Date ? date : new Date(date);
-  if (Number.isNaN(instant.getTime())) return "regular";
-  const jstDate = new Date(instant.getTime() + 9 * 60 * 60 * 1e3).toISOString().slice(0, 10);
-  if (jstDate <= "2026-09-30") return "early";
-  if (jstDate <= "2026-12-31") return "year_end";
-  return "regular";
+  return sharedFeePeriodForDate(date);
 }
 __name(feePeriodForDate, "feePeriodForDate");
-var BASE_FEES = {
-  obog: { early: 13e3, year_end: 14e3, regular: 15e3 },
-  obog_6_10: { early: 11e3, year_end: 12e3, regular: 13e3 },
-  obog_5_under: { early: 9e3, year_end: 1e4, regular: 11e3 },
-  current_student: { early: 4e3, year_end: 4e3, regular: 4e3 }
-};
-var ATTENDING_PLAN_TOTALS = {
-  platinum: 1e5,
-  gold: 5e4,
-  silver: 3e4,
-  bronze: 2e4
-};
-var STAFF_TICKET_TYPES = ["obog_staff", "obog_staff_6_10", "obog_staff_5_under"];
-var ABSENT_DONATION_TOTALS = {
-  absent_donation_30000: 3e4,
-  absent_donation_10000: 1e4,
-  absent_donation_5000: 5e3
-};
-var SUPPORT_TIER_BENEFITS = {
-  platinum: { count: 25, unit_amount_jpy: 600 },
-  gold: { count: 20, unit_amount_jpy: 500 },
-  silver: { count: 12, unit_amount_jpy: 400 },
-  bronze: { count: 5, unit_amount_jpy: 300 }
-};
-var STANDARD_DANCE_TICKET_BENEFITS = {
-  obog: { count: 3, unit_amount_jpy: 300 },
-  obog_6_10: { count: 2, unit_amount_jpy: 300 },
-  obog_5_under: { count: 2, unit_amount_jpy: 300 }
-};
-var COMPANION_FEES = {
-  adult: { attending: 8e3, without_reception: 6e3 },
-  child: { attending: 3e3, without_reception: 1e3 },
-  preschool: { attending: 0, without_reception: 0 }
-};
+var BASE_FEES = SHARED_BASE_FEES;
+var ATTENDING_PLAN_TOTALS = SHARED_ATTENDING_PLAN_TOTALS;
+var STAFF_TICKET_TYPES = SHARED_STAFF_TICKET_TYPES;
+var ABSENT_DONATION_TOTALS = SHARED_ABSENT_DONATION_TOTALS;
+var SUPPORT_TIER_BENEFITS = SHARED_SUPPORT_TIER_BENEFITS;
+var STANDARD_DANCE_TICKET_BENEFITS = SHARED_STANDARD_DANCE_TICKET_BENEFITS;
 var TICKET_LABELS = {
   obog: "60\u5468\u5E74\u8A18\u5FF5FESTA \u4E00\u822COBOG\u53C2\u52A0\u8CBB",
   obog_6_10: "60\u5468\u5E74\u8A18\u5FF5FESTA OBOG 6\u301C10\u5E74\u76EE\u53C2\u52A0\u8CBB",
@@ -270,46 +283,19 @@ var DONATION_PLAN_DETAILS = {
   }
 };
 function danceTicketBenefit(ticketType) {
-  const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(ticketType);
-  const benefit = SUPPORT_TIER_BENEFITS[supportTier] || STANDARD_DANCE_TICKET_BENEFITS[publicBaseTicketType(baseTicketType)] || { count: 0, unit_amount_jpy: 0 };
-  return {
-    count: benefit.count,
-    unit_amount_jpy: benefit.unit_amount_jpy,
-    total_amount_jpy: benefit.count * benefit.unit_amount_jpy
-  };
+  return sharedDanceTicketBenefit(ticketType);
 }
 __name(danceTicketBenefit, "danceTicketBenefit");
 function companionDanceTicketBenefit(ticketType, companions = []) {
-  const adultCount = Array.isArray(companions)
-    ? companions.filter((companion) => companion.attendee_type === "adult").length
-    : Math.max(0, Number(companions || 0));
-  const unitAmount = adultCount ? danceTicketBenefit(ticketType).unit_amount_jpy || 300 : 0;
-  return {
-    count: adultCount,
-    unit_amount_jpy: unitAmount,
-    total_amount_jpy: adultCount * unitAmount
-  };
+  return sharedCompanionDanceTicketBenefit(ticketType, companions);
 }
 __name(companionDanceTicketBenefit, "companionDanceTicketBenefit");
 function splitTicketType(ticketType) {
-  const legacy = {
-    premium: "obog__gold",
-    donation_only: "obog__gold",
-    premium_gold: "obog__gold",
-    premium_silver: "obog__silver",
-    premium_bronze: "obog__bronze"
-  };
-  const value = legacy[ticketType] || String(ticketType || "obog");
-  const [rawBase, rawSupport = "none"] = value.split("__");
-  const baseTicketType = rawBase === "young_obog" ? "obog_6_10" : rawBase;
-  const supportTier = Object.hasOwn(ATTENDING_PLAN_TOTALS, rawSupport) ? rawSupport : "none";
-  return { base_ticket_type: baseTicketType || "obog", support_tier: supportTier };
+  return sharedSplitTicketType(ticketType);
 }
 __name(splitTicketType, "splitTicketType");
 function normalizeTicketType(ticketType, supportTier = "none") {
-  const parsed = splitTicketType(ticketType);
-  const normalizedSupport = Object.hasOwn(ATTENDING_PLAN_TOTALS, supportTier) ? supportTier : parsed.support_tier;
-  return normalizedSupport === "none" ? parsed.base_ticket_type : `${parsed.base_ticket_type}__${normalizedSupport}`;
+  return sharedNormalizeTicketType(ticketType, supportTier);
 }
 __name(normalizeTicketType, "normalizeTicketType");
 function ticketLabel(ticketType) {
@@ -327,132 +313,48 @@ function donationPlanDetails(ticketType) {
   return DONATION_PLAN_DETAILS[key] || null;
 }
 __name(donationPlanDetails, "donationPlanDetails");
-function ticketAmount(ticketType, companions = 0, feePeriod = "regular", receptionAttendance = "attending") {
-  const companionRows = Array.isArray(companions) ? companions : Array.from({ length: Number(companions || 0) }, () => ({ attendee_type: "adult" }));
-  return lineItemsTotal(buildPaymentLineItems({ ticket_type: ticketType, fee_period: feePeriod, reception_attendance: receptionAttendance }, companionRows));
+function ticketAmount(ticketType, companions = 0, feePeriod = "regular", receptionAttendance = "attending", pricingVersion = CURRENT_PRICING_VERSION) {
+  return sharedTicketAmount(ticketType, companions, feePeriod, receptionAttendance, pricingVersion);
 }
 __name(ticketAmount, "ticketAmount");
-function buildPaymentLineItems(payload, companions = []) {
-  const normalizedTicket = normalizeTicketType(payload.ticket_type);
-  const normalizedPeriod = FEE_PERIODS.includes(payload.fee_period) ? payload.fee_period : "regular";
-  const normalizedReception = RECEPTION_ATTENDANCE.includes(payload.reception_attendance) ? payload.reception_attendance : "attending";
-  const items = [];
-  const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(normalizedTicket);
-  const isAbsentDonation = Object.hasOwn(ABSENT_DONATION_TOTALS, baseTicketType);
-  const companionTicketUnitAmount = danceTicketBenefit(normalizedTicket).unit_amount_jpy || 300;
-  const ticketAmountJpy = !isAbsentDonation && supportTier !== "none" ? attendingPlanAmount(supportTier, baseTicketType, normalizedPeriod, normalizedReception) : ticketLineAmount(baseTicketType, normalizedPeriod, normalizedReception);
-  if (ticketAmountJpy > 0) {
-    const danceTicket = danceTicketBenefit(normalizedTicket);
-    const plan = donationPlanDetails(normalizedTicket);
-    items.push({
-      item_type: isAbsentDonation ? "donation" : "ticket",
-      label: ticketLabel(normalizedTicket),
-      quantity: 1,
-      unit_amount_jpy: ticketAmountJpy,
-      amount_jpy: ticketAmountJpy,
-      metadata: {
-        ticket_type: normalizedTicket,
-        fee_period: normalizedPeriod,
-        reception_attendance: normalizedReception,
-        dance_ticket_count: danceTicket.count,
-        dance_ticket_unit_amount_jpy: danceTicket.unit_amount_jpy,
-        dance_ticket_total_amount_jpy: danceTicket.total_amount_jpy,
-        plan_name: plan?.name || "",
-        benefits_summary: plan?.description || ""
-      }
-    });
-  }
-  if (!isAbsentDonation) companions.forEach((companion, index) => {
-    const type = ["adult", "child", "preschool"].includes(companion.attendee_type) ? companion.attendee_type : "adult";
-    const companionReception = RECEPTION_ATTENDANCE.includes(companion.reception_attendance) ? companion.reception_attendance : normalizedReception;
-    const amount = COMPANION_FEES[type][companionReception];
-    const danceTicketCount = type === "adult" ? 1 : 0;
-    if (amount <= 0) return;
-    items.push({
-      item_type: "companion",
-      label: `\u540C\u4F34\u8005${index + 1} ${type === "adult" ? "\u5927\u4EBA\uFF08\u4E2D\u5B66\u751F\u4EE5\u4E0A\uFF09" : type === "child" ? "\u5B50\u4F9B\uFF08\u5C0F\u5B66\u751F\uFF09" : "\u672A\u5C31\u5B66\u5150\uFF08\u7121\u6599\uFF09"}`,
-      quantity: 1,
-      unit_amount_jpy: amount,
-      amount_jpy: amount,
-      metadata: {
-        attendee_type: type,
-        relationship: companion.relationship || "",
-        reception_attendance: companionReception,
-        dance_ticket_count: danceTicketCount,
-        dance_ticket_unit_amount_jpy: danceTicketCount ? companionTicketUnitAmount : 0,
-        dance_ticket_total_amount_jpy: danceTicketCount * companionTicketUnitAmount
-      }
-    });
-  });
-  return items;
+function buildPaymentLineItems(payload, companions = [], pricingVersion = payload.pricing_version || CURRENT_PRICING_VERSION) {
+  return sharedBuildPaymentLineItems(payload, companions, pricingVersion);
 }
 __name(buildPaymentLineItems, "buildPaymentLineItems");
 function lineItemsTotal(items) {
-  return items.reduce((sum, item) => sum + Number(item.amount_jpy || 0), 0);
+  return sharedLineItemsTotal(items);
 }
 __name(lineItemsTotal, "lineItemsTotal");
-function ticketLineAmount(ticketType, feePeriod, receptionAttendance) {
-  const { base_ticket_type: baseTicketType } = splitTicketType(ticketType);
-  if (Object.hasOwn(ABSENT_DONATION_TOTALS, baseTicketType)) {
-    return ABSENT_DONATION_TOTALS[baseTicketType];
-  }
-  let base = BASE_FEES[baseTicketType]?.[feePeriod] ?? BASE_FEES.obog[feePeriod];
-  if (isStaffTicketType(baseTicketType)) {
-    return staffParticipationAmount(baseTicketType, feePeriod, receptionAttendance);
-  }
-  if (baseTicketType === "current_student") {
-    return receptionAttendance === "attending" ? BASE_FEES.current_student[feePeriod] : 0;
-  }
-  return Math.max(0, base - noReceptionDiscount(receptionAttendance));
+function ticketLineAmount(ticketType, feePeriod, receptionAttendance, pricingVersion = CURRENT_PRICING_VERSION) {
+  return sharedTicketLineAmount(ticketType, feePeriod, receptionAttendance, pricingVersion);
 }
 __name(ticketLineAmount, "ticketLineAmount");
-function attendingPlanAmount(supportTier, baseTicketType, feePeriod, receptionAttendance = "attending") {
-  const planBase = ATTENDING_PLAN_TOTALS[supportTier];
-  if (!planBase) return ticketLineAmount(baseTicketType, feePeriod, receptionAttendance);
-  if (isStaffTicketType(baseTicketType)) {
-    const donationAddOn = Math.max(0, planBase - BASE_FEES.obog.regular);
-    return donationAddOn + staffParticipationAmount(baseTicketType, feePeriod, receptionAttendance);
-  }
-  const discountedStandardFee = BASE_FEES[baseTicketType]?.[feePeriod] ?? BASE_FEES.obog[feePeriod];
-  const combinedDiscount = Math.max(0, BASE_FEES.obog.regular - discountedStandardFee);
-  return Math.max(0, planBase - combinedDiscount - noReceptionDiscount(receptionAttendance));
+function attendingPlanAmount(supportTier, baseTicketType, feePeriod, receptionAttendance = "attending", pricingVersion = CURRENT_PRICING_VERSION) {
+  return sharedAttendingPlanAmount(supportTier, baseTicketType, feePeriod, receptionAttendance, pricingVersion);
 }
 __name(attendingPlanAmount, "attendingPlanAmount");
 function publicBaseTicketType(baseTicketType) {
-  if (baseTicketType === "obog_staff_6_10") return "obog_6_10";
-  if (baseTicketType === "obog_staff_5_under") return "obog_5_under";
-  if (baseTicketType === "obog_staff") return "obog";
-  return baseTicketType;
+  return sharedPublicBaseTicketType(baseTicketType);
 }
 __name(publicBaseTicketType, "publicBaseTicketType");
 function isStaffTicketType(baseTicketType) {
-  return STAFF_TICKET_TYPES.includes(baseTicketType);
+  return sharedIsStaffTicketType(baseTicketType);
 }
 __name(isStaffTicketType, "isStaffTicketType");
 function staffApplicationPeriodDiscount(feePeriod) {
-  if (feePeriod === "early") return 2e3;
-  if (feePeriod === "year_end") return 1e3;
-  return 0;
+  return sharedStaffApplicationPeriodDiscount(feePeriod);
 }
 __name(staffApplicationPeriodDiscount, "staffApplicationPeriodDiscount");
 function staffGraduationDiscount(baseTicketType) {
-  const publicType = publicBaseTicketType(baseTicketType);
-  if (publicType === "obog_6_10") return 2e3;
-  if (publicType === "obog_5_under") return 4e3;
-  return 0;
+  return sharedStaffGraduationDiscount(baseTicketType);
 }
 __name(staffGraduationDiscount, "staffGraduationDiscount");
-function staffParticipationAmount(baseTicketType, feePeriod, receptionAttendance) {
-  const discountedParticipationFee = Math.max(
-    0,
-    BASE_FEES.obog.regular - staffApplicationPeriodDiscount(feePeriod) - staffGraduationDiscount(baseTicketType)
-  );
-  const staffParticipationFee = Math.round(discountedParticipationFee * 0.5);
-  return Math.max(0, staffParticipationFee - noReceptionDiscount(receptionAttendance));
+function staffParticipationAmount(baseTicketType, feePeriod, receptionAttendance, pricingVersion = CURRENT_PRICING_VERSION) {
+  return sharedStaffParticipationAmount(baseTicketType, feePeriod, receptionAttendance, pricingVersion);
 }
 __name(staffParticipationAmount, "staffParticipationAmount");
-function noReceptionDiscount(receptionAttendance) {
-  return receptionAttendance === "without_reception" ? 2e3 : 0;
+function noReceptionDiscount(receptionAttendance, pricingVersion = CURRENT_PRICING_VERSION) {
+  return sharedNoReceptionDiscount(receptionAttendance, pricingVersion);
 }
 __name(noReceptionDiscount, "noReceptionDiscount");
 function transferNameFor(applicationCode, fullNameKana) {
@@ -482,8 +384,10 @@ async function insertApplication(db, payload, requestMeta = {}) {
   const id = newId("app");
   const applicationCode = payload.application_code || await nextApplicationCode(db);
   const companions = Array.isArray(payload.companions) ? payload.companions.filter((item) => item.full_name) : [];
-  const lineItems = buildPaymentLineItems(payload, companions);
+  const pricingVersion = normalizePricingVersion(payload.pricing_version || CURRENT_PRICING_VERSION);
+  const lineItems = buildPaymentLineItems(payload, companions, pricingVersion);
   const totalAmountJpy = lineItemsTotal(lineItems);
+  const donationEquivalentJpy = donationEquivalentForTicket(payload.ticket_type);
   const quantity = 1 + companions.length;
   const paymentStatus = totalAmountJpy > 0 ? "unpaid" : "paid";
   const paymentMethod = totalAmountJpy > 0 ? "stripe_checkout" : "not_required";
@@ -499,8 +403,11 @@ async function insertApplication(db, payload, requestMeta = {}) {
         email, phone, graduation_year, generation, school_lineage, dance_role,
         postal_code, address, prefecture, city, street_address, building,
         companion_count, expected_transfer_name, actual_transfer_name, message, source, client_submission_id,
-        paid_at, cancelled_at, refunded_at, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        paid_at, cancelled_at, refunded_at, created_at, updated_at,
+        pricing_version, pricing_effective_at, donation_equivalent_jpy,
+        supporter_publication_consent, supporter_publication_name, supporter_include_maiden_name,
+        supporter_joint_name, supporter_anonymous, supporter_badge_preference, supporter_message
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
     id,
     applicationCode,
@@ -547,7 +454,17 @@ async function insertApplication(db, payload, requestMeta = {}) {
     null,
     null,
     now,
-    now
+    now,
+    pricingVersion,
+    payload.pricing_effective_at || DEFAULT_PRICING_EFFECTIVE_AT,
+    donationEquivalentJpy,
+    payload.supporter_publication_consent ? 1 : 0,
+    payload.supporter_publication_name || null,
+    payload.supporter_include_maiden_name ? 1 : 0,
+    payload.supporter_joint_name || null,
+    payload.supporter_anonymous !== false ? 1 : 0,
+    payload.supporter_badge_preference || "display",
+    payload.supporter_message || null
   ).run();
   for (const item of lineItems) {
     await db.prepare(
@@ -596,7 +513,8 @@ async function insertApplication(db, payload, requestMeta = {}) {
       "cancellation_policy",
       payload.cancellation_policy_consent === true || payload.cancellation_policy_consent === "on",
       "\u652F\u6255\u3044\u5F8C\u306E\u30AD\u30E3\u30F3\u30BB\u30EB\u306B\u4F34\u3046\u8FD4\u91D1\u306F\u539F\u5247\u306A\u3057"
-    ]
+    ],
+    ["supporter_publication", payload.supporter_publication_consent === true, "寄付者名の公式サイト・記念パンフレット掲載に同意"]
   ];
   for (const [type, value, text2] of consentRows) {
     await db.prepare(
@@ -613,7 +531,7 @@ async function insertApplication(db, payload, requestMeta = {}) {
     action: "application.created",
     target_type: "application",
     target_id: id,
-    details_json: JSON.stringify({ match_status: match2.status, ticket_type: normalizeTicketType(payload.ticket_type), fee_period: payload.fee_period, reception_attendance: payload.reception_attendance }),
+    details_json: JSON.stringify({ match_status: match2.status, ticket_type: normalizeTicketType(payload.ticket_type), fee_period: payload.fee_period, reception_attendance: payload.reception_attendance, pricing_version: pricingVersion, donation_equivalent_jpy: donationEquivalentJpy }),
     ...requestMeta
   });
   const paymentId = null;
@@ -644,7 +562,9 @@ async function insertApplication(db, payload, requestMeta = {}) {
     payment_id: paymentId,
     line_items: lineItems,
     dance_ticket_benefit: danceTicketBenefit(payload.ticket_type),
-    companion_dance_ticket_benefit: companionDanceTicketBenefit(payload.ticket_type, companions)
+    companion_dance_ticket_benefit: companionDanceTicketBenefit(payload.ticket_type, companions),
+    pricing_version: pricingVersion,
+    donation_equivalent_jpy: donationEquivalentJpy
   };
 }
 __name(insertApplication, "insertApplication");
@@ -997,6 +917,9 @@ async function getApplicationById(db, applicationId) {
         a.payment_status, a.payment_method, a.payment_provider, a.external_payment_id,
         a.expected_transfer_name, a.actual_transfer_name, a.admin_note, a.total_amount_jpy,
         a.status, a.attendance_status, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at,
+        a.pricing_version, a.pricing_effective_at, a.donation_equivalent_jpy,
+        a.supporter_publication_consent, a.supporter_publication_name, a.supporter_include_maiden_name,
+        a.supporter_joint_name, a.supporter_anonymous, a.supporter_badge_preference, a.supporter_message,
         a.application_received_email_sent_at,
         (SELECT COUNT(*) FROM companions c WHERE c.application_id = a.id AND c.attendee_type = 'adult') AS adult_companion_count
        FROM applications a
@@ -1021,7 +944,7 @@ async function adjustUnfundedBankTransferAmount({
   const current = await db.prepare(
     `SELECT
         a.id, a.application_code, a.full_name, a.email, a.ticket_type, a.fee_period,
-        a.reception_attendance, a.payment_status, a.payment_method, a.total_amount_jpy,
+        a.reception_attendance, a.payment_status, a.payment_method, a.total_amount_jpy, a.pricing_version,
         p.id AS payment_id, p.stripe_payment_intent_id, p.stripe_customer_id,
         p.amount_total AS payment_amount_total, p.amount_received_jpy,
         p.amount_remaining_jpy, p.status AS stripe_payment_status
@@ -1060,9 +983,11 @@ async function adjustUnfundedBankTransferAmount({
     {
       ticket_type: current.ticket_type,
       fee_period: current.fee_period,
-      reception_attendance: current.reception_attendance
+      reception_attendance: current.reception_attendance,
+      pricing_version: current.pricing_version || LEGACY_PRICING_VERSION
     },
-    companions
+    companions,
+    current.pricing_version || LEGACY_PRICING_VERSION
   );
   const calculatedAmount = lineItemsTotal(expectedLineItems);
   const requestedAmount = Number(expectedAmountJpy);
@@ -1433,6 +1358,9 @@ async function listApplications(db) {
         a.quantity, a.expected_transfer_name, a.actual_transfer_name,
         a.match_confidence, a.status, a.payment_status, a.payment_method, a.payment_provider, a.external_payment_id,
         a.admin_note, a.attendance_status, a.total_amount_jpy, a.created_at, a.updated_at, a.paid_at, a.cancelled_at, a.refunded_at,
+        a.pricing_version, a.pricing_effective_at, a.donation_equivalent_jpy,
+        a.supporter_publication_consent, a.supporter_publication_name, a.supporter_include_maiden_name,
+        a.supporter_joint_name, a.supporter_anonymous, a.supporter_badge_preference, a.supporter_message,
         a.application_received_email_sent_at,
         m.member_code, m.full_name AS matched_member_name,
         p.stripe_checkout_session_id, p.stripe_payment_intent_id, p.stripe_customer_id, p.stripe_event_id,
@@ -1441,19 +1369,9 @@ async function listApplications(db) {
         p.instructions_email_sent_at, p.payment_confirmed_email_sent_at,
         p.unreconciled_amount_jpy, p.cash_balance_attention_at, p.cash_balance_alert_email_sent_at,
         p.payment_method AS latest_payment_method, p.payment_provider AS latest_payment_provider,
-        (
-          SELECT COALESCE(SUM(
-            CASE
-              WHEN c.attendee_type = 'preschool' THEN 0
-              WHEN c.attendee_type = 'child' THEN
-                CASE WHEN COALESCE(c.reception_attendance, a.reception_attendance) = 'without_reception' THEN 1000 ELSE 3000 END
-              ELSE
-                CASE WHEN COALESCE(c.reception_attendance, a.reception_attendance) = 'without_reception' THEN 6000 ELSE 8000 END
-            END
-          ), 0)
-          FROM companions c
-          WHERE c.application_id = a.id
-        ) AS companion_fee_total,
+        (SELECT COALESCE(SUM(pli.amount_jpy), 0)
+           FROM payment_line_items pli
+          WHERE pli.application_id = a.id AND pli.item_type = 'companion') AS companion_fee_total,
         (
           SELECT GROUP_CONCAT(
             c.full_name || '（' || CASE WHEN COALESCE(c.reception_attendance, a.reception_attendance) = 'attending' THEN '懇親会参加' ELSE '懇親会不参加' END || '）',
@@ -1670,6 +1588,10 @@ function renderPaymentConfirmedEmail(application) {
   const paidAt = application.paid_at || application.paidAt || "\u5165\u91D1\u78BA\u8A8D\u65E5\u672A\u8A2D\u5B9A";
   const isAbsentDonation = String(application.ticket_type || "").startsWith("absent_donation_");
   const donationPlan = donationPlanDetails(application.ticket_type);
+  const planName = donationPlan?.name || "通常参加";
+  const receptionLabel = application.reception_attendance === "without_reception" ? "第一部FESTAのみ" : "第一部FESTA＋第二部懇親会";
+  const paymentAmount = formatYen(application.total_amount_jpy || application.amount_total || application.amount);
+  const donationEquivalent = Number(application.donation_equivalent_jpy || 0);
   if (isAbsentDonation) {
     return {
       to: application.email,
@@ -1681,6 +1603,8 @@ function renderPaymentConfirmedEmail(application) {
 \u53D7\u4ED8\u756A\u53F7\uFF1A${application.application_code || application.applicationId}
 \u304A\u7533\u8FBC\u8005\u540D\uFF1A${name}
 \u5BC4\u4ED8\u30D7\u30E9\u30F3\uFF1A${donationPlan?.name || ""}
+\u304A\u652F\u6255\u3044\u91D1\u984D\uFF1A${paymentAmount}
+\u5BC4\u4ED8\u76F8\u5F53\u984D\uFF1A${formatYen(donationEquivalent)}
 \u8FD4\u793C\u5185\u5BB9\uFF1A${donationPlan?.description || ""}
 \u5165\u91D1\u78BA\u8A8D\u65E5\uFF1A${paidAt}
 
@@ -1701,11 +1625,15 @@ function renderPaymentConfirmedEmail(application) {
 
 \u53D7\u4ED8\u756A\u53F7\uFF1A${application.application_code || application.applicationId}
 \u304A\u7533\u8FBC\u8005\u540D\uFF1A${name}
+\u53C2\u52A0\u30D7\u30E9\u30F3\uFF1A${planName}
+\u53C2\u52A0\u5F62\u614B\uFF1A${receptionLabel}
 \u53C2\u52A0\u4EBA\u6570\uFF1A${quantity}\u540D
+\u304A\u652F\u6255\u3044\u91D1\u984D\uFF1A${paymentAmount}
 \u5165\u91D1\u78BA\u8A8D\u65E5\uFF1A${paidAt}
 \u30C0\u30F3\u30B9\u30BF\u30A4\u30E0\u30C1\u30B1\u30C3\u30C8\uFF1A${danceTicketDescription(application.ticket_type)}
 \u540C\u4F34\u8005\u5411\u3051\u30C1\u30B1\u30C3\u30C8\uFF1A${companionDanceTicketDescription(application)}
 ${donationPlan ? `\u5BC4\u4ED8\u30D7\u30E9\u30F3\uFF1A${donationPlan.name}
+\u5BC4\u4ED8\u76F8\u5F53\u984D\uFF1A${formatYen(donationEquivalent)}
 \u8FD4\u793C\u5185\u5BB9\uFF1A${donationPlan.description}` : ""}
 
 \u9818\u53CE\u66F8\u30E1\u30FC\u30EB\u306F\u3001\u6C7A\u6E08\u4EE3\u884C\u30B5\u30FC\u30D3\u30B9\u304B\u3089\u5225\u9014\u304A\u9001\u308A\u3057\u307E\u3059\u3002\u5C4A\u304F\u307E\u3067\u5C11\u3057\u6642\u9593\u304C\u304B\u304B\u308B\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002
@@ -1847,6 +1775,72 @@ FANTASISTA 60周年FESTA事務局`
   };
 }
 __name(renderBankTransferInstructionsRefreshedEmail, "renderBankTransferInstructionsRefreshedEmail");
+async function updateSupporterPublication(db, applicationId, payload, actor, requestMeta = {}) {
+  const current = await getApplicationById(db, applicationId);
+  if (!current) return null;
+  const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(current.ticket_type);
+  const isDonor = ABSENT_DONATION_TICKET_TYPES.includes(baseTicketType) || supportTier !== "none";
+  if (!isDonor) throw new Error("Supporter publication is available only for donation plans.");
+  const consent = payload.supporter_publication_consent === true;
+  const anonymous = !consent || payload.supporter_anonymous !== false;
+  const publicationName = String(payload.supporter_publication_name || "").trim().slice(0, 100) || null;
+  const jointName = String(payload.supporter_joint_name || "").trim().slice(0, 100) || null;
+  const badgePreference = ["display", "decline"].includes(payload.supporter_badge_preference)
+    ? payload.supporter_badge_preference
+    : "decline";
+  const message = String(payload.supporter_message || "").trim().slice(0, 50) || null;
+  if (consent && !anonymous && !publicationName && !jointName) {
+    throw new Error("A publication name is required when public listing is enabled.");
+  }
+  if (message && supportTier !== "platinum") {
+    throw new Error("A supporter message is available only for the platinum plan.");
+  }
+  const now = nowIso();
+  await db.prepare(
+    `UPDATE applications
+        SET supporter_publication_consent = ?, supporter_publication_name = ?,
+            supporter_include_maiden_name = ?, supporter_joint_name = ?, supporter_anonymous = ?,
+            supporter_badge_preference = ?, supporter_message = ?, updated_at = ?
+      WHERE id = ?`
+  ).bind(
+    consent ? 1 : 0,
+    publicationName,
+    payload.supporter_include_maiden_name === true ? 1 : 0,
+    jointName,
+    anonymous ? 1 : 0,
+    badgePreference,
+    message,
+    now,
+    current.id
+  ).run();
+  const consentUpdate = await db.prepare(
+    `UPDATE consents
+        SET consent_value = ?, consent_text = ?, created_at = ?
+      WHERE application_id = ? AND consent_type = 'supporter_publication'`
+  ).bind(consent ? 1 : 0, "寄付者名の公式サイト・記念パンフレット掲載に同意", now, current.id).run();
+  if (!Number(consentUpdate.meta?.changes || 0)) {
+    await db.prepare(
+      `INSERT INTO consents (id, application_id, consent_type, consent_value, consent_text, created_at)
+       VALUES (?, ?, 'supporter_publication', ?, ?, ?)`
+    ).bind(
+      newId("cns"),
+      current.id,
+      consent ? 1 : 0,
+      "寄付者名の公式サイト・記念パンフレット掲載に同意",
+      now
+    ).run();
+  }
+  await audit(db, {
+    actor,
+    action: "application.supporter_publication_updated",
+    target_type: "application",
+    target_id: current.id,
+    details_json: JSON.stringify({ consent, anonymous, badge_preference: badgePreference }),
+    ...requestMeta
+  });
+  return getApplicationById(db, current.id);
+}
+__name(updateSupporterPublication, "updateSupporterPublication");
 // api/festa60/admin/applications/[id].js
 async function onRequestPatch({ request, env, params }) {
   const auth = assertAdmin(request, env);
@@ -1854,6 +1848,17 @@ async function onRequestPatch({ request, env, params }) {
   try {
     const payload = await readJson(request);
     if (!payload) return badRequest("Invalid JSON payload.");
+    if (payload.action === "update_supporter_publication") {
+      const application = await updateSupporterPublication(
+        requireDb(env),
+        params.id,
+        payload,
+        auth.actor,
+        getClientMeta(request)
+      );
+      if (!application) return json({ ok: false, error: "not_found" }, { status: 404 });
+      return json({ ok: true, application });
+    }
     if (payload.action === "adjust_unfunded_bank_transfer_amount") {
       const result = await adjustUnfundedBankTransferAmount({
         db: requireDb(env),
@@ -1952,6 +1957,13 @@ async function onRequestPatch({ request, env, params }) {
   } catch (error) {
     if (String(error?.message || "").startsWith("Invalid payment status")) {
       return badRequest("Invalid payment status.");
+    }
+    if ([
+      "Supporter publication is available only for donation plans.",
+      "A publication name is required when public listing is enabled.",
+      "A supporter message is available only for the platinum plan."
+    ].includes(String(error?.message || ""))) {
+      return badRequest(error.message);
     }
     return serverError(error);
   }
@@ -2362,8 +2374,9 @@ async function persistBankTransferPreview(db, payload, preview, amount, payloadH
     `INSERT INTO bank_transfer_previews (
         id, stripe_payment_intent_id, stripe_customer_id, amount_total_jpy,
         amount_received_jpy, amount_remaining_jpy, currency, payload_hash, status,
-        applicant_email, applicant_name, hosted_instructions_url, expires_at, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, 0, ?, 'jpy', ?, 'previewed', ?, ?, ?, ?, ?, ?)`
+        applicant_email, applicant_name, hosted_instructions_url, expires_at, created_at, updated_at,
+        pricing_version, pricing_effective_at, donation_equivalent_jpy
+      ) VALUES (?, ?, ?, ?, 0, ?, 'jpy', ?, 'previewed', ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
     preview.previewId,
     preview.paymentIntent.id,
@@ -2376,7 +2389,10 @@ async function persistBankTransferPreview(db, payload, preview, amount, payloadH
     details.hosted_instructions_url || null,
     new Date(expiresAt).toISOString(),
     now,
-    now
+    now,
+    normalizePricingVersion(payload.pricing_version),
+    payload.pricing_effective_at || DEFAULT_PRICING_EFFECTIVE_AT,
+    donationEquivalentForTicket(payload.ticket_type)
   ).run();
   return details;
 }
@@ -2386,7 +2402,8 @@ async function getBankTransferPreview(db, previewId) {
   return db.prepare(
     `SELECT id, stripe_payment_intent_id, stripe_customer_id, amount_total_jpy,
             amount_received_jpy, amount_remaining_jpy, currency, payload_hash, status,
-            application_id, applicant_email, applicant_name, hosted_instructions_url, expires_at
+            application_id, applicant_email, applicant_name, hosted_instructions_url, expires_at,
+            pricing_version, pricing_effective_at, donation_equivalent_jpy
        FROM bank_transfer_previews
        WHERE id = ?
        LIMIT 1`
@@ -2437,7 +2454,7 @@ function stableStringify(value) {
 }
 __name(stableStringify, "stableStringify");
 function bankDecisionPayload(payload) {
-  const ignored = new Set(["action", "bank_preview_token", "turnstile_token", "pay_now", "payment_method"]);
+  const ignored = new Set(["action", "bank_preview_token", "turnstile_token", "pay_now", "payment_method", "pricing_version", "pricing_effective_at"]);
   return Object.fromEntries(Object.entries(payload).filter(([key]) => !ignored.has(key)));
 }
 __name(bankDecisionPayload, "bankDecisionPayload");
@@ -2853,6 +2870,8 @@ async function onRequestPost6({ request, env }) {
       payload.client_submission_id = crypto.randomUUID();
     }
     payload.fee_period = feePeriodForDate();
+    payload.pricing_version = activePricingVersion(env);
+    payload.pricing_effective_at = pricingEffectiveAt(env);
     payload.ticket_type = normalizeTicketType(payload.ticket_type, payload.support_tier);
     const validation = validateApplication(payload, env, action);
     if (!validation.ok) return badRequest("\u5165\u529B\u5185\u5BB9\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002", validation.errors);
@@ -2862,7 +2881,7 @@ async function onRequestPost6({ request, env }) {
     const db = requireDb(env);
     payload.ticket_type = normalizeTicketType(payload.ticket_type);
     const companions = Array.isArray(payload.companions) ? payload.companions.filter((item) => item.full_name) : [];
-    const amount = lineItemsTotal(buildPaymentLineItems(payload, companions));
+    let amount = lineItemsTotal(buildPaymentLineItems(payload, companions, payload.pricing_version));
 
     if (action === "preview_bank_transfer") {
       if (amount <= 0) return badRequest("銀行振込が必要なお支払い金額ではありません。");
@@ -2893,6 +2912,8 @@ async function onRequestPost6({ request, env }) {
         payment_intent_id: preview.paymentIntent.id,
         customer_id: preview.customer.id,
         amount,
+        pricing_version: payload.pricing_version,
+        pricing_effective_at: payload.pricing_effective_at,
         payload_hash: payloadHash,
         expires_at: expiresAt
       });
@@ -2917,6 +2938,10 @@ async function onRequestPost6({ request, env }) {
       if (!previewRecord || previewRecord.stripe_payment_intent_id !== bankPreview.payment_intent_id || previewRecord.stripe_customer_id !== bankPreview.customer_id) {
         return badRequest("銀行振込の確認記録が見つかりません。振込先をもう一度確認してください。");
       }
+      const previewPricingVersion = normalizePricingVersion(previewRecord.pricing_version || bankPreview.pricing_version || LEGACY_PRICING_VERSION);
+      payload.pricing_version = previewPricingVersion;
+      payload.pricing_effective_at = previewRecord.pricing_effective_at || bankPreview.pricing_effective_at || DEFAULT_PRICING_EFFECTIVE_AT;
+      amount = lineItemsTotal(buildPaymentLineItems(payload, companions, previewPricingVersion));
       if (previewRecord.payload_hash !== bankPreview.payload_hash || Number(previewRecord.amount_total_jpy) !== amount) {
         return badRequest("申込内容が変更されています。振込先をもう一度確認してください。");
       }
@@ -3250,6 +3275,21 @@ function validateApplication(payload, env, action = "submit_online") {
     }
   }
   const isDonor = ABSENT_DONATION_TICKET_TYPES.includes(baseTicketType) || supportTier !== "none";
+  if (payload.supporter_publication_consent && !isDonor) {
+    errors.supporter_publication_consent = "supporter_plan_required";
+  }
+  if (payload.supporter_publication_consent && !String(payload.supporter_publication_name || payload.full_name || "").trim()) {
+    errors.supporter_publication_name = "required_when_published";
+  }
+  if (payload.supporter_badge_preference && !["display", "decline"].includes(payload.supporter_badge_preference)) {
+    errors.supporter_badge_preference = "invalid";
+  }
+  if (String(payload.supporter_message || "").length > 50) {
+    errors.supporter_message = "too_long";
+  }
+  if (supportTier !== "platinum" && payload.supporter_message) {
+    errors.supporter_message = "platinum_only";
+  }
   if (isDonor && String(payload.postal_code || "").replace(/\D/g, "").length !== 7) {
     errors.postal_code = "required_for_donor_returns";
   }
@@ -3264,6 +3304,7 @@ __name(validateApplication, "validateApplication");
 
 // api/festa60/config.js
 async function onRequestGet7({ env }) {
+  const pricingVersion = activePricingVersion(env);
   return json({
     ok: true,
     environment: environmentName(env),
@@ -3275,6 +3316,10 @@ async function onRequestGet7({ env }) {
     application_open: isApplicationOpen(),
     application_deadline: APPLICATION_DEADLINE_ISO,
     fee_period: feePeriodForDate(),
+    pricing_version: pricingVersion,
+    pricing_effective_at: pricingEffectiveAt(env),
+    pricing: pricingConfig(pricingVersion),
+    fundraising: FUNDRAISING_CONFIG,
     fee_periods: {
       early: "2026\u5E749\u670830\u65E5\u307E\u3067\u306E\u7533\u8FBC",
       year_end: "2026\u5E7410\u67081\u65E5\u301C12\u670831\u65E5\u306E\u7533\u8FBC",
@@ -3295,6 +3340,137 @@ async function onRequestPost7() {
   return methodNotAllowed();
 }
 __name(onRequestPost7, "onRequestPost");
+
+// Public, aggregate-only participation and fundraising summary.
+async function getPublicFundraisingSummary(db, env) {
+  const rows = await db.prepare(
+    `SELECT
+        a.ticket_type,
+        COALESCE(a.companion_count, 0) AS companion_count,
+        COALESCE(
+          a.donation_equivalent_jpy,
+          CASE
+            WHEN a.ticket_type LIKE '%__platinum' THEN 70000
+            WHEN a.ticket_type LIKE '%__gold' THEN 25000
+            WHEN a.ticket_type LIKE '%__silver' THEN 10200
+            WHEN a.ticket_type LIKE '%__bronze' THEN 3500
+            WHEN a.ticket_type = 'absent_donation_30000' THEN 30000
+            WHEN a.ticket_type = 'absent_donation_10000' THEN 10000
+            WHEN a.ticket_type = 'absent_donation_5000' THEN 5000
+            ELSE 0
+          END
+        ) AS donation_equivalent_jpy,
+        CASE
+          WHEN a.supporter_publication_consent = 1
+           AND COALESCE(a.supporter_anonymous, 1) = 0
+          THEN NULLIF(TRIM(
+            CASE
+              WHEN NULLIF(TRIM(a.supporter_joint_name), '') IS NOT NULL THEN a.supporter_joint_name
+              WHEN a.supporter_include_maiden_name = 1 AND NULLIF(TRIM(a.maiden_name), '') IS NOT NULL
+                THEN COALESCE(a.supporter_publication_name, a.full_name) || '（旧姓 ' || a.maiden_name || '）'
+              ELSE COALESCE(a.supporter_publication_name, a.full_name)
+            END
+          ), '')
+          ELSE NULL
+        END AS public_supporter_name,
+        CASE
+          WHEN a.supporter_publication_consent = 1
+           AND COALESCE(a.supporter_anonymous, 1) = 0
+           AND a.ticket_type LIKE '%__platinum'
+          THEN NULLIF(TRIM(a.supporter_message), '')
+          ELSE NULL
+        END AS public_supporter_message,
+        a.updated_at
+      FROM applications a
+      WHERE a.payment_status = 'paid'
+        AND a.cancelled_at IS NULL
+        AND a.refunded_at IS NULL
+        AND COALESCE(a.status, '') NOT IN ('cancelled', 'refunded')`
+  ).all();
+  const additionalDonation = await db.prepare(
+    `SELECT COALESCE(SUM(pli.amount_jpy), 0) AS amount_jpy
+       FROM payment_line_items pli
+       JOIN applications a ON a.id = pli.application_id
+      WHERE pli.item_type = 'additional_donation'
+        AND a.payment_status = 'paid'
+        AND a.cancelled_at IS NULL
+        AND a.refunded_at IS NULL
+        AND COALESCE(a.status, '') NOT IN ('cancelled', 'refunded')`
+  ).first();
+  const paidRows = rows.results || [];
+  const planCounts = {
+    platinum: 0,
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+    absent_donation_30000: 0,
+    absent_donation_10000: 0,
+    absent_donation_5000: 0
+  };
+  let obogParticipants = 0;
+  let companionCount = 0;
+  let supporterCount = 0;
+  let donationEquivalentJpy = Number(additionalDonation?.amount_jpy || 0);
+  let lastUpdatedAt = null;
+  const supporters = [];
+  for (const row of paidRows) {
+    const { base_ticket_type: baseTicketType, support_tier: supportTier } = splitTicketType(row.ticket_type);
+    const isAbsentDonation = ABSENT_DONATION_TICKET_TYPES.includes(baseTicketType);
+    const isObogParticipant = !isAbsentDonation && publicBaseTicketType(baseTicketType).startsWith('obog');
+    const planKey = isAbsentDonation ? baseTicketType : supportTier;
+    if (isObogParticipant) {
+      obogParticipants += 1;
+      companionCount += Number(row.companion_count || 0);
+    }
+    if (Object.hasOwn(planCounts, planKey)) {
+      planCounts[planKey] += 1;
+      supporterCount += 1;
+    }
+    donationEquivalentJpy += Number(row.donation_equivalent_jpy || 0);
+    if (!lastUpdatedAt || String(row.updated_at || '') > lastUpdatedAt) lastUpdatedAt = row.updated_at || lastUpdatedAt;
+    if (row.public_supporter_name && Object.hasOwn(planCounts, planKey)) {
+      supporters.push({
+        plan: planKey,
+        display_name: row.public_supporter_name,
+        message: row.public_supporter_message || null
+      });
+    }
+  }
+  const configuredThreshold = Number(env.PUBLIC_PARTICIPANT_COUNT_THRESHOLD || FUNDRAISING_CONFIG.participant_count_public_threshold);
+  const participantThreshold = Number.isFinite(configuredThreshold) && configuredThreshold >= 0
+    ? configuredThreshold
+    : FUNDRAISING_CONFIG.participant_count_public_threshold;
+  const primaryTarget = FUNDRAISING_CONFIG.primary_target_jpy;
+  return {
+    participant_count_visible: obogParticipants >= participantThreshold,
+    participant_count_threshold: participantThreshold,
+    obog_participant_count: obogParticipants >= participantThreshold ? obogParticipants : null,
+    companion_count: obogParticipants >= participantThreshold ? companionCount : null,
+    supporter_count: supporterCount,
+    plan_counts: planCounts,
+    donation_equivalent_jpy: donationEquivalentJpy,
+    primary_target_jpy: primaryTarget,
+    primary_target_remaining_jpy: Math.max(0, primaryTarget - donationEquivalentJpy),
+    goals: FUNDRAISING_CONFIG.goals,
+    allocation: FUNDRAISING_CONFIG.allocation,
+    supporters,
+    last_updated_at: lastUpdatedAt
+  };
+}
+__name(getPublicFundraisingSummary, "getPublicFundraisingSummary");
+async function onRequestGet8({ env }) {
+  try {
+    const summary = await getPublicFundraisingSummary(requireDb(env), env);
+    return json({ ok: true, summary }, { headers: { "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=600" } });
+  } catch (error) {
+    return serverError(error);
+  }
+}
+__name(onRequestGet8, "onRequestGet");
+async function onRequestPost8() {
+  return methodNotAllowed();
+}
+__name(onRequestPost8, "onRequestPost");
 
 // _middleware.js
 var PROTECTED_PREFIXES = [
@@ -3459,6 +3635,20 @@ var routes = [
     method: "POST",
     middlewares: [],
     modules: [onRequestPost7]
+  },
+  {
+    routePath: "/api/festa60/public-summary",
+    mountPath: "/api/festa60",
+    method: "GET",
+    middlewares: [],
+    modules: [onRequestGet8]
+  },
+  {
+    routePath: "/api/festa60/public-summary",
+    mountPath: "/api/festa60",
+    method: "POST",
+    middlewares: [],
+    modules: [onRequestPost8]
   },
   {
     routePath: "/api/stripe/webhook",

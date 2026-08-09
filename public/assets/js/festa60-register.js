@@ -1,3 +1,23 @@
+import {
+  ABSENT_DONATION_TOTALS,
+  ATTENDING_DONATION_EQUIVALENTS,
+  ATTENDING_PLAN_TOTALS,
+  BASE_FEES,
+  CURRENT_PRICING_VERSION,
+  FEE_PERIOD_LABELS,
+  STAFF_TICKET_TYPES,
+  SUPPORT_PLAN_DETAILS,
+  ABSENT_PLAN_DETAILS,
+  buildPaymentLineItems,
+  lineItemsTotal,
+  attendingPlanAmount as sharedAttendingPlanAmount,
+  staffParticipationAmount as sharedStaffParticipationAmount,
+  noReceptionDiscount as sharedNoReceptionDiscount,
+  normalizeTicketType,
+  pricingConfig,
+  publicBaseTicketType,
+} from "./festa60-pricing.js";
+
 (function () {
   const form = document.getElementById("festa60-form");
   const message = document.getElementById("form-message");
@@ -46,6 +66,15 @@
   const absentPlanDetail = document.getElementById("absent-plan-detail");
   const photoConsentSection = document.getElementById("photo-consent-section");
   const photoConsent = form?.querySelector("input[name='photo_consent']");
+  const supporterRecognitionSection = document.getElementById("supporter-recognition-section");
+  const supporterPublicationConsent = document.getElementById("supporter_publication_consent");
+  const supporterPublicationName = document.getElementById("supporter_publication_name");
+  const supporterJointName = document.getElementById("supporter_joint_name");
+  const supporterIncludeMaidenName = document.getElementById("supporter_include_maiden_name");
+  const supporterAnonymous = document.getElementById("supporter_anonymous");
+  const supporterBadgePreference = document.getElementById("supporter_badge_preference");
+  const supporterMessageSection = document.getElementById("supporter-message-section");
+  const supporterMessage = document.getElementById("supporter_message");
   const returnAddressSection = document.getElementById("return-address-section");
   const postalCode = document.getElementById("postal_code");
   const postalLookupButton = document.getElementById("postal-lookup-button");
@@ -75,67 +104,21 @@
   let applicationOpen = true;
   let lastLookedUpPostalCode = "";
   let stripeAvailable = false;
+  let activePricingVersion = CURRENT_PRICING_VERSION;
   const obogSixTenFrom = 2016;
   const obogSixTenTo = 2020;
   const obogFiveUnderFrom = 2021;
   const obogFiveUnderTo = 2025;
   const obogElevenOverTo = 2015;
-  const baseFees = {
-    obog: { early: 13000, year_end: 14000, regular: 15000 },
-    obog_6_10: { early: 11000, year_end: 12000, regular: 13000 },
-    obog_5_under: { early: 9000, year_end: 10000, regular: 11000 },
-    current_student: { early: 4000, year_end: 4000, regular: 4000 },
-  };
-  const attendingPlanTotals = { platinum: 100000, gold: 50000, silver: 30000, bronze: 20000 };
+  const baseFees = BASE_FEES;
+  const attendingPlanTotals = ATTENDING_PLAN_TOTALS;
   const attendingPlanTicketUnits = { platinum: 600, gold: 500, silver: 400, bronze: 300 };
-  const staffTicketTypes = ["obog_staff", "obog_staff_6_10", "obog_staff_5_under"];
-  const absentDonationTotals = {
-    absent_donation_30000: 30000,
-    absent_donation_10000: 10000,
-    absent_donation_5000: 5000,
-  };
-  const supportPlanDetails = {
-    bronze: {
-      title: "ブロンズ（プラン料金20,000円）",
-      benefits: ["300円券×5枚", "当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー（予定）"],
-    },
-    silver: {
-      title: "シルバー（プラン料金30,000円）",
-      benefits: ["400円券×12枚", "当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー（予定）"],
-    },
-    gold: {
-      title: "ゴールド（プラン料金50,000円）",
-      benefits: ["500円券×20枚", "当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー（予定）"],
-    },
-    platinum: {
-      title: "プラチナ（プラン料金100,000円）",
-      benefits: ["600円券×25枚", "当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー（予定）"],
-    },
-  };
-  const absentPlanDetails = {
-    absent_donation_5000: {
-      title: "スタンダード（5,000円）",
-      benefits: ["当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー", "定形郵便等で配送予定"],
-    },
-    absent_donation_10000: {
-      title: "アドバンス（10,000円）",
-      benefits: ["当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー", "写真スタンド", "レターパックで配送予定"],
-    },
-    absent_donation_30000: {
-      title: "プレミアム（30,000円）",
-      benefits: ["当日の集合写真", "現役からのお礼のメッセージ", "60周年記念オリジナルステッカー", "写真盾", "記念品", "宅急便コンパクトで配送予定"],
-    },
-  };
-  const companionFees = {
-    adult: { attending: 8000, without_reception: 6000 },
-    child: { attending: 3000, without_reception: 1000 },
-    preschool: { attending: 0, without_reception: 0 },
-  };
-  const feePeriodLabels = {
-    early: "2026年9月30日までの申込",
-    year_end: "2026年10月1日〜12月31日の申込",
-    regular: "2027年1月1日〜1月31日の申込",
-  };
+  const staffTicketTypes = STAFF_TICKET_TYPES;
+  const absentDonationTotals = ABSENT_DONATION_TOTALS;
+  const supportPlanDetails = SUPPORT_PLAN_DETAILS;
+  const absentPlanDetails = ABSENT_PLAN_DETAILS;
+  let companionFees = pricingConfig(activePricingVersion).companion_fees;
+  const feePeriodLabels = FEE_PERIOD_LABELS;
 
   if (!form) return;
 
@@ -148,6 +131,8 @@
   fetch("/api/festa60/config")
     .then((response) => response.json())
     .then((config) => {
+      activePricingVersion = config.pricing_version || CURRENT_PRICING_VERSION;
+      companionFees = pricingConfig(activePricingVersion).companion_fees;
       applyFeePeriod(config.fee_period || feePeriodForNow(), config.fee_periods || feePeriodLabels);
       updateApplicationDeadline(config);
       updateStripeAvailability(config);
@@ -182,8 +167,17 @@
     updateFeePreview();
   });
   absentDonationTier.addEventListener("change", function () {
+    updateReturnAddressRequirement();
     updatePlanDetails();
     updateFeePreview();
+  });
+  supporterPublicationConsent?.addEventListener("change", function () {
+    if (supporterPublicationConsent.checked) supporterAnonymous.checked = false;
+    updateSupporterPublicationFields();
+  });
+  supporterAnonymous?.addEventListener("change", function () {
+    if (supporterAnonymous.checked) supporterPublicationConsent.checked = false;
+    updateSupporterPublicationFields();
   });
   receptionAttendance.addEventListener("change", function () {
     syncCompanionReceptionOptions();
@@ -364,6 +358,10 @@
     payload.contact_consent = data.has("contact_consent");
     payload.photo_consent = data.has("photo_consent");
     payload.cancellation_policy_consent = data.has("cancellation_policy_consent");
+    payload.supporter_publication_consent = data.has("supporter_publication_consent");
+    payload.supporter_include_maiden_name = data.has("supporter_include_maiden_name");
+    payload.supporter_anonymous = !payload.supporter_publication_consent || data.has("supporter_anonymous");
+    payload.pricing_version = activePricingVersion;
     delete payload.expected_transfer_name;
     const isAbsentDonation = payload.application_mode === "absent_donation";
     if (isAbsentDonation) {
@@ -491,6 +489,19 @@
     prefecture.required = isDonor;
     city.required = isDonor;
     streetAddress.required = isDonor;
+    supporterRecognitionSection.hidden = !isDonor;
+    const isPlatinum = applicationMode.value === "attending" && supportTier.value === "platinum";
+    supporterMessageSection.hidden = !isDonor || !isPlatinum;
+    if (!isPlatinum) supporterMessage.value = "";
+    updateSupporterPublicationFields();
+  }
+
+  function updateSupporterPublicationFields() {
+    const canPublish = !supporterRecognitionSection.hidden && supporterPublicationConsent.checked && !supporterAnonymous.checked;
+    supporterPublicationName.disabled = !canPublish;
+    supporterJointName.disabled = !canPublish;
+    supporterIncludeMaidenName.disabled = !canPublish;
+    supporterPublicationName.required = canPublish;
   }
 
   function normalizePostalCode(value) {
@@ -533,17 +544,18 @@
     if (support) {
       const discountedAmount = attendeePlanAmount(supportTier.value, ticketType.value, feePeriod.value, receptionAttendance.value);
       const ticketUnitAmount = danceTicketUnitAmount(supportTier.value);
+      const donationEquivalent = ATTENDING_DONATION_EQUIVALENTS[supportTier.value] || 0;
       const staffExplanation = staffMode
-        ? "<p>参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。上乗せ寄付相当分は割引しません。懇親会不参加の場合は、半額後に2,000円を控除します。</p>"
+        ? "<p>参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。上乗せ寄付相当分は割引しません。第一部のみの場合は、半額後に4,000円を控除します。</p>"
         : "<p>申込時期割引と卒部年度割引を併用しています。</p>";
-      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p><p>通常参加分の300円券は別途配布しません。有料の大人同伴者には${ticketUnitAmount}円券を1枚配布し、当日の追加購入も原則として${ticketUnitAmount}円券です。</p>${staffExplanation}`;
+      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>寄付相当額：約${donationEquivalent.toLocaleString("ja-JP")}円</strong></p><p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p><p>通常参加分の300円券は別途配布しません。有料の大人同伴者には${ticketUnitAmount}円券を1枚配布し、当日の追加購入も原則として${ticketUnitAmount}円券です。</p>${staffExplanation}`;
     } else {
       const standardDanceTicket = publicTicketType(ticketType.value) === "obog" ? "300円券×3枚" : "300円券×2枚";
       const staffAmount = staffMode ? staffParticipationAmount(ticketType.value, feePeriod.value, receptionAttendance.value) : null;
       const standardAmount = attendeePlanAmount("none", ticketType.value, feePeriod.value, receptionAttendance.value);
       supportPlanDetail.innerHTML = staffMode
-        ? `<h3>役員・当日お手伝い 通常参加</h3><p>参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。懇親会不参加の場合は、半額後に2,000円を控除します。</p><p><strong>現在の割引・控除適用額：${staffAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。有料の大人同伴者には300円券を1枚配布し、当日の追加購入も原則として300円券です。</p>`
-        : `<h3>通常参加（基準額15,000円）</h3><p>申込時期割引・卒部年度割引・懇親会不参加時の2,000円控除を自動適用します。</p><p><strong>現在の割引・控除適用額：${standardAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。有料の大人同伴者には300円券を1枚配布し、当日の追加購入も原則として300円券です。</p>`;
+        ? `<h3>役員・当日お手伝い 通常参加</h3><p>参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。第一部のみの場合は、半額後に4,000円を控除します。</p><p><strong>現在の割引・控除適用額：${staffAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。有料の大人同伴者には300円券を1枚配布し、当日の追加購入も原則として300円券です。</p>`
+        : `<h3>通常参加（基準額15,000円）</h3><p>申込時期割引・卒部年度割引を適用します。第一部のみの場合は、さらに4,000円を控除します。</p><p><strong>現在の割引・控除適用額：${standardAmount.toLocaleString("ja-JP")}円</strong></p><p>ダンスタイム用の${standardDanceTicket}が付きます。有料の大人同伴者には300円券を1枚配布し、当日の追加購入も原則として300円券です。</p>`;
     }
     const absent = absentPlanDetails[absentDonationTier.value];
     absentPlanDetail.innerHTML = absent ? planDetailMarkup(absent) : "";
@@ -564,7 +576,7 @@
     attendanceTicketNotice.hidden = false;
     ticketType.value = "obog_staff";
     ticketTypeDisplay.value = "一般OBOG（11年目以上）／役員・当日お手伝い";
-    receptionAttendanceHelp.textContent = "役員・当日お手伝いは、参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。懇親会不参加の場合は、半額後に2,000円を控除します。上乗せ寄付相当分と同伴者料金には役員割引を適用しません。";
+    receptionAttendanceHelp.textContent = "役員・当日お手伝いは、参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。第一部のみの場合は、半額後に4,000円を控除します。上乗せ寄付相当分と同伴者料金には役員割引を適用しません。";
   }
 
   function showConfirmation(payload) {
@@ -779,6 +791,19 @@
     }
 
     if (isDonor) {
+      groups.push({
+        title: "サポーター掲載・当日表示",
+        rows: [
+          ["氏名掲載", payload.supporter_publication_consent && !payload.supporter_anonymous ? "同意する" : "掲載しない"],
+          ...(payload.supporter_publication_consent && !payload.supporter_anonymous ? [
+            ["掲載名", payload.supporter_publication_name || payload.full_name],
+            ["旧姓併記", payload.supporter_include_maiden_name ? "希望する" : "希望しない"],
+            ["夫妻・連名等", payload.supporter_joint_name || "希望なし"],
+          ] : []),
+          ["当日のサポーター表示", payload.supporter_badge_preference === "decline" ? "辞退する" : "希望する"],
+          ...(payload.supporter_message ? [["応援メッセージ", payload.supporter_message]] : []),
+        ],
+      });
       groups.push({
         title: "返礼品・お礼状の送付先",
         rows: [
@@ -1014,6 +1039,15 @@
       errors.push("参加者向け支援プランはOBOG区分で選択してください。");
     }
     const isDonor = isAbsentDonation || payload.support_tier !== "none";
+    if (isDonor && payload.supporter_publication_consent && !payload.supporter_anonymous && !String(payload.supporter_publication_name || "").trim()) {
+      errors.push("氏名掲載に同意する場合は掲載名を入力してください。");
+    }
+    if (String(payload.supporter_message || "").length > 50) {
+      errors.push("プラチナサポーター応援メッセージは50字以内で入力してください。");
+    }
+    if (payload.support_tier !== "platinum" && payload.supporter_message) {
+      errors.push("応援メッセージはプラチナプランでのみ入力できます。");
+    }
     if (isDonor && normalizePostalCode(payload.postal_code).length !== 7) {
       errors.push("寄付のお申し込みには7桁の郵便番号が必要です。");
     }
@@ -1041,45 +1075,12 @@
   }
 
   function calculateAmount(payload) {
-    const period = payload.fee_period || "regular";
-    const reception = payload.reception_attendance || "attending";
-    if (Object.hasOwn(absentDonationTotals, payload.ticket_type)) {
-      return absentDonationTotals[payload.ticket_type];
-    }
-    let base = baseFees[payload.ticket_type]?.[period] ?? baseFees.obog[period];
-    if (staffTicketTypes.includes(payload.ticket_type)) {
-      base = payload.support_tier && payload.support_tier !== "none"
-        ? attendeePlanAmount(payload.support_tier, payload.ticket_type, period, reception)
-        : staffParticipationAmount(payload.ticket_type, period, reception);
-    } else if (payload.ticket_type === "current_student") {
-      base = reception === "attending" ? baseFees.current_student[period] : 0;
-    } else if (payload.support_tier && payload.support_tier !== "none") {
-      base = attendeePlanAmount(payload.support_tier, payload.ticket_type, period, reception);
-    } else {
-      base = Math.max(0, base - noReceptionDiscount(reception));
-    }
-
-    const companionTotal = payload.companions.reduce((sum, companion) => {
-      const type = ["adult", "child", "preschool"].includes(companion.attendee_type) ? companion.attendee_type : "adult";
-      const companionReception = companion.reception_attendance || reception;
-      return sum + companionFees[type][companionReception];
-    }, base);
-    return companionTotal;
+    const pricedPayload = { ...payload, ticket_type: normalizeTicketType(payload.ticket_type, payload.support_tier) };
+    return lineItemsTotal(buildPaymentLineItems(pricedPayload, payload.companions || [], activePricingVersion));
   }
 
   function attendeePlanAmount(plan, attendeeType, period, reception = "attending") {
-    const planBase = attendingPlanTotals[plan];
-    if (!planBase) {
-      const standardFee = baseFees[attendeeType]?.[period] ?? baseFees.obog[period];
-      return Math.max(0, standardFee - noReceptionDiscount(reception));
-    }
-    if (staffTicketTypes.includes(attendeeType)) {
-      const donationAddOn = Math.max(0, planBase - baseFees.obog.regular);
-      return donationAddOn + staffParticipationAmount(attendeeType, period, reception);
-    }
-    const discountedStandardFee = baseFees[attendeeType]?.[period] ?? baseFees.obog[period];
-    const combinedDiscount = Math.max(0, baseFees.obog.regular - discountedStandardFee);
-    return Math.max(0, planBase - combinedDiscount - noReceptionDiscount(reception));
+    return sharedAttendingPlanAmount(plan, attendeeType, period, reception, activePricingVersion);
   }
 
   function applicationPeriodDiscount(period) {
@@ -1096,19 +1097,11 @@
   }
 
   function staffParticipationAmount(attendeeType, period, reception) {
-    const discountedParticipationFee = Math.max(
-      0,
-      baseFees.obog.regular - applicationPeriodDiscount(period) - graduationDiscount(attendeeType)
-    );
-    const staffParticipationFee = Math.round(discountedParticipationFee * 0.5);
-    return Math.max(0, staffParticipationFee - noReceptionDiscount(reception));
+    return sharedStaffParticipationAmount(attendeeType, period, reception, activePricingVersion);
   }
 
   function publicTicketType(attendeeType) {
-    if (attendeeType === "obog_staff_6_10") return "obog_6_10";
-    if (attendeeType === "obog_staff_5_under") return "obog_5_under";
-    if (attendeeType === "obog_staff") return "obog";
-    return attendeeType;
+    return publicBaseTicketType(attendeeType);
   }
 
   function staffTicketType(attendeeType) {
@@ -1118,7 +1111,7 @@
   }
 
   function noReceptionDiscount(reception) {
-    return reception === "without_reception" ? 2000 : 0;
+    return sharedNoReceptionDiscount(reception, activePricingVersion);
   }
 
   function danceTicketUnitAmount(plan) {

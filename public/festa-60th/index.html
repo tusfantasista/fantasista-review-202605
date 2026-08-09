@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/festa60-fundraising.css?v=20260810-1">
     <style>
       :root {
         --bg: #070707;
@@ -2615,7 +2616,7 @@
             <div class="home-support-impact" aria-label="参加と寄付によって生まれる3つの価値">
               <article><span>YOUR FESTA</span><h3>再会の一日を、もっと記憶に残る時間へ</h3><p>記念展示、写真や映像、プロデモ、トライアル、懇親会。皆さまの参加と応援が、世代を超えて楽しめるFESTAをつくります。</p></article>
               <article><span>DIRECT SUPPORT</span><h3>応援を、踊った現役本人へ届ける</h3><p>ダンスタイムやトライアルで渡されたチケットは、券面相当額のすべてを、そのチケットで踊った現役本人へ還元します。</p></article>
-              <article><span>NEXT BUKEN</span><h3>現役の挑戦と、舞研の次の10年を支える</h3><p>寄付は、FMドレスや活動備品の整備、競技力向上に向けた現役支援にも活用し、舞研の未来へつなげます。</p></article>
+              <article><span>NEXT BUKEN</span><h3>現役の挑戦と、舞研の次の10年を支える</h3><p>寄付相当分の約3分の2を現役支援へ。FMドレス更新を最優先に、舞研の未来へつなげます。</p></article>
             </div>
 
             <div class="home-support-message">
@@ -2623,11 +2624,30 @@
               <p>60周年を懐かしむだけでなく、私たち自身の手でFESTAを盛り上げ、次の世代へ渡していく機会です。会場に来ること、仲間を誘うこと、寄付プランを選ぶこと。それぞれの形で、この輪に加わってください。</p>
             </div>
 
+            <section class="fundraising-summary" data-festa60-public-summary aria-labelledby="home-fundraising-summary-title">
+              <div class="fundraising-summary__heading">
+                <div><p class="eyebrow">Current Support</p><h3 id="home-fundraising-summary-title">現在の参加・応援状況</h3></div>
+                <p data-summary-updated>集計中</p>
+              </div>
+              <div class="fundraising-summary__metrics">
+                <p><span>OBOG参加申込</span><strong data-summary-participants>参加申込受付中</strong></p>
+                <p><span>同伴者</span><strong data-summary-companions>0名</strong></p>
+                <p><span>サポーター</span><strong data-summary-supporters>0名</strong></p>
+                <p><span>寄付相当額</span><strong data-summary-donation>0円</strong></p>
+              </div>
+              <div class="fundraising-progress" aria-label="寄付目標の進捗">
+                <div class="fundraising-progress__bar"><span data-summary-progress-bar></span></div>
+                <div class="fundraising-progress__milestones" data-summary-milestones aria-hidden="true"></div>
+                <p data-summary-next-goal>まずは第1目標へ</p>
+              </div>
+              <p class="fundraising-summary__plans" data-summary-plan-counts>入金確認済みの寄付プランを集計します。</p>
+            </section>
+
             <section class="home-early-entry" aria-labelledby="home-early-entry-title">
               <div>
                 <p class="home-early-entry__label">EARLY ENTRY / 9月30日まで</p>
                 <h3 id="home-early-entry-title">若手OBOGは、今なら通常参加<strong>9,000円</strong>から。</h3>
-                <p>2021〜2025年度卒部（OBOG1〜5年目）の方は、早期申込2,000円と卒部年次4,000円の合計6,000円引き。参加者向け寄付プランにも、同じ割引を適用します。</p>
+                <p>2021〜2025年度卒部（OBOG1〜5年目）の方は、早期申込2,000円と卒部年次4,000円の合計6,000円引き。通常参加は第一部＋第二部が9,000円、第一部のみなら5,000円です。参加者向け寄付プランにも、同じ割引を適用します。</p>
               </div>
               <a class="btn btn--primary" href="../festa60-register/">割引額を確認して申し込む</a>
             </section>
@@ -2639,7 +2659,7 @@
                 <div><dt>卒部6〜10年目<small>OBOG6〜10年目／2016〜2020年度</small></dt><dd>4,000円引き<small>通常参加 15,000円 → 11,000円</small></dd></div>
                 <div><dt>卒部11年目以上<small>OBOG11年目以上／2015年度以前</small></dt><dd>2,000円引き<small>通常参加 15,000円 → 13,000円</small></dd></div>
               </dl>
-              <p>割引額は通常参加からプラチナまで共通です。懇親会へ参加しない場合は、割引後の金額からさらに2,000円を控除します。卒部年次は2026年4月1日時点を基準とします。</p>
+              <p>割引額は通常参加からプラチナまで共通です。「第一部のみ」を選ぶ場合は、割引後の金額からさらに4,000円を控除します。卒部年次は2026年4月1日時点を基準とします。</p>
             </details>
 
             <div class="home-support-plans" aria-label="参加と寄付の選択肢">
@@ -3002,6 +3022,7 @@
     </div>
     <script src="../assets/js/site.js?v=20260720-1" defer=""></script>
     <script src="../assets/js/photo-library.js?v=20260809-3" defer=""></script>
+    <script type="module" src="../assets/js/festa60-public-summary.js?v=20260810-2"></script>
 
 
 
