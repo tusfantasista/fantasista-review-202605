@@ -260,6 +260,29 @@
         margin-top: 28px;
       }
 
+      .hero-quick-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 22px;
+        margin-top: 16px;
+      }
+
+      .hero-quick-links a {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff3ca;
+        font-weight: 800;
+        text-underline-offset: 5px;
+      }
+
+      .hero-quick-links a::after {
+        content: "›";
+        color: var(--gold);
+        font-size: 1.25rem;
+      }
+
       .btn {
         display: inline-flex;
         align-items: center;
@@ -750,6 +773,24 @@
           align-items: center;
           justify-content: center;
           gap: 10px;
+        }
+
+        .hero-quick-links {
+          width: 100%;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 8px;
+        }
+
+        .hero-quick-links a {
+          min-width: 0;
+          justify-content: center;
+          border: 1px solid rgba(255, 210, 28, 0.28);
+          border-radius: 12px;
+          padding: 9px 8px;
+          background: rgba(255, 255, 255, 0.035);
+          font-size: 0.86rem;
+          text-decoration: none;
         }
 
         .cta-row .btn,
@@ -2199,6 +2240,7 @@
                 <a class="btn btn--primary" href="#overview">開催概要を見る</a>
                 <a class="btn btn--ghost" href="#home-fundraising-summary-title">参加状況を確認する</a>
               </div>
+              <nav class="hero-quick-links" aria-label="主要ページへのショートカット"><a href="./program/">プログラムを見る</a><a href="./support/">参加費・寄付を見る</a></nav>
             </div>
 
             <div class="hero__facts" aria-label="開催情報">

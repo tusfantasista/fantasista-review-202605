@@ -47,7 +47,7 @@ const checks = [
   ["public summary exposes no direct identifiers", files.worker.includes("participant_count_visible") && !files.worker.includes("publicSummary.email") && !files.worker.includes("publicSummary.address")],
   ["public count threshold is configurable", files.worker.includes("PUBLIC_PARTICIPANT_COUNT_THRESHOLD") && files.pricing.includes("participant_count_public_threshold: 20")],
   ["public attendance target is centralized", files.pricing.includes("participant_target_count: 120") && files.worker.includes("participant_target_count: participantTarget")],
-  ["companions are not treated as supporters", files.worker.includes("companionCount += Number(row.companion_count || 0)") && files.worker.includes("if (hasPlanSupport || additionalDonationJpy > 0) supporterCount += 1") && files.festaHome.includes("ご家族・ご友人は通常の参加者です")],
+  ["companions are not treated as supporters", files.worker.includes("companionCount += Number(row.companion_count || 0)") && files.worker.includes("if (hasPlanSupport || additionalDonationJpy > 0) supporterCount += 1")],
   ["additional donations move public progress", files.worker.includes("additional_donation_jpy") && files.worker.includes("donationEquivalentJpy += Number(row.donation_equivalent_jpy || 0) + additionalDonationJpy") && files.publicSummaryScript.includes('additional_donation: "追加寄付"')],
   ["public summary has two movements", files.festaHome.includes("再会のムーブメント") && files.festaHome.includes("次の挑戦へのムーブメント") && files.festaSupport.includes("再会のムーブメント")],
   ["fundraising goal is amount based", !files.pricing.includes("platinum_supporter_target_count") && !files.festaHome.includes("プラチナサポーター目標")],

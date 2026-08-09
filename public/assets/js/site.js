@@ -61,7 +61,7 @@
       const target = document.querySelector(hash);
       if (!target) return;
       event.preventDefault();
-      if (target.matches("details.faq-group")) target.open = true;
+      if (target.matches("details")) target.open = true;
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
@@ -86,6 +86,17 @@
 
     openGroupFromHash();
     window.addEventListener("hashchange", openGroupFromHash);
+  }
+
+  function initHashDetails() {
+    function openDetailsFromHash() {
+      if (!location.hash) return;
+      const target = document.querySelector(location.hash);
+      if (target && target.matches("details")) target.open = true;
+    }
+
+    openDetailsFromHash();
+    window.addEventListener("hashchange", openDetailsFromHash);
   }
 
   function initActiveSectionNav() {
@@ -459,6 +470,7 @@
   initTopButton();
   initSmoothScroll();
   initFaqGroups();
+  initHashDetails();
   initActiveSectionNav();
   initFilters();
   initLightbox();
