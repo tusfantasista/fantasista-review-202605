@@ -21,6 +21,7 @@ const checks = [
   ["partial funding handled", files.worker.includes('event.type === "payment_intent.partially_funded"')],
   ["unreconciled cash handled", files.worker.includes('event.type === "cash_balance.funds_available"')],
   ["confirmation email retryable", files.worker.includes("sendPaymentEmailOnce(env, db, application, \"confirmed\"")],
+  ["confirmation email explains separate receipt", files.worker.match(/\\u9818\\u53CE\\u66F8\\u30E1\\u30FC\\u30EB\\u306F/g)?.length === 2 && files.worker.includes("\\u6C7A\\u6E08\\u4EE3\\u884C\\u30B5\\u30FC\\u30D3\\u30B9\\u304B\\u3089\\u5225\\u9014")],
   ["bank instructions tracked", files.worker.includes("renderBankTransferInstructionsEmail") && files.worker.includes('kind === "instructions"')],
   ["online application completes after payment", files.registerScript.includes("お支払いが完了し、申込が完了しました") && files.registerScript.includes("申込は完了していません")],
   ["no pre-payment online email", files.worker.includes('reason: "Sent only after payment confirmation."') && !files.worker.includes("renderApplicationReceivedEmail")],
