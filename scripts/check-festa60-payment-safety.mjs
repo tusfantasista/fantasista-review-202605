@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 
 const files = {
   worker: await readFile(new URL("../public/_worker.js", import.meta.url), "utf8"),
+  festaHome: await readFile(new URL("../public/festa-60th/index.html", import.meta.url), "utf8"),
   register: await readFile(new URL("../public/festa60-register/index.html", import.meta.url), "utf8"),
   registerScript: await readFile(new URL("../public/assets/js/festa60-register.js", import.meta.url), "utf8"),
   migration: await readFile(new URL("../migrations/20260808_harden_bank_transfer_flow.sql", import.meta.url), "utf8"),
@@ -22,6 +23,7 @@ const checks = [
   ["unreconciled cash handled", files.worker.includes('event.type === "cash_balance.funds_available"')],
   ["confirmation email retryable", files.worker.includes("sendPaymentEmailOnce(env, db, application, \"confirmed\"")],
   ["confirmation email explains separate receipt", files.worker.match(/\\u9818\\u53CE\\u66F8\\u30E1\\u30FC\\u30EB\\u306F/g)?.length === 2 && files.worker.includes("\\u6C7A\\u6E08\\u4EE3\\u884C\\u30B5\\u30FC\\u30D3\\u30B9\\u304B\\u3089\\u5225\\u9014")],
+  ["public pages do not call bank transfer unavailable", !files.festaHome.includes("銀行振込は現在準備中") && !files.register.includes("銀行振込は現在準備中")],
   ["bank instructions tracked", files.worker.includes("renderBankTransferInstructionsEmail") && files.worker.includes('kind === "instructions"')],
   ["online application completes after payment", files.registerScript.includes("お支払いが完了し、申込が完了しました") && files.registerScript.includes("申込は完了していません")],
   ["no pre-payment online email", files.worker.includes('reason: "Sent only after payment confirmation."') && !files.worker.includes("renderApplicationReceivedEmail")],
