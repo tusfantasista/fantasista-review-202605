@@ -150,17 +150,27 @@ img { max-width: 100%; }
 .participant-plan-scroll-hint { display: none; margin: 4px 0 0; color: var(--f60-muted); font-size: 0.76rem; }
 .standard-inclusions { margin: 26px 0; border-block: 1px solid var(--f60-line); padding: 24px 0; }
 .standard-inclusions h3 { margin: 0 0 14px; color: var(--f60-cream); font-size: 1.25rem; }
-.standard-inclusions ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 0; padding: 0; list-style: none; }
+.standard-inclusions ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 0; padding: 0; list-style: none; }
 .standard-inclusions li { border-left: 3px solid var(--f60-gold); padding-left: 14px; }
 .standard-inclusions li strong, .standard-inclusions li span { display: block; }
 .standard-inclusions li strong { color: var(--f60-cream); }
 .standard-inclusions li span, .standard-inclusions p { color: var(--f60-muted); }
 .standard-inclusions p { margin: 20px 0 0; }
-.standard-inclusions__exception { display: flex; flex-wrap: wrap; gap: 6px 18px; border-left: 3px solid var(--f60-gold); padding-left: 14px; }
-.standard-inclusions__exception strong { color: var(--f60-cream); }
+.standard-inclusions__ticket { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.standard-inclusions__ticket strong { color: var(--f60-cream); }
+.companion-fees { margin: 24px 0; }
+.companion-fees__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.companion-fees__grid p { margin: 0; border: 1px solid var(--f60-line); padding: 14px; }
+.companion-fees__grid strong, .companion-fees__grid small, .companion-fees__grid span { display: block; }
+.companion-fees__grid strong { color: var(--f60-cream); font-size: 1.05rem; }
+.companion-fees__grid small { margin: 2px 0 8px; color: var(--f60-muted); }
+.companion-fees__grid span { color: var(--f60-muted); line-height: 1.65; }
+.companion-fees__note { margin: 10px 0 0; color: var(--f60-muted); font-size: 0.84rem; line-height: 1.7; }
 .discount-guide { margin: 24px 0; border-block: 1px solid var(--f60-line); padding: 24px 0; }
 .discount-guide h3 { margin: 0 0 8px; color: var(--f60-cream); font-size: 1.15rem; }
 .discount-guide > p { color: var(--f60-muted); }
+.discount-guide .discount-guide__reception { margin: 10px 0 0; font-size: 0.88rem; }
+.discount-guide__reception strong { color: var(--f60-cream); }
 .table-wrap--compact { margin-top: 16px; }
 .discount-table { min-width: 620px; }
 .discount-table td strong { color: var(--f60-gold); }
@@ -168,11 +178,6 @@ img { max-width: 100%; }
 .discount-example strong { color: var(--f60-cream); }
 .discount-guide__link { margin-bottom: 0; }
 .discount-guide__link a { color: var(--f60-gold); font-weight: 700; text-underline-offset: 4px; }
-.pricing-formula { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: stretch; gap: 10px; margin: 18px 0; }
-.pricing-formula span { display: flex; min-width: 0; min-height: 82px; flex-direction: column; justify-content: center; border: 1px solid var(--f60-line); padding: 12px; color: var(--f60-cream); font-weight: 800; text-align: center; }
-.pricing-formula span small { margin-bottom: 4px; color: var(--f60-muted); font-size: 0.68rem; font-weight: 500; }
-.pricing-formula b { align-self: center; color: var(--f60-gold); font-size: 1.25rem; }
-.pricing-formula .pricing-formula__result { border-color: var(--f60-gold); background: rgba(255, 210, 28, 0.08); color: var(--f60-gold); }
 .participant-plan-essentials { display: grid; grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.6fr); gap: 12px; margin-top: 22px; }
 .participant-plan-essentials p { margin: 0; border-left: 4px solid var(--f60-gold); background: rgba(255, 210, 28, 0.06); padding: 14px 16px; }
 .participant-plan-essentials strong, .participant-plan-essentials span { display: block; }
@@ -282,13 +287,11 @@ img { max-width: 100%; }
   .social-links { grid-template-columns: 1fr; }
   .support-impact-grid, .support-use-list { grid-template-columns: 1fr; }
   .standard-inclusions ul { grid-template-columns: 1fr; }
+  .companion-fees__grid { grid-template-columns: 1fr; }
   .plan-choice-flow { grid-template-columns: 1fr; }
   .plan-choice-flow li { border-top: 1px solid var(--f60-line); border-bottom: 0; padding-left: 50px; }
   .plan-choice-flow li:last-child { border-bottom: 1px solid var(--f60-line); }
   .plan-choice-flow li + li::before { top: -7px; left: 50%; transform: translateX(-50%) rotate(135deg); }
-  .pricing-formula { grid-template-columns: 1fr; }
-  .pricing-formula b { line-height: 1; }
-  .pricing-formula span { min-height: 68px; }
   .participant-plan-essentials { grid-template-columns: 1fr; }
 }
 
