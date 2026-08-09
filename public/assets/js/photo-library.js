@@ -3,12 +3,57 @@
   if (!containers.length) return;
 
   const albumMeta = {
-    "1966-1976": { period: "1〜10年", years: "1966〜1976" },
-    "1977-1986": { period: "11〜20年", years: "1977〜1986" },
-    "1987-1996": { period: "21〜30年", years: "1987〜1996" },
-    "1997-2006": { period: "31〜40年", years: "1997〜2006" },
-    "2007-2016": { period: "41〜50年", years: "2007〜2016" },
-    "2017-2026": { period: "51〜60年", years: "2017〜2026" },
+    "1966-1976": {
+      period: "1〜10年",
+      years: "1966〜1976",
+      milestones: [
+        { year: "1966", text: "東京理科大学舞踏研究部 創部" },
+        { year: "1976", text: "創部10周年" },
+      ],
+    },
+    "1977-1986": {
+      period: "11〜20年",
+      years: "1977〜1986",
+      milestones: [
+        { year: "1977〜1986", text: "Ⅰ部・Ⅱ部での活動を通じ、組織体制の基礎を形成" },
+        { year: "1980年代", text: "共同加盟校との連携を深め、競技面でも成長" },
+      ],
+    },
+    "1987-1996": {
+      period: "21〜30年",
+      years: "1987〜1996",
+      milestones: [
+        { year: "1996", text: "冬全サンバ優勝。理科大初の全日本制覇" },
+      ],
+    },
+    "1997-2006": {
+      period: "31〜40年",
+      years: "1997〜2006",
+      milestones: [
+        { year: "1999", text: "夏全ラテン優勝" },
+        { year: "2004", text: "Ⅰ部校へ昇格" },
+        { year: "2006", text: "夏全ラテン総合・冬全チャチャチャ優勝" },
+      ],
+    },
+    "2007-2016": {
+      period: "41〜50年",
+      years: "2007〜2016",
+      milestones: [
+        { year: "2008〜2009", text: "冬全クイックステップ連覇" },
+        { year: "2014", text: "OBOGの支援を受け活動再開" },
+        { year: "2016", text: "創部50周年・冬全ルンバ優勝・FM春東部2位" },
+      ],
+    },
+    "2017-2026": {
+      period: "51〜60年",
+      years: "2017〜2026",
+      milestones: [
+        { year: "2018", text: "冬全フォーメーション初出場" },
+        { year: "2019", text: "冬全4年連続優勝" },
+        { year: "2019・2023〜2025", text: "FANTASISTA FESTAを開催" },
+        { year: "2026", text: "創部60周年" },
+      ],
+    },
   };
 
   const albumLabels = Object.fromEntries(Object.entries(albumMeta).map(function (entry) {
@@ -199,6 +244,25 @@
     controls.append(previous, next);
     header.append(headingGroup, controls);
 
+    const highlights = document.createElement("div");
+    highlights.className = "photo-decade-highlights";
+    highlights.setAttribute("aria-label", meta.years + "の主な節目");
+    const highlightsLabel = document.createElement("p");
+    highlightsLabel.className = "photo-decade-highlights__label";
+    highlightsLabel.textContent = "この10年の主な節目";
+    const highlightsList = document.createElement("ul");
+    highlightsList.className = "photo-decade-highlights__list";
+    (meta.milestones || []).forEach(function (milestone) {
+      const item = document.createElement("li");
+      const year = document.createElement("time");
+      year.textContent = milestone.year;
+      const text = document.createElement("span");
+      text.textContent = milestone.text;
+      item.append(year, text);
+      highlightsList.append(item);
+    });
+    highlights.append(highlightsLabel, highlightsList);
+
     const rail = document.createElement("div");
     rail.className = "photo-decade-rail";
     rail.tabIndex = 0;
@@ -212,7 +276,7 @@
     }
     previous.addEventListener("click", function () { move(-1); });
     next.addEventListener("click", function () { move(1); });
-    section.append(header, rail);
+    section.append(header, highlights, rail);
     return section;
   }
 
