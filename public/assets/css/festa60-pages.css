@@ -125,6 +125,13 @@ img { max-width: 100%; }
 .support-page-nav a::after { content: "↓"; color: var(--f60-gold); }
 .support-page-nav a:hover, .support-page-nav a:focus-visible { border-color: var(--f60-gold); background: rgba(255, 210, 28, 0.06); outline: none; }
 .support-jump-target { scroll-margin-top: 92px; }
+.support-purpose-brief { margin: 4px 0 34px; scroll-margin-top: 92px; }
+.support-purpose-brief h2 { margin: 0 0 10px; color: var(--f60-cream); font-size: clamp(1.35rem, 2.8vw, 1.8rem); }
+.support-story-library { margin-top: 42px; scroll-margin-top: 92px; }
+.support-story-library__heading { margin-bottom: 16px; }
+.support-story-library__heading h2 { margin: 6px 0 0; color: var(--f60-cream); font-size: clamp(1.45rem, 3vw, 2rem); }
+.support-story-library .support-story-details { margin-bottom: 12px; }
+.support-story-library .support-story-details:last-child { margin-bottom: 34px; }
 .support-story-details {
   margin: 0 0 34px;
   border: 1px solid rgba(214, 177, 91, 0.34);

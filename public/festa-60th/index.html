@@ -165,14 +165,21 @@
 
       .hero__grid {
         display: grid;
-        grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
-        gap: 42px;
-        align-items: end;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 34px;
+        justify-items: center;
+        align-items: center;
+      }
+
+      .hero__grid > div:first-child {
+        width: 100%;
+        text-align: center;
       }
 
       .eyebrow {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 10px;
         color: var(--gold);
         font-size: 12px;
@@ -198,14 +205,20 @@
       .hero h1 {
         margin-top: 18px;
         color: #fff7dd;
-        font-size: clamp(38px, 6.8vw, 78px);
+        font-size: clamp(38px, 5.5vw, 72px);
         line-height: 1.08;
         letter-spacing: -0.04em;
         font-weight: 800;
       }
 
+      .hero-title-line {
+        display: block;
+      }
+
       .hero__copy {
         margin-top: 22px;
+        margin-left: auto;
+        margin-right: auto;
         color: var(--gold);
         font-size: clamp(22px, 3vw, 34px);
         font-weight: 800;
@@ -218,6 +231,8 @@
 
       .hero__lead {
         margin-top: 22px;
+        margin-left: auto;
+        margin-right: auto;
         max-width: 42rem;
         color: var(--text);
         font-size: clamp(16px, 1.7vw, 18px);
@@ -226,7 +241,9 @@
 
       .hero__facts {
         display: grid;
-        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 920px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;
       }
 
@@ -256,6 +273,7 @@
       .cta-row {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
         gap: 14px;
         margin-top: 28px;
       }
@@ -263,6 +281,7 @@
       .hero-quick-links {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
         gap: 10px 22px;
         margin-top: 16px;
       }
@@ -580,9 +599,6 @@
         .brand small,
         .brand strong {
           max-width: calc(100vw - 132px);
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
         }
 
         .brand small {
@@ -591,8 +607,14 @@
         }
 
         .brand strong {
-          font-size: 14px;
+          font-size: 11px;
+          line-height: 1.25;
           letter-spacing: 0.02em;
+        }
+
+        .brand strong span {
+          display: block;
+          white-space: nowrap;
         }
 
         .menu-toggle {
@@ -2202,7 +2224,7 @@
         <div class="wrap header__inner">
           <a class="brand" href="./" aria-label="60周年記念FESTAトップへ戻る">
             <small>FANTASISTA会</small>
-            <strong>東京理科大学舞踏研究部 60周年記念FESTA</strong>
+            <strong><span>東京理科大学舞踏研究部</span><span>60周年記念FESTA</span></strong>
           </a>
 
           <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
