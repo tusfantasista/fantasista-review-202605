@@ -248,6 +248,45 @@ select:focus-visible {
   font-size: 1rem;
 }
 
+.admin-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.admin-panel-heading p {
+  margin: 5px 0 0;
+  color: var(--admin-muted);
+  font-size: 0.76rem;
+}
+
+.admin-panel-heading > strong {
+  flex: 0 0 auto;
+  color: var(--admin-blue);
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.admin-absent-donation-panel {
+  margin-top: 16px;
+}
+
+.admin-donation-table {
+  margin-top: 14px;
+}
+
+.admin-donation-table strong,
+.admin-donation-table small {
+  display: block;
+}
+
+.admin-donation-table small {
+  margin-top: 2px;
+  color: var(--admin-muted);
+  font-size: 0.7rem;
+}
+
 .admin-bank-alert-panel {
   margin-top: 16px;
   border-color: #d74b4b;
@@ -697,10 +736,15 @@ select:focus-visible {
   }
 
   .admin-table td:last-child { display: block; }
+  .admin-donation-table td:last-child {
+    display: grid;
+  }
   .admin-row-action { width: 100%; margin-top: 4px; }
   .admin-detail-grid { grid-template-columns: 1fr; }
   .admin-detail-list { grid-template-columns: 94px minmax(0, 1fr); }
   .admin-bank-alert { grid-template-columns: 1fr; }
+  .admin-panel-heading { flex-direction: column; gap: 8px; }
+  .admin-panel-heading > strong { white-space: normal; }
   .admin-amount-adjustment__controls { align-items: stretch; flex-direction: column; }
   .admin-amount-adjustment__controls input { width: 100%; }
 }

@@ -6,8 +6,8 @@
     <meta name="robots" content="noindex,nofollow,noarchive" />
     <meta name="referrer" content="same-origin" />
     <title>FESTA 60 申込管理</title>
-    <link rel="stylesheet" href="../assets/css/festa60-admin.css?v=20260809-1" />
-    <script src="../assets/js/festa60-admin.js?v=20260809-1" defer></script>
+    <link rel="stylesheet" href="../assets/css/festa60-admin.css?v=20260809-2" />
+    <script src="../assets/js/festa60-admin.js?v=20260809-2" defer></script>
   </head>
   <body class="admin-page">
     <div id="environment-banner" class="admin-environment" hidden>TEST環境 / Cloudflare Pages Preview / 本番データではありません</div>
@@ -85,6 +85,32 @@
           </div>
         </div>
 
+        <div class="admin-panel admin-absent-donation-panel">
+          <div class="admin-panel-heading">
+            <div>
+              <h3>欠席者向け寄付の内訳</h3>
+              <p>各プランの申込・入金状況です。未入金取消と返金済みは申込総額に含めません。</p>
+            </div>
+            <strong id="absent-donation-total">-</strong>
+          </div>
+          <div class="admin-table-wrapper">
+            <table class="admin-table admin-donation-table">
+              <thead>
+                <tr>
+                  <th scope="col">プラン</th>
+                  <th scope="col">申込</th>
+                  <th scope="col">入金済み</th>
+                  <th scope="col">不足・未入金</th>
+                  <th scope="col">取消・返金</th>
+                  <th scope="col">申込総額</th>
+                  <th scope="col">確認済み入金</th>
+                </tr>
+              </thead>
+              <tbody id="absent-donation-body"></tbody>
+            </table>
+          </div>
+        </div>
+
         <div id="bank-transfer-alert-panel" class="admin-panel admin-bank-alert-panel" hidden>
           <h3>銀行振込の要確認事項</h3>
           <p>申込確定前の入金、未消込残高、確定処理の停滞です。決済管理画面と照合して対応してください。</p>
@@ -132,7 +158,10 @@
               <option value="standard">通常参加</option>
               <option value="staff">役員・お手伝い</option>
               <option value="current_student">現役</option>
-              <option value="absent_donation">欠席者寄付</option>
+              <option value="absent_donation">欠席者寄付（すべて）</option>
+              <option value="absent_donation_30000">欠席者寄付 プレミアム</option>
+              <option value="absent_donation_10000">欠席者寄付 アドバンス</option>
+              <option value="absent_donation_5000">欠席者寄付 スタンダード</option>
             </select>
           </div>
           <div class="admin-field">

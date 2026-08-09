@@ -38,6 +38,8 @@
     participantChart: document.querySelector("#participant-chart"),
     receptionChart: document.querySelector("#reception-chart"),
     cohortChart: document.querySelector("#cohort-chart"),
+    absentDonationBody: document.querySelector("#absent-donation-body"),
+    absentDonationTotal: document.querySelector("#absent-donation-total"),
     bankTransferAlertPanel: document.querySelector("#bank-transfer-alert-panel"),
     bankTransferAlerts: document.querySelector("#bank-transfer-alerts"),
     dialog: document.querySelector("#application-dialog"),
@@ -325,24 +327,70 @@
       { label: "年次未確認", value: participation.cohort_unknown_count, className: "pending" }
     ].filter((item) => item.value > 0));
 
-    const planCounts = ["platinum", "gold", "silver", "bronze", "standard", "staff", "current_student", "absent_donation"]
-      .map((key) => ({ key, value: applications.filter((item) => planKey(item.ticket_type) === key).length }))
+    const planDefinitions = [
+      { key: "platinum", label: "プラチナ" },
+      { key: "gold", label: "ゴールド" },
+      { key: "silver", label: "シルバー" },
+      { key: "bronze", label: "ブロンズ" },
+      { key: "standard", label: "通常参加" },
+      { key: "staff", label: "役員等" },
+      { key: "current_student", label: "現役" },
+      { key: "absent_donation_30000", label: "欠席寄付 プレミアム", exact: true },
+      { key: "absent_donation_10000", label: "欠席寄付 アドバンス", exact: true },
+      { key: "absent_donation_5000", label: "欠席寄付 スタンダード", exact: true }
+    ];
+    const planCounts = planDefinitions
+      .map((definition) => ({
+        ...definition,
+        value: applications.filter((item) => definition.exact
+          ? item.ticket_type === definition.key
+          : planKey(item.ticket_type) === definition.key).length
+      }))
       .filter((item) => item.value > 0)
       .map((item) => ({
-        label: {
-          platinum: "プラチナ",
-          gold: "ゴールド",
-          silver: "シルバー",
-          bronze: "ブロンズ",
-          standard: "通常参加",
-          staff: "役員等",
-          current_student: "現役",
-          absent_donation: "欠席寄付"
-        }[item.key],
+        label: item.label,
         value: item.value,
         className: ""
       }));
     renderBarChart(elements.planChart, planCounts);
+    renderAbsentDonationSummary(applications);
+  }
+
+  function renderAbsentDonationSummary(applications) {
+    const definitions = [
+      { ticketType: "absent_donation_30000", label: "プレミアム", price: 30000 },
+      { ticketType: "absent_donation_10000", label: "アドバンス", price: 10000 },
+      { ticketType: "absent_donation_5000", label: "スタンダード", price: 5000 }
+    ];
+    const donationApplications = applications.filter((item) => String(item.ticket_type || "").startsWith("absent_donation_"));
+    const totalExpected = donationApplications.reduce((sum, item) => sum + countedApplicationAmount(item), 0);
+    const totalReceived = donationApplications.reduce((sum, item) => sum + receivedAmount(item), 0);
+
+    elements.absentDonationTotal.textContent = `${donationApplications.length}件 / 入金 ${formatYen(totalReceived)}`;
+    elements.absentDonationBody.innerHTML = definitions.map((definition) => {
+      const rows = donationApplications.filter((item) => item.ticket_type === definition.ticketType);
+      const paid = rows.filter((item) => effectivePaymentStatus(item) === "paid");
+      const pending = rows.filter((item) => ["partially_funded", "unpaid", "pending", "failed", "expired"].includes(effectivePaymentStatus(item)));
+      const cancelled = rows.filter((item) => ["cancelled", "refunded"].includes(effectivePaymentStatus(item)));
+      const expected = rows.reduce((sum, item) => sum + countedApplicationAmount(item), 0);
+      const received = rows.reduce((sum, item) => sum + receivedAmount(item), 0);
+      const outstanding = pending.reduce((sum, item) => sum + outstandingAmount(item), 0);
+
+      return `<tr>
+        <td data-label="プラン"><strong>${escapeHtml(definition.label)}</strong><small>${escapeHtml(formatYen(definition.price))}</small></td>
+        <td data-label="申込"><strong>${rows.length}件</strong></td>
+        <td data-label="入金済み"><strong>${paid.length}件</strong><small>${escapeHtml(formatYen(paid.reduce((sum, item) => sum + receivedAmount(item), 0)))}</small></td>
+        <td data-label="不足・未入金"><strong>${pending.length}件</strong><small>未収 ${escapeHtml(formatYen(outstanding))}</small></td>
+        <td data-label="取消・返金"><strong>${cancelled.length}件</strong></td>
+        <td data-label="申込総額"><strong>${escapeHtml(formatYen(expected))}</strong></td>
+        <td data-label="確認済み入金"><strong>${escapeHtml(formatYen(received))}</strong></td>
+      </tr>`;
+    }).join("");
+
+    elements.absentDonationTotal.setAttribute(
+      "aria-label",
+      `欠席者向け寄付 ${donationApplications.length}件、申込総額${formatYen(totalExpected)}、確認済み入金${formatYen(totalReceived)}`
+    );
   }
 
   function renderBankTransferAlerts() {
@@ -431,7 +479,10 @@
       ].join(" ").toLocaleLowerCase("ja");
       const matchesSearch = !normalizedSearch || searchable.includes(normalizedSearch);
       const matchesPayment = state.filters.payment === "all" || effectivePaymentStatus(application) === state.filters.payment;
-      const matchesPlan = state.filters.plan === "all" || planKey(application.ticket_type) === state.filters.plan;
+      const matchesPlan = state.filters.plan === "all"
+        || (state.filters.plan.startsWith("absent_donation_")
+          ? application.ticket_type === state.filters.plan
+          : planKey(application.ticket_type) === state.filters.plan);
       return matchesSearch && matchesPayment && matchesPlan;
     });
 
