@@ -30,6 +30,11 @@ const checks = [
   ["cohort baseline is fixed", files.worker.includes("OBOG_5_UNDER_GRADUATION_YEAR_TO = 2025") && files.register.includes("2026年4月1日時点で固定")],
   ["staff discounts applied before half", files.worker.includes("BASE_FEES.obog.regular - staffApplicationPeriodDiscount(feePeriod) - staffGraduationDiscount(baseTicketType)") && files.registerScript.includes("baseFees.obog.regular - applicationPeriodDiscount(period) - graduationDiscount(attendeeType)")],
   ["staff no-reception deduction applied after half", files.worker.includes("staffParticipationFee - noReceptionDiscount(receptionAttendance)") && files.registerScript.includes("staffParticipationFee - noReceptionDiscount(reception)")],
+  ["bank amount correction requires staff application", files.worker.includes("Only staff applications can use this amount correction.")],
+  ["bank amount correction rejects received funds", files.worker.includes("Only an unpaid bank transfer with no received funds can be adjusted.") && files.worker.includes("Stripe has already received funds for this PaymentIntent.")],
+  ["bank amount correction confirms application code", files.worker.includes("Application code confirmation does not match.")],
+  ["bank amount correction recalculates stored application", files.worker.includes("requestedAmount !== calculatedAmount") && files.worker.includes("payment.bank_transfer_amount_adjusted")],
+  ["bank amount correction rolls back Stripe on D1 failure", files.worker.includes("festa60-bank-adjust-rollback-")],
   ["preview omits actionable hosted link", !files.register.includes('id="bank-preview-instructions"')],
   ["design covers five issues", [1, 2, 3, 4, 5].every((number) => files.design.includes(`| ${number} |`))]
 ];

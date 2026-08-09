@@ -1008,6 +1008,191 @@ async function getApplicationById(db, applicationId) {
   return application;
 }
 __name(getApplicationById, "getApplicationById");
+async function adjustUnfundedBankTransferAmount({
+  db,
+  env,
+  applicationId,
+  expectedAmountJpy,
+  confirmedApplicationCode,
+  actor,
+  requestMeta = {}
+}) {
+  const current = await db.prepare(
+    `SELECT
+        a.id, a.application_code, a.full_name, a.email, a.ticket_type, a.fee_period,
+        a.reception_attendance, a.payment_status, a.payment_method, a.total_amount_jpy,
+        p.id AS payment_id, p.stripe_payment_intent_id, p.stripe_customer_id,
+        p.amount_total AS payment_amount_total, p.amount_received_jpy,
+        p.amount_remaining_jpy, p.status AS stripe_payment_status
+       FROM applications a
+       INNER JOIN payments p ON p.id = (
+         SELECT id FROM payments
+         WHERE application_id = a.id
+         ORDER BY created_at DESC
+         LIMIT 1
+       )
+       WHERE (a.id = ? OR a.application_code = ?)
+       LIMIT 1`
+  ).bind(applicationId, applicationId).first();
+  if (!current) throw new Error("Festa 60 application was not found.");
+  if (!confirmedApplicationCode || confirmedApplicationCode !== current.application_code) {
+    throw new Error("Application code confirmation does not match.");
+  }
+  const { base_ticket_type: baseTicketType } = splitTicketType(current.ticket_type);
+  if (!isStaffTicketType(baseTicketType)) {
+    throw new Error("Only staff applications can use this amount correction.");
+  }
+  if (current.payment_method !== "bank_transfer" || !current.stripe_payment_intent_id) {
+    throw new Error("The application is not linked to a bank transfer PaymentIntent.");
+  }
+  if (current.payment_status !== "unpaid" || Number(current.amount_received_jpy || 0) !== 0) {
+    throw new Error("Only an unpaid bank transfer with no received funds can be adjusted.");
+  }
+  const companionResult = await db.prepare(
+    `SELECT full_name, relationship, attendee_type, reception_attendance
+       FROM companions
+       WHERE application_id = ?
+       ORDER BY created_at, id`
+  ).bind(current.id).all();
+  const companions = companionResult.results || [];
+  const expectedLineItems = buildPaymentLineItems(
+    {
+      ticket_type: current.ticket_type,
+      fee_period: current.fee_period,
+      reception_attendance: current.reception_attendance
+    },
+    companions
+  );
+  const calculatedAmount = lineItemsTotal(expectedLineItems);
+  const requestedAmount = Number(expectedAmountJpy);
+  if (!Number.isSafeInteger(requestedAmount) || requestedAmount <= 0 || requestedAmount !== calculatedAmount) {
+    throw new Error(`The requested amount does not match the calculated application amount (${calculatedAmount} JPY).`);
+  }
+  const storedLineItemResult = await db.prepare(
+    `SELECT id, item_type, unit_amount_jpy, amount_jpy
+       FROM payment_line_items
+       WHERE application_id = ?
+       ORDER BY created_at, id`
+  ).bind(current.id).all();
+  const storedLineItems = storedLineItemResult.results || [];
+  const storedTotal = storedLineItems.reduce((sum, item) => sum + Number(item.amount_jpy || 0), 0);
+  const storedTicketItems = storedLineItems.filter((item) => item.item_type === "ticket");
+  const expectedTicketItems = expectedLineItems.filter((item) => item.item_type === "ticket");
+  if (storedTicketItems.length !== 1 || expectedTicketItems.length !== 1) {
+    throw new Error("The staff participation line item could not be identified safely.");
+  }
+  const previousAmount = Number(current.total_amount_jpy || 0);
+  if (storedTotal !== previousAmount || Number(current.payment_amount_total || 0) !== previousAmount) {
+    throw new Error("Stored application and payment amounts are inconsistent.");
+  }
+  const storedNonTicketTotal = storedTotal - Number(storedTicketItems[0].amount_jpy || 0);
+  const expectedNonTicketTotal = calculatedAmount - Number(expectedTicketItems[0].amount_jpy || 0);
+  if (storedNonTicketTotal !== expectedNonTicketTotal) {
+    throw new Error("Companion or donation amounts have changed and require manual review.");
+  }
+  const stripeSecret = requireStripeSecret(env);
+  let paymentIntent = await retrieveStripePaymentIntent(stripeSecret, current.stripe_payment_intent_id);
+  if (
+    paymentIntent.currency !== "jpy" ||
+    paymentIntent.customer !== current.stripe_customer_id ||
+    !paymentIntent.payment_method_types?.includes("customer_balance") ||
+    !["requires_action", "requires_payment_method"].includes(paymentIntent.status)
+  ) {
+    throw new Error("Stripe PaymentIntent is not an adjustable JPY bank transfer.");
+  }
+  if (bankTransferAmountReceived(paymentIntent) !== 0 || Number(paymentIntent.amount_received || 0) !== 0) {
+    throw new Error("Stripe has already received funds for this PaymentIntent.");
+  }
+  if (![previousAmount, calculatedAmount].includes(Number(paymentIntent.amount || 0))) {
+    throw new Error("Stripe and FANTASISTA amounts are inconsistent.");
+  }
+  let stripeChanged = false;
+  if (Number(paymentIntent.amount) !== calculatedAmount) {
+    paymentIntent = await updateStripePaymentIntentAmount(
+      stripeSecret,
+      current.stripe_payment_intent_id,
+      calculatedAmount,
+      `festa60-bank-adjust-${current.id}-${calculatedAmount}`
+    );
+    stripeChanged = true;
+  }
+  if (Number(paymentIntent.amount) !== calculatedAmount || bankTransferAmountReceived(paymentIntent) !== 0) {
+    throw new Error("Stripe did not accept the corrected bank transfer amount safely.");
+  }
+  const amountRemaining = bankTransferAmountRemaining(paymentIntent);
+  if (amountRemaining !== calculatedAmount) {
+    throw new Error("Stripe returned an unexpected remaining amount after correction.");
+  }
+  const now = nowIso();
+  const expectedTicketItem = expectedTicketItems[0];
+  try {
+    await db.batch([
+      db.prepare(
+        `UPDATE applications
+            SET total_amount_jpy = ?, updated_at = ?
+          WHERE id = ? AND payment_status = 'unpaid' AND total_amount_jpy = ?`
+      ).bind(calculatedAmount, now, current.id, previousAmount),
+      db.prepare(
+        `UPDATE payments
+            SET amount_total = ?, amount_received_jpy = 0, amount_remaining_jpy = ?,
+                status = ?, updated_at = ?
+          WHERE id = ? AND amount_received_jpy = 0`
+      ).bind(calculatedAmount, amountRemaining, paymentIntent.status, now, current.payment_id),
+      db.prepare(
+        `UPDATE payment_line_items
+            SET label = ?, unit_amount_jpy = ?, amount_jpy = ?, metadata_json = ?
+          WHERE id = ?`
+      ).bind(
+        expectedTicketItem.label,
+        expectedTicketItem.unit_amount_jpy,
+        expectedTicketItem.amount_jpy,
+        JSON.stringify(expectedTicketItem.metadata || {}),
+        storedTicketItems[0].id
+      ),
+      db.prepare(
+        `UPDATE bank_transfer_previews
+            SET amount_total_jpy = ?, amount_received_jpy = 0,
+                amount_remaining_jpy = ?, updated_at = ?
+          WHERE stripe_payment_intent_id = ?`
+      ).bind(calculatedAmount, amountRemaining, now, current.stripe_payment_intent_id)
+    ]);
+  } catch (error) {
+    if (stripeChanged) {
+      await updateStripePaymentIntentAmount(
+        stripeSecret,
+        current.stripe_payment_intent_id,
+        previousAmount,
+        `festa60-bank-adjust-rollback-${current.id}-${previousAmount}-${Date.now()}`
+      ).catch((rollbackError) => console.error("Stripe amount rollback failed", rollbackError));
+    }
+    throw error;
+  }
+  await audit(db, {
+    actor,
+    action: "payment.bank_transfer_amount_adjusted",
+    target_type: "application",
+    target_id: current.id,
+    details_json: JSON.stringify({
+      application_code: current.application_code,
+      previous_amount_jpy: previousAmount,
+      adjusted_amount_jpy: calculatedAmount,
+      difference_jpy: calculatedAmount - previousAmount,
+      stripe_payment_intent_id: current.stripe_payment_intent_id
+    }),
+    ...requestMeta
+  });
+  const application = await getApplicationById(db, current.id);
+  return {
+    changed: previousAmount !== calculatedAmount,
+    application,
+    previous_amount_jpy: previousAmount,
+    adjusted_amount_jpy: calculatedAmount,
+    difference_jpy: calculatedAmount - previousAmount,
+    amount_remaining_jpy: amountRemaining,
+    hosted_instructions_url: bankTransferInstructionsUrl(paymentIntent)
+  };
+}
+__name(adjustUnfundedBankTransferAmount, "adjustUnfundedBankTransferAmount");
 async function hydrateApplicationLineItems(db, application) {
   if (!application) return null;
   const result = await db.prepare(
@@ -1458,6 +1643,31 @@ function companionDanceTicketDescription(application) {
   return `${Number(benefit.unit_amount_jpy).toLocaleString("ja-JP")}円券×${benefit.count}枚（${Number(benefit.total_amount_jpy).toLocaleString("ja-JP")}円相当）`;
 }
 __name(companionDanceTicketDescription, "companionDanceTicketDescription");
+function renderBankTransferAmountAdjustedEmail(application, previousAmount, adjustedAmount, hostedInstructionsUrl) {
+  const name = application.full_name || application.name || "";
+  const difference = adjustedAmount - previousAmount;
+  return {
+    to: application.email,
+    subject: "【60周年FESTA】お支払い予定額訂正のご案内",
+    body: `${name} 様
+
+60周年FESTAへのお申し込みありがとうございます。
+役員・当日お手伝い向け参加費の割引計算を訂正したため、お支払い予定額を次のとおり変更しました。
+
+受付番号：${application.application_code || application.applicationId}
+訂正前：${formatYen(previousAmount)}
+訂正後：${formatYen(adjustedAmount)}
+差額：${formatYen(difference)}
+
+振込先口座は変更ありません。次の案内ページで、訂正後の金額と振込先をご確認ください。
+${hostedInstructionsUrl}
+
+すでに振込手続きをされた場合は、着金確認後に不足額をご案内します。重複して全額を振り込まないようお願いいたします。
+
+FANTASISTA 60周年FESTA事務局`
+  };
+}
+__name(renderBankTransferAmountAdjustedEmail, "renderBankTransferAmountAdjustedEmail");
 // api/festa60/admin/applications/[id].js
 async function onRequestPatch({ request, env, params }) {
   const auth = assertAdmin(request, env);
@@ -1465,6 +1675,41 @@ async function onRequestPatch({ request, env, params }) {
   try {
     const payload = await readJson(request);
     if (!payload) return badRequest("Invalid JSON payload.");
+    if (payload.action === "adjust_unfunded_bank_transfer_amount") {
+      const result = await adjustUnfundedBankTransferAmount({
+        db: requireDb(env),
+        env,
+        applicationId: params.id,
+        expectedAmountJpy: payload.expected_amount_jpy,
+        confirmedApplicationCode: payload.confirm_application_code,
+        actor: auth.actor,
+        requestMeta: getClientMeta(request)
+      });
+      let emailDelivery = null;
+      if (payload.sendEmail === true && result.changed) {
+        emailDelivery = await maybeSendEmail(
+          env,
+          {
+            ...renderBankTransferAmountAdjustedEmail(
+              result.application,
+              result.previous_amount_jpy,
+              result.adjusted_amount_jpy,
+              result.hosted_instructions_url
+            ),
+            message_id: `festa60-bank-amount-adjust-${result.application.id}-${result.adjusted_amount_jpy}`
+          }
+        );
+      }
+      return json({
+        ok: true,
+        ...result,
+        email_delivery: emailDelivery ? {
+          sent: Boolean(emailDelivery.sent),
+          skipped: Boolean(emailDelivery.skipped),
+          reason: emailDelivery.reason || emailDelivery.error || null
+        } : null
+      });
+    }
     const paymentStatus = payload.paymentStatus || payload.payment_status;
     if (!["unpaid", "paid", "cancelled", "refunded"].includes(paymentStatus)) {
       return badRequest("paymentStatus must be unpaid, paid, cancelled, or refunded.");
@@ -2066,6 +2311,25 @@ async function updateStripePaymentIntentForApplication(stripeSecret, paymentInte
   return result;
 }
 __name(updateStripePaymentIntentForApplication, "updateStripePaymentIntentForApplication");
+async function updateStripePaymentIntentAmount(stripeSecret, paymentIntentId, amount, idempotencyKey) {
+  const params = new URLSearchParams();
+  params.set("amount", String(amount));
+  const response = await fetch(`https://api.stripe.com/v1/payment_intents/${encodeURIComponent(paymentIntentId)}`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${stripeSecret}`,
+      "content-type": "application/x-www-form-urlencoded",
+      "idempotency-key": idempotencyKey
+    },
+    body: params
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(`Stripe PaymentIntent amount update failed: ${result.error?.message || response.status}`);
+  }
+  return result;
+}
+__name(updateStripePaymentIntentAmount, "updateStripePaymentIntentAmount");
 async function cancelStripePaymentIntent(stripeSecret, paymentIntentId) {
   const response = await fetch(`https://api.stripe.com/v1/payment_intents/${encodeURIComponent(paymentIntentId)}/cancel`, {
     method: "POST",
