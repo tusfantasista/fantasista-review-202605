@@ -9,10 +9,22 @@
 
     if (!header || !toggle || !nav) return;
 
+    header.classList.add("has-menu-toggle");
+
     function setMenuOpen(open) {
       header.classList.toggle("is-open", open);
       document.body.classList.toggle("menu-open", open);
       toggle.setAttribute("aria-expanded", String(open));
+      if (!open) {
+        nav.querySelectorAll("details[data-festa-guide][open]").forEach((details) => {
+          details.open = false;
+        });
+        nav.querySelectorAll(".mobile-nav-parent").forEach((button) => {
+          button.setAttribute("aria-expanded", "false");
+          const submenu = document.getElementById(button.getAttribute("aria-controls"));
+          if (submenu) submenu.hidden = true;
+        });
+      }
     }
 
     toggle.addEventListener("click", function () {
@@ -20,7 +32,23 @@
     });
 
     nav.addEventListener("click", function (event) {
+      const parentButton = event.target.closest(".mobile-nav-parent");
+      if (parentButton) {
+        const willOpen = parentButton.getAttribute("aria-expanded") !== "true";
+        nav.querySelectorAll(".mobile-nav-parent").forEach((button) => {
+          const submenu = document.getElementById(button.getAttribute("aria-controls"));
+          const isTarget = button === parentButton;
+          button.setAttribute("aria-expanded", String(isTarget && willOpen));
+          if (submenu) submenu.hidden = !(isTarget && willOpen);
+        });
+        return;
+      }
       if (event.target.closest("a")) setMenuOpen(false);
+    });
+
+    document.addEventListener("click", function (event) {
+      if (toggle.getAttribute("aria-expanded") !== "true") return;
+      if (!header.contains(event.target)) setMenuOpen(false);
     });
 
     document.addEventListener("keydown", function (event) {
@@ -29,6 +57,49 @@
 
     window.addEventListener("resize", function () {
       if (window.matchMedia("(min-width: 861px)").matches) setMenuOpen(false);
+    });
+  }
+
+  function initFestaGuideMenus() {
+    const guides = Array.from(document.querySelectorAll("details[data-festa-guide]"));
+    if (!guides.length) return;
+
+    function setExpanded(guide, expanded) {
+      const summary = guide.querySelector(":scope > summary");
+      if (summary) summary.setAttribute("aria-expanded", String(expanded));
+    }
+
+    function closeGuide(guide, restoreFocus) {
+      if (!guide.open) return;
+      guide.open = false;
+      setExpanded(guide, false);
+      if (restoreFocus) guide.querySelector(":scope > summary")?.focus();
+    }
+
+    guides.forEach((guide) => {
+      setExpanded(guide, guide.open);
+      guide.addEventListener("toggle", function () {
+        setExpanded(guide, guide.open);
+        if (!guide.open) return;
+        guides.forEach((other) => {
+          if (other !== guide) closeGuide(other, false);
+        });
+      });
+    });
+
+    document.addEventListener("click", function (event) {
+      guides.forEach((guide) => {
+        if (!guide.contains(event.target)) closeGuide(guide, false);
+      });
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape") return;
+      const openGuide = guides.find((guide) => guide.open);
+      if (openGuide) {
+        event.preventDefault();
+        closeGuide(openGuide, true);
+      }
     });
   }
 
@@ -202,25 +273,115 @@
       : "https://tus-fantasista-festa60.pages.dev/festa-60th/";
   }
 
-  function initFestaNavLinks() {
-    if (location.pathname.includes("/festa-60th/") || location.pathname.includes("/festa60-")) return;
+  function initStructuredNavigation() {
+    if (location.pathname.includes("/festa-60th/")) return;
 
-    document.querySelectorAll(".site-nav").forEach((nav) => {
-      if (nav.querySelector(".nav-festa60")) return;
+    const normalizedPath = location.pathname.replace(/\/index\.html$/, "/");
+    const pathEndsWith = (suffix) => normalizedPath.endsWith(suffix);
+    const activeGroup = pathEndsWith("/about/") || pathEndsWith("/archive/") || normalizedPath.includes("/news/")
+      ? "about"
+      : pathEndsWith("/festa/") || pathEndsWith("/gallery/")
+        ? "festa"
+        : pathEndsWith("/history/") || normalizedPath.includes("/history/context/") || pathEndsWith("/data/")
+          ? "history"
+          : pathEndsWith("/documents/")
+            ? "members"
+            : pathEndsWith("/contact/")
+              ? "contact"
+              : "";
 
-      const link = document.createElement("a");
-      link.className = "nav-festa60";
-      link.href = getFestaSiteUrl();
-      link.innerHTML = '<span class="nav-copy"><span class="nav-ja">60周年FESTA</span><span class="nav-en">Special Site</span></span>';
+    const groups = [
+      {
+        id: "about",
+        label: "FANTASISTAについて",
+        english: "About",
+        href: `${assetPrefix}about/`,
+        children: [
+          { label: "FANTASISTA会について", href: `${assetPrefix}about/`, current: pathEndsWith("/about/") },
+          { label: "お知らせ", href: `${assetPrefix}archive/`, current: pathEndsWith("/archive/") || normalizedPath.includes("/news/") },
+        ],
+      },
+      {
+        id: "festa",
+        label: "FESTA",
+        english: "Events",
+        href: `${assetPrefix}festa/`,
+        children: [
+          { label: "60周年記念FESTA", href: getFestaSiteUrl(), className: "nav-festa60" },
+          { label: "過去のFESTA", href: `${assetPrefix}festa/`, current: pathEndsWith("/festa/") },
+          { label: "写真・ギャラリー", href: `${assetPrefix}gallery/`, current: pathEndsWith("/gallery/") },
+        ],
+      },
+      {
+        id: "history",
+        label: "舞研の歩み",
+        english: "History",
+        href: `${assetPrefix}history/`,
+        children: [
+          { label: "歴史・沿革", href: `${assetPrefix}history/`, current: pathEndsWith("/history/") && !normalizedPath.includes("/history/context/") },
+          { label: "データ", href: `${assetPrefix}data/`, current: pathEndsWith("/data/") },
+          { label: "競技ダンスの背景", href: `${assetPrefix}history/context/`, current: normalizedPath.includes("/history/context/") },
+        ],
+      },
+      {
+        id: "members",
+        label: "会員向け",
+        english: "Members",
+        href: `${assetPrefix}documents/`,
+        children: [
+          { label: "公開資料", href: `${assetPrefix}documents/`, current: pathEndsWith("/documents/") && !location.hash },
+          { label: "総会資料", href: `${assetPrefix}documents/#general-meeting-materials` },
+          { label: "会則・規程", href: `${assetPrefix}documents/#rules-and-regulations` },
+        ],
+      },
+    ];
 
-      const contactLink = Array.from(nav.querySelectorAll("a")).find((item) => item.href.includes("/contact/"));
-      if (contactLink) nav.insertBefore(link, contactLink);
-      else nav.appendChild(link);
+    const navCopy = (label, english) => `<span class="nav-copy"><span class="nav-ja">${label}</span>${english ? `<span class="nav-en">${english}</span>` : ""}</span>`;
+    const childLink = (item) => `<a${item.className ? ` class="${item.className}"` : ""} href="${item.href}"${item.current ? ' aria-current="page"' : ""}>${item.label}</a>`;
+
+    document.querySelectorAll(".site-nav--desktop").forEach((nav) => {
+      nav.innerHTML = groups.map((group) => `
+        <div class="nav-group${activeGroup === group.id ? " is-current" : ""}">
+          <a class="nav-parent-link" href="${group.href}">${navCopy(group.label, group.english)}</a>
+          <div class="nav-submenu" aria-label="${group.label}">
+            ${group.children.map(childLink).join("")}
+          </div>
+        </div>
+      `).join("") + `<a class="nav-direct-link${activeGroup === "contact" ? " is-current" : ""}" href="${assetPrefix}contact/"${activeGroup === "contact" ? ' aria-current="page"' : ""}>${navCopy("お問い合わせ", "Contact")}</a>`;
+    });
+
+    document.querySelectorAll(".site-nav--mobile").forEach((nav) => {
+      const navId = nav.id || "site-nav";
+      nav.innerHTML = groups.map((group) => {
+        const submenuId = `${navId}-${group.id}-submenu`;
+        return `
+          <div class="mobile-nav-group${activeGroup === group.id ? " is-current" : ""}">
+            <button class="mobile-nav-parent" type="button" aria-expanded="false" aria-controls="${submenuId}">
+              ${navCopy(group.label, group.english)}
+              <span class="mobile-nav-parent__icon" aria-hidden="true"></span>
+            </button>
+            <div id="${submenuId}" class="mobile-nav-submenu" hidden>
+              ${group.children.map(childLink).join("")}
+            </div>
+          </div>
+        `;
+      }).join("") + `<a class="nav-direct-link${activeGroup === "contact" ? " is-current" : ""}" href="${assetPrefix}contact/"${activeGroup === "contact" ? ' aria-current="page"' : ""}>${navCopy("お問い合わせ", "Contact")}</a>`;
     });
   }
 
+  function initMainFooterLinks() {
+    const footerContainer = document.querySelector(".site-footer .container");
+    if (!footerContainer || footerContainer.querySelector(".footer-legal-links")) return;
+
+    const links = document.createElement("nav");
+    links.className = "footer-legal-links";
+    links.setAttribute("aria-label", "サイトポリシー");
+    links.innerHTML = `<a href="${assetPrefix}terms/">サイト利用条件</a><a href="${assetPrefix}privacy/">プライバシーポリシー</a>`;
+    footerContainer.prepend(links);
+  }
+
   function initFestaQuickLink() {
-    if (location.pathname.includes("/festa-60th/") || location.pathname.includes("/festa60-")) return;
+    if (location.pathname.includes("/festa-60th/")) return;
     const link = document.createElement("a");
     link.className = "festa-quick-link";
     link.href = getFestaSiteUrl();
@@ -465,7 +626,9 @@
     });
   }
 
-  initFestaNavLinks();
+  initStructuredNavigation();
+  initMainFooterLinks();
+  initFestaGuideMenus();
   initMobileMenu();
   initTopButton();
   initSmoothScroll();

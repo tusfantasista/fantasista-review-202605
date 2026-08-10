@@ -120,9 +120,16 @@ ${payload.message}
 }
 
 async function readEmailResult(location) {
+  let resultUrl;
+  try {
+    resultUrl = new URL(location);
+  } catch {
+    return null;
+  }
+  if (resultUrl.protocol !== "https:") return null;
   for (const delay of [0, 400, 1000, 2000]) {
     if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
-    const response = await fetch(location, { headers: { accept: "application/json" } });
+    const response = await fetch(resultUrl, { headers: { accept: "application/json" } });
     if (!response.ok) continue;
     const result = await response.json().catch(() => null);
     if (result) return result;
@@ -135,9 +142,19 @@ async function sendEmail(env, message) {
     return { sent: false, error: "email_not_configured" };
   }
 
+  let webhookUrl;
+  try {
+    webhookUrl = new URL(env.EMAIL_WEBHOOK_URL);
+  } catch {
+    return { sent: false, error: "email_webhook_invalid" };
+  }
+  if (webhookUrl.protocol !== "https:") {
+    return { sent: false, error: "email_webhook_requires_https" };
+  }
+
   const headers = { "content-type": "application/json" };
   if (env.EMAIL_API_TOKEN) headers.authorization = `Bearer ${env.EMAIL_API_TOKEN}`;
-  const response = await fetch(env.EMAIL_WEBHOOK_URL, {
+  const response = await fetch(webhookUrl, {
     method: "POST",
     redirect: "manual",
     headers,

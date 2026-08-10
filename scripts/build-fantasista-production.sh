@@ -13,7 +13,7 @@ fi
 rm -rf "$output_dir"
 mkdir -p "$output_dir"
 
-for directory in about archive assets contact css data documents festa gallery history js news; do
+for directory in about archive assets contact css data documents festa gallery history js news privacy terms; do
   cp -R "$source_dir/$directory" "$output_dir/$directory"
 done
 

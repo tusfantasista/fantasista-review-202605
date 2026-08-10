@@ -1,4 +1,4 @@
-import { FUNDRAISING_CONFIG } from "./festa60-pricing.js";
+import { FUNDRAISING_CONFIG, REGISTRATION_STATUS } from "./festa60-pricing.js";
 
 const roots = document.querySelectorAll("[data-festa60-public-summary]");
 
@@ -8,8 +8,27 @@ document.querySelectorAll("[data-fundraising-final-target]").forEach((element) =
   element.textContent = `最終目標 ${formatCompactCurrency(FUNDRAISING_CONFIG.final_target_jpy)}`;
 });
 
-if (roots.length) {
+if (roots.length && REGISTRATION_STATUS === "open") {
   loadPublicSummary();
+} else if (roots.length) {
+  roots.forEach(renderComingSoon);
+}
+
+function renderComingSoon(root) {
+  setText(root, "[data-summary-participants]", "近日受付開始");
+  setText(root, "[data-summary-companions]", "受付開始後に集計");
+  setText(root, "[data-summary-supporters]", "受付開始後に集計");
+  setText(root, "[data-summary-donation]", "受付開始後に集計");
+  setText(root, "[data-summary-plan-counts]", "参加・寄付の受付開始後に表示します。");
+  setText(root, "[data-summary-updated]", "受付開始時期は改めてご案内します");
+  setText(root, "[data-summary-decades]", "参加申込の受付開始後に、卒部年代の広がりを表示します。");
+  setText(root, "[data-summary-attendance-status]", `参加目標${formatNumber(FUNDRAISING_CONFIG.participant_target_count)}名／近日受付開始`);
+  const attendanceBar = root.querySelector("[data-summary-attendance-progress-bar]");
+  if (attendanceBar) attendanceBar.style.width = "0%";
+  const supportBar = root.querySelector("[data-summary-progress-bar]");
+  if (supportBar) supportBar.style.width = "0%";
+  setText(root, "[data-summary-next-goal]", `まずは${FUNDRAISING_CONFIG.goals[0].label}${formatCompactCurrency(FUNDRAISING_CONFIG.primary_target_jpy)}`);
+  root.dataset.summaryState = "coming-soon";
 }
 
 async function loadPublicSummary() {

@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/festa60-pages.css?v=20260811-6">
+    <link rel="stylesheet" href="../../assets/css/festa60-navigation.css?v=20260810-1">
   </head>
   <body>
     <header class="header">
@@ -17,7 +18,15 @@
         <a class="brand" href="../" aria-label="60周年記念FESTAトップへ戻る"><small>FANTASISTA会</small><strong>東京理科大学舞踏研究部 60周年記念FESTA</strong></a>
         <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false"><span class="sr-only">メニューを開閉</span><span class="menu-toggle-line" aria-hidden="true"></span><span class="menu-toggle-line" aria-hidden="true"></span><span class="menu-toggle-line" aria-hidden="true"></span></button>
         <nav id="site-nav" class="nav" aria-label="60周年記念サイト">
-          <a href="../">開催概要</a><a href="../news/">最新情報</a><a href="./" aria-current="page">プログラム</a><a href="../support/">参加費・寄付</a><a href="../chronicle/">クロニクル</a><a href="../faq/">FAQ</a><a href="../../festa60-register/">参加申込</a><a href="https://tus-fantasista.pages.dev/">FANTASISTA会サイトへ</a>
+          <a href="../"><span class="nav-copy"><span class="nav-ja">トップ</span><span class="nav-en">Top</span></span></a>
+          <a href="./" aria-current="page"><span class="nav-copy"><span class="nav-ja">プログラム</span><span class="nav-en">Program</span></span></a>
+          <a href="../support/"><span class="nav-copy"><span class="nav-ja">参加費・寄付</span><span class="nav-en">Support</span></span></a>
+          <a href="../chronicle/"><span class="nav-copy"><span class="nav-ja">クロニクル</span><span class="nav-en">Chronicle</span></span></a>
+          <details class="nav-guide" data-festa-guide>
+            <summary aria-controls="site-nav-guide" aria-expanded="false"><span class="nav-copy"><span class="nav-ja">ご案内</span><span class="nav-en">Guide</span></span><span class="nav-guide__chevron" aria-hidden="true"></span></summary>
+            <div id="site-nav-guide" class="nav-guide__menu"><a href="../news/">最新情報</a><a href="../faq/">FAQ</a></div>
+          </details>
+          <a class="nav-register" href="../../festa60-register/"><span class="nav-copy"><span class="nav-ja">近日受付開始</span><span class="nav-en">Coming Soon</span></span></a>
         </nav>
       </div>
     </header>
@@ -50,11 +59,11 @@
             </div>
           </section>
           <p class="note">企画内容・実施順・時間は調整中です。確定情報は60周年記念サイトと申込者向けのご案内でお知らせします。</p>
-          <div class="cta-row"><a class="btn btn--primary" href="../../festa60-register/">参加申込へ進む</a><a class="btn btn--ghost" href="../faq/#day">当日のFAQを見る</a></div>
+          <div class="cta-row"><a class="btn btn--primary" href="../../festa60-register/">参加申込は近日受付開始</a><a class="btn btn--ghost" href="../faq/#day">当日のFAQを見る</a></div>
         </div>
       </section>
     </main>
-    <footer class="subpage-footer"><div class="wrap subpage-footer__inner"><nav class="subpage-footer__links" aria-label="法令・プライバシー"><a href="../legal/">特定商取引法に基づく表記</a><a href="../privacy/">プライバシーポリシー</a></nav><span>© All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</span></div></footer>
+    <footer class="subpage-footer"><div class="wrap subpage-footer__inner"><a class="subpage-footer__main-link" href="https://tus-fantasista.pages.dev/">FANTASISTA会公式サイトへ</a><nav class="subpage-footer__links" aria-label="申込条件・法令・プライバシー"><a href="../terms/">FESTA参加申込条件</a><a href="../legal/">特定商取引法に基づく表記</a><a href="../privacy/">プライバシーポリシー</a><a href="https://tus-fantasista.pages.dev/terms/">サイト利用条件</a></nav><span>© All Tokyo University of Science Ballroom Dance Club OBOG Association FANTASISTA</span></div></footer>
     <script src="../../assets/js/site.js?v=20260720-2" defer></script>
   </body>
 </html>

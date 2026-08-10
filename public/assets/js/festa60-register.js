@@ -4,6 +4,8 @@ import {
   ATTENDING_PLAN_TOTALS,
   BASE_FEES,
   CURRENT_PRICING_VERSION,
+  REGISTRATION_STATUS,
+  REGISTRATION_STATUS_MESSAGE,
   FEE_PERIOD_LABELS,
   STAFF_TICKET_TYPES,
   SUPPORT_PLAN_DETAILS,
@@ -38,6 +40,8 @@ import {
   const receptionAttendanceHelp = document.getElementById("reception-attendance-help");
   const feePreview = document.getElementById("fee-preview");
   const entryPanel = document.getElementById("entry-panel");
+  const registrationSteps = document.getElementById("registration-steps");
+  const registrationComingSoon = document.getElementById("registration-coming-soon");
   const confirmationPanel = document.getElementById("confirmation-panel");
   const confirmationSummary = document.getElementById("confirmation-summary");
   const confirmationMessage = document.getElementById("confirmation-message");
@@ -101,7 +105,8 @@ import {
   let bankPreviewToken = "";
   let bankPreviewDetails = null;
   let postalLookupTimer = null;
-  let applicationOpen = true;
+  let applicationOpen = REGISTRATION_STATUS === "open";
+  let applicationStatus = REGISTRATION_STATUS;
   let lastLookedUpPostalCode = "";
   let stripeAvailable = false;
   let activePricingVersion = CURRENT_PRICING_VERSION;
@@ -228,7 +233,7 @@ import {
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     try {
-      if (!applicationOpen) throw new Error("参加申込は2027年1月31日をもって締め切りました。変更や確認はFESTA事務局へお問い合わせください。");
+      if (!applicationOpen) throw new Error(applicationStatus === "coming_soon" ? REGISTRATION_STATUS_MESSAGE : "参加申込は2027年1月31日をもって締め切りました。変更や確認はFESTA事務局へお問い合わせください。");
       const payload = formPayload(new FormData(form));
       payload.client_submission_id = crypto.randomUUID();
       const clientErrors = validatePayload(payload);
@@ -546,9 +551,9 @@ import {
       const ticketUnitAmount = danceTicketUnitAmount(supportTier.value);
       const donationEquivalent = ATTENDING_DONATION_EQUIVALENTS[supportTier.value] || 0;
       const staffExplanation = staffMode
-        ? "<p>参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。上乗せ寄付相当分は割引しません。第一部のみの場合は、半額後に4,000円を控除します。</p>"
+        ? "<p>参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。寄付相当額部分は割引しません。第一部のみの場合は、半額後に4,000円を控除します。</p>"
         : "<p>申込時期割引と卒部年度割引を併用しています。</p>";
-      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>寄付相当額：約${donationEquivalent.toLocaleString("ja-JP")}円</strong><br><small>基本参加費とダンスタイムチケットの券面相当額を除いた金額です。</small></p><p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p><p>通常参加分の300円券は別途配布しません。有料の大人同伴者には${ticketUnitAmount}円券を1枚配布し、当日の追加購入も原則として${ticketUnitAmount}円券です。</p>${staffExplanation}`;
+      supportPlanDetail.innerHTML = `${planDetailMarkup(support)}<p><strong>寄付相当額：約${donationEquivalent.toLocaleString("ja-JP")}円</strong><br><small>基準参加費15,000円とダンスタイムチケット券面総額を除いた金額です。</small></p><p><strong>現在の割引・控除適用額：${discountedAmount.toLocaleString("ja-JP")}円</strong></p><p>通常参加分の300円券は別途配布しません。有料の大人同伴者には${ticketUnitAmount}円券を1枚配布し、当日の追加購入も原則として${ticketUnitAmount}円券です。</p>${staffExplanation}`;
     } else {
       const standardDanceTicket = publicTicketType(ticketType.value) === "obog" ? "300円券×3枚" : "300円券×2枚";
       const staffAmount = staffMode ? staffParticipationAmount(ticketType.value, feePeriod.value, receptionAttendance.value) : null;
@@ -576,7 +581,7 @@ import {
     attendanceTicketNotice.hidden = false;
     ticketType.value = "obog_staff";
     ticketTypeDisplay.value = "一般OBOG（11年目以上）／役員・当日お手伝い";
-    receptionAttendanceHelp.textContent = "役員・当日お手伝いは、参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。第一部のみの場合は、半額後に4,000円を控除します。上乗せ寄付相当分と同伴者料金には役員割引を適用しません。";
+    receptionAttendanceHelp.textContent = "役員・当日お手伝いは、参加費15,000円から申込時期割引と卒部年度割引を引いた後、参加費相当分を50%にします。第一部のみの場合は、半額後に4,000円を控除します。寄付相当額部分と同伴者料金には役員割引を適用しません。";
   }
 
   function showConfirmation(payload) {
@@ -664,8 +669,12 @@ import {
       const result = await postApplication(payload);
 
       if (result.payment?.checkoutUrl) {
+        const checkoutUrl = new URL(result.payment.checkoutUrl, window.location.href);
+        if (checkoutUrl.protocol !== "https:") {
+          throw new Error("安全な決済画面を確認できませんでした。時間をおいて再度お試しください。");
+        }
         setConfirmationMessage("決済画面を準備しました。お支払い完了後に申込完了となります...", "success");
-        window.location.assign(result.payment.checkoutUrl);
+        window.location.assign(checkoutUrl.href);
         return;
       }
 
@@ -988,13 +997,18 @@ import {
   }
 
   function applicationOpenForNow() {
-    return Date.now() <= new Date("2027-01-31T23:59:59+09:00").getTime();
+    return REGISTRATION_STATUS === "open" && Date.now() <= new Date("2027-01-31T23:59:59+09:00").getTime();
   }
 
   function updateApplicationDeadline(config) {
+    applicationStatus = config.application_status || REGISTRATION_STATUS;
     applicationOpen = config.application_open ?? applicationOpenForNow();
     reviewApplicationButton.disabled = !applicationOpen;
-    if (!applicationOpen) {
+    const checkoutCompleted = checkoutState.get("checkout") === "success";
+    registrationComingSoon.hidden = applicationOpen || checkoutCompleted;
+    registrationSteps.hidden = !applicationOpen && !checkoutCompleted;
+    if (!checkoutCompleted) entryPanel.hidden = !applicationOpen;
+    if (!applicationOpen && applicationStatus !== "coming_soon" && !checkoutCompleted) {
       setMessage("参加申込は2027年1月31日をもって締め切りました。変更や確認はFESTA事務局へお問い合わせください。", "error");
     }
   }
@@ -1126,6 +1140,7 @@ import {
 
   function showCheckoutSuccess() {
     const applicationId = checkoutState.get("application") || "確認中";
+    registrationComingSoon.hidden = true;
     entryPanel.hidden = true;
     confirmationPanel.hidden = true;
     completionPanel.hidden = false;

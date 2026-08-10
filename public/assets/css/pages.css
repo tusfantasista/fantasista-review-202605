@@ -73,6 +73,66 @@
 .page-grid { display: grid; gap: 28px; }
 .page-grid--about { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
 
+.policy-content {
+  width: min(920px, 100%);
+}
+
+.policy-intro {
+  margin: 0 0 34px;
+  color: #59606b;
+  font-size: 1.02rem;
+  line-height: 1.9;
+}
+
+.policy-section {
+  padding: 30px 0;
+  border-top: 1px solid rgba(25, 31, 42, 0.14);
+}
+
+.policy-section:first-of-type {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.policy-section h2 {
+  margin: 0 0 14px;
+  color: #191f2a;
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.policy-section p,
+.policy-section li {
+  color: #59606b;
+  line-height: 1.9;
+}
+
+.policy-section p {
+  margin: 0;
+}
+
+.policy-section p + p {
+  margin-top: 14px;
+}
+
+.policy-section ul {
+  margin: 14px 0 0;
+  padding-left: 1.4em;
+}
+
+.policy-section a,
+.policy-intro a {
+  color: #745900;
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
+.policy-updated {
+  margin: 24px 0 0;
+  color: #727985;
+  font-size: 0.88rem;
+  text-align: right;
+}
+
 .panel {
   border-radius: 28px;
   padding: 32px;

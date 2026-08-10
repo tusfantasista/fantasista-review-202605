@@ -1151,7 +1151,7 @@
           <a href="../../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
           <a href="../../about/"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
           <a href="../../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
-          <a href="../../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+          <a href="../../archive/"><span class="nav-copy"><span class="nav-ja">お知らせ</span><span class="nav-en">Archive</span></span></a>
           <a href="../../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
           <a href="../" aria-current="page"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
           <a href="../../data/"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
@@ -1170,7 +1170,7 @@
           <a href="../../"><span class="nav-copy"><span class="nav-ja">ホーム</span><span class="nav-en">Home</span></span></a>
           <a href="../../about/"><span class="nav-copy"><span class="nav-ja">FANTASISTA会について</span><span class="nav-en">About</span></span></a>
           <a href="../../festa/"><span class="nav-copy"><span class="nav-ja">FESTA</span></span></a>
-          <a href="../../archive/"><span class="nav-copy"><span class="nav-ja">アーカイブ</span><span class="nav-en">Archive</span></span></a>
+          <a href="../../archive/"><span class="nav-copy"><span class="nav-ja">お知らせ</span><span class="nav-en">Archive</span></span></a>
           <a href="../../documents/"><span class="nav-copy"><span class="nav-ja">資料</span><span class="nav-en">Documents</span></span></a>
           <a href="../" aria-current="page"><span class="nav-copy"><span class="nav-ja">歩み</span><span class="nav-en">History</span></span></a>
           <a href="../../data/"><span class="nav-copy"><span class="nav-ja">データ</span><span class="nav-en">Data</span></span></a>
@@ -1804,40 +1804,6 @@
       </div>
     </footer>
 
-    <script>
-(function () {
-  const toggle = document.querySelector('.menu-toggle');
-  const header = document.querySelector('.site-header, .header');
-  const nav = document.getElementById(toggle ? toggle.getAttribute('aria-controls') : 'site-nav');
-
-  if (!header || !toggle || !nav) return;
-
-  function setMenuOpen(open) {
-    header.classList.toggle('is-open', open);
-    document.body.classList.toggle('menu-open', open);
-    toggle.setAttribute('aria-expanded', String(open));
-  }
-
-  toggle.addEventListener('click', function () {
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    setMenuOpen(!isOpen);
-  });
-
-  nav.addEventListener('click', function (event) {
-    const link = event.target.closest('a');
-    if (link) setMenuOpen(false);
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') setMenuOpen(false);
-  });
-
-  window.addEventListener('resize', function () {
-    if (window.matchMedia('(min-width: 861px)').matches) {
-      setMenuOpen(false);
-    }
-  });
-})();
-    </script>
+    <script src="../../assets/js/site.js" defer></script>
   </body>
 </html>

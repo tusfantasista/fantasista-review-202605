@@ -15,8 +15,17 @@
       <section class="crm-hero">
         <span class="crm-kicker">FESTA 60 Registration</span>
         <h1><span class="crm-title-line">60周年記念FESTA</span><span class="crm-title-line">参加申込</span></h1>
-        <p>参加情報、参加費・寄付、お支払い方法をご入力ください。入力内容に応じて、お支払い予定額をご案内します。</p>
-        <p><strong>申込締切：2027年1月31日（日）</strong></p>
+        <p>参加申込は近日受付開始です。受付開始時期は改めてご案内します。</p>
+      </section>
+
+      <section id="registration-coming-soon" class="crm-card crm-coming-soon" aria-labelledby="registration-coming-soon-title">
+        <span class="crm-kicker">Coming Soon</span>
+        <h2 id="registration-coming-soon-title">参加申込は近日受付開始です</h2>
+        <p>現在、受付開始に向けて最終準備を進めています。受付開始時期は改めてご案内します。</p>
+        <div class="crm-coming-soon__links">
+          <a class="crm-button" href="../festa-60th/support/">参加費・寄付を見る</a>
+          <a class="crm-button crm-button--ghost" href="../festa-60th/">FESTAトップへ戻る</a>
+        </div>
       </section>
 
       <section id="staff-mode-banner" class="crm-notice" hidden>
@@ -24,14 +33,14 @@
         <p>事務局から案内を受けた方のみ利用できる専用申込です。一般向けの申込ページには、この料金区分への導線を掲載していません。</p>
       </section>
 
-      <ol class="crm-steps" aria-label="申込手順">
+      <ol id="registration-steps" class="crm-steps" aria-label="申込手順" hidden>
         <li id="step-entry" class="is-current" aria-current="step"><span>1</span>入力</li>
         <li id="step-confirm"><span>2</span>内容確認</li>
         <li id="step-payment"><span>3</span>お支払い</li>
         <li id="step-complete"><span>4</span>申込完了</li>
       </ol>
 
-      <div id="entry-panel" class="crm-grid">
+      <div id="entry-panel" class="crm-grid" hidden>
         <form id="festa60-form" class="crm-card crm-stack">
           <h2>申込内容</h2>
           <input id="stripe-payment-method" type="hidden" name="payment_method" value="stripe" />
@@ -42,7 +51,7 @@
             <ul>
               <li>クレジットカード</li>
               <li>Apple Pay・Google Pay（対応端末・ブラウザで表示）</li>
-              <li>銀行振込（確認画面で振込先を確認してから確定）</li>
+              <li>銀行振込（外部決済サービスが発行する振込専用の仮想口座を、確認画面で確認してから確定）</li>
             </ul>
             <ul>
               <li>カード情報は外部決済サービスの安全な画面で入力し、FANTASISTAでは取得・保存しません。</li>
@@ -147,8 +156,8 @@
                 <option value="bronze">ブロンズ（プラン料金 20,000円）</option>
                 <option value="none" selected>通常参加（基準額 15,000円・各種割引あり）</option>
               </select>
-              <p class="crm-help"><strong>通常参加は、60周年記念FESTAと懇親会を含む基本の参加プランです。</strong>プラチナ・ゴールド・シルバー・ブロンズは、参加費に寄付と寄付特典を組み合わせた参加者向け寄付プランで、表示額が支払総額です。</p>
-              <p class="crm-help">寄付相当分は現役支援を中心に、FESTAの充実にも活用します。現役支援はFMドレス更新を最優先とします。各プランのダンスタイムチケットはこの活用分とは別に、券面相当額を踊った現役本人へ100％還元します。</p>
+              <p class="crm-help"><strong>通常参加は、60周年記念FESTAと懇親会を含む基本の参加プランです。</strong>プラチナ・ゴールド・シルバー・ブロンズは、基準参加費15,000円、プランごとのダンスタイムチケット券面総額、寄付相当額を組み合わせた参加プランで、表示額が支払総額です。</p>
+              <p class="crm-help">寄付相当額は、基準参加費とチケット券面総額を除いた部分です。現役支援を中心にFESTAの充実にも活用し、現役支援はFMドレス更新を最優先とします。チケット券面相当額は寄付相当額とは別に、踊った現役本人へ100％還元します。</p>
             </div>
           </div>
 
@@ -246,11 +255,12 @@
 
             <div class="crm-benefit-group">
               <h4>FESTA参加者向けプラン</h4>
-              <p>プラチナ、ゴールド、シルバー、ブロンズの表示額は、参加費・寄付・寄付特典を含む一体価格です。寄付は、記念展示、写真や映像、プロデモ、トライアル、世代交流を充実させ、FESTAをより彩り豊かな場にするための原資となります。</p>
+              <p>プラチナ、ゴールド、シルバー、ブロンズの表示額は、基準参加費15,000円、プランごとのダンスタイムチケット券面総額、寄付相当額を組み合わせた支払総額です。寄付は、現役の次の挑戦を支え、記念展示や写真・映像などを充実させるために活用します。</p>
+              <p class="crm-small">寄付プランについて、税制上の寄附金控除に用いる証明書は発行しません。決済サービスの領収書は、お支払いの記録としてご利用いただけます。</p>
               <div class="crm-benefit-note">
                 <strong>寄付が現役支援につながります</strong>
                 <p>各プランに含まれるダンスタイムチケットは、当日のダンスタイムやトライアルで現役部員へ直接お渡しいただけます。チケットの券面相当額はすべて、そのチケットで踊った現役本人へ還元します。</p>
-                <p>基本参加費とダンスタイムチケットの券面相当額を除く寄付相当分は、現役支援を中心に、60周年FESTAの充実にも活用します。現役支援はFMドレス更新を最優先とし、更新後の残額は、部で使う備品の購入・修繕費に充てる現役支援基金へ積み立てます。</p>
+                <p>寄付相当額は、基準参加費とダンスタイムチケット券面総額を除いた部分です。現役支援を中心に60周年FESTAの充実にも活用し、現役支援はFMドレス更新を最優先とします。ドレス更新に充てた後、支援金に余裕がある場合は、部で使う備品の購入・修繕費に充てる現役支援基金へ積み立てます。</p>
               </div>
               <p>プラチナ、ゴールド、シルバー、ブロンズには、当日の集合写真をプリントしたもの、現役からのお礼のメッセージ、60周年記念オリジナルステッカーを開催後に郵送する予定です。開催前の郵送物はありません。土産品類は設けません。</p>
               <div class="crm-benefit-table-wrap" tabindex="0" role="region" aria-label="FESTA参加者向けプランの比較表">
@@ -258,7 +268,7 @@
                   <thead>
                     <tr>
                       <th scope="col">プラン</th>
-                      <th scope="col">基準一体価格<br /><small>参加費・寄付を含む</small></th>
+                      <th scope="col">基準プラン料金<br /><small>参加費・チケット・寄付相当額を含む</small></th>
                       <th scope="col">寄付相当額<br /><small>参加費・チケット額面を除く</small></th>
                       <th scope="col">ダンスタイム券</th>
                     </tr>
@@ -446,6 +456,7 @@
             <input type="checkbox" name="contact_consent" checked />
             <span>事務局からメール等で連絡を受け取ることに同意します。</span>
           </label>
+          <p class="crm-small">フォームから送信する内容はSSL/TLSで暗号化されます。詳しくは<a href="../festa-60th/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>をご確認ください。</p>
           <div id="photo-consent-section">
           <details class="crm-notice crm-notice--plain crm-disclosure">
             <summary>当日の撮影・動画配信について</summary>
@@ -457,7 +468,7 @@
           </details>
           <label class="crm-check">
             <input type="checkbox" name="photo_consent" required />
-            <span>上記の撮影・限定公開による配信および映り込みについて了承します。</span>
+            <span><a href="../festa-60th/terms/#application-photo" target="_blank" rel="noopener">写真・動画撮影に関する条件</a>と上記の撮影・限定公開による配信および映り込みについて了承します。</span>
           </label>
           </div>
 
@@ -473,10 +484,10 @@
 
           <label class="crm-check">
             <input type="checkbox" name="cancellation_policy_consent" required />
-            <span>上記のキャンセル・返金規定を確認し、同意します。</span>
+            <span><a href="../festa-60th/terms/" target="_blank" rel="noopener">FESTA参加申込条件</a>と上記のキャンセル・返金規定を確認し、<strong>支払い後の申込者都合によるキャンセルに伴う返金がないこと</strong>に同意します。</span>
           </label>
 
-          <p class="crm-small">お申し込み前に<a href="../festa-60th/legal/" target="_blank" rel="noopener">特定商取引法に基づく表記</a>と<a href="../festa-60th/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>をご確認ください。</p>
+          <p class="crm-small">お申し込み前に<a href="../festa-60th/terms/" target="_blank" rel="noopener">FESTA参加申込条件</a>、<a href="../festa-60th/legal/" target="_blank" rel="noopener">特定商取引法に基づく表記</a>、<a href="../festa-60th/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>をご確認ください。</p>
 
           <div id="turnstile-slot"></div>
           <button id="review-application" class="crm-button" type="submit">入力内容を確認する</button>
@@ -530,6 +541,7 @@
             <h3 id="bank-transfer-preview-title" tabindex="-1">銀行振込先をご確認ください</h3>
             <p><strong>この時点では申込も振込も確定していません。</strong>内容を確認し、銀行振込で申し込むか、カード等へ選び直してください。</p>
             <p><strong>この画面の口座へは、まだ振り込まないでください。</strong>「この銀行振込で申込を確定する」を押した後、受付番号と正式な振込案内を表示し、メールでもお送りします。</p>
+            <p><strong>表示される振込先は、OBOG会の通常口座ではありません。</strong>外部決済サービスがこの申込のために発行する振込専用の仮想口座（VBAN）です。銀行名、支店名、口座名義がOBOG会と異なっていても、ここに表示された口座であれば正常です。</p>
           </div>
           <dl class="crm-summary">
             <div><dt>お支払い金額</dt><dd id="bank-preview-amount"></dd></div>
@@ -615,7 +627,7 @@
         <p class="crm-help">途中入部、休学、卒部時期が異なる場合は、実際に冬全で卒部した年度を入力してください。不明な場合は事務局へお問い合わせください。</p>
       </div>
     </dialog>
-    <footer class="crm-legal-footer"><a href="../festa-60th/legal/">特定商取引法に基づく表記</a><a href="../festa-60th/privacy/">プライバシーポリシー</a></footer>
-    <script type="module" src="../assets/js/festa60-register.js?v=20260810-1"></script>
+    <footer class="crm-legal-footer"><a href="https://tus-fantasista.pages.dev/terms/">サイト利用条件</a><a href="../festa-60th/terms/">FESTA参加申込条件</a><a href="../festa-60th/legal/">特定商取引法に基づく表記</a><a href="../festa-60th/privacy/">プライバシーポリシー</a></footer>
+    <script type="module" src="../assets/js/festa60-register.js?v=20260810-2"></script>
   </body>
 </html>

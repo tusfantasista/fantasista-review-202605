@@ -12,6 +12,8 @@ import {
   LEGACY_PRICING_VERSION,
   PAYMENT_STATUSES as SHARED_PAYMENT_STATUSES,
   RECEPTION_ATTENDANCE as SHARED_RECEPTION_ATTENDANCE,
+  REGISTRATION_STATUS,
+  REGISTRATION_STATUS_MESSAGE,
   STAFF_TICKET_TYPES as SHARED_STAFF_TICKET_TYPES,
   STANDARD_DANCE_TICKET_BENEFITS as SHARED_STANDARD_DANCE_TICKET_BENEFITS,
   SUPPORT_TIER_BENEFITS as SHARED_SUPPORT_TIER_BENEFITS,
@@ -205,9 +207,12 @@ function bankPreviewCleanupBatchSize(env) {
 }
 __name(bankPreviewCleanupBatchSize, "bankPreviewCleanupBatchSize");
 function publicBaseUrl(env, request) {
-  if (env.PUBLIC_BASE_URL) return env.PUBLIC_BASE_URL.replace(/\/$/, "");
-  const url = new URL(request.url);
-  return `${url.protocol}//${url.host}`;
+  const url = new URL(env.PUBLIC_BASE_URL || request.url);
+  const isLocal = url.hostname === "localhost" || url.hostname === "127.0.0.1" || url.hostname === "[::1]";
+  if (url.protocol !== "https:" && !isLocal) {
+    throw new Error("Public base URL must use HTTPS.");
+  }
+  return `${url.protocol}//${url.host}`.replace(/\/$/, "");
 }
 __name(publicBaseUrl, "publicBaseUrl");
 function adminActor(request, env) {
@@ -1551,6 +1556,10 @@ function numberOrNull(value) {
 __name(numberOrNull, "numberOrNull");
 
 // api/festa60/_lib/email.js
+function bankVirtualAccountNotice() {
+  return "振込先はOBOG会の通常口座ではなく、外部決済サービスがこの申込のために発行する振込専用の仮想口座（VBAN）です。銀行名、支店名、口座名義がOBOG会と異なっていても、案内ページに表示された口座であれば正常です。";
+}
+__name(bankVirtualAccountNotice, "bankVirtualAccountNotice");
 function renderBankTransferInstructionsEmail(application, hostedInstructionsUrl) {
   const name = application.full_name || application.name || "";
   return {
@@ -1566,6 +1575,9 @@ function renderBankTransferInstructionsEmail(application, hostedInstructionsUrl)
 
 振込先口座と支払期限は、次の案内ページでご確認ください。
 ${hostedInstructionsUrl}
+
+${bankVirtualAccountNotice()}
+振込先は申込ごとに異なるため、ご自身の最新の案内ページに表示された口座をご利用ください。
 
 FESTAの受付番号を振込名義へ付ける必要はありません。案内ページの内容に従ってお振り込みください。
 入金確認後に、FESTA事務局から参加確定メールをお送りします。`
@@ -1589,6 +1601,8 @@ function renderPartialPaymentEmail(application, partialPayment) {
 不足額を、前回と同じ指定口座へお振り込みください。
 振込先と現在のお支払い状況は、次の案内ページでご確認いただけます。
 ${partialPayment.hosted_instructions_url}
+
+${bankVirtualAccountNotice()}
 
 FESTAの受付番号を振込名義へ付ける必要はありません。案内ページの内容に従ってお振り込みください。
 全額の入金確認後に、FESTA事務局から参加確定メールをお送りします。`
@@ -1707,9 +1721,18 @@ async function maybeSendEmail(env, message) {
   if (!env.EMAIL_WEBHOOK_URL) {
     return { sent: false, skipped: true, reason: "EMAIL_WEBHOOK_URL is not configured." };
   }
+  let webhookUrl;
+  try {
+    webhookUrl = new URL(env.EMAIL_WEBHOOK_URL);
+  } catch {
+    return { sent: false, skipped: false, error: "EMAIL_WEBHOOK_URL is invalid." };
+  }
+  if (webhookUrl.protocol !== "https:") {
+    return { sent: false, skipped: false, error: "EMAIL_WEBHOOK_URL must use HTTPS." };
+  }
   const headers = { "content-type": "application/json" };
   if (env.EMAIL_API_TOKEN) headers.authorization = `Bearer ${env.EMAIL_API_TOKEN}`;
-  const response = await fetch(env.EMAIL_WEBHOOK_URL, {
+  const response = await fetch(webhookUrl, {
     method: "POST",
     redirect: "manual",
     headers,
@@ -1732,10 +1755,17 @@ async function maybeSendEmail(env, message) {
 }
 __name(maybeSendEmail, "maybeSendEmail");
 async function readAppsScriptEmailResult(location) {
+  let resultUrl;
+  try {
+    resultUrl = new URL(location);
+  } catch {
+    return null;
+  }
+  if (resultUrl.protocol !== "https:") return null;
   const retryDelays = [0, 400, 1e3, 2e3];
   for (const delay of retryDelays) {
     if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
-    const response = await fetch(location, { headers: { accept: "application/json" } });
+    const response = await fetch(resultUrl, { headers: { accept: "application/json" } });
     if (!response.ok) continue;
     const result = await response.json().catch(() => null);
     if (result) return result;
@@ -1778,6 +1808,8 @@ function renderBankTransferAmountAdjustedEmail(application, previousAmount, adju
 振込先口座は変更ありません。次の案内ページで、訂正後の金額と振込先をご確認ください。
 ${hostedInstructionsUrl}
 
+${bankVirtualAccountNotice()}
+
 すでに振込手続きをされた場合は、着金確認後に不足額をご案内します。重複して全額を振り込まないようお願いいたします。
 
 FANTASISTA 60周年FESTA事務局`
@@ -1801,6 +1833,8 @@ function renderBankTransferInstructionsRefreshedEmail(application, payment) {
 
 新しい振込案内ページ：
 ${payment.hosted_instructions_url}
+
+${bankVirtualAccountNotice()}
 
 すでに振込手続きをされた場合は、着金確認までお待ちください。重複して振り込まないようお願いいたします。
 全額の入金確認後に、FESTA事務局から参加確定メールをお送りします。
@@ -2324,6 +2358,9 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
   const result = await response.json();
   if (!response.ok) {
     throw new Error(`Stripe Checkout session failed: ${result.error?.message || response.status}`);
+  }
+  if (!result.url || new URL(result.url).protocol !== "https:") {
+    throw new Error("Stripe Checkout returned a non-HTTPS URL.");
   }
   return { session: result, metadata };
 }
@@ -3127,7 +3164,13 @@ async function onRequestPost6({ request, env, waitUntil }) {
     const allowedActions = ["submit_online", "preview_bank_transfer", "confirm_bank_transfer", "switch_to_online", "cancel_bank_preview"];
     if (!allowedActions.includes(action)) return badRequest("Invalid application action.");
     if (action !== "cancel_bank_preview" && !isApplicationOpen()) {
-      return json({ ok: false, error: "application_closed", message: "参加申込は2027年1月31日をもって締め切りました。変更や確認はFESTA事務局へお問い合わせください。" }, { status: 410 });
+      const notStarted = REGISTRATION_STATUS === "coming_soon";
+      return json({
+        ok: false,
+        error: notStarted ? "application_not_open" : "application_closed",
+        application_status: REGISTRATION_STATUS,
+        message: notStarted ? REGISTRATION_STATUS_MESSAGE : "参加申込は2027年1月31日をもって締め切りました。変更や確認はFESTA事務局へお問い合わせください。"
+      }, { status: notStarted ? 403 : 410 });
     }
     payload.full_name = [payload.family_name, payload.given_name].filter(Boolean).join(" ").trim();
     payload.full_name_kana = [payload.family_name_kana, payload.given_name_kana].filter(Boolean).join(" ").trim();
@@ -3595,6 +3638,8 @@ async function onRequestGet7({ env }) {
     payment_mode: "stripe_checkout",
     payment_provider: "stripe",
     stripe_mode: stripeMode(env),
+    application_status: REGISTRATION_STATUS,
+    application_status_message: REGISTRATION_STATUS_MESSAGE,
     application_open: isApplicationOpen(),
     application_deadline: APPLICATION_DEADLINE_ISO,
     fee_period: feePeriodForDate(),
