@@ -8,6 +8,9 @@ ENVIRONMENT = "production"
 SITE_ROLE = "festa60"
 CONTACT_EMAIL = "tus.festa.office@gmail.com"
 CONTACT_EMAIL_SENDER_NAME = "東京理科大学舞研OBOG会 FANTASISTA"
+BANK_PREVIEW_TTL_MINUTES = "30"
+BANK_PREVIEW_CLEANUP_GRACE_MINUTES = "15"
+BANK_PREVIEW_CLEANUP_BATCH_SIZE = "3"
 
 [[d1_databases]]
 binding = "DB"

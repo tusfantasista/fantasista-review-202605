@@ -4,7 +4,10 @@
   "compatibility_date": "2026-08-02",
   "pages_build_output_dir": "./public",
   "vars": {
-    "ENVIRONMENT": "staging"
+    "ENVIRONMENT": "staging",
+    "BANK_PREVIEW_TTL_MINUTES": "30",
+    "BANK_PREVIEW_CLEANUP_GRACE_MINUTES": "15",
+    "BANK_PREVIEW_CLEANUP_BATCH_SIZE": "3"
   },
   "d1_databases": [
     {

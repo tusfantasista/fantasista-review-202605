@@ -21,6 +21,13 @@ const checks = [
   ["preview persisted before response", files.worker.includes("persistBankTransferPreview(db, payload, preview")],
   ["bank preview confirms with customer balance method", files.worker.includes('params.set("payment_method_data[type]", "customer_balance")')],
   ["failed bank preview cleans up customer", files.worker.includes("deleteBankTransferPreviewCustomer(stripeSecret, customer.id)")],
+  ["expired previews are claimed before cleanup", files.worker.includes("claimExpiredBankTransferPreview") && files.worker.includes("status = 'cleanup_in_progress'")],
+  ["expired preview cleanup protects funds", files.worker.includes("bank_preview.cleanup_protected_funds") && files.worker.includes("observedBankPreviewFunding")],
+  ["expired preview cleanup cancels intent and customer", files.worker.includes("bank_preview.expired_cancelled") && files.worker.includes("expired_cancelled")],
+  ["expired preview cleanup runs in background", files.worker.includes("scheduleExpiredBankTransferPreviewCleanup(waitUntil, env, db)") && files.worker.includes("waitUntil(cleanupExpiredBankTransferPreviews")],
+  ["explicit bank cancellation cleans up customer", files.worker.includes("cancelled_cleanup_pending") && files.worker.includes("switched_cleanup_pending")],
+  ["cleanup failures are visible to admins", files.worker.includes("'cleanup_failed', 'cancelled_cleanup_pending', 'switched_cleanup_pending'")],
+  ["bank preview cleanup settings are configurable", files.worker.includes('"BANK_PREVIEW_TTL_MINUTES"') && files.worker.includes('"BANK_PREVIEW_CLEANUP_GRACE_MINUTES"') && files.worker.includes('"BANK_PREVIEW_CLEANUP_BATCH_SIZE"')],
   ["bank preview failure is user friendly", files.worker.includes('error: "bank_transfer_unavailable"')],
   ["funded preview cannot switch", files.worker.includes("bank_transfer_already_funded")],
   ["pre-confirmation funding tracked", files.worker.includes("paid_before_confirmation") && files.worker.includes("funds_received_before_confirmation")],
@@ -64,7 +71,7 @@ const checks = [
   ["admin can refresh bank instructions", files.worker.includes('payload.action === "refresh_bank_transfer_instructions"') && files.worker.includes("payment.bank_transfer_instructions_refreshed")],
   ["refreshed bank instructions can be resent", files.worker.includes("renderBankTransferInstructionsRefreshedEmail") && files.worker.includes("銀行振込先・お支払い手順（再発行）")],
   ["preview omits actionable hosted link", !files.register.includes('id="bank-preview-instructions"')],
-  ["design covers five issues", [1, 2, 3, 4, 5].every((number) => files.design.includes(`| ${number} |`))]
+  ["design covers six issues", [1, 2, 3, 4, 5, 6].every((number) => files.design.includes(`| ${number} |`))]
 ];
 
 const failed = checks.filter(([, passed]) => !passed);

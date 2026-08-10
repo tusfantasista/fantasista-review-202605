@@ -187,6 +187,23 @@ function requireStripeSecret(env) {
   return key;
 }
 __name(requireStripeSecret, "requireStripeSecret");
+function positiveIntegerEnv(env, key, fallback) {
+  const value = Number(env[key]);
+  return Number.isInteger(value) && value > 0 ? value : fallback;
+}
+__name(positiveIntegerEnv, "positiveIntegerEnv");
+function bankPreviewTtlMs(env) {
+  return positiveIntegerEnv(env, "BANK_PREVIEW_TTL_MINUTES", 30) * 60 * 1e3;
+}
+__name(bankPreviewTtlMs, "bankPreviewTtlMs");
+function bankPreviewCleanupGraceMs(env) {
+  return positiveIntegerEnv(env, "BANK_PREVIEW_CLEANUP_GRACE_MINUTES", 15) * 60 * 1e3;
+}
+__name(bankPreviewCleanupGraceMs, "bankPreviewCleanupGraceMs");
+function bankPreviewCleanupBatchSize(env) {
+  return Math.min(10, positiveIntegerEnv(env, "BANK_PREVIEW_CLEANUP_BATCH_SIZE", 3));
+}
+__name(bankPreviewCleanupBatchSize, "bankPreviewCleanupBatchSize");
 function publicBaseUrl(env, request) {
   if (env.PUBLIC_BASE_URL) return env.PUBLIC_BASE_URL.replace(/\/$/, "");
   const url = new URL(request.url);
@@ -1429,8 +1446,11 @@ async function listBankTransferAlerts(db) {
             amount_received_jpy, amount_remaining_jpy, status, application_id,
             applicant_email, applicant_name, hosted_instructions_url, expires_at, created_at, updated_at
        FROM bank_transfer_previews
-       WHERE status IN ('funds_received_before_confirmation', 'paid_before_confirmation', 'unreconciled_funds_received')
-          OR (status IN ('confirming', 'application_created') AND expires_at < ?)
+       WHERE status IN (
+         'funds_received_before_confirmation', 'paid_before_confirmation', 'unreconciled_funds_received',
+         'cleanup_failed', 'cancelled_cleanup_pending', 'switched_cleanup_pending'
+       )
+          OR (status IN ('confirming', 'application_created', 'cleanup_in_progress') AND expires_at < ?)
        ORDER BY updated_at DESC
        LIMIT 100`
   ).bind(nowIso()).all();
@@ -1996,11 +2016,12 @@ async function onRequestGet() {
 __name(onRequestGet, "onRequestGet");
 
 // api/festa60/admin/applications.js
-async function onRequestGet2({ request, env }) {
+async function onRequestGet2({ request, env, waitUntil }) {
   const auth = assertAdmin(request, env);
   if (!auth.ok) return auth.response;
   try {
     const db = requireDb(env);
+    scheduleExpiredBankTransferPreviewCleanup(waitUntil, env, db);
     const [rows, summary, bankTransferAlerts] = await Promise.all([
       listApplications(db),
       getAdminParticipationSummary(db),
@@ -2339,15 +2360,17 @@ async function createBankTransferPreviewCustomer(stripeSecret, payload, previewI
 }
 __name(createBankTransferPreviewCustomer, "createBankTransferPreviewCustomer");
 async function deleteBankTransferPreviewCustomer(stripeSecret, customerId) {
-  if (!customerId) return;
+  if (!customerId) return true;
   const response = await fetch(`https://api.stripe.com/v1/customers/${encodeURIComponent(customerId)}`, {
     method: "DELETE",
     headers: { authorization: `Bearer ${stripeSecret}` }
   });
   if (!response.ok) {
     const result = await response.json().catch(() => ({}));
-    console.error(`Stripe bank transfer preview customer cleanup failed: ${result.error?.message || response.status}`);
+    if (response.status === 404 || result.error?.code === "resource_missing") return true;
+    throw new Error(`Stripe bank transfer preview customer cleanup failed: ${result.error?.message || response.status}`);
   }
+  return true;
 }
 __name(deleteBankTransferPreviewCustomer, "deleteBankTransferPreviewCustomer");
 async function createBankTransferPreview({ env, payload, amount }) {
@@ -2378,7 +2401,7 @@ async function createBankTransferPreview({ env, payload, amount }) {
   });
   const paymentIntent = await response.json();
   if (!response.ok) {
-    await deleteBankTransferPreviewCustomer(stripeSecret, customer.id);
+    await deleteBankTransferPreviewCustomer(stripeSecret, customer.id).catch((cleanupError) => console.error(cleanupError));
     throw new Error(`Stripe bank transfer preview failed: ${paymentIntent.error?.message || response.status}`);
   }
   return { previewId, customer, paymentIntent };
@@ -2444,6 +2467,151 @@ async function updateBankTransferPreview(db, previewId, update) {
   ).run();
 }
 __name(updateBankTransferPreview, "updateBankTransferPreview");
+async function claimExpiredBankTransferPreview(db, cutoffIso, retryBeforeIso) {
+  const now = nowIso();
+  return db.prepare(
+    `UPDATE bank_transfer_previews
+        SET status = 'cleanup_in_progress', updated_at = ?
+      WHERE id = (
+        SELECT id
+          FROM bank_transfer_previews
+         WHERE application_id IS NULL
+           AND (
+             status IN ('previewed', 'cancelled_cleanup_pending', 'switched_cleanup_pending')
+             OR (status IN ('cleanup_failed', 'cleanup_in_progress') AND updated_at < ?)
+           )
+           AND expires_at < ?
+         ORDER BY expires_at ASC
+         LIMIT 1
+      )
+        AND application_id IS NULL
+        AND (
+          status IN ('previewed', 'cancelled_cleanup_pending', 'switched_cleanup_pending')
+          OR (status IN ('cleanup_failed', 'cleanup_in_progress') AND updated_at < ?)
+        )
+      RETURNING id, stripe_payment_intent_id, stripe_customer_id, amount_total_jpy,
+                amount_received_jpy, amount_remaining_jpy, status, expires_at`
+  ).bind(now, retryBeforeIso, cutoffIso, retryBeforeIso).first();
+}
+__name(claimExpiredBankTransferPreview, "claimExpiredBankTransferPreview");
+function observedBankPreviewFunding(paymentIntent, cashBalanceTransactions) {
+  const total = Number(paymentIntent?.amount || 0);
+  const remainingValue = Number(paymentIntent?.next_action?.display_bank_transfer_instructions?.amount_remaining);
+  const receivedFromIntent = paymentIntent?.status === "succeeded"
+    ? Number(paymentIntent.amount_received || total)
+    : Number.isFinite(remainingValue)
+      ? Math.max(0, total - remainingValue)
+      : Number(paymentIntent?.amount_received || 0);
+  const hasCashBalanceActivity = Array.isArray(cashBalanceTransactions) && cashBalanceTransactions.length > 0;
+  return {
+    amount_received_jpy: receivedFromIntent,
+    amount_remaining_jpy: Math.max(0, total - receivedFromIntent),
+    fully_paid: paymentIntent?.status === "succeeded" || total > 0 && receivedFromIntent >= total,
+    has_funds: receivedFromIntent > 0 || hasCashBalanceActivity,
+    has_cash_balance_activity: hasCashBalanceActivity
+  };
+}
+__name(observedBankPreviewFunding, "observedBankPreviewFunding");
+async function listBankPreviewCashBalanceTransactions(stripeSecret, customerId) {
+  try {
+    return await listStripeCashBalanceTransactions(stripeSecret, customerId, 3);
+  } catch (error) {
+    if (/No such customer|resource_missing/i.test(String(error?.message || error))) return [];
+    throw error;
+  }
+}
+__name(listBankPreviewCashBalanceTransactions, "listBankPreviewCashBalanceTransactions");
+async function cleanupExpiredBankTransferPreviews(env, db) {
+  if (!env.STRIPE_SECRET_KEY) return { examined: 0, cancelled: 0, protected: 0, failed: 0 };
+  const stripeSecret = requireStripeSecret(env);
+  const cutoffIso = new Date(Date.now() - bankPreviewCleanupGraceMs(env)).toISOString();
+  const summary = { examined: 0, cancelled: 0, protected: 0, failed: 0 };
+  for (let index = 0; index < bankPreviewCleanupBatchSize(env); index += 1) {
+    const retryBeforeIso = new Date(Date.now() - bankPreviewCleanupGraceMs(env)).toISOString();
+    const preview = await claimExpiredBankTransferPreview(db, cutoffIso, retryBeforeIso);
+    if (!preview) break;
+    summary.examined += 1;
+    try {
+      let paymentIntent = await retrieveStripePaymentIntent(stripeSecret, preview.stripe_payment_intent_id);
+      const transactions = await listBankPreviewCashBalanceTransactions(stripeSecret, preview.stripe_customer_id);
+      const funding = observedBankPreviewFunding(paymentIntent, transactions);
+      if (funding.has_funds) {
+        const fundedStatus = funding.fully_paid
+          ? "paid_before_confirmation"
+          : funding.amount_received_jpy > 0
+            ? "funds_received_before_confirmation"
+            : "unreconciled_funds_received";
+        await db.prepare(
+          `UPDATE bank_transfer_previews
+              SET status = ?, amount_received_jpy = ?, amount_remaining_jpy = ?, updated_at = ?
+            WHERE id = ? AND status = 'cleanup_in_progress'`
+        ).bind(fundedStatus, funding.amount_received_jpy, funding.amount_remaining_jpy, nowIso(), preview.id).run();
+        await audit(db, {
+          actor: "system",
+          action: "bank_preview.cleanup_protected_funds",
+          target_type: "bank_transfer_preview",
+          target_id: preview.id,
+          details_json: JSON.stringify({
+            payment_intent_id: preview.stripe_payment_intent_id,
+            amount_received_jpy: funding.amount_received_jpy,
+            has_cash_balance_activity: funding.has_cash_balance_activity
+          })
+        });
+        summary.protected += 1;
+        continue;
+      }
+      if (paymentIntent.status !== "canceled") {
+        await cancelStripePaymentIntent(stripeSecret, preview.stripe_payment_intent_id);
+        paymentIntent = await retrieveStripePaymentIntent(stripeSecret, preview.stripe_payment_intent_id);
+      }
+      if (paymentIntent.status !== "canceled") {
+        throw new Error(`Expired bank preview PaymentIntent was not cancelled: ${paymentIntent.status}`);
+      }
+      await deleteBankTransferPreviewCustomer(stripeSecret, preview.stripe_customer_id);
+      await db.prepare(
+        `UPDATE bank_transfer_previews
+            SET status = 'expired_cancelled', updated_at = ?
+          WHERE id = ? AND status = 'cleanup_in_progress'`
+      ).bind(nowIso(), preview.id).run();
+      await audit(db, {
+        actor: "system",
+        action: "bank_preview.expired_cancelled",
+        target_type: "bank_transfer_preview",
+        target_id: preview.id,
+        details_json: JSON.stringify({
+          payment_intent_id: preview.stripe_payment_intent_id,
+          stripe_customer_id: preview.stripe_customer_id,
+          expires_at: preview.expires_at
+        })
+      });
+      summary.cancelled += 1;
+    } catch (error) {
+      await db.prepare(
+        `UPDATE bank_transfer_previews
+            SET status = 'cleanup_failed', updated_at = ?
+          WHERE id = ? AND status = 'cleanup_in_progress'`
+      ).bind(nowIso(), preview.id).run();
+      await audit(db, {
+        actor: "system",
+        action: "bank_preview.cleanup_failed",
+        target_type: "bank_transfer_preview",
+        target_id: preview.id,
+        details_json: JSON.stringify({ error: String(error?.message || error).slice(0, 500) })
+      }).catch(() => null);
+      console.error("Expired bank transfer preview cleanup failed.", error);
+      summary.failed += 1;
+    }
+  }
+  return summary;
+}
+__name(cleanupExpiredBankTransferPreviews, "cleanupExpiredBankTransferPreviews");
+function scheduleExpiredBankTransferPreviewCleanup(waitUntil, env, db) {
+  if (typeof waitUntil !== "function" || !env.STRIPE_SECRET_KEY) return;
+  waitUntil(cleanupExpiredBankTransferPreviews(env, db).catch((error) => {
+    console.error("Scheduled bank transfer preview cleanup failed.", error);
+  }));
+}
+__name(scheduleExpiredBankTransferPreviewCleanup, "scheduleExpiredBankTransferPreviewCleanup");
 function bankTransferDetails(paymentIntent) {
   const instructions = paymentIntent?.next_action?.display_bank_transfer_instructions;
   const financialAddress = (instructions?.financial_addresses || []).find((item) => item.type === "zengin");
@@ -2951,7 +3119,7 @@ __name(verifyTurnstile, "verifyTurnstile");
 var PUBLIC_OBOG_TICKET_TYPES = ["obog", "obog_6_10", "obog_5_under"];
 var ABSENT_DONATION_TICKET_TYPES = ["absent_donation_30000", "absent_donation_10000", "absent_donation_5000"];
 var SCHOOL_LINEAGES = ["tus_obog", "gakushuin_ouyukai"];
-async function onRequestPost6({ request, env }) {
+async function onRequestPost6({ request, env, waitUntil }) {
   try {
     const payload = await readJson(request);
     if (!payload) return badRequest("Invalid JSON payload.");
@@ -2977,6 +3145,7 @@ async function onRequestPost6({ request, env }) {
     payload.source = isStaffApplication ? "staff_invite" : "public_form";
     delete payload.staff_access_code;
     const db = requireDb(env);
+    scheduleExpiredBankTransferPreviewCleanup(waitUntil, env, db);
     payload.ticket_type = normalizeTicketType(payload.ticket_type);
     const companions = Array.isArray(payload.companions) ? payload.companions.filter((item) => item.full_name) : [];
     let amount = lineItemsTotal(buildPaymentLineItems(payload, companions, payload.pricing_version));
@@ -2997,7 +3166,7 @@ async function onRequestPost6({ request, env }) {
         }, { status: 502 });
       }
       const payloadHash = await bankPreviewPayloadHash(payload);
-      const expiresAt = Date.now() + 30 * 60 * 1e3;
+      const expiresAt = Date.now() + bankPreviewTtlMs(env);
       let previewDetails;
       try {
         previewDetails = await persistBankTransferPreview(db, payload, preview, amount, payloadHash, expiresAt);
@@ -3059,18 +3228,26 @@ async function onRequestPost6({ request, env }) {
         "SELECT application_id FROM payments WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe' LIMIT 1"
       ).bind(bankPreview.payment_intent_id).first();
       if (linkedPayment?.application_id || bankPreview.record.application_id) return badRequest("この銀行振込はすでに申込へ確定されています。");
-      const amountReceived = bankTransferAmountReceived(bankPaymentIntent);
-      if (amountReceived > 0 || bankPaymentIntent.status === "succeeded") {
+      const cashBalanceTransactions = await listBankPreviewCashBalanceTransactions(requireStripeSecret(env), bankPreview.customer_id);
+      const funding = observedBankPreviewFunding(bankPaymentIntent, cashBalanceTransactions);
+      if (funding.has_funds) {
         await updateBankTransferPreview(db, bankPreview.preview_id, {
-          status: "funds_received_before_confirmation",
-          amount_received_jpy: amountReceived || bankPaymentIntent.amount,
-          amount_remaining_jpy: bankTransferAmountRemaining(bankPaymentIntent)
+          status: funding.fully_paid ? "paid_before_confirmation" : funding.amount_received_jpy > 0 ? "funds_received_before_confirmation" : "unreconciled_funds_received",
+          amount_received_jpy: funding.amount_received_jpy,
+          amount_remaining_jpy: funding.amount_remaining_jpy
         });
         return json({ ok: false, error: "bank_transfer_already_funded", message: "すでに入金が確認されているため、この振込先を取り消せません。FESTA事務局へご連絡ください。" }, { status: 409 });
       }
-      if (bankPaymentIntent.status === "canceled") return json({ ok: true, cancelled: true });
-      await cancelStripePaymentIntent(requireStripeSecret(env), bankPreview.payment_intent_id);
-      await updateBankTransferPreview(db, bankPreview.preview_id, { status: "cancelled" });
+      if (bankPaymentIntent.status !== "canceled") {
+        await cancelStripePaymentIntent(requireStripeSecret(env), bankPreview.payment_intent_id);
+      }
+      try {
+        await deleteBankTransferPreviewCustomer(requireStripeSecret(env), bankPreview.customer_id);
+        await updateBankTransferPreview(db, bankPreview.preview_id, { status: "cancelled" });
+      } catch (cleanupError) {
+        await updateBankTransferPreview(db, bankPreview.preview_id, { status: "cancelled_cleanup_pending" });
+        console.error("Cancelled bank preview customer cleanup deferred.", cleanupError);
+      }
       return json({ ok: true, cancelled: true });
     }
 
@@ -3174,17 +3351,24 @@ async function onRequestPost6({ request, env }) {
       ).bind(bankPreview.payment_intent_id).first();
       if (linkedPayment?.application_id || bankPreview.record.application_id) return badRequest("この銀行振込はすでに申込へ確定されています。");
       if (bankPaymentIntent.status === "canceled") return badRequest("この確認情報はすでに使用されています。入力画面からやり直してください。");
-      const amountReceived = bankTransferAmountReceived(bankPaymentIntent);
-      if (amountReceived > 0 || bankPaymentIntent.status === "succeeded") {
+      const cashBalanceTransactions = await listBankPreviewCashBalanceTransactions(requireStripeSecret(env), bankPreview.customer_id);
+      const funding = observedBankPreviewFunding(bankPaymentIntent, cashBalanceTransactions);
+      if (funding.has_funds) {
         await updateBankTransferPreview(db, bankPreview.preview_id, {
-          status: "funds_received_before_confirmation",
-          amount_received_jpy: amountReceived || bankPaymentIntent.amount,
-          amount_remaining_jpy: bankTransferAmountRemaining(bankPaymentIntent)
+          status: funding.fully_paid ? "paid_before_confirmation" : funding.amount_received_jpy > 0 ? "funds_received_before_confirmation" : "unreconciled_funds_received",
+          amount_received_jpy: funding.amount_received_jpy,
+          amount_remaining_jpy: funding.amount_remaining_jpy
         });
         return json({ ok: false, error: "bank_transfer_already_funded", message: "すでに入金が確認されているため、カード等へ変更できません。銀行振込で申込を確定するか、FESTA事務局へご連絡ください。" }, { status: 409 });
       }
       await cancelStripePaymentIntent(requireStripeSecret(env), bankPreview.payment_intent_id);
-      await updateBankTransferPreview(db, bankPreview.preview_id, { status: "switched_to_online" });
+      try {
+        await deleteBankTransferPreviewCustomer(requireStripeSecret(env), bankPreview.customer_id);
+        await updateBankTransferPreview(db, bankPreview.preview_id, { status: "switched_to_online" });
+      } catch (cleanupError) {
+        await updateBankTransferPreview(db, bankPreview.preview_id, { status: "switched_cleanup_pending" });
+        console.error("Switched bank preview customer cleanup deferred.", cleanupError);
+      }
     }
     let application = null;
     if (payload.client_submission_id) {
