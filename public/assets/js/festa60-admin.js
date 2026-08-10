@@ -153,9 +153,15 @@
   }
 
   function effectivePaymentStatus(application) {
+    const recordedAmount = Number(application.amount_received_jpy || 0);
+    const remainingAmount = Number(application.amount_remaining_jpy || 0);
+    const applicationStatus = application.payment_status || application.paymentStatus || "";
+    if (!["paid", "cancelled", "refunded"].includes(applicationStatus) && recordedAmount > 0 && remainingAmount > 0) {
+      return "partially_funded";
+    }
     if (application.latest_payment_status === "partially_funded") return "partially_funded";
     if (["failed", "expired"].includes(application.latest_payment_status)) return application.latest_payment_status;
-    return application.payment_status || application.paymentStatus || application.latest_payment_status || "unpaid";
+    return applicationStatus || application.latest_payment_status || "unpaid";
   }
 
   function receivedAmount(application) {

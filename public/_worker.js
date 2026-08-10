@@ -900,15 +900,6 @@ async function markBankTransferPaymentSucceeded(db, paymentIntent, stripeEventId
   return { application_id: payment.application_id };
 }
 __name(markBankTransferPaymentSucceeded, "markBankTransferPaymentSucceeded");
-async function markPartialPaymentEmailSent(db, paymentIntentId) {
-  const now = nowIso();
-  await db.prepare(
-    `UPDATE payments
-       SET partial_payment_email_sent_at = ?, updated_at = ?
-       WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe'`
-  ).bind(now, now, paymentIntentId).run();
-}
-__name(markPartialPaymentEmailSent, "markPartialPaymentEmailSent");
 async function getApplicationById(db, applicationId) {
   const application = await db.prepare(
     `SELECT
@@ -1221,14 +1212,28 @@ async function refreshBankTransferInstructions({
   if (!hostedInstructionsUrl) throw new Error("Stripe bank transfer instructions URL is unavailable.");
   const amountRemaining = bankTransferAmountRemaining(paymentIntent);
   const amountReceived = bankTransferAmountReceived(paymentIntent);
+  const synchronizedPaymentStatus = amountReceived > 0 && amountRemaining > 0 ? "partially_funded" : paymentIntent.status;
   const now = nowIso();
   await db.batch([
     db.prepare(
       `UPDATE payments
           SET status = ?, amount_total = ?, amount_received_jpy = ?,
-              amount_remaining_jpy = ?, updated_at = ?
+              amount_remaining_jpy = ?,
+              partial_payment_at = CASE WHEN ? = 'partially_funded' THEN COALESCE(partial_payment_at, ?) ELSE partial_payment_at END,
+              unreconciled_amount_jpy = CASE WHEN ? = 'partially_funded' THEN 0 ELSE unreconciled_amount_jpy END,
+              updated_at = ?
         WHERE id = ?`
-    ).bind(paymentIntent.status, paymentIntent.amount, amountReceived, amountRemaining, now, current.payment_id),
+    ).bind(
+      synchronizedPaymentStatus,
+      paymentIntent.amount,
+      amountReceived,
+      amountRemaining,
+      synchronizedPaymentStatus,
+      now,
+      synchronizedPaymentStatus,
+      now,
+      current.payment_id
+    ),
     db.prepare(
       `UPDATE bank_transfer_previews
           SET amount_total_jpy = ?, amount_received_jpy = ?, amount_remaining_jpy = ?,
@@ -1243,6 +1248,13 @@ async function refreshBankTransferInstructions({
       current.stripe_payment_intent_id
     )
   ]);
+  if (synchronizedPaymentStatus === "partially_funded") {
+    await db.prepare(
+      `UPDATE applications
+          SET payment_status = 'pending', status = 'payment_pending', attendance_status = 'pending', updated_at = ?
+        WHERE id = ?`
+    ).bind(now, current.id).run();
+  }
   await audit(db, {
     actor,
     action: "payment.bank_transfer_instructions_refreshed",
@@ -1254,6 +1266,7 @@ async function refreshBankTransferInstructions({
       amount_total_jpy: Number(paymentIntent.amount || 0),
       amount_received_jpy: amountReceived,
       amount_remaining_jpy: amountRemaining,
+      payment_status: synchronizedPaymentStatus,
       reconfirmed
     }),
     ...requestMeta
@@ -1264,6 +1277,7 @@ async function refreshBankTransferInstructions({
     amount_total_jpy: Number(paymentIntent.amount || 0),
     amount_received_jpy: amountReceived,
     amount_remaining_jpy: amountRemaining,
+    payment_status: synchronizedPaymentStatus,
     reconfirmed
   };
 }
@@ -1895,8 +1909,9 @@ async function onRequestPatch({ request, env, params }) {
       });
     }
     if (payload.action === "refresh_bank_transfer_instructions") {
+      const db = requireDb(env);
       const result = await refreshBankTransferInstructions({
-        db: requireDb(env),
+        db,
         env,
         applicationId: params.id,
         confirmedApplicationCode: payload.confirm_application_code,
@@ -1905,10 +1920,12 @@ async function onRequestPatch({ request, env, params }) {
       });
       let emailDelivery = null;
       if (payload.sendEmail === true) {
-        emailDelivery = await maybeSendEmail(env, {
-          ...renderBankTransferInstructionsRefreshedEmail(result.application, result),
-          message_id: `festa60-bank-instructions-refresh-${result.application.id}-${Date.now()}`
-        });
+        emailDelivery = result.payment_status === "partially_funded"
+          ? await sendPaymentEmailOnce(env, db, result.application, "partial", renderPartialPaymentEmail(result.application, result))
+          : await maybeSendEmail(env, {
+            ...renderBankTransferInstructionsRefreshedEmail(result.application, result),
+            message_id: `festa60-bank-instructions-refresh-${result.application.id}-${Date.now()}`
+          });
       }
       return json({
         ok: true,
@@ -2627,6 +2644,106 @@ function bankTransferAmountReceived(paymentIntent) {
   return Math.max(0, amount - remaining);
 }
 __name(bankTransferAmountReceived, "bankTransferAmountReceived");
+function bankTransferProgress(paymentIntent) {
+  const amountTotal = Number(paymentIntent?.amount || 0);
+  if (paymentIntent?.status === "succeeded") {
+    return {
+      status: "paid",
+      amount_total_jpy: amountTotal,
+      amount_received_jpy: Number(paymentIntent.amount_received || amountTotal),
+      amount_remaining_jpy: 0
+    };
+  }
+  const amountRemaining = bankTransferAmountRemaining(paymentIntent);
+  const amountReceived = Math.max(0, amountTotal - amountRemaining);
+  return {
+    status: amountReceived > 0 && amountRemaining > 0 ? "partially_funded" : "pending",
+    amount_total_jpy: amountTotal,
+    amount_received_jpy: amountReceived,
+    amount_remaining_jpy: amountRemaining
+  };
+}
+__name(bankTransferProgress, "bankTransferProgress");
+async function findLinkedBankTransferByCustomer(db, customerId) {
+  if (!customerId) return null;
+  const payment = await db.prepare(
+    `SELECT stripe_payment_intent_id, status
+       FROM payments
+       WHERE stripe_customer_id = ? AND payment_provider = 'stripe'
+         AND stripe_payment_intent_id IS NOT NULL
+       ORDER BY created_at DESC
+       LIMIT 1`
+  ).bind(customerId).first();
+  if (payment?.stripe_payment_intent_id) {
+    return {
+      stripe_payment_intent_id: payment.stripe_payment_intent_id,
+      local_status: payment.status || "",
+      source: "payment"
+    };
+  }
+  const preview = await db.prepare(
+    `SELECT stripe_payment_intent_id, status
+       FROM bank_transfer_previews
+       WHERE stripe_customer_id = ? AND stripe_payment_intent_id IS NOT NULL
+       ORDER BY created_at DESC
+       LIMIT 1`
+  ).bind(customerId).first();
+  if (!preview?.stripe_payment_intent_id) return null;
+  return {
+    stripe_payment_intent_id: preview.stripe_payment_intent_id,
+    local_status: preview.status || "",
+    source: "preview"
+  };
+}
+__name(findLinkedBankTransferByCustomer, "findLinkedBankTransferByCustomer");
+async function retrieveLinkedBankTransferWithProgress(stripeSecret, paymentIntentId, attempts = 3) {
+  let paymentIntent = null;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    paymentIntent = await retrieveStripePaymentIntent(stripeSecret, paymentIntentId);
+    const progress = bankTransferProgress(paymentIntent);
+    if (progress.status !== "pending" || attempt === attempts - 1) return { paymentIntent, progress };
+    await new Promise((resolve) => setTimeout(resolve, 400 * (attempt + 1)));
+  }
+  return { paymentIntent, progress: bankTransferProgress(paymentIntent) };
+}
+__name(retrieveLinkedBankTransferWithProgress, "retrieveLinkedBankTransferWithProgress");
+async function processBankTransferProgress(env, db, paymentIntent, stripeEventId) {
+  const progress = bankTransferProgress(paymentIntent);
+  if (progress.status === "paid") {
+    const paidPayment = await markBankTransferPaymentSucceeded(db, paymentIntent, stripeEventId);
+    if (paidPayment.application_id) {
+      const application = await getApplicationById(db, paidPayment.application_id);
+      if (application) await sendPaymentEmailOnce(env, db, application, "confirmed", renderPaymentConfirmedEmail(application));
+    } else {
+      const emailResult = await maybeSendEmail(env, {
+        ...renderBankFundsBeforeConfirmationEmail(paidPayment, true),
+        message_id: `festa60-bank-paid-before-confirmation-${paidPayment.preview_id}`
+      });
+      if (!emailResult.sent) throw new Error(`Pre-confirmation payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
+    }
+    return { handled: true, status: "paid", ...paidPayment };
+  }
+  if (progress.status === "partially_funded") {
+    const partialPayment = await markPaymentPartiallyFunded(db, paymentIntent, stripeEventId);
+    if (!partialPayment.hosted_instructions_url) {
+      throw new Error("Stripe bank transfer instructions URL is unavailable for a partially funded payment.");
+    }
+    if (partialPayment.application_id) {
+      const application = await getApplicationById(db, partialPayment.application_id);
+      if (!application) throw new Error("Festa 60 application was not found for a partially funded payment.");
+      await sendPaymentEmailOnce(env, db, application, "partial", renderPartialPaymentEmail(application, partialPayment));
+    } else {
+      const emailResult = await maybeSendEmail(env, {
+        ...renderBankFundsBeforeConfirmationEmail(partialPayment, false),
+        message_id: `festa60-bank-partial-before-confirmation-${partialPayment.preview_id}`
+      });
+      if (!emailResult.sent) throw new Error(`Pre-confirmation partial payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
+    }
+    return { handled: true, status: "partially_funded", ...partialPayment };
+  }
+  return { handled: false, status: "pending", ...progress };
+}
+__name(processBankTransferProgress, "processBankTransferProgress");
 async function markUnreconciledCashBalance(db, cashBalance, stripeEventId) {
   const customerId = cashBalance?.customer;
   const amount = Number(cashBalance?.available?.jpy || 0);
@@ -2760,40 +2877,21 @@ async function onRequestPost5({ request, env }) {
           }
         }
       } else if (event.type === "payment_intent.succeeded" && event.data.object.payment_method_types?.includes("customer_balance")) {
-        const paidPayment = await markBankTransferPaymentSucceeded(db, event.data.object, event.id);
-        if (paidPayment.application_id) {
-          const application = await getApplicationById(db, paidPayment.application_id);
-          if (application) await sendPaymentEmailOnce(env, db, application, "confirmed", renderPaymentConfirmedEmail(application));
-        } else {
-          const emailResult = await maybeSendEmail(env, {
-            ...renderBankFundsBeforeConfirmationEmail(paidPayment, true),
-            message_id: `festa60-bank-paid-before-confirmation-${paidPayment.preview_id}`
-          });
-          if (!emailResult.sent) throw new Error(`Pre-confirmation payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
-        }
+        await processBankTransferProgress(env, db, event.data.object, event.id);
       } else if (event.type === "payment_intent.partially_funded") {
-        const partialPayment = await markPaymentPartiallyFunded(db, event.data.object, event.id);
-        if (!partialPayment.hosted_instructions_url) {
-          throw new Error("Stripe bank transfer instructions URL is unavailable for a partially funded payment.");
-        }
-        if (partialPayment.application_id) {
-          const application = await getApplicationById(db, partialPayment.application_id);
-          if (!application) throw new Error("Festa 60 application was not found for a partially funded payment.");
-          const emailResult = await maybeSendEmail(env, {
-            ...renderPartialPaymentEmail(application, partialPayment),
-            message_id: `festa60-partial-${application.id}-${event.id}`
-          });
-          if (!emailResult.sent) throw new Error(`Partial payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
-          await markPartialPaymentEmailSent(db, event.data.object.id);
-        } else {
-          const emailResult = await maybeSendEmail(env, {
-            ...renderBankFundsBeforeConfirmationEmail(partialPayment, false),
-            message_id: `festa60-bank-partial-before-confirmation-${partialPayment.preview_id}`
-          });
-          if (!emailResult.sent) throw new Error(`Pre-confirmation partial payment email was not sent: ${emailResult.error || emailResult.reason || "unknown error"}`);
-        }
+        await processBankTransferProgress(env, db, event.data.object, event.id);
       } else if (event.type === "cash_balance.funds_available") {
-        const attention = await markUnreconciledCashBalance(db, event.data.object, event.id);
+        const customerId = event.data.object?.customer;
+        const linkedPayment = await findLinkedBankTransferByCustomer(db, customerId);
+        let synchronization = null;
+        if (linkedPayment && linkedPayment.local_status !== "paid") {
+          const linked = await retrieveLinkedBankTransferWithProgress(
+            requireStripeSecret(env),
+            linkedPayment.stripe_payment_intent_id
+          );
+          synchronization = await processBankTransferProgress(env, db, linked.paymentIntent, event.id);
+        }
+        const attention = synchronization?.handled ? null : await markUnreconciledCashBalance(db, event.data.object, event.id);
         if (attention && env.CONTACT_EMAIL) {
           const emailResult = await maybeSendEmail(env, {
             to: env.CONTACT_EMAIL,
