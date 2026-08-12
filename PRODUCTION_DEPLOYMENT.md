@@ -58,3 +58,27 @@ npx wrangler pages deploy festa60-public \
 Before accepting applications, verify that `/api/festa60/config` reports
 `"stripe_mode": "live"` and complete one low-value live end-to-end test.
 Also verify that the response reports the approved `pricing_version`, and that `/api/festa60/public-summary` contains no email address, phone number, address, application code, or internal identifier.
+
+## Cloudflare Web Analytics
+
+Track the two public sites as separate Web Analytics sites so their pageviews and
+visits can be compared independently:
+
+- `tus-fantasista`
+- `tus-fantasista-festa60`
+
+For each Pages project, open **Workers & Pages > project > Metrics** and enable
+Web Analytics. Cloudflare Pages injects the analytics beacon on the next
+deployment; do not commit a site token or a hand-written beacon tag to the HTML.
+
+After the next production deployment, verify both public sites:
+
+1. Page source contains the Cloudflare Insights beacon.
+2. The browser loads `https://static.cloudflareinsights.com/beacon.min.js`.
+3. A request to `/cdn-cgi/rum` completes without a page error.
+4. The project Metrics page begins showing data after normal processing time.
+
+Cloudflare Web Analytics starts collecting only after it is enabled and the next
+deployment completes. It does not backfill historical pageviews. Treat
+Cloudflare's **Visits** as visit sessions, not as an exact count of distinct
+people; the service is intentionally designed not to identify individual users.
