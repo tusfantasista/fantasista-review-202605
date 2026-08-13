@@ -40,6 +40,7 @@ fantasista-site/public/
 
 # local package/tool caches
 .npm-cache*/
+.wrangler-home/
 
 # local databases and exports
 *.sqlite

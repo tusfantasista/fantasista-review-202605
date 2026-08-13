@@ -37,6 +37,7 @@ Subscribe it to:
 - `checkout.session.expired`
 - `payment_intent.succeeded`
 - `payment_intent.partially_funded`
+- `charge.refunded`
 - `cash_balance.funds_available`
 
 In Stripe Dashboard, enable cards and bank transfer for the account. Apple Pay and Google Pay are displayed by Stripe Checkout only when the device, browser, wallet, and card are eligible. The staff menu is available only at `/festa60-register/?staff=1`; never add a public navigation link or commit its access code.

@@ -121,7 +121,10 @@
 - `checkout.session.expired`
 - `payment_intent.succeeded`
 - `payment_intent.partially_funded`
+- `charge.refunded`
 - `cash_balance.funds_available`
+
+`charge.refunded`は全額返金時に申込と支払を`refunded`へ同期します。一部返金は監査ログへ記録しますが、申込全体を返金済みには変更しません。同一イベントの再送は`stripe_events`で冪等に処理します。
 
 Webhookは署名、イベント重複、申込ID、金額、通貨を検証します。処理または必須メールが失敗した場合はイベントを `failed` とし、決済代行サービスからの再送で再処理します。
 

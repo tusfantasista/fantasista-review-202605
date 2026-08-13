@@ -700,7 +700,7 @@ async function markCheckoutCompleted(db, session, stripeEventId) {
   const memberId = session.metadata?.member_id || null;
   const status = session.payment_status === "paid" ? "paid" : "pending";
   const expectedPayment = await db.prepare(
-    `SELECT application_id, amount_total, currency
+    `SELECT application_id, amount_total, currency, status
        FROM payments
        WHERE stripe_checkout_session_id = ? AND payment_provider = 'stripe'
        LIMIT 1`
@@ -712,6 +712,16 @@ async function markCheckoutCompleted(db, session, stripeEventId) {
   }
   if (String(session.currency || "").toLowerCase() !== String(expectedPayment.currency || "").toLowerCase()) {
     throw new Error("Stripe payment currency mismatch.");
+  }
+  if (expectedPayment.status === "refunded") {
+    await audit(db, {
+      actor: "stripe",
+      action: "payment.checkout_completed_after_refund_ignored",
+      target_type: "application",
+      target_id: applicationId || session.id,
+      details_json: JSON.stringify({ checkout_session_id: session.id, stripe_event_id: stripeEventId || null })
+    });
+    return;
   }
   await db.prepare(
     `UPDATE payments
@@ -784,6 +794,72 @@ async function markCheckoutFailed(db, session, stripeEventId) {
   });
 }
 __name(markCheckoutFailed, "markCheckoutFailed");
+function isStripeChargeFullyRefunded(charge) {
+  const amount = Number(charge?.amount || 0);
+  const amountRefunded = Number(charge?.amount_refunded || 0);
+  return charge?.refunded === true && amount > 0 && amountRefunded >= amount;
+}
+__name(isStripeChargeFullyRefunded, "isStripeChargeFullyRefunded");
+async function markStripeChargeRefunded(db, charge, stripeEventId) {
+  const paymentIntentId = typeof charge?.payment_intent === "string" ? charge.payment_intent : charge?.payment_intent?.id;
+  const metadataApplicationId = charge?.metadata?.application_id || null;
+  const payment = paymentIntentId ? await db.prepare(
+    `SELECT id, application_id, amount_total, status
+       FROM payments
+       WHERE stripe_payment_intent_id = ? AND payment_provider = 'stripe'
+       ORDER BY created_at DESC
+       LIMIT 1`
+  ).bind(paymentIntentId).first() : null;
+  const applicationId = payment?.application_id || metadataApplicationId;
+  if (!applicationId) throw new Error("Stripe refunded charge is not linked to a Festa 60 application.");
+  if (!isStripeChargeFullyRefunded(charge)) {
+    await audit(db, {
+      actor: "stripe",
+      action: "payment.partial_refund_observed",
+      target_type: "application",
+      target_id: applicationId,
+      details_json: JSON.stringify({
+        charge_id: charge?.id || null,
+        payment_intent_id: paymentIntentId || null,
+        amount_jpy: Number(charge?.amount || 0),
+        amount_refunded_jpy: Number(charge?.amount_refunded || 0),
+        stripe_event_id: stripeEventId || null
+      })
+    });
+    return { application_id: applicationId, fully_refunded: false };
+  }
+  const current = await getApplicationById(db, applicationId);
+  if (!current) throw new Error("Stripe refunded charge application was not found in Festa 60 D1.");
+  const now = nowIso();
+  await db.prepare(
+    `UPDATE payments
+       SET status = 'refunded', refunded_at = COALESCE(refunded_at, ?),
+           stripe_event_id = ?, updated_at = ?
+       WHERE application_id = ? AND payment_provider = 'stripe'
+         AND (? IS NULL OR stripe_payment_intent_id = ?)`
+  ).bind(now, stripeEventId || null, now, current.id, paymentIntentId, paymentIntentId).run();
+  await db.prepare(
+    `UPDATE applications
+       SET payment_status = 'refunded', status = 'refunded', attendance_status = 'refunded',
+           refunded_at = COALESCE(refunded_at, ?), updated_at = ?
+       WHERE id = ?`
+  ).bind(now, now, current.id).run();
+  await audit(db, {
+    actor: "stripe",
+    action: current.payment_status === "refunded" ? "payment.refund_reconciled" : "payment.refunded",
+    target_type: "application",
+    target_id: current.id,
+    details_json: JSON.stringify({
+      application_code: current.application_code,
+      charge_id: charge?.id || null,
+      payment_intent_id: paymentIntentId || null,
+      amount_refunded_jpy: Number(charge?.amount_refunded || 0),
+      stripe_event_id: stripeEventId || null
+    })
+  });
+  return { application_id: current.id, fully_refunded: true };
+}
+__name(markStripeChargeRefunded, "markStripeChargeRefunded");
 async function markPaymentPartiallyFunded(db, paymentIntent, stripeEventId) {
   const now = nowIso();
   const amountTotal = Number(paymentIntent.amount || 0);
@@ -1329,7 +1405,7 @@ async function updateApplicationPaymentStatus(db, applicationId, update, request
   const cancelledAt = nextStatus === "cancelled" ? now : current.cancelled_at || null;
   const refundedAt = nextStatus === "refunded" ? now : current.refunded_at || null;
   const applicationStatus = applicationStatusForPayment(nextStatus);
-  const attendanceStatus = nextStatus === "paid" ? "confirmed" : current.attendance_status || "pending";
+  const attendanceStatus = nextStatus === "paid" ? "confirmed" : nextStatus === "refunded" ? "refunded" : nextStatus === "cancelled" ? "cancelled" : current.attendance_status || "pending";
   const actualTransferName = update.actual_transfer_name || update.actualTransferName || current.actual_transfer_name || null;
   const externalPaymentId = update.external_payment_id || update.externalPaymentId || current.external_payment_id || null;
   const adminNote = update.admin_note || update.adminNote || current.admin_note || null;
@@ -3085,6 +3161,8 @@ async function onRequestPost5({ request, env }) {
         await processBankTransferProgress(env, db, event.data.object, event.id);
       } else if (event.type === "payment_intent.partially_funded") {
         await processBankTransferProgress(env, db, event.data.object, event.id);
+      } else if (event.type === "charge.refunded") {
+        await markStripeChargeRefunded(db, event.data.object, event.id);
       } else if (event.type === "cash_balance.funds_available") {
         const customerId = event.data.object?.customer;
         const linkedPayment = await findLinkedBankTransferByCustomer(db, customerId);

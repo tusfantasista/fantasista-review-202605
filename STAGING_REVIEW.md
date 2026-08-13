@@ -51,7 +51,7 @@ npx wrangler pages deploy public \
 - `/api/festa60/config` がliveモードを返さない。
 - 申込データは `festa60_staging` にのみ保存される。
 - 一般申込はStripeサンドボックスへ遷移し、カード、対象端末のApple Pay・Google Pay、銀行振込の有効な方法が表示される。
-- StripeサンドボックスのWebhook送信先は `/api/festa60/stripe/webhook` とし、`checkout.session.completed`、`checkout.session.async_payment_succeeded`、`checkout.session.async_payment_failed`、`checkout.session.expired`、`payment_intent.succeeded`、`payment_intent.partially_funded`、`cash_balance.funds_available` の7イベントを購読する。
+- StripeサンドボックスのWebhook送信先は `/api/festa60/stripe/webhook` とし、`checkout.session.completed`、`checkout.session.async_payment_succeeded`、`checkout.session.async_payment_failed`、`checkout.session.expired`、`payment_intent.succeeded`、`payment_intent.partially_funded`、`charge.refunded`、`cash_balance.funds_available` の8イベントを購読する。
 - 銀行振込の不足入金テストでは、D1の支払状態が `partially_funded`、申込状態が未確定のままとなり、確認済み入金額・不足額・メール送信時刻が記録されることを確認する。
 - `migrations/20260808_harden_bank_transfer_flow.sql` をレビューD1へ適用し、申込確定前入金、入金後の支払方法変更拒否、二重確定防止、未消込残高の管理画面表示を確認する。
 - `migrations/20260810_add_pricing_supporter_publication.sql` をレビューD1へ適用し、新料金版、寄付相当額、掲載同意項目、銀行振込プレビューの料金スナップショットを確認する。旧申込の確定金額を再計算しない。
