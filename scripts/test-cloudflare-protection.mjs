@@ -49,6 +49,13 @@ try {
 const withoutBinding = await enforceRateLimit(request, {}, "MISSING_LIMITER", "summary");
 assert.equal(withoutBinding, null);
 
+for (let attempt = 0; attempt < 10; attempt += 1) {
+  const response = await enforceRateLimit(request, {}, "CONTACT_RATE_LIMITER", "contact-fallback");
+  assert.equal(response, null);
+}
+const locallyBlocked = await enforceRateLimit(request, {}, "CONTACT_RATE_LIMITER", "contact-fallback");
+assert.equal(locallyBlocked.status, 429);
+
 const cacheKey = publicSummaryCacheKey(request);
 assert.equal(cacheKey.method, "GET");
 assert.equal(cacheKey.url, "https://example.com/api/festa60/public-summary");

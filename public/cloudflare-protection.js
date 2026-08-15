@@ -1,4 +1,12 @@
 const DEFAULT_RETRY_AFTER_SECONDS = 60;
+const LOCAL_WINDOW_MS = DEFAULT_RETRY_AFTER_SECONDS * 1000;
+const MAX_LOCAL_KEYS = 2048;
+const LOCAL_LIMITS = {
+  CONTACT_RATE_LIMITER: 10,
+  APPLICATION_RATE_LIMITER: 30,
+  PUBLIC_SUMMARY_RATE_LIMITER: 60,
+};
+const localWindows = new Map();
 
 function json(data, init = {}) {
   return new Response(JSON.stringify(data), {
@@ -30,11 +38,12 @@ async function privacySafeClientKey(request, scope) {
   return `${scope}:${hash}`;
 }
 
-function rateLimitLog(request, bindingName) {
+function rateLimitLog(request, bindingName, enforcement) {
   const url = new URL(request.url);
   return {
     event: "api_rate_limited",
     binding: bindingName,
+    enforcement,
     method: request.method,
     path: url.pathname,
     country: request.cf?.country || "unknown",
@@ -43,36 +52,71 @@ function rateLimitLog(request, bindingName) {
   };
 }
 
+function enforceLocalWindow(key, bindingName) {
+  const limit = LOCAL_LIMITS[bindingName];
+  if (!limit) return true;
+
+  const now = Date.now();
+  const windowStart = Math.floor(now / LOCAL_WINDOW_MS) * LOCAL_WINDOW_MS;
+  const storageKey = `${bindingName}:${key}`;
+  const current = localWindows.get(storageKey);
+  const next = !current || current.windowStart !== windowStart
+    ? { count: 1, windowStart }
+    : { count: current.count + 1, windowStart };
+  localWindows.set(storageKey, next);
+
+  if (localWindows.size > MAX_LOCAL_KEYS) {
+    for (const [candidateKey, value] of localWindows) {
+      if (value.windowStart < windowStart) localWindows.delete(candidateKey);
+    }
+    while (localWindows.size > MAX_LOCAL_KEYS) {
+      localWindows.delete(localWindows.keys().next().value);
+    }
+  }
+
+  return next.count <= limit;
+}
+
+function rateLimitedResponse(request, bindingName, enforcement) {
+  console.warn(rateLimitLog(request, bindingName, enforcement));
+  return json(
+    {
+      ok: false,
+      error: "rate_limited",
+      message: "アクセスが集中しています。少し時間をおいてから、もう一度お試しください。",
+    },
+    {
+      status: 429,
+      headers: { "retry-after": String(DEFAULT_RETRY_AFTER_SECONDS) },
+    },
+  );
+}
+
 export async function enforceRateLimit(request, env, bindingName, scope) {
   const limiter = env?.[bindingName];
-  if (!limiter || typeof limiter.limit !== "function") return null;
+  const key = await privacySafeClientKey(request, scope);
+
+  if (!limiter || typeof limiter.limit !== "function") {
+    return enforceLocalWindow(key, bindingName)
+      ? null
+      : rateLimitedResponse(request, bindingName, "isolate");
+  }
 
   try {
-    const key = await privacySafeClientKey(request, scope);
     const result = await limiter.limit({ key });
     if (result?.success !== false) return null;
 
-    console.warn(rateLimitLog(request, bindingName));
-    return json(
-      {
-        ok: false,
-        error: "rate_limited",
-        message: "アクセスが集中しています。少し時間をおいてから、もう一度お試しください。",
-      },
-      {
-        status: 429,
-        headers: { "retry-after": String(DEFAULT_RETRY_AFTER_SECONDS) },
-      },
-    );
+    return rateLimitedResponse(request, bindingName, "binding");
   } catch {
-    // Availability is preserved if Cloudflare's rate-limit binding is temporarily unavailable.
     console.error({
       event: "rate_limit_check_failed",
       binding: bindingName,
       method: request.method,
       path: new URL(request.url).pathname,
     });
-    return null;
+    return enforceLocalWindow(key, bindingName)
+      ? null
+      : rateLimitedResponse(request, bindingName, "isolate_fallback");
   }
 }
 

@@ -2,23 +2,7 @@ name = "tus-fantasista"
 pages_build_output_dir = "public"
 compatibility_date = "2026-08-02"
 
-[observability]
-enabled = true
-head_sampling_rate = 0.1
-
-  [observability.logs]
-  invocation_logs = true
-  head_sampling_rate = 0.1
-
 [vars]
 ENVIRONMENT = "production"
 CONTACT_EMAIL = "tus.festa.office@gmail.com"
 CONTACT_EMAIL_SENDER_NAME = "東京理科大学舞研OBOG会 FANTASISTA"
-
-[[ratelimits]]
-name = "CONTACT_RATE_LIMITER"
-namespace_id = "600001"
-
-  [ratelimits.simple]
-  limit = 10
-  period = 60

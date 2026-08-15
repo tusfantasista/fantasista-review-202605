@@ -8,16 +8,16 @@ const files = {
   stagingConfig: await readFile(new URL("../wrangler.staging.jsonc", import.meta.url), "utf8"),
 };
 
-const requiredBindings = ["CONTACT_RATE_LIMITER", "APPLICATION_RATE_LIMITER", "PUBLIC_SUMMARY_RATE_LIMITER"];
 const checks = [
-  ["FESTA production observability is sampled", /\[observability\][\s\S]*head_sampling_rate\s*=\s*0\.1/.test(files.festaConfig)],
-  ["main-site production observability is sampled", /\[observability\][\s\S]*head_sampling_rate\s*=\s*0\.1/.test(files.mainConfig)],
-  ["staging observability captures all invocations", /"head_sampling_rate"\s*:\s*1/.test(files.stagingConfig)],
-  ["FESTA production declares all API limiters", requiredBindings.every((name) => files.festaConfig.includes(`name = "${name}"`))],
-  ["staging declares all API limiters", requiredBindings.every((name) => files.stagingConfig.includes(`"name": "${name}"`))],
-  ["main site rate-limits contact submissions", files.mainConfig.includes('name = "CONTACT_RATE_LIMITER"')],
+  ["FESTA Pages config avoids unsupported rate-limit bindings", !files.festaConfig.includes("ratelimits")],
+  ["main-site Pages config avoids unsupported rate-limit bindings", !files.mainConfig.includes("ratelimits")],
+  ["staging Pages config avoids unsupported rate-limit bindings", !files.stagingConfig.includes("ratelimits")],
+  ["FESTA Pages config leaves observability to the dashboard", !files.festaConfig.includes("observability")],
+  ["main-site Pages config leaves observability to the dashboard", !files.mainConfig.includes("observability")],
+  ["staging Pages config leaves observability to the dashboard", !files.stagingConfig.includes("observability")],
   ["application API enforces its limiter", files.worker.includes('enforceRateLimit(request, env, "APPLICATION_RATE_LIMITER"')],
   ["public summary uses the Cache API", files.worker.includes("cache.match(cacheKey)") && files.worker.includes("cache.put(cacheKey, response.clone())")],
+  ["Pages-compatible isolate fallback is bounded", files.helper.includes("MAX_LOCAL_KEYS") && files.helper.includes("enforceLocalWindow")],
   ["rate-limit logs do not include raw client IP", !files.helper.includes('ip_address:') && !files.helper.includes('cf-connecting-ip" || ""')],
 ];
 

@@ -3,14 +3,6 @@
   "name": "fantasista-review-202605-staging",
   "compatibility_date": "2026-08-02",
   "pages_build_output_dir": "./public",
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 1,
-    "logs": {
-      "invocation_logs": true,
-      "head_sampling_rate": 1
-    }
-  },
   "vars": {
     "ENVIRONMENT": "staging",
     "BANK_PREVIEW_TTL_MINUTES": "30",
@@ -22,23 +14,6 @@
       "binding": "DB",
       "database_name": "festa60_staging",
       "database_id": "b7b6640d-a39f-49fc-b8e1-f4d286129911"
-    }
-  ],
-  "ratelimits": [
-    {
-      "name": "CONTACT_RATE_LIMITER",
-      "namespace_id": "610001",
-      "simple": { "limit": 10, "period": 60 }
-    },
-    {
-      "name": "APPLICATION_RATE_LIMITER",
-      "namespace_id": "610002",
-      "simple": { "limit": 30, "period": 60 }
-    },
-    {
-      "name": "PUBLIC_SUMMARY_RATE_LIMITER",
-      "namespace_id": "610003",
-      "simple": { "limit": 60, "period": 60 }
     }
   ]
 }
