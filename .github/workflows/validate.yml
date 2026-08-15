@@ -32,9 +32,13 @@ jobs:
           node scripts/check-local-links.mjs festa60-public
           node scripts/check-local-links.mjs fantasista-site/public
 
+      - name: Check Cloudflare routing boundaries
+        run: node scripts/check-cloudflare-routing.mjs
+
       - name: Check JavaScript syntax
         run: |
           node --check public/_worker.js
           node --check public/assets/js/festa60-register.js
           node --check public/assets/js/site.js
+          node --check scripts/check-cloudflare-routing.mjs
           node --check scripts/check-local-links.mjs

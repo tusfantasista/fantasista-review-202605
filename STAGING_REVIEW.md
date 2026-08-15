@@ -29,8 +29,10 @@ Gitコミット、GitHubへのpush、ローカル検査の完了だけを理由�
 3. `RELEASE_WORKFLOW.md` の標準検査をすべて通す。
 4. 個人情報、秘密情報、内部資料が公開対象に含まれていないことを確認する。
 5. `wrangler.staging.jsonc` が `festa60_staging` を参照していることを確認する。
-6. レビュー環境に `STAFF_PAYMENT_ACCESS_CODE` が暗号化シークレットとして設定されていることを確認する。
-7. 同じコミットの成功済みデプロイが既にないことを `wrangler pages deployment list` で確認する。
+6. `public/_routes.json` が既知のAPIと保護ページだけをFunctions対象とし、`/*` を含まないことを確認する。
+7. `public/robots.txt` と `public/_headers` がレビュー環境を検索対象外にしていることを確認する。
+8. レビュー環境に `STAFF_PAYMENT_ACCESS_CODE` が暗号化シークレットとして設定されていることを確認する。
+9. 同じコミットの成功済みデプロイが既にないことを `wrangler pages deployment list` で確認する。
 
 ## レビュー環境への反映
 

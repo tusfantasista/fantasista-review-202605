@@ -56,6 +56,7 @@ GitHubでソースと変更履歴を管理し、ローカルで変更をまと�
 node scripts/check-local-links.mjs public
 node scripts/check-local-links.mjs festa60-public
 node scripts/check-local-links.mjs fantasista-site/public
+node scripts/check-cloudflare-routing.mjs
 node --check public/_worker.js
 node --check public/assets/js/festa60-register.js
 node --check public/assets/js/site.js
