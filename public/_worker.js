@@ -1,4 +1,5 @@
 import { handleContactRequest } from "./contact-api.js";
+import { enforceRateLimit, publicSummaryCacheKey } from "./cloudflare-protection.js";
 import {
   ABSENT_DONATION_TOTALS as SHARED_ABSENT_DONATION_TOTALS,
   APPLICATION_DEADLINE_ISO as SHARED_APPLICATION_DEADLINE_ISO,
@@ -3236,6 +3237,8 @@ var ABSENT_DONATION_TICKET_TYPES = ["absent_donation_30000", "absent_donation_10
 var SCHOOL_LINEAGES = ["tus_obog", "gakushuin_ouyukai"];
 async function onRequestPost6({ request, env, waitUntil }) {
   try {
+    const rateLimited = await enforceRateLimit(request, env, "APPLICATION_RATE_LIMITER", "festa60-applications");
+    if (rateLimited) return rateLimited;
     const payload = await readJson(request);
     if (!payload) return badRequest("Invalid JSON payload.");
     const action = payload.action || "submit_online";
@@ -3874,10 +3877,25 @@ async function getPublicFundraisingSummary(db, env) {
   };
 }
 __name(getPublicFundraisingSummary, "getPublicFundraisingSummary");
-async function onRequestGet8({ env }) {
+async function onRequestGet8({ request, env, waitUntil }) {
   try {
+    const cache = typeof caches !== "undefined" ? caches.default : null;
+    const cacheKey = publicSummaryCacheKey(request);
+    const cachedResponse = cache ? await cache.match(cacheKey) : null;
+    if (cachedResponse) return cachedResponse;
+
+    const rateLimited = await enforceRateLimit(request, env, "PUBLIC_SUMMARY_RATE_LIMITER", "festa60-public-summary");
+    if (rateLimited) return rateLimited;
+
     const summary = await getPublicFundraisingSummary(requireDb(env), env);
-    return json({ ok: true, summary }, { headers: { "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=600" } });
+    const response = json(
+      { ok: true, summary },
+      { headers: { "cache-control": "public, max-age=60, s-maxage=300, stale-while-revalidate=600" } },
+    );
+    if (cache && typeof waitUntil === "function") {
+      waitUntil(cache.put(cacheKey, response.clone()));
+    }
+    return response;
   } catch (error) {
     return serverError(error);
   }
@@ -4537,6 +4555,8 @@ var cloneResponse = /* @__PURE__ */ __name((response) => (
 var fantasista_worker_default = {
   async fetch(request, env, workerContext) {
     if (new URL(request.url).pathname === "/api/contact") {
+      const rateLimited = await enforceRateLimit(request, env, "CONTACT_RATE_LIMITER", "contact");
+      if (rateLimited) return rateLimited;
       return handleContactRequest(request, env);
     }
     return pages_template_worker_default.fetch(request, env, workerContext);

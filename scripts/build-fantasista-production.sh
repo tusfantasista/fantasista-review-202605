@@ -26,6 +26,7 @@ cp "$root_dir/production/fantasista-headers.txt" "$output_dir/_headers"
 cp "$root_dir/production/fantasista-worker.js" "$output_dir/_worker.js"
 cp "$root_dir/production/fantasista-routes.json" "$output_dir/_routes.json"
 cp "$source_dir/contact-api.js" "$output_dir/contact-api.js"
+cp "$source_dir/cloudflare-protection.js" "$output_dir/cloudflare-protection.js"
 
 # Internal review-phase labels are not part of the public production artifact.
 find "$output_dir" -type f \( -name "*.html" -o -name "*.css" -o -name "*.js" \) \

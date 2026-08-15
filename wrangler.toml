@@ -3,6 +3,14 @@ name = "tus-fantasista-festa60"
 pages_build_output_dir = "festa60-public"
 compatibility_date = "2026-08-02"
 
+[observability]
+enabled = true
+head_sampling_rate = 0.1
+
+  [observability.logs]
+  invocation_logs = true
+  head_sampling_rate = 0.1
+
 [vars]
 ENVIRONMENT = "production"
 SITE_ROLE = "festa60"
@@ -16,3 +24,27 @@ BANK_PREVIEW_CLEANUP_BATCH_SIZE = "3"
 binding = "DB"
 database_name = "festa60_production"
 database_id = "11995bb1-9261-4f1d-b020-d5947d87fee1"
+
+[[ratelimits]]
+name = "CONTACT_RATE_LIMITER"
+namespace_id = "600001"
+
+  [ratelimits.simple]
+  limit = 10
+  period = 60
+
+[[ratelimits]]
+name = "APPLICATION_RATE_LIMITER"
+namespace_id = "600002"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
+
+[[ratelimits]]
+name = "PUBLIC_SUMMARY_RATE_LIMITER"
+namespace_id = "600003"
+
+  [ratelimits.simple]
+  limit = 60
+  period = 60
