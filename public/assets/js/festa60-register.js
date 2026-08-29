@@ -624,7 +624,6 @@ import {
       payload.payment_method = "bank_transfer";
       payload.turnstile_token = turnstileToken;
       const result = await postApplication(payload);
-      applicationSaved = true;
       bankPreviewToken = result.bank_preview_token;
       bankPreviewDetails = result.bank_transfer_preview;
       renderBankTransferPreview(bankPreviewDetails);
@@ -669,6 +668,7 @@ import {
       }
       payload.pay_now = true;
       const result = await postApplication(payload);
+      applicationSaved = true;
 
       if (result.payment?.checkoutUrl) {
         const checkoutUrl = new URL(result.payment.checkoutUrl, window.location.href);
