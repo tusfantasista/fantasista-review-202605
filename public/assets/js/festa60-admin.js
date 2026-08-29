@@ -89,9 +89,9 @@
   };
 
   const feePeriodLabels = {
-    early: "10月15日まで",
-    year_end: "年内",
-    regular: "通常"
+    early: "超早期申込（10月15日まで）",
+    year_end: "早期申込（10月16日〜12月31日）",
+    regular: "通常申込（1月1日〜1月31日）"
   };
 
   function escapeHtml(value) {

@@ -34,8 +34,8 @@ const equal = (actual, expected, message) => {
 };
 
 equal(REGISTRATION_STATUS, "open", "registration is open");
-equal(FEE_PERIOD_LABELS.early, "2026年10月15日までの申込", "early application label ends on October 15");
-equal(FEE_PERIOD_LABELS.year_end, "2026年10月16日〜12月31日の申込", "year-end application label starts on October 16");
+equal(FEE_PERIOD_LABELS.early, "超早期申込（2026年10月15日まで）", "early application label ends on October 15");
+equal(FEE_PERIOD_LABELS.year_end, "早期申込（2026年10月16日〜12月31日）", "year-end application label starts on October 16");
 equal(feePeriodForDate(new Date("2026-10-15T14:59:59Z")), "early", "early period includes October 15 in Japan");
 equal(feePeriodForDate(new Date("2026-10-15T15:00:00Z")), "year_end", "year-end period starts October 16 in Japan");
 equal(isApplicationOpen(new Date("2026-10-15T15:00:00Z")), true, "registration stays open during the extended early period");

@@ -96,9 +96,9 @@ export const FUNDRAISING_CONFIG = {
 };
 
 export const FEE_PERIOD_LABELS = {
-  early: "2026年10月15日までの申込",
-  year_end: "2026年10月16日〜12月31日の申込",
-  regular: "2027年1月1日〜1月31日の申込",
+  early: "超早期申込（2026年10月15日まで）",
+  year_end: "早期申込（2026年10月16日〜12月31日）",
+  regular: "通常申込（2027年1月1日〜1月31日）",
 };
 
 export const SUPPORT_PLAN_DETAILS = {
