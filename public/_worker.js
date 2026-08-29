@@ -8,6 +8,7 @@ import {
   COHORTS,
   CURRENT_PRICING_VERSION,
   DEFAULT_PRICING_EFFECTIVE_AT,
+  FEE_PERIOD_LABELS as SHARED_FEE_PERIOD_LABELS,
   FEE_PERIODS as SHARED_FEE_PERIODS,
   FUNDRAISING_CONFIG,
   LEGACY_PRICING_VERSION,
@@ -3728,11 +3729,7 @@ async function onRequestGet7({ env }) {
     pricing_effective_at: pricingEffectiveAt(env),
     pricing: pricingConfig(pricingVersion),
     fundraising: FUNDRAISING_CONFIG,
-    fee_periods: {
-      early: "2026\u5E749\u670830\u65E5\u307E\u3067\u306E\u7533\u8FBC",
-      year_end: "2026\u5E7410\u67081\u65E5\u301C12\u670831\u65E5\u306E\u7533\u8FBC",
-      regular: "2027\u5E741\u67081\u65E5\u301C1\u670831\u65E5\u306E\u7533\u8FBC"
-    }
+    fee_periods: SHARED_FEE_PERIOD_LABELS
   });
 }
 __name(onRequestGet7, "onRequestGet");

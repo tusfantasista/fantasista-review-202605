@@ -89,7 +89,7 @@
   };
 
   const feePeriodLabels = {
-    early: "9月末まで",
+    early: "10月15日まで",
     year_end: "年内",
     regular: "通常"
   };

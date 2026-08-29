@@ -6,12 +6,16 @@ import {
   ATTENDING_PLAN_TOTALS,
   BASE_FEES,
   CURRENT_PRICING_VERSION,
+  FEE_PERIOD_LABELS,
   FUNDRAISING_CONFIG,
   LEGACY_PRICING_VERSION,
+  REGISTRATION_STATUS,
   SUPPORT_TIER_BENEFITS,
   attendingPlanAmount,
   buildPaymentLineItems,
   donationEquivalentForTicket,
+  feePeriodForDate,
+  isApplicationOpen,
   lineItemsTotal,
   pricingVersionForDate,
   staffParticipationAmount,
@@ -28,6 +32,13 @@ const equal = (actual, expected, message) => {
   assert.equal(actual, expected, message);
   assertions += 1;
 };
+
+equal(REGISTRATION_STATUS, "open", "registration is open");
+equal(FEE_PERIOD_LABELS.early, "2026年10月15日までの申込", "early application label ends on October 15");
+equal(FEE_PERIOD_LABELS.year_end, "2026年10月16日〜12月31日の申込", "year-end application label starts on October 16");
+equal(feePeriodForDate(new Date("2026-10-15T14:59:59Z")), "early", "early period includes October 15 in Japan");
+equal(feePeriodForDate(new Date("2026-10-15T15:00:00Z")), "year_end", "year-end period starts October 16 in Japan");
+equal(isApplicationOpen(new Date("2026-10-15T15:00:00Z")), true, "registration stays open during the extended early period");
 
 for (const cohort of cohorts) {
   for (const period of periods) {

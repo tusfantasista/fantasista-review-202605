@@ -2,6 +2,7 @@ import {
   ABSENT_DONATION_TOTALS,
   ATTENDING_DONATION_EQUIVALENTS,
   ATTENDING_PLAN_TOTALS,
+  APPLICATION_DEADLINE_ISO,
   BASE_FEES,
   CURRENT_PRICING_VERSION,
   REGISTRATION_STATUS,
@@ -16,6 +17,7 @@ import {
   staffParticipationAmount as sharedStaffParticipationAmount,
   noReceptionDiscount as sharedNoReceptionDiscount,
   normalizeTicketType,
+  feePeriodForDate as sharedFeePeriodForDate,
   pricingConfig,
   publicBaseTicketType,
 } from "./festa60-pricing.js";
@@ -883,7 +885,7 @@ import {
       confirmApplicationButton.textContent = "振込先を確認する（まだ確定しません）";
     } else {
       confirmationPaymentTitle.textContent = "カード・スマホ決済等でお支払い";
-      confirmationPaymentNote.textContent = "安全な外部決済画面へ移動します。お支払い完了後に申込完了となります。利用できる支払い方法は端末やブラウザ等により異なります。";
+      confirmationPaymentNote.textContent = "安全な外部決済画面へ移動します。お支払い完了後に申込完了となります。Visa、Mastercard、American Express、Apple Pay、Google Payを選択できます。JCB、Diners Club、Discoverは現在ご利用いただけません。";
       confirmApplicationButton.textContent = "決済画面へ進む（決済後に申込完了）";
     }
   }
@@ -983,21 +985,11 @@ import {
   }
 
   function feePeriodForNow() {
-    const parts = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Tokyo",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).formatToParts(new Date());
-    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-    const date = `${values.year}-${values.month}-${values.day}`;
-    if (date <= "2026-09-30") return "early";
-    if (date <= "2026-12-31") return "year_end";
-    return "regular";
+    return sharedFeePeriodForDate(new Date());
   }
 
   function applicationOpenForNow() {
-    return REGISTRATION_STATUS === "open" && Date.now() <= new Date("2027-01-31T23:59:59+09:00").getTime();
+    return REGISTRATION_STATUS === "open" && Date.now() <= new Date(APPLICATION_DEADLINE_ISO).getTime();
   }
 
   function updateApplicationDeadline(config) {

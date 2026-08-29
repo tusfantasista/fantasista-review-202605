@@ -2,8 +2,8 @@ export const LEGACY_PRICING_VERSION = "festa60-2026-v1";
 export const CURRENT_PRICING_VERSION = "festa60-2026-v2";
 export const DEFAULT_PRICING_EFFECTIVE_AT = "2026-08-10T00:00:00+09:00";
 export const APPLICATION_DEADLINE_ISO = "2027-01-31T23:59:59+09:00";
-export const REGISTRATION_STATUS = "coming_soon";
-export const REGISTRATION_STATUS_MESSAGE = "参加申込は近日受付開始です。受付開始時期は改めてご案内します。";
+export const REGISTRATION_STATUS = "open";
+export const REGISTRATION_STATUS_MESSAGE = "参加申込を受け付けています。";
 
 export const FEE_PERIODS = ["early", "year_end", "regular"];
 export const RECEPTION_ATTENDANCE = ["attending", "without_reception"];
@@ -96,8 +96,8 @@ export const FUNDRAISING_CONFIG = {
 };
 
 export const FEE_PERIOD_LABELS = {
-  early: "2026年9月30日までの申込",
-  year_end: "2026年10月1日〜12月31日の申込",
+  early: "2026年10月15日までの申込",
+  year_end: "2026年10月16日〜12月31日の申込",
   regular: "2027年1月1日〜1月31日の申込",
 };
 
@@ -139,7 +139,7 @@ export function feePeriodForDate(date = new Date()) {
   const instant = date instanceof Date ? date : new Date(date);
   if (Number.isNaN(instant.getTime())) return "regular";
   const jstDate = new Date(instant.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
-  if (jstDate <= "2026-09-30") return "early";
+  if (jstDate <= "2026-10-15") return "early";
   if (jstDate <= "2026-12-31") return "year_end";
   return "regular";
 }
