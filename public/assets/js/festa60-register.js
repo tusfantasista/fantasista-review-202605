@@ -20,7 +20,7 @@ import {
   feePeriodForDate as sharedFeePeriodForDate,
   pricingConfig,
   publicBaseTicketType,
-} from "./festa60-pricing.js";
+} from "./festa60-pricing.js?v=20260829-1";
 
 (function () {
   const form = document.getElementById("festa60-form");
