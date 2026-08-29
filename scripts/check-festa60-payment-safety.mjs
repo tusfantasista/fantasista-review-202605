@@ -27,6 +27,7 @@ function applicationInsertColumnCount(worker) {
 
 const checks = [
   ["application insert columns and bindings match", applicationInsertColumnCount(files.worker) === applicationInsertPlaceholderCount(files.worker)],
+  ["raw server errors are hidden from applicants", files.registerScript.includes('message === "server_error"') && files.registerScript.includes("処理を完了できませんでした。時間をおいて再度お試しいただくか、FESTA事務局へお問い合わせください。")],
   ["preview mapping table", files.migration.includes("CREATE TABLE IF NOT EXISTS bank_transfer_previews")],
   ["PaymentIntent uniqueness", files.migration.includes("idx_payments_stripe_payment_intent_unique")],
   ["submission idempotency", files.migration.includes("idx_applications_client_submission_unique") && files.registerScript.includes("crypto.randomUUID()")],

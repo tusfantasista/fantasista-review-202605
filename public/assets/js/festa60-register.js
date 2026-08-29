@@ -716,11 +716,19 @@ import {
     const result = await response.json();
     if (!response.ok || !result.ok) {
       if (result.application?.application_code) {
-        throw new Error(`${result.message || "送信に失敗しました。"}\n受付番号: ${result.application.application_code}`);
+        throw new Error(`${safeApplicationErrorMessage(result)}\n受付番号: ${result.application.application_code}`);
       }
       throw new Error(formatApplicationError(result));
     }
     return result;
+  }
+
+  function safeApplicationErrorMessage(result) {
+    const message = String(result?.message || result?.error || "").trim();
+    if (!message || message === "server_error") {
+      return "処理を完了できませんでした。時間をおいて再度お試しいただくか、FESTA事務局へお問い合わせください。";
+    }
+    return message;
   }
 
   function formatApplicationError(result) {
@@ -745,7 +753,7 @@ import {
     if (uniqueFields.length) {
       return `${result.message || "入力内容を確認してください。"}\n確認が必要な項目: ${uniqueFields.join("、")}`;
     }
-    return result.message || result.error || "送信に失敗しました。";
+    return safeApplicationErrorMessage(result);
   }
 
   function renderConfirmation(payload) {
