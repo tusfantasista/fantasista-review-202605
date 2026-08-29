@@ -15,7 +15,18 @@ const files = {
   pricingDesign: await readFile(new URL("../docs/FESTA60_PRICING_DONATION_DESIGN.md", import.meta.url), "utf8")
 };
 
+function applicationInsertPlaceholderCount(worker) {
+  const match = worker.match(/INSERT INTO applications \([\s\S]*?\) VALUES \(([?\s,]+)\)`/);
+  return match ? (match[1].match(/\?/g) || []).length : 0;
+}
+
+function applicationInsertColumnCount(worker) {
+  const match = worker.match(/INSERT INTO applications \(([\s\S]*?)\) VALUES/);
+  return match ? match[1].split(",").map((column) => column.trim()).filter(Boolean).length : 0;
+}
+
 const checks = [
+  ["application insert columns and bindings match", applicationInsertColumnCount(files.worker) === applicationInsertPlaceholderCount(files.worker)],
   ["preview mapping table", files.migration.includes("CREATE TABLE IF NOT EXISTS bank_transfer_previews")],
   ["PaymentIntent uniqueness", files.migration.includes("idx_payments_stripe_payment_intent_unique")],
   ["submission idempotency", files.migration.includes("idx_applications_client_submission_unique") && files.registerScript.includes("crypto.randomUUID()")],
