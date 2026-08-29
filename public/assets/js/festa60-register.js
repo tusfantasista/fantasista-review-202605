@@ -885,7 +885,7 @@ import {
       confirmApplicationButton.textContent = "振込先を確認する（まだ確定しません）";
     } else {
       confirmationPaymentTitle.textContent = "カード・スマホ決済等でお支払い";
-      confirmationPaymentNote.textContent = "安全な外部決済画面へ移動します。お支払い完了後に申込完了となります。Visa、Mastercard、American Express、Apple Pay、Google Payを選択できます。JCB、Diners Club、Discoverは現在ご利用いただけません。";
+      confirmationPaymentNote.textContent = "安全な外部決済画面へ移動します。お支払い完了後に申込完了となります。Visa、Mastercard、American Express、Apple Pay、Google Payを選択できます。JCB、Diners Club、Discoverはご利用いただけません。";
       confirmApplicationButton.textContent = "決済画面へ進む（決済後に申込完了）";
     }
   }
