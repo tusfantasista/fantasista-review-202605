@@ -376,7 +376,7 @@ body.festa60-crm {
 
 .crm-input-action {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(13rem, 1fr) auto;
   gap: 8px;
 }
 
@@ -396,7 +396,7 @@ body.festa60-crm {
 }
 
 .crm-address-grid {
-  grid-template-columns: minmax(150px, 0.42fr) minmax(0, 1.58fr);
+  grid-template-columns: minmax(360px, 0.9fr) minmax(280px, 1.1fr);
 }
 
 .crm-companion {
