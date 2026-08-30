@@ -47,7 +47,7 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&amp;family=Oswald:wght@500;600;700&amp;display=optional" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/festa60-fundraising.css?v=20260810-2">
     <style>
       :root {
@@ -180,12 +180,18 @@
         position: absolute;
         right: -2vw;
         top: 6vh;
-        font-family: "Oswald", sans-serif;
+        width: min(64vw, 720px);
+        height: min(32vw, 360px);
+        contain: layout paint;
+        font-family: Arial, "Helvetica Neue", sans-serif;
         font-size: min(32vw, 360px);
+        font-weight: 700;
         line-height: 1;
+        text-align: right;
         color: transparent;
         -webkit-text-stroke: 2px rgba(255, 210, 28, 0.12);
-        letter-spacing: -0.06em;
+        letter-spacing: 0;
+        pointer-events: none;
       }
 
       .hero::after {
@@ -552,6 +558,8 @@
         }
 
         .hero::before {
+          width: 68vw;
+          height: 34vw;
           font-size: 34vw;
           right: -10vw;
           top: 10vh;
@@ -779,6 +787,8 @@
         }
 
         .hero::before {
+          width: 84vw;
+          height: 42vw;
           font-size: 42vw;
           right: -18vw;
           top: 8vh;
@@ -2111,7 +2121,7 @@
     <link rel="stylesheet" href="../assets/css/festa60-navigation.css?v=20260810-1">
     <link rel="stylesheet" href="../assets/css/enhancements.css?v=20260718-2">
     <link rel="stylesheet" href="../assets/css/photo-library.css">
-    <link rel="stylesheet" href="../assets/css/festa60-film-hero.css?v=20260830-5">
+    <link rel="stylesheet" href="../assets/css/festa60-film-hero.css?v=20260830-6">
   </head>
   <body><div class="page">
       <header class="header">
@@ -2475,19 +2485,19 @@
 
             <div class="memory-mini-photo-grid">
               <figure class="memory-photo-card memory-mini-photo-card">
-                <img class="memory-photo-placeholder" src="../assets/img/archive/1987-1996/1107692152682240.webp" alt="1995年夏合宿で練習する部員たち" loading="lazy" decoding="async">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/1987-1996/1107692152682240.webp" alt="1995年夏合宿で練習する部員たち" width="1600" height="1119" loading="lazy" decoding="async">
                 <figcaption class="memory-photo-caption">夏合宿の記憶</figcaption>
                 <p class="memory-photo-note">シャドーコンペ、踊り込み、集合写真などを掲載予定</p>
               </figure>
 
               <figure class="memory-photo-card memory-mini-photo-card">
-                <img class="memory-photo-placeholder" src="../assets/img/archive/1997-2006/1107722159345906.webp" alt="1999年理大祭での集合写真" loading="lazy" decoding="async">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/1997-2006/1107722159345906.webp" alt="1999年理大祭での集合写真" width="1600" height="1097" loading="lazy" decoding="async">
                 <figcaption class="memory-photo-caption">秋のイベント</figcaption>
                 <p class="memory-photo-note">理大祭、桜凛祭、デモ披露、出店などを掲載予定</p>
               </figure>
 
               <figure class="memory-photo-card memory-mini-photo-card">
-                <img class="memory-photo-placeholder" src="../assets/img/archive/2007-2016/1107758536008935.webp" alt="2009年東都大会フィナーレの記録" loading="lazy" decoding="async">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/2007-2016/1107758536008935.webp" alt="2009年東都大会フィナーレの記録" width="1600" height="1200" loading="lazy" decoding="async">
                 <figcaption class="memory-photo-caption">冬全のフロア</figcaption>
                 <p class="memory-photo-note">ファイナルソロ、オナーダンス、4年生の最後の一曲などを掲載予定</p>
               </figure>
@@ -2592,19 +2602,19 @@
 
             <div class="memory-photo-grid memory-photo-grid--three" style="margin-top: 22px;">
               <figure class="memory-photo-card">
-                <img class="memory-photo-placeholder" src="../assets/img/archive/1987-1996/1107694519348670.webp" alt="1989年理大祭の記録" loading="lazy" decoding="async">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/1987-1996/1107694519348670.webp" alt="1989年理大祭の記録" width="1600" height="1073" loading="lazy" decoding="async">
                 <figcaption class="memory-photo-caption">競技会の記憶</figcaption>
                 <p class="memory-photo-note">背番号をつけて臨んだ一日を思い出す写真を掲載予定です。</p>
               </figure>
 
               <figure class="memory-photo-card">
-                <img class="memory-photo-placeholder" src="../assets/img/archive/1977-1986/1107676216017167.webp" alt="1985年夏合宿での練習風景" loading="lazy" decoding="async">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/1977-1986/1107676216017167.webp" alt="1985年夏合宿での練習風景" width="1600" height="1086" loading="lazy" decoding="async">
                 <figcaption class="memory-photo-caption">練習場の記憶</figcaption>
                 <p class="memory-photo-note">踊っても踊っても足りなかった時間を伝える写真を掲載予定です。</p>
               </figure>
 
               <figure class="memory-photo-card">
-                <img class="memory-photo-placeholder" src="../assets/img/archive/2007-2016/1107756789342443.webp" alt="2008年春合宿の集合写真" loading="lazy" decoding="async">
+                <img class="memory-photo-placeholder" src="../assets/img/archive/2007-2016/1107756789342443.webp" alt="2008年春合宿の集合写真" width="1600" height="1200" loading="lazy" decoding="async">
                 <figcaption class="memory-photo-caption">仲間との記憶</figcaption>
                 <p class="memory-photo-note">同期、先輩、後輩と過ごした時間が伝わる写真を掲載予定です。</p>
               </figure>
