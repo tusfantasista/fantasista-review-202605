@@ -1044,3 +1044,274 @@
   .festa-film-dance-relay__photo { opacity: 0.58; }
   .festa-film-dance-relay__light { left: 34.5%; opacity: 0.42; }
 }
+
+/* 60th anniversary stage: the archive, emblem and chronology share one space. */
+@media (min-width: 721px) {
+  .festa-film-hero {
+    width: 100vw;
+    height: clamp(710px, 66vw, 820px);
+    margin: 38px calc(50% - 50vw) 18px;
+    border: 0;
+    background-position: 50% 46%;
+    box-shadow:
+      inset 0 110px 130px rgba(0, 0, 0, 0.36),
+      inset 0 -150px 170px rgba(0, 0, 0, 0.82),
+      0 36px 90px rgba(0, 0, 0, 0.34);
+  }
+
+  .festa-film-hero::before,
+  .festa-film-hero::after {
+    width: clamp(70px, 12vw, 210px);
+  }
+
+  .festa-film-hero::before {
+    background: linear-gradient(90deg, #03070d 4%, rgba(3, 7, 13, 0.74) 34%, transparent);
+  }
+
+  .festa-film-hero::after {
+    background: linear-gradient(270deg, #03070d 4%, rgba(3, 7, 13, 0.74) 34%, transparent);
+  }
+
+  .festa-film-hero__kicker {
+    top: 22px;
+    padding: 0 18px;
+    color: rgba(222, 187, 119, 0.84);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+
+  .festa-film-sixty {
+    position: absolute;
+    z-index: 1;
+    top: 31px;
+    left: 50%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    column-gap: clamp(12px, 2vw, 28px);
+    width: min(82vw, 940px);
+    color: rgba(217, 174, 91, 0.5);
+    font-family: Georgia, "Times New Roman", serif;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .festa-film-sixty::before,
+  .festa-film-sixty::after {
+    content: "";
+    position: absolute;
+    top: 47%;
+    width: 31%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(222, 181, 102, 0.38));
+  }
+
+  .festa-film-sixty::before { left: 0; }
+  .festa-film-sixty::after { right: 0; transform: scaleX(-1); }
+
+  .festa-film-sixty strong {
+    grid-column: 2;
+    color: transparent;
+    font-size: clamp(170px, 25vw, 320px);
+    font-weight: 400;
+    line-height: 0.82;
+    -webkit-text-stroke: 1px rgba(226, 184, 103, 0.16);
+    text-shadow: 0 0 65px rgba(199, 143, 50, 0.08);
+  }
+
+  .festa-film-sixty__years {
+    position: relative;
+    z-index: 1;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+  }
+
+  .festa-film-sixty__years:first-of-type { justify-self: end; }
+  .festa-film-sixty__years:nth-of-type(2) { justify-self: start; }
+
+  .festa-film-sixty small {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: -12px;
+    color: rgba(236, 211, 160, 0.48);
+    font-size: 9px;
+    letter-spacing: 0.22em;
+  }
+
+  .festa-film-strip {
+    left: -5%;
+    width: 110%;
+    border-color: rgba(215, 171, 88, 0.44);
+  }
+
+  .festa-film-strip--past {
+    top: 106px;
+    height: 106px;
+    opacity: 0.62;
+  }
+
+  .festa-film-strip--present {
+    bottom: 250px;
+    height: 136px;
+  }
+
+  .festa-film-emblem {
+    top: 35%;
+  }
+
+  .festa-film-emblem img {
+    width: clamp(126px, 13vw, 176px);
+  }
+
+  .festa-film-emblem__name {
+    margin-top: 7px;
+    font-size: clamp(18px, 2vw, 26px);
+    letter-spacing: 0.08em;
+  }
+
+  .festa-film-emblem__anniversary {
+    letter-spacing: 0.12em;
+  }
+
+  .festa-film-dance-relay {
+    top: calc(100% - 112px);
+    width: min(72vw, 720px);
+    height: 104px;
+  }
+
+  .festa-film-dance-relay__photo {
+    height: 94px;
+  }
+
+  .festa-film-baton {
+    width: min(70vw, 520px);
+    margin-top: 11px;
+    font-size: 10px;
+  }
+
+  .festa-film-emblem__relay {
+    width: min(72vw, 600px);
+    margin-top: 8px;
+    font-size: clamp(12px, 1.25vw, 15px);
+  }
+
+  .festa-film-decade-nav {
+    right: max(5%, calc((100vw - 1180px) / 2));
+    bottom: 214px;
+    left: max(5%, calc((100vw - 1180px) / 2));
+    background: linear-gradient(90deg, rgba(3, 6, 10, 0.9), rgba(8, 12, 18, 0.7), rgba(3, 6, 10, 0.9));
+  }
+
+  .festa-film-decade-nav button {
+    padding: 10px 5px 9px;
+  }
+
+  .festa-film-decade-nav button strong { font-size: 11px; }
+  .festa-film-decade-nav button span { font-size: 10px; }
+
+  .festa-film-era-flow {
+    right: max(28%, calc((100vw - 610px) / 2));
+    bottom: 147px;
+    left: max(28%, calc((100vw - 610px) / 2));
+  }
+
+  .festa-film-era-story {
+    right: max(5%, calc((100vw - 1180px) / 2));
+    bottom: 24px;
+    left: max(5%, calc((100vw - 1180px) / 2));
+    min-height: 100px;
+    border-top-color: rgba(232, 194, 119, 0.52);
+    background:
+      linear-gradient(105deg, rgba(240, 210, 149, 0.045), transparent 24%, transparent 78%, rgba(240, 210, 149, 0.035)),
+      repeating-linear-gradient(0deg, rgba(255, 245, 220, 0.012) 0 1px, transparent 1px 7px),
+      rgba(3, 6, 11, 0.94);
+  }
+}
+
+@media (min-width: 721px) and (max-width: 900px) {
+  .festa-film-hero {
+    height: 790px;
+  }
+
+  .festa-film-emblem {
+    z-index: 6;
+    top: 33%;
+  }
+
+  .festa-film-emblem img {
+    filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 22px rgba(232, 183, 86, 0.38));
+  }
+
+  .festa-film-strip--present {
+    bottom: 320px;
+  }
+
+  .festa-film-decade-nav {
+    bottom: 274px;
+  }
+
+  .festa-film-era-flow {
+    right: 22%;
+    bottom: 206px;
+    left: 22%;
+  }
+
+  .festa-film-era-story {
+    bottom: 24px;
+    grid-template-columns: 104px 1fr;
+    min-height: 170px;
+  }
+
+  .festa-film-era-story dl {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .festa-film-era-story dl > div {
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(223, 180, 98, 0.1);
+  }
+
+  .festa-film-era-story dl > div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .festa-film-era-story dl > div:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .festa-film-sixty {
+    position: absolute;
+    z-index: 1;
+    top: 42px;
+    left: 50%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    gap: 7px;
+    width: 90%;
+    color: rgba(218, 178, 99, 0.48);
+    font-family: Georgia, "Times New Roman", serif;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .festa-film-sixty strong {
+    color: transparent;
+    font-size: 102px;
+    font-weight: 400;
+    line-height: 0.8;
+    -webkit-text-stroke: 1px rgba(226, 184, 103, 0.16);
+  }
+
+  .festa-film-sixty__years { font-size: 8px; }
+  .festa-film-sixty__years:first-of-type { justify-self: end; }
+  .festa-film-sixty small {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: -5px;
+    font-size: 6px;
+    letter-spacing: 0.12em;
+  }
+}
