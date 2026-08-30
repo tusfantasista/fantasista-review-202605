@@ -89,6 +89,10 @@ const checks = [
   ["bank instructions URL refreshed in D1", files.worker.includes("hosted_instructions_url = ?, updated_at = ?")],
   ["admin can refresh bank instructions", files.worker.includes('payload.action === "refresh_bank_transfer_instructions"') && files.worker.includes("payment.bank_transfer_instructions_refreshed")],
   ["refreshed bank instructions can be resent", files.worker.includes("renderBankTransferInstructionsRefreshedEmail") && files.worker.includes("銀行振込先・お支払い手順（再発行）")],
+  ["refunded card repayment verifies Stripe refund", files.worker.includes("isStripeChargeFullyRefunded(charge)") && files.worker.includes("Stripe has not confirmed a full refund for the original payment.")],
+  ["refunded card repayment requires application code", files.worker.includes('payload.action === "reissue_refunded_card_payment"') && files.worker.includes("confirmedApplicationCode !== application.application_code")],
+  ["refunded card repayment stays linked", files.worker.includes("repayment_for_payment_id") && files.worker.includes("payment.card_repayment_issued")],
+  ["refunded card repayment email uses office delivery", files.worker.includes("renderRefundRepaymentEmail") && files.worker.includes("await maybeSendEmail(env")],
   ["preview omits actionable hosted link", !files.register.includes('id="bank-preview-instructions"')],
   ["design covers six issues", [1, 2, 3, 4, 5, 6].every((number) => files.design.includes(`| ${number} |`))]
 ];

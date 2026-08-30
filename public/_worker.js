@@ -1992,6 +1992,148 @@ async function updateSupporterPublication(db, applicationId, payload, actor, req
   return getApplicationById(db, current.id);
 }
 __name(updateSupporterPublication, "updateSupporterPublication");
+function renderRefundRepaymentEmail(application, checkoutUrl) {
+  return {
+    to: application.email,
+    subject: `【60周年FESTA】返金に伴う再決済のお願い（${application.application_code}）`,
+    body: `${application.full_name} 様
+
+東京理科大学舞踏研究部60周年記念FESTAへお申し込みいただき、ありがとうございます。
+
+受付番号 ${application.application_code} の2026年8月9日のJCBによるお支払い6,500円は、決済サービス側の取扱変更により全額返金されました。返金処理は2026年8月12日に完了しています。
+
+お手数をおかけしますが、次の専用画面から6,500円を再度お支払いください。
+${checkoutUrl}
+
+利用可能な方法：Visa、Mastercard、American Express、Apple Pay、Google Pay
+JCB、Diners Club、Discoverはご利用いただけません。
+
+銀行振込をご希望の場合は、このメールへご返信ください。振込先をご案内します。
+
+再決済の確認後、参加確定のお知らせと領収書メールを改めてお送りします。重複して参加申込を行う必要はありません。
+
+ご不明な点は tus.festa.office@gmail.com までお問い合わせください。
+
+東京理科大学舞踏研究部60周年記念FESTA事務局`
+  };
+}
+__name(renderRefundRepaymentEmail, "renderRefundRepaymentEmail");
+async function applicationCheckoutLineItems(db, applicationId) {
+  const result = await db.prepare(
+    `SELECT item_type, label, quantity, unit_amount_jpy, amount_jpy, metadata_json
+       FROM payment_line_items
+       WHERE application_id = ?
+       ORDER BY created_at, id`
+  ).bind(applicationId).all();
+  return (result.results || []).map((item) => ({
+    ...item,
+    metadata: safeJsonObject(item.metadata_json)
+  }));
+}
+__name(applicationCheckoutLineItems, "applicationCheckoutLineItems");
+function safeJsonObject(value) {
+  try {
+    const parsed = JSON.parse(value || "{}");
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+__name(safeJsonObject, "safeJsonObject");
+async function reissueRefundedCardPayment({ db, env, request, applicationId, confirmedApplicationCode, actor, requestMeta = {} }) {
+  const application = await getApplicationById(db, applicationId);
+  if (!application) throw new Error("Festa 60 application was not found.");
+  if (!confirmedApplicationCode || confirmedApplicationCode !== application.application_code) {
+    throw new Error("Application code confirmation does not match.");
+  }
+  const stripeSecret = requireStripeSecret(env);
+  const paymentResult = await db.prepare(
+    `SELECT id, stripe_checkout_session_id, stripe_payment_intent_id, stripe_customer_id,
+            amount_total, currency, status, created_at
+       FROM payments
+       WHERE application_id = ? AND payment_provider = 'stripe' AND payment_method = 'stripe_checkout'
+       ORDER BY created_at DESC`
+  ).bind(application.id).all();
+  const payments = paymentResult.results || [];
+  const reusablePayment = payments.find((payment) =>
+    payment.stripe_checkout_session_id && !["paid", "refunded", "cancelled", "failed"].includes(payment.status)
+  );
+  if (reusablePayment) {
+    const reusableSession = await retrieveStripeCheckoutSession(stripeSecret, reusablePayment.stripe_checkout_session_id);
+    if (reusableSession?.status === "open" && reusableSession?.url) {
+      const emailDelivery = await maybeSendEmail(env, {
+        ...renderRefundRepaymentEmail(application, reusableSession.url),
+        message_id: `festa60-refund-repayment-${application.id}-${reusableSession.id}`
+      });
+      return { application, session: reusableSession, reused: true, email_delivery: emailDelivery };
+    }
+  }
+  const originalPayment = payments.find((payment) => payment.stripe_payment_intent_id && payment.status !== "refunded")
+    || payments.find((payment) => payment.stripe_payment_intent_id);
+  if (!originalPayment) throw new Error("The original Stripe card payment was not found.");
+  const paymentIntent = await retrieveStripePaymentIntent(stripeSecret, originalPayment.stripe_payment_intent_id);
+  const charge = await retrieveStripeCharge(stripeSecret, paymentIntent?.latest_charge);
+  if (!charge || !isStripeChargeFullyRefunded(charge)) {
+    throw new Error("Stripe has not confirmed a full refund for the original payment.");
+  }
+  await markStripeChargeRefunded(db, charge, null);
+  const lineItems = await applicationCheckoutLineItems(db, application.id);
+  if (!lineItems.length || lineItemsTotal(lineItems) !== Number(application.total_amount_jpy || 0)) {
+    throw new Error("Stored application line items do not match the application total.");
+  }
+  application.line_items = lineItems;
+  application.amount_total = Number(application.total_amount_jpy || 0);
+  const reissueNumber = payments.length + 1;
+  const baseUrl = new URL(request.url).origin;
+  const { session, metadata } = await createCheckoutSession({
+    env,
+    application,
+    request,
+    baseUrl,
+    customerId: originalPayment.stripe_customer_id || paymentIntent?.customer || null,
+    idempotencyKey: `festa60-repayment-${application.id}-${reissueNumber}`
+  });
+  await createPayment(db, application, session, {
+    ...metadata,
+    repayment_for_payment_id: originalPayment.id,
+    repayment_reason: "jcb_account_review_refund"
+  });
+  const now = nowIso();
+  await db.prepare(
+    `UPDATE applications
+       SET payment_status = 'unpaid', status = 'payment_pending', attendance_status = 'pending',
+           paid_at = NULL, refunded_at = NULL, cancelled_at = NULL, updated_at = ?
+       WHERE id = ?`
+  ).bind(now, application.id).run();
+  await audit(db, {
+    actor,
+    action: "payment.card_repayment_issued",
+    target_type: "application",
+    target_id: application.id,
+    details_json: JSON.stringify({
+      application_code: application.application_code,
+      refunded_payment_id: originalPayment.id,
+      checkout_session_id: session.id,
+      amount_jpy: Number(session.amount_total || application.total_amount_jpy || 0)
+    }),
+    ...requestMeta
+  });
+  const current = await getApplicationById(db, application.id);
+  const emailDelivery = await maybeSendEmail(env, {
+    ...renderRefundRepaymentEmail(current, session.url),
+    message_id: `festa60-refund-repayment-${application.id}-${session.id}`
+  });
+  await audit(db, {
+    actor,
+    action: emailDelivery.sent ? "payment.card_repayment_email_sent" : "payment.card_repayment_email_failed",
+    target_type: "application",
+    target_id: application.id,
+    details_json: JSON.stringify({ checkout_session_id: session.id, reason: emailDelivery.error || emailDelivery.reason || null }),
+    ...requestMeta
+  });
+  return { application: current, session, reused: false, email_delivery: emailDelivery };
+}
+__name(reissueRefundedCardPayment, "reissueRefundedCardPayment");
 // api/festa60/admin/applications/[id].js
 async function onRequestPatch({ request, env, params }) {
   const auth = assertAdmin(request, env);
@@ -2071,6 +2213,29 @@ async function onRequestPatch({ request, env, params }) {
           sent: Boolean(emailDelivery.sent),
           skipped: Boolean(emailDelivery.skipped),
           reason: emailDelivery.reason || emailDelivery.error || null
+        } : null
+      });
+    }
+    if (payload.action === "reissue_refunded_card_payment") {
+      const result = await reissueRefundedCardPayment({
+        db: requireDb(env),
+        env,
+        request,
+        applicationId: params.id,
+        confirmedApplicationCode: payload.confirm_application_code,
+        actor: auth.actor,
+        requestMeta: getClientMeta(request)
+      });
+      return json({
+        ok: true,
+        application: result.application,
+        checkout_url: result.session.url,
+        checkout_session_id: result.session.id,
+        reused: result.reused,
+        email_delivery: result.email_delivery ? {
+          sent: Boolean(result.email_delivery.sent),
+          skipped: Boolean(result.email_delivery.skipped),
+          reason: result.email_delivery.reason || result.email_delivery.error || null
         } : null
       });
     }
@@ -2390,9 +2555,9 @@ async function createStripeCustomer(stripeSecret, application) {
   return result;
 }
 __name(createStripeCustomer, "createStripeCustomer");
-async function createCheckoutSession({ env, application, request, baseUrl }) {
+async function createCheckoutSession({ env, application, request, baseUrl, idempotencyKey = null, customerId = null }) {
   const stripeSecret = requireStripeSecret(env);
-  const customer = await createStripeCustomer(stripeSecret, application);
+  const customer = customerId ? { id: customerId } : await createStripeCustomer(stripeSecret, application);
   const metadata = {
     application_id: application.id,
     member_id: application.member_id || "",
@@ -2434,7 +2599,7 @@ async function createCheckoutSession({ env, application, request, baseUrl }) {
     headers: {
       authorization: `Bearer ${stripeSecret}`,
       "content-type": "application/x-www-form-urlencoded",
-      "idempotency-key": `festa60-${application.id}`
+      "idempotency-key": idempotencyKey || `festa60-${application.id}`
     },
     body: params
   });
@@ -2899,6 +3064,19 @@ async function retrieveStripePaymentIntent(stripeSecret, paymentIntent) {
   return result;
 }
 __name(retrieveStripePaymentIntent, "retrieveStripePaymentIntent");
+async function retrieveStripeCharge(stripeSecret, charge) {
+  const chargeId = typeof charge === "string" ? charge : charge?.id;
+  if (!chargeId) return null;
+  const response = await fetch(`https://api.stripe.com/v1/charges/${encodeURIComponent(chargeId)}`, {
+    headers: { authorization: `Bearer ${stripeSecret}` }
+  });
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(`Stripe charge retrieval failed: ${result.error?.message || response.status}`);
+  }
+  return result;
+}
+__name(retrieveStripeCharge, "retrieveStripeCharge");
 async function listStripeCashBalanceTransactions(stripeSecret, customerId, limit = 1) {
   if (!customerId) throw new Error("Stripe customer is required for cash balance verification.");
   const params = new URLSearchParams({ limit: String(limit) });
