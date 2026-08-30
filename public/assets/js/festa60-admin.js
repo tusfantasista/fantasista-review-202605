@@ -13,7 +13,7 @@
     actor: "",
     filters: {
       search: "",
-      payment: "all",
+      payment: "active",
       plan: "all",
       sort: "newest"
     }
@@ -78,7 +78,8 @@
     cancelled: "取消",
     refunded: "返金済み",
     failed: "決済失敗",
-    expired: "期限切れ"
+    expired: "期限切れ",
+    checkout_incomplete: "決済未完了"
   };
 
   const attendanceLabels = {
@@ -160,6 +161,13 @@
       return "partially_funded";
     }
     if (application.latest_payment_status === "partially_funded") return "partially_funded";
+    const paymentMethod = application.latest_payment_method || application.payment_method;
+    const isIncompleteCheckout = paymentMethod === "stripe_checkout"
+      && Boolean(application.stripe_checkout_session_id)
+      && !["paid", "cancelled", "refunded"].includes(applicationStatus)
+      && !application.application_received_email_sent_at
+      && !application.payment_confirmed_email_sent_at;
+    if (isIncompleteCheckout) return "checkout_incomplete";
     if (["failed", "expired"].includes(application.latest_payment_status)) return application.latest_payment_status;
     return applicationStatus || application.latest_payment_status || "unpaid";
   }
@@ -182,13 +190,13 @@
 
   function outstandingAmount(application) {
     const status = effectivePaymentStatus(application);
-    if (["cancelled", "refunded"].includes(status)) return 0;
+    if (["cancelled", "refunded", "checkout_incomplete"].includes(status)) return 0;
     return Math.max(0, expectedAmount(application) - receivedAmount(application));
   }
 
   function countedApplicationAmount(application) {
     const status = effectivePaymentStatus(application);
-    if (status === "refunded") return 0;
+    if (["refunded", "checkout_incomplete"].includes(status)) return 0;
     if (status === "cancelled") return receivedAmount(application);
     return expectedAmount(application);
   }
@@ -279,17 +287,19 @@
 
   function renderSummary() {
     const applications = state.applications;
-    const active = applications.filter((item) => !["cancelled", "refunded"].includes(effectivePaymentStatus(item)));
-    const paid = applications.filter((item) => effectivePaymentStatus(item) === "paid");
-    const partial = applications.filter((item) => effectivePaymentStatus(item) === "partially_funded");
-    const pending = applications.filter((item) => ["unpaid", "pending", "failed", "expired"].includes(effectivePaymentStatus(item)));
-    const expectedTotal = applications.reduce((sum, item) => sum + countedApplicationAmount(item), 0);
-    const receivedTotal = applications.reduce((sum, item) => sum + receivedAmount(item), 0);
+    const incomplete = applications.filter((item) => effectivePaymentStatus(item) === "checkout_incomplete");
+    const formalApplications = applications.filter((item) => effectivePaymentStatus(item) !== "checkout_incomplete");
+    const active = formalApplications.filter((item) => !["cancelled", "refunded"].includes(effectivePaymentStatus(item)));
+    const paid = formalApplications.filter((item) => effectivePaymentStatus(item) === "paid");
+    const partial = formalApplications.filter((item) => effectivePaymentStatus(item) === "partially_funded");
+    const pending = formalApplications.filter((item) => ["unpaid", "pending", "failed", "expired"].includes(effectivePaymentStatus(item)));
+    const expectedTotal = formalApplications.reduce((sum, item) => sum + countedApplicationAmount(item), 0);
+    const receivedTotal = formalApplications.reduce((sum, item) => sum + receivedAmount(item), 0);
     const outstandingTotal = active.reduce((sum, item) => sum + outstandingAmount(item), 0);
     const collectionRate = expectedTotal > 0 ? Math.round((receivedTotal / expectedTotal) * 100) : 0;
     const participation = state.participationSummary || fallbackParticipationSummary(applications);
 
-    metricElements.applications.textContent = `${applications.length}件`;
+    metricElements.applications.textContent = `${formalApplications.length}件`;
     metricElements.festaAttendees.textContent = `${participation.festa_attendee_count}名`;
     metricElements.confirmedFesta.textContent = `入金済み・参加確定 ${participation.confirmed_festa_attendee_count}名`;
     metricElements.receptionAttendees.textContent = `${participation.reception_attendee_count}名`;
@@ -315,7 +325,8 @@
       { label: "入金済み", value: paid.length, className: "paid" },
       { label: "不足入金", value: partial.length, className: "partial" },
       { label: "未入金等", value: pending.length, className: "pending" },
-      { label: "取消・返金", value: applications.length - active.length, className: "" }
+      { label: "決済未完了", value: incomplete.length, className: "pending" },
+      { label: "取消・返金", value: formalApplications.length - active.length, className: "" }
     ]);
 
     renderBarChart(elements.participantChart, [
@@ -356,7 +367,7 @@
     const planCounts = planDefinitions
       .map((definition) => ({
         ...definition,
-        value: applications.filter((item) => definition.exact
+        value: formalApplications.filter((item) => definition.exact
           ? item.ticket_type === definition.key
           : planKey(item.ticket_type) === definition.key).length
       }))
@@ -367,7 +378,7 @@
         className: ""
       }));
     renderBarChart(elements.planChart, planCounts);
-    renderAbsentDonationSummary(applications);
+    renderAbsentDonationSummary(formalApplications);
   }
 
   function renderAbsentDonationSummary(applications) {
@@ -435,7 +446,7 @@
   function fallbackParticipationSummary(applications) {
     const attendees = applications.filter((item) => {
       const status = effectivePaymentStatus(item);
-      return !["cancelled", "refunded"].includes(status) && planKey(item.ticket_type) !== "absent_donation";
+      return !["cancelled", "refunded", "checkout_incomplete"].includes(status) && planKey(item.ticket_type) !== "absent_donation";
     });
     const paid = attendees.filter((item) => effectivePaymentStatus(item) === "paid");
     const summarizePeople = (rows) => rows.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
@@ -492,7 +503,10 @@
         application.graduation_year
       ].join(" ").toLocaleLowerCase("ja");
       const matchesSearch = !normalizedSearch || searchable.includes(normalizedSearch);
-      const matchesPayment = state.filters.payment === "all" || effectivePaymentStatus(application) === state.filters.payment;
+      const paymentStatus = effectivePaymentStatus(application);
+      const matchesPayment = state.filters.payment === "all"
+        || (state.filters.payment === "active" && !["cancelled", "refunded", "checkout_incomplete"].includes(paymentStatus))
+        || paymentStatus === state.filters.payment;
       const matchesPlan = state.filters.plan === "all"
         || (state.filters.plan.startsWith("absent_donation_")
           ? application.ticket_type === state.filters.plan
@@ -513,7 +527,15 @@
   }
 
   function renderTable() {
-    elements.resultCount.textContent = `${state.filtered.length}件 / 全${state.applications.length}件`;
+    const incompleteCount = state.applications.filter((item) => effectivePaymentStatus(item) === "checkout_incomplete").length;
+    const inactiveCount = state.applications.filter((item) => ["cancelled", "refunded"].includes(effectivePaymentStatus(item))).length;
+    const excludedLabels = [
+      inactiveCount > 0 ? `取消・返金${inactiveCount}件` : "",
+      incompleteCount > 0 ? `決済未完了${incompleteCount}件` : ""
+    ].filter(Boolean);
+    elements.resultCount.textContent = state.filters.payment === "active" && excludedLabels.length > 0
+      ? `${state.filtered.length}件（${excludedLabels.join("、")}を除外）`
+      : `${state.filtered.length}件 / 全${state.applications.length}件`;
     elements.message.hidden = true;
     elements.tableWrapper.hidden = false;
 
@@ -818,9 +840,9 @@
       applyFilters();
     });
     elements.clearFilters.addEventListener("click", () => {
-      state.filters = { search: "", payment: "all", plan: "all", sort: "newest" };
+      state.filters = { search: "", payment: "active", plan: "all", sort: "newest" };
       elements.searchInput.value = "";
-      elements.paymentFilter.value = "all";
+      elements.paymentFilter.value = "active";
       elements.planFilter.value = "all";
       elements.sortSelect.value = "newest";
       applyFilters();

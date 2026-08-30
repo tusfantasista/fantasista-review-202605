@@ -1547,6 +1547,11 @@ async function getAdminParticipationSummary(db) {
          id, ticket_type, school_lineage, graduation_year, reception_attendance, payment_status
        FROM applications
        WHERE COALESCE(payment_status, 'unpaid') NOT IN ('cancelled', 'refunded')
+         AND NOT (
+           payment_method = 'stripe_checkout'
+           AND COALESCE(payment_status, 'unpaid') IN ('unpaid', 'pending')
+           AND application_received_email_sent_at IS NULL
+         )
          AND ticket_type NOT LIKE 'absent_donation_%'
      ),
      companion_counts AS (
