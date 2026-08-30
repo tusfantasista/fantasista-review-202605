@@ -140,7 +140,9 @@
           <div class="admin-field">
             <label for="payment-filter">入金状態</label>
             <select id="payment-filter">
+              <option value="active" selected>有効な申込</option>
               <option value="all">すべて</option>
+              <option value="checkout_incomplete">決済未完了</option>
               <option value="paid">入金済み</option>
               <option value="partially_funded">不足入金</option>
               <option value="pending">手続中</option>
